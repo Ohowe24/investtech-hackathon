@@ -1,0 +1,7 @@
+ticker,name,hq_country,listed_on,sub_sector,in_index,verdict,proposed_weight_pct,reason
+FAKEA,Sample Compounder Co (FAKE),CA,TSX,Software serial acquirers,false,add,3,"FAKE: per-share cash flow grew much faster than revenue, with little new stock issued."
+FAKEB,Sample Empire Builder Inc (FAKE),CA,TSX,Serial acquirers,false,reject,,"FAKE: grew fast by buying, but nearly doubled its share count, so each share earns less."
+FAKEC,Sample Organic Grower Ltd (FAKE),CA,TSX,Distribution,false,watch,,"FAKE: strong per-share growth, but buys very few businesses, so it may not fit the theme."
+FAKED,Sample Stalled Corp (FAKE),CA,TSXV,Engineering,false,reject,,"FAKE: little acquisition activity and shrinking per-share cash flow."
+FAKEE,Sample Existing Holding (FAKE),US,NYSE,Serial acquirers,true,existing,,"FAKE: stands in for a company already in the index, as a reference point."
+FAKEF,Sample Missing Data Co (FAKE),CA,TSX,Waste,false,watch,,"FAKE: shows how missing numbers are handled, so it is not plotted."

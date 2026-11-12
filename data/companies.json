@@ -1,0 +1,432 @@
+{
+  "isFake": true,
+  "generatedAt": "2026-11-12T21:46:48.459Z",
+  "indexName": "Serial acquirers & consolidators",
+  "currency": "USD",
+  "question": "Which Canadian companies truly belong in this index, and which only look like they do?",
+  "metricDefs": [
+    {
+      "id": "acqIntensity",
+      "label": "Acquisition intensity",
+      "unit": "pct",
+      "description": "Cash spent buying businesses as a share of operating cash flow, summed over the period."
+    },
+    {
+      "id": "fcfPerShareCagr",
+      "label": "FCF per share growth / yr",
+      "unit": "pct",
+      "higherIsBetter": true,
+      "description": "Annual growth in free cash flow per diluted share: did owners get richer per share?"
+    },
+    {
+      "id": "revenueCagr",
+      "label": "Revenue growth / yr",
+      "unit": "pct",
+      "higherIsBetter": true,
+      "description": "Annual growth in total revenue: how much bigger the company got."
+    },
+    {
+      "id": "shareCountChange",
+      "label": "Share count change",
+      "unit": "pct",
+      "higherIsBetter": false,
+      "description": "Change in diluted shares over the period. Positive means new shares were issued."
+    },
+    {
+      "id": "netDebtToFcf",
+      "label": "Net debt / FCF",
+      "unit": "multiple",
+      "higherIsBetter": false,
+      "description": "Years of free cash flow needed to pay off net debt (latest year)."
+    },
+    {
+      "id": "organicGrowth",
+      "label": "Organic growth (reported)",
+      "unit": "pct",
+      "higherIsBetter": true,
+      "description": "Growth excluding acquisitions, as reported by the company (latest year). Missing if not disclosed."
+    }
+  ],
+  "map": {
+    "x": "acqIntensity",
+    "y": "fcfPerShareCagr",
+    "xThreshold": 0.5,
+    "yThreshold": 0.05,
+    "zones": {
+      "topRight": "Compounders",
+      "bottomRight": "Empire builders",
+      "topLeft": "Organic growers",
+      "bottomLeft": "Stalled"
+    }
+  },
+  "companies": [
+    {
+      "ticker": "FAKEA",
+      "name": "Sample Compounder Co (FAKE)",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Software serial acquirers",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.5232558139534884,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.16654517052686102,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.15829218528826905,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.020000000000000018,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": 0.8823529411764706,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": 0.06,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        }
+      },
+      "zone": "Compounders",
+      "verdict": "add",
+      "proposedWeightPct": 3,
+      "reason": "FAKE: per-share cash flow grew much faster than revenue, with little new stock issued."
+    },
+    {
+      "ticker": "FAKEB",
+      "name": "Sample Empire Builder Inc (FAKE)",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Serial acquirers",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 1.2264150943396226,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": -0.04039395978255522,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.17017365966035802,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.8999999999999999,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": 4.620689655172414,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ],
+          "note": "Not disclosed in the data provided"
+        }
+      },
+      "zone": "Empire builders",
+      "verdict": "reject",
+      "reason": "FAKE: grew fast by buying, but nearly doubled its share count, so each share earns less."
+    },
+    {
+      "ticker": "FAKEC",
+      "name": "Sample Organic Grower Ltd (FAKE)",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Distribution",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.058823529411764705,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.1860980501956171,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.12468265038069815,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.040000000000000036,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": -0.05263157894736842,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": 0.11,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        }
+      },
+      "zone": "Organic growers",
+      "verdict": "watch",
+      "reason": "FAKE: strong per-share growth, but buys very few businesses, so it may not fit the theme."
+    },
+    {
+      "ticker": "FAKED",
+      "name": "Sample Stalled Corp (FAKE)",
+      "hqCountry": "CA",
+      "listedOn": "TSXV",
+      "subSector": "Engineering",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.03125,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": -0.13921049400277397,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.008231146843384884,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.0625,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": 6.857142857142857,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": -0.02,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        }
+      },
+      "zone": "Stalled",
+      "verdict": "reject",
+      "reason": "FAKE: little acquisition activity and shrinking per-share cash flow."
+    },
+    {
+      "ticker": "FAKEE",
+      "name": "Sample Existing Holding (FAKE)",
+      "hqCountry": "US",
+      "listedOn": "NYSE",
+      "subSector": "Serial acquirers",
+      "inIndex": true,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.5806451612903226,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.1294644722040712,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.10668191970032148,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.010000000000000009,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": 1.7816091954022988,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": 0.05,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        }
+      },
+      "zone": "Compounders",
+      "verdict": "existing",
+      "reason": "FAKE: stands in for a company already in the index, as a reference point."
+    },
+    {
+      "ticker": "FAKEF",
+      "name": "Sample Missing Data Co (FAKE)",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Waste",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ],
+          "note": "Acquisition spending missing for at least one year"
+        },
+        "fcfPerShareCagr": {
+          "value": 0.09987124601849096,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.06778997237244089,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.02499999999999991,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "fake-2021",
+            "fake-2025"
+          ]
+        },
+        "netDebtToFcf": {
+          "value": 2.3333333333333335,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [
+            "fake-2025"
+          ],
+          "note": "Not disclosed in the data provided"
+        }
+      },
+      "zone": "Not enough data",
+      "verdict": "watch",
+      "reason": "FAKE: shows how missing numbers are handled, so it is not plotted."
+    }
+  ],
+  "sources": [
+    {
+      "id": "fake-2021",
+      "label": "FAKE source: 2021 annual report"
+    },
+    {
+      "id": "fake-2025",
+      "label": "FAKE source: 2025 annual report"
+    }
+  ]
+}
