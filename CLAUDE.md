@@ -3,7 +3,7 @@
 @AGENTS.md
 
 Two people build this repo at the same time: **Oscar** (website) and **Max** (engine). Each runs their own Claude session.
-Before substantial work, read `docs/BRIEF.md` (what and why) and `docs/TEAM_PLAN.md` (how and when).
+Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md` (how and when) `docs/KICKOFF_NOTES.md` (what the organizers said at kickoff) and `docs/DATA_PACK.md` (the 10 candidate companies' Onesheet data, in `engine/raw/datapack/`).
 
 ## Lanes: the most important rule
 | Folder | Owner | What it is |
