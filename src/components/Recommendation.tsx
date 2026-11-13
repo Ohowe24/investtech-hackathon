@@ -4,6 +4,7 @@ import type { Company, Dataset, IndexSnapshot } from "@contract/types";
 import { amountFor, completeIndex, sharePct, type IndexState } from "@/lib/indexMath";
 import { formatMetric, pct } from "@/lib/format";
 import { Card } from "./ui";
+import { Decode } from "./live/motion";
 
 interface Props {
   dataset: Dataset;
@@ -28,14 +29,17 @@ export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
   const related = ["CSU", "TOI"].every((t) => picks.some((c) => c.ticker === t));
 
   return (
-    <div className="space-y-5">
-      <Card>
-        <div className="text-[11px] font-medium uppercase tracking-wide text-muted">Recommendation · {dataset.indexName}</div>
+    <div className="enter space-y-5">
+      <Card className="scan-once">
+        <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-muted">
+          <span className="live-dot" /> Recommendation · {dataset.indexName}
+        </div>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-          Add {picks.map((c) => c.name).join(" and ")}
+          <Decode text={`Add ${picks.map((c) => c.name).join(" and ")}`} letters duration={1100} delay={200} />
         </h1>
         <p className="mt-1 text-sm text-muted">
-          {money(amountFor(totalPct, index.totalValue))} in total, {pct(totalPct)} of the index{fromCash ? ", paid from cash. Nothing is sold." : "."}
+          <Decode text={money(amountFor(totalPct, index.totalValue))} delay={700} className="font-semibold text-ink" /> in total,{" "}
+          <Decode text={pct(totalPct)} delay={800} className="font-semibold text-ink" /> of the index{fromCash ? ", paid from cash. Nothing is sold." : "."}
         </p>
       </Card>
 
@@ -89,15 +93,18 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
   ].map((s) => ({ ...s, def: def(s.id) })).filter((s) => s.def);
 
   return (
-    <Card>
+    <Card className="a-glow">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="font-mono text-xs font-semibold text-muted">{c.ticker}{c.listedOn ? ` · ${c.listedOn}` : ""}</div>
+          <div className="flex items-center gap-2 font-mono text-xs font-semibold text-muted">
+            {c.ticker}{c.listedOn ? ` · ${c.listedOn}` : ""}
+            <span className="a-stamp rounded bg-signal px-1.5 py-px text-[10px] font-bold text-ink" style={{ animationDelay: "1100ms" }}>ADD</span>
+          </div>
           <div className="text-lg font-semibold text-ink">{c.name}</div>
         </div>
         <div className="text-right">
-          <div className="text-2xl font-semibold text-teal">{pct(c.proposedWeightPct!)}</div>
-          <div className="text-xs text-muted">{amount}</div>
+          <Decode text={pct(c.proposedWeightPct!)} delay={600} duration={900} className="block text-2xl font-semibold tabular-nums text-teal" />
+          <Decode text={amount} delay={800} className="block text-xs tabular-nums text-muted" />
         </div>
       </div>
 
@@ -109,9 +116,9 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
       )}
 
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
-        {stats.map(({ id, label, def: d }) => (
+        {stats.map(({ id, label, def: d }, i) => (
           <div key={id}>
-            <div className="text-base font-semibold text-ink">{formatMetric(c.metrics[id], d!.unit)}</div>
+            <Decode text={formatMetric(c.metrics[id], d!.unit)} delay={900 + i * 120} className="block text-base font-semibold tabular-nums text-ink" />
             <div className="text-[11px] text-muted">{label}</div>
           </div>
         ))}
@@ -126,7 +133,7 @@ function Change({ label, from, to }: { label: string; from: string; to: string }
   return (
     <div>
       <div className="text-sm text-faint line-through decoration-faint/60">{from}</div>
-      <div className="text-lg font-semibold text-ink">{to}</div>
+      <Decode text={to} delay={700} duration={900} className="block text-lg font-semibold tabular-nums text-ink" />
       <div className="text-[11px] uppercase tracking-wide text-muted">{label}</div>
     </div>
   );
@@ -138,11 +145,12 @@ function WeightBar({ state }: { state: IndexState }) {
   return (
     <div className="mt-5">
       <div className="flex h-5 w-full overflow-hidden rounded">
-        {rows.map((r) => (
-          <div key={r.ticker} title={`${r.ticker} ${pct(r.weightPct)}`} style={{ width: `${r.weightPct}%` }}
-            className={`border-r border-white ${r.isAddition ? "bg-teal" : "bg-ink/25"}`} />
+        {rows.map((r, i) => (
+          <div key={r.ticker} title={`${r.ticker} ${pct(r.weightPct)}`}
+            style={{ width: `${r.weightPct}%`, transformOrigin: "center bottom", animationDelay: `${r.isAddition ? 600 + rows.length * 55 + i * 160 : 400 + i * 55}ms` }}
+            className={`a-grow-y border-r border-white ${r.isAddition ? "bg-teal shadow-[0_0_12px_rgba(61,220,108,0.8)]" : "bg-ink/25"}`} />
         ))}
-        <div title={`Cash ${pct(state.cashPct)}`} style={{ width: `${state.cashPct}%` }} className="bg-soft" />
+        <div title={`Cash ${pct(state.cashPct)}`} style={{ width: `${state.cashPct}%` }} className="a-fade bg-soft" />
       </div>
       <div className="mt-2 flex gap-4 text-[11px] text-muted">
         <span className="flex items-center gap-1.5"><span className="h-2 w-2 rounded-sm bg-teal" />New</span>

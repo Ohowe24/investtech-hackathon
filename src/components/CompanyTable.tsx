@@ -5,6 +5,11 @@ import { formatMetric, pct, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics, stateText } from "@/lib/rank";
 import { Dot, Explain, Segmented } from "./ui";
+import { Decode } from "./live/motion";
+
+// Row timing: each row lands, then its checks fire one by one, then its result stamps.
+const ROW = 110;
+const PIP = 75;
 
 interface Props {
   dataset: Dataset;
@@ -21,7 +26,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
   const rows = (scope === "ca" ? candidates : tested).sort((a, b) => a.model!.rank - b.model!.rank);
 
   return (
-    <section className="overflow-hidden rounded-xl border border-line bg-white">
+    <section key={scope} className="scan-once overflow-hidden rounded-xl border border-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
         <Segmented value={scope} onChange={onScope} options={[
           { id: "ca", label: `Canadian · ${candidates.length}` },
@@ -58,13 +63,19 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
             </tr>
           </thead>
           <tbody>
-            {rows.map((c) => {
+            {rows.map((c, r) => {
               const m = c.model!;
               const rec = recStyle[m.recommendation];
+              const t0 = 250 + r * ROW;
+              const stampAt = t0 + 300 + m.checks.length * PIP;
               return (
                 <tr key={c.ticker} onClick={() => onOpen(c.ticker)} tabIndex={0} onKeyDown={(e) => e.key === "Enter" && onOpen(c.ticker)}
-                  className="group cursor-pointer border-b border-line outline-none transition-colors last:border-0 hover:bg-canvas focus-visible:bg-canvas">
-                  <td className="py-3.5 pl-5 font-mono text-xs tabular-nums text-faint">{m.rank}</td>
+                  style={{ animationDelay: `${t0}ms` }}
+                  className="a-rise group relative cursor-pointer border-b border-line outline-none transition-colors last:border-0 hover:bg-canvas focus-visible:bg-canvas">
+                  <td className="relative py-3.5 pl-5 font-mono text-xs tabular-nums text-faint">
+                    <span className="absolute inset-y-1 left-0 w-[3px] origin-center scale-y-0 rounded-r bg-signal transition-transform duration-300 group-hover:scale-y-100" />
+                    {m.rank}
+                  </td>
                   <td className="py-3.5 pr-3">
                     <div className="flex items-center gap-3">
                       <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md bg-soft font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
@@ -75,22 +86,22 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                     </div>
                   </td>
                   <td className="py-3.5 pr-3">
-                    <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${rec.badge}`}>{rec.label}</span>
+                    <span className={`a-stamp rounded-full px-2.5 py-1 text-xs font-medium ${rec.badge}`} style={{ animationDelay: `${stampAt}ms` }}>{rec.label}</span>
                   </td>
-                  {metrics.map((d) => {
+                  {metrics.map((d, j) => {
                     const st = metricState(c, d.id);
                     return (
                       <td key={d.id} className={`px-3 py-3.5 text-right font-mono text-[13px] tabular-nums ${stateText[st]}`}>
-                        {st === "none" ? "—" : formatMetric(c.metrics[d.id], d.unit)}
+                        {st === "none" ? "—" : <Decode text={formatMetric(c.metrics[d.id], d.unit)} delay={t0 + 120 + j * 60} duration={520} />}
                       </td>
                     );
                   })}
                   <td className="px-3 py-3.5">
                     <div className="flex items-center gap-2">
                       <div className="flex gap-[3px]">
-                        {m.checks.map((k) => (
-                          <span key={k.id} title={k.label}
-                            className={`h-4 w-1.5 rounded-full ${k.pass === null ? "bg-line" : k.pass ? "bg-teal" : "bg-bad"}`} />
+                        {m.checks.map((k, i) => (
+                          <span key={k.id} title={k.label} style={{ animationDelay: `${t0 + 300 + i * PIP}ms` }}
+                            className={`a-pip h-4 w-1.5 rounded-full ${k.pass === null ? "bg-line text-line" : k.pass ? "bg-teal text-signal" : "bg-bad text-bad"}`} />
                         ))}
                       </div>
                       <span className="font-mono text-xs tabular-nums text-muted">
@@ -100,7 +111,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                   </td>
                   <td className="py-3.5 text-right font-mono text-[13px] tabular-nums">
                     {c.proposedWeightPct != null ? (
-                      <span className="font-semibold text-ink">{pct(c.proposedWeightPct, 2)}</span>
+                      <Decode text={pct(c.proposedWeightPct, 2)} delay={stampAt} className="font-semibold text-ink" />
                     ) : (
                       <span className="font-sans text-xs text-faint">{c.inIndex ? "Held" : verdictStyle[c.verdict].label}</span>
                     )}

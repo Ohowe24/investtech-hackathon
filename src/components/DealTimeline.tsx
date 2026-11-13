@@ -55,7 +55,8 @@ export default function DealTimeline({ dataset, company }: { dataset: Dataset; c
                   onClick={() => setPicked(picked === h.fiscalYear ? null : h.fiscalYear)}>
                   <rect x={cx(i) - band / 2} y={PAD.top - 20} width={band} height={H - PAD.top + 20} fill={active ? "#f5f5f5" : "transparent"} />
                   <rect x={cx(i) - band * 0.26} y={base - hgt} width={band * 0.52} height={hgt} rx={3}
-                    fill={negative ? "#c8372d" : "#2f5454"} opacity={active ? 1 : 0.55} style={{ transition: "opacity 120ms" }} />
+                    fill={negative ? "#c8372d" : "#2f5454"} opacity={active ? 1 : 0.55}
+                    className="a-grow-y" style={{ transition: "opacity 120ms", transformOrigin: "center bottom", animationDelay: `${150 + i * 90}ms` }} />
                   {h.acquisitions == null && <text x={cx(i)} y={base - 8} textAnchor="middle" className="fill-faint text-[10px]">missing</text>}
                   <text x={cx(i)} y={H - 10} textAnchor="middle" className={`text-[12px] ${active ? "fill-ink font-semibold" : "fill-muted"}`}>
                     FY{h.fiscalYear}
@@ -63,11 +64,12 @@ export default function DealTimeline({ dataset, company }: { dataset: Dataset; c
                 </g>
               );
             })}
-            {linePts && <polyline points={linePts} fill="none" stroke="#000" strokeWidth={1.75} pointerEvents="none" />}
+            {linePts && <polyline points={linePts} fill="none" stroke="#000" strokeWidth={1.75} pointerEvents="none" pathLength={1} className="a-draw" style={{ animationDelay: "400ms" }} />}
             {history.map((h, i) =>
               h.fcfPerShare == null ? null : (
                 <circle key={h.fiscalYear} cx={cx(i)} cy={fy(h.fcfPerShare)} r={h.fiscalYear === focus.fiscalYear ? 5.5 : 3.5}
-                  fill="#fff" stroke="#000" strokeWidth={1.75} pointerEvents="none" />
+                  fill="#fff" stroke="#000" strokeWidth={1.75} pointerEvents="none"
+                  className="a-pop" style={{ animationDelay: `${450 + (i / Math.max(history.length - 1, 1)) * 1200}ms` }} />
               ),
             )}
           </svg>

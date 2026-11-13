@@ -84,3 +84,170 @@ body {
   color: #3e3e3e;
   white-space: nowrap;
 }
+
+/* ───────────────────────── Alive layer ─────────────────────────
+   Motion only. Nothing here changes a number: every figure on screen still
+   comes from data/companies.json or data/indexes.json. */
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.985); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pip-fire {
+  0% { transform: scaleY(0.1); opacity: 0; filter: brightness(2.2); }
+  55% { transform: scaleY(1.35); opacity: 1; filter: brightness(1.8) drop-shadow(0 0 4px currentColor); }
+  100% { transform: scaleY(1); opacity: 1; filter: none; }
+}
+@keyframes stamp {
+  0% { transform: scale(1.9) rotate(-4deg); opacity: 0; filter: blur(3px); }
+  60% { transform: scale(0.94) rotate(0); opacity: 1; filter: none; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes grow-y { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+@keyframes grow-x { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pop { 0% { transform: scale(0); } 70% { transform: scale(1.5); } 100% { transform: scale(1); } }
+@keyframes ping-ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  14% { transform: scale(3.4); opacity: 0; }
+  100% { transform: scale(3.4); opacity: 0; }
+}
+@keyframes sweep { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes scan-down { 0% { transform: translateY(-100%); opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { transform: translateY(var(--scan-h, 100vh)); opacity: 0; } }
+@keyframes scan-across { 0% { transform: translateX(-120%); } 100% { transform: translateX(520%); } }
+@keyframes caret { 50% { opacity: 0; } }
+@keyframes live-dot {
+  0% { box-shadow: 0 0 0 0 rgba(61, 220, 108, 0.75); }
+  70% { box-shadow: 0 0 0 7px rgba(61, 220, 108, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(61, 220, 108, 0); }
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(47, 84, 84, 0), 0 0 0 1px rgba(47, 84, 84, 0.15); }
+  50% { box-shadow: 0 0 28px 2px rgba(61, 220, 108, 0.28), 0 0 0 1px rgba(61, 220, 108, 0.6); }
+}
+@keyframes shimmer { from { background-position: -200% 0; } to { background-position: 200% 0; } }
+@keyframes flow { to { stroke-dashoffset: -24; } }
+@keyframes float-y { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+/* Each view rises in, child by child. */
+.enter > * { animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.enter > *:nth-child(2) { animation-delay: 0.08s; }
+.enter > *:nth-child(3) { animation-delay: 0.16s; }
+.enter > *:nth-child(4) { animation-delay: 0.24s; }
+.enter > *:nth-child(5) { animation-delay: 0.32s; }
+.enter > *:nth-child(6) { animation-delay: 0.4s; }
+.enter > *:nth-child(n + 7) { animation-delay: 0.48s; }
+.stagger > * { animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: calc(var(--i, 0) * 70ms + var(--d, 0ms)); }
+
+.a-rise { animation: rise 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.a-fade { animation: fade-in 0.5s ease both; }
+.a-pip { animation: pip-fire 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) both; transform-origin: center; }
+.a-stamp { animation: stamp 0.5s cubic-bezier(0.3, 1.3, 0.5, 1) both; display: inline-block; }
+.a-grow-y { animation: grow-y 0.9s cubic-bezier(0.2, 0.9, 0.25, 1) both; transform-box: fill-box; }
+.a-grow-x { animation: grow-x 1s cubic-bezier(0.2, 0.9, 0.25, 1) both; transform-origin: left; }
+.a-draw { stroke-dasharray: 1; animation: draw 1.3s cubic-bezier(0.45, 0, 0.2, 1) both; }
+.a-pop { animation: pop 0.45s cubic-bezier(0.3, 1.5, 0.5, 1) both; transform-box: fill-box; transform-origin: center; }
+.a-glow { animation: glow-pulse 2.6s ease-in-out infinite; }
+.a-float { animation: float-y 3s ease-in-out infinite; }
+
+/* Animations inside a .reveal wait until it scrolls into view (see live/Reveal.tsx). */
+.reveal:not(.is-in) *, .reveal:not(.is-in) { animation-play-state: paused !important; }
+
+.live-dot { width: 7px; height: 7px; border-radius: 9999px; background: #3ddc6c; animation: live-dot 1.8s ease-out infinite; }
+.caret::after { content: "▍"; margin-left: 1px; animation: caret 1s steps(1) infinite; color: #3ddc6c; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, #fff 0%, #fff 40%, #3ddc6c 50%, #fff 60%, #fff 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 3.2s linear infinite;
+}
+
+/* Cursor light on cards: a soft glow that follows the pointer (live/LiveEffects.tsx sets --mx/--my). */
+.spot { position: relative; isolation: isolate; }
+.spot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  background:
+    radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(61, 220, 108, 0.07), transparent 42%),
+    radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), rgba(47, 84, 84, 0.08), transparent 60%);
+  z-index: 1;
+}
+.spot:hover::after { opacity: 1; }
+
+/* A one-off X-ray pass down a panel when it appears. */
+.scan-once { position: relative; overflow: hidden; }
+.scan-once::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 90px;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(180deg, transparent, rgba(61, 220, 108, 0.1) 70%, rgba(61, 220, 108, 0.55) 98%, transparent);
+  --scan-h: 900px;
+  animation: scan-down 1.6s cubic-bezier(0.5, 0, 0.3, 1) 0.15s both;
+}
+
+/* The X in the logo gets scanned every few seconds. */
+.logo-scan { position: relative; overflow: hidden; }
+.logo-scan::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background: linear-gradient(90deg, transparent, rgba(61, 220, 108, 0.85), transparent);
+  animation: scan-across 3.4s ease-in-out infinite;
+}
+
+/* The ambient X-ray line that drifts down the window. */
+.xray-sweep {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 140px;
+  z-index: 30;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(61, 220, 108, 0.035) 75%, rgba(61, 220, 108, 0.22) 99%, transparent 100%);
+  mix-blend-mode: screen;
+  --scan-h: 110vh;
+  animation: scan-down 9s cubic-bezier(0.45, 0, 0.55, 1) 2s infinite;
+}
+
+.marquee { animation: marquee var(--marquee-s, 60s) linear infinite; }
+.marquee-wrap:hover .marquee { animation-play-state: paused; }
+
+.run-grid {
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter > *, .stagger > *, .a-rise, .a-fade, .a-pip, .a-stamp, .a-grow-y, .a-grow-x, .a-draw, .a-pop, .a-glow, .a-float, .marquee, .xray-sweep, .logo-scan::after, .scan-once::before {
+    animation: none !important;
+  }
+  .xray-sweep, .scan-once::before { display: none; }
+}
+
+/* Map: dots fly out from the crosshair, then ping each time the radar beam passes. */
+@keyframes map-fly {
+  from { transform: translate(var(--fx, 0), var(--fy, 0)) scale(0.2); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.map-fly { animation: map-fly 0.9s cubic-bezier(0.2, 0.9, 0.25, 1.05) both; }
+.map-ping { transform-box: fill-box; transform-origin: center; opacity: 0; animation: ping-ring 6s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .map-fly, .map-ping { animation: none !important; } }

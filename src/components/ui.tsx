@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { useInView } from "./live/motion";
 
 /** Dashboard panel: a short title, optional controls on the right. */
 export function Card({ title, right, children, className = "" }: {
@@ -10,8 +11,9 @@ export function Card({ title, right, children, className = "" }: {
   children: ReactNode;
   className?: string;
 }) {
+  const [ref, inView] = useInView<HTMLElement>();
   return (
-    <section className={`min-w-0 rounded-xl border border-line bg-white ${className}`}>
+    <section ref={ref} className={`spot reveal ${inView ? "is-in" : ""} min-w-0 rounded-xl border border-line bg-white ${className}`}>
       {(title || right) && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
           <h2 className="text-[13px] font-semibold text-ink">{title}</h2>

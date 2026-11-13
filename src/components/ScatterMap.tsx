@@ -68,6 +68,18 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
   // Draw the hovered and selected dots last so they sit on top.
   const order = plotted.filter(visible).sort((a, b) => Number(a.ticker === hovered || a.ticker === selected) - Number(b.ticker === hovered || b.ticker === selected));
 
+  // Radar: a beam turns around the crosshair where the two pass lines meet; each dot pings as the beam passes it.
+  const SWEEP_S = 6;
+  const reach = Math.max(...[[left, top], [right, top], [left, bottom], [right, bottom]].map(([x, y]) => Math.hypot(x - tx, y - ty)));
+  const wedge = (a0: number, a1: number) => {
+    const r = (a: number) => (a * Math.PI) / 180;
+    return `M${tx},${ty} L${tx + reach * Math.cos(r(a0))},${ty + reach * Math.sin(r(a0))} A${reach},${reach} 0 0 1 ${tx + reach * Math.cos(r(a1))},${ty + reach * Math.sin(r(a1))} Z`;
+  };
+  const pingDelay = (cx: number, cy: number) => {
+    const deg = ((Math.atan2(cy - ty, cx - tx) * 180) / Math.PI + 360) % 360;
+    return (deg / 360) * SWEEP_S;
+  };
+
   return (
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
@@ -123,8 +135,24 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
             </g>
           ))}
 
-          <line x1={tx} x2={tx} y1={top} y2={bottom} stroke="#2f5454" strokeOpacity={0.55} strokeWidth={1} strokeDasharray="4 4" />
-          <line x1={left} x2={right} y1={ty} y2={ty} stroke="#2f5454" strokeOpacity={0.55} strokeWidth={1} strokeDasharray="4 4" />
+          <clipPath id="plot-clip"><rect x={left} y={top} width={right - left} height={bottom - top} /></clipPath>
+          <g clipPath="url(#plot-clip)" pointerEvents="none" className="a-fade" style={{ animationDelay: "900ms" }}>
+            <g style={{ transformBox: "view-box", transformOrigin: `${tx}px ${ty}px`, animation: `sweep ${SWEEP_S}s linear infinite` }}>
+              {Array.from({ length: 14 }, (_, i) => (
+                <path key={i} d={wedge(-42 + i * 3, -39 + i * 3)} fill="#3ddc6c" opacity={0.004 + i * i * 0.0007} />
+              ))}
+              <line x1={tx} y1={ty} x2={tx + reach} y2={ty} stroke="#3ddc6c" strokeOpacity={0.55} strokeWidth={1.25} />
+            </g>
+            {[0.25, 0.5, 0.75].map((f) => (
+              <circle key={f} cx={tx} cy={ty} r={reach * f} fill="none" stroke="#2f5454" strokeOpacity={0.07} strokeDasharray="2 5" />
+            ))}
+          </g>
+
+          <line x1={tx} x2={tx} y1={top} y2={bottom} stroke="#2f5454" strokeOpacity={0.55} strokeWidth={1} strokeDasharray="4 4"
+            className="a-grow-y" style={{ transformOrigin: "center top", animationDelay: "150ms" }} />
+          <line x1={left} x2={right} y1={ty} y2={ty} stroke="#2f5454" strokeOpacity={0.55} strokeWidth={1} strokeDasharray="4 4"
+            className="a-grow-x" style={{ transformBox: "fill-box", animationDelay: "250ms" }} />
+          <circle cx={tx} cy={ty} r={3} fill="#2f5454" className="a-pop" style={{ animationDelay: "500ms" }} />
           <line x1={left} x2={right} y1={bottom} y2={bottom} stroke="#000" strokeOpacity={0.18} />
 
           <Zone x={tx + 12} y={top + 20} anchor="start" text={map.zones.topRight} className="fill-teal" />
@@ -156,9 +184,13 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
             const isHot = c.ticker === hovered;
             const dim = hovered != null && !isHot && !isSel;
             const flip = cx > right - 70;
+            const fly = { ["--fx" as string]: `${tx - cx}px`, ["--fy" as string]: `${ty - cy}px`, animationDelay: `${450 + plotted.indexOf(c) * 45}ms` };
             return (
               <g key={c.ticker} onClick={() => onSelect(c.ticker)} onMouseEnter={() => onHover(c.ticker)}
                 className="cursor-pointer" opacity={dim ? 0.3 : 1} style={{ transition: "opacity 150ms" }}>
+              <g className="map-fly" style={fly}>
+                <circle cx={cx} cy={cy} r={6} fill="none" stroke={c.inIndex ? dotColor(c) : "#3ddc6c"} strokeWidth={c.inIndex ? 1.5 : 2}
+                  pointerEvents="none" className="map-ping" style={{ animationDelay: `${pingDelay(cx, cy)}s`, animationDuration: `${SWEEP_S}s` }} />
                 <circle cx={cx} cy={cy} r={16} fill="transparent" />
                 {!c.inIndex && <circle cx={cx} cy={cy} r={isHot ? 12 : 10} fill="white" fillOpacity={0.6} stroke="#000" strokeWidth={1.25} style={{ transition: "r 150ms" }} />}
                 <circle cx={cx} cy={cy} r={isHot || isSel ? 7 : 5.5} fill={dotColor(c)}
@@ -168,6 +200,7 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
                   className={`text-[11px] ${!c.inIndex || isHot ? "fill-ink font-semibold" : "fill-muted font-medium"}`}>
                   {c.ticker}{offChart(c) && <tspan className="fill-faint font-normal"> (off chart)</tspan>}
                 </text>
+              </g>
               </g>
             );
           })}
