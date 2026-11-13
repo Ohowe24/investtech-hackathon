@@ -91,3 +91,8 @@ export function countryMix(state: IndexState): { code: string; pct: number }[] {
 export function sharePct(state: IndexState, countryCode: string): number {
   return state.rows.filter((r) => r.countryCode === countryCode).reduce((s, r) => s + r.weightPct, 0);
 }
+
+/** Money a weight buys at the index's current total value. */
+export function amountFor(weightPct: number, totalValue: number): number {
+  return (weightPct / 100) * totalValue;
+}

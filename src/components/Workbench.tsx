@@ -9,6 +9,7 @@ import ScatterMap from "./ScatterMap";
 import IndexBuilder from "./IndexBuilder";
 import RuleLab from "./RuleLab";
 import { defaultSettings } from "../../engine/sensitivity";
+import Recommendation from "./Recommendation";
 import { Card } from "./ui";
 
 interface Props {
@@ -16,15 +17,16 @@ interface Props {
   snapshot: IndexSnapshot;
 }
 
-type Tab = "companies" | "map" | "index" | "test";
+type Tab = "recommendation" | "companies" | "map" | "index" | "test";
 const TABS: { id: Tab; label: string }[] = [
+  { id: "recommendation", label: "Recommendation" },
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
   { id: "index", label: "Index" },
   { id: "test", label: "Test the conclusion" },
 ];
 
-/** The whole app. The address hash holds the view (none = start page, #companies, #map, #index) or the open company (#c/CSU), so Back works. */
+/** The whole app. The address hash holds the view (none = start page, #recommendation, #companies, #map, #index, #test) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
@@ -45,7 +47,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "";
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = company ? "companies" : hash === "map" || hash === "index" || hash === "test" ? hash : "companies";
+  const tab: Tab = company ? "companies" : hash === "map" || hash === "index" || hash === "test" || hash === "recommendation" ? hash : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -75,9 +77,11 @@ export default function Workbench({ dataset, snapshot }: Props) {
 
       <main className="mx-auto w-full max-w-[1240px] px-5 py-6 md:px-8 md:py-8">
         {start ? (
-          <StartPage dataset={dataset} snapshot={snapshot} onDone={() => go("companies")} />
+          <StartPage dataset={dataset} snapshot={snapshot} onDone={() => go("recommendation")} />
         ) : company ? (
           <CompanyDashboard key={company.ticker} dataset={dataset} company={company} onOpen={(t) => go(`c/${t}`)} onBack={() => go("companies")} />
+        ) : tab === "recommendation" ? (
+          <Recommendation dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} />
         ) : tab === "map" ? (
           <Card title="Acquisition spend vs FCF per share growth">
             <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
