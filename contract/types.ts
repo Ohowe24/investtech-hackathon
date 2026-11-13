@@ -28,6 +28,8 @@ export interface MetricDef {
   description: string;
   /** one or two plain sentences: how it is calculated */
   formula?: string;
+  /** one plain sentence: why it matters when judging the company */
+  why?: string;
   higherIsBetter?: boolean;
 }
 
