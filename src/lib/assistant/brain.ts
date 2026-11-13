@@ -489,23 +489,25 @@ function indexSummary(w: W, ctx: GuideContext, asked: string): Reply {
 function compare(w: W, tickers: string[], ctx: GuideContext, asked: string): Reply {
   const cs = tickers.map((t) => w.by.get(t)).filter((c): c is Company => !!c).slice(0, 3);
   const o = new Out().step(`Read ${joinAnd(cs.map((c) => c.ticker))} side by side`).step(`Ranked them against ${w.tested.length} companies`);
-  const lines: string[] = [];
+  // Who leads on each scored metric that has a better direction. The card below shows every value.
+  const leads = new Map<string, string[]>();
+  const level: string[] = [];
   for (const def of scoredMetrics(w.ds)) {
     const have = cs.filter((c) => c.metrics[def.id]?.value != null);
-    const missing = cs.filter((c) => c.metrics[def.id]?.value == null);
-    const values = cs.map((c) => `${chip(c.ticker)} ${val(w, c, def.id)}`).join(", ");
+    if (def.higherIsBetter == null || have.length < 2) continue;
     const name = def.short ?? def.label;
-    if (def.higherIsBetter == null || have.length < 2) {
-      lines.push(`• ${name}: ${values}${def.higherIsBetter == null ? " (neither better nor worse on its own)" : ""}.`);
-      continue;
-    }
     const sign = def.higherIsBetter ? -1 : 1;
     const sorted = [...have].sort((a, b) => sign * (a.metrics[def.id].value! - b.metrics[def.id].value!));
     const lead = sorted[0];
-    const tie = sorted[1] && formatValue(sorted[1].metrics[def.id].value, def.unit) === formatValue(lead.metrics[def.id].value, def.unit);
-    lines.push(`• ${name}: ${values}. ${tie ? "Level" : `${chip(lead.ticker)} leads`}${def.higherIsBetter ? "" : " (lower is better)"}${missing.length ? `; missing for ${chips(missing.map((c) => c.ticker))}` : ""}.`);
+    if (formatValue(sorted[1].metrics[def.id].value, def.unit) === formatValue(lead.metrics[def.id].value, def.unit)) level.push(name);
+    else leads.set(lead.ticker, [...(leads.get(lead.ticker) ?? []), name]);
   }
-  o.say(`${joinAnd(cs.map((c) => chip(c.ticker)))}, metric by metric:`, ...lines);
+  o.say(
+    `${joinAnd(cs.map((c) => chip(c.ticker)))}, side by side:`,
+    ...cs.filter((c) => leads.has(c.ticker)).map((c) => `• ${chip(c.ticker)} leads on ${joinAnd(leads.get(c.ticker)!)}.`),
+    ...cs.filter((c) => !leads.has(c.ticker)).map((c) => `• ${chip(c.ticker)} leads on none of the scored metrics.`),
+    level.length ? `• Level on ${joinAnd(level)}.` : "",
+  );
   o.say(`Model ranks: ${cs.map((c) => `${chip(c.ticker)} ${c.model ? `${ordinal(c.model.rank)} (${recLabel(c)})` : "not tested"}`).join(", ")}.`);
   const weightRule = w.ds.rules?.weight
     .split(/(?<=\.)\s+/)

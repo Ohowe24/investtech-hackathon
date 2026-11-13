@@ -15,6 +15,7 @@ import LiveEffects from "./live/LiveEffects";
 import { primeSound } from "./live/sound";
 import { prefersReducedMotion, useNow } from "./live/motion";
 import AssistantPanel from "./assistant/AssistantPanel";
+import { Sparkle } from "./assistant/icons";
 import type { Action, GuideContext } from "@/lib/assistant/types";
 
 interface Props {
@@ -138,7 +139,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
   const docked = guideOpen && !start;
 
   return (
-    <div className={`min-h-screen w-full transition-[padding] duration-300 ${docked ? "lg:pr-[400px]" : ""}`}>
+    <div className={`min-h-screen w-full transition-[padding] duration-300 ${docked ? "lg:pr-[392px]" : ""}`}>
       {dataset.isFake && (
         <div className="bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">
           FAKE SAMPLE DATA: not real companies or numbers
@@ -163,9 +164,9 @@ export default function Workbench({ dataset, snapshot }: Props) {
             <LiveClock updatedAt={snapshot.updatedAt} />
             {!start && (
               <button onClick={() => toggleGuide()} aria-pressed={guideOpen} title="Open the Guide (⌘K)"
-                className={`relative flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] font-medium transition-colors ${guideOpen ? "border-signal/60 bg-signal/10 text-signal" : "border-white/15 text-white/80 hover:border-signal/60 hover:text-white"}`}>
-                <span aria-hidden>✦</span> Guide
-                <kbd className="hidden rounded bg-white/10 px-1 font-mono text-[10px] text-white/50 xl:inline">⌘K</kbd>
+                className={`relative flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] font-medium transition-colors ${guideOpen ? "border-white/25 bg-white/15 text-white" : "border-white/15 text-white/80 hover:border-white/40 hover:text-white"}`}>
+                <Sparkle className="h-3 w-3 text-signal" /> Guide
+                <kbd className="hidden rounded border border-white/15 px-1 font-mono text-[10px] leading-4 text-white/45 xl:inline">⌘K</kbd>
                 {unread && !guideOpen && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-signal shadow-[0_0_8px_rgba(61,220,108,0.9)]" aria-label="New note from the Guide" />}
               </button>
             )}
@@ -208,9 +209,9 @@ export default function Workbench({ dataset, snapshot }: Props) {
 
       {/* Docked on the right on wide screens; a sheet over the page on phones. Always mounted so it keeps following you. */}
       <div className={docked ? "contents" : "hidden"}>
-        <button type="button" aria-label="Close the guide" onClick={() => toggleGuide(false)} className="fixed inset-0 z-40 bg-black/50 backdrop-blur-[2px] lg:hidden" />
+        <button type="button" aria-label="Close the guide" onClick={() => toggleGuide(false)} className="fixed inset-0 z-40 bg-black/55 backdrop-blur-[2px] lg:hidden" />
         <aside aria-label="Guide"
-          className="guide-panel fixed inset-x-0 bottom-0 z-50 h-[84dvh] overflow-hidden rounded-t-2xl border-t border-white/10 bg-[#070707]/95 shadow-[0_-20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl lg:inset-y-0 lg:left-auto lg:right-0 lg:h-auto lg:w-[400px] lg:rounded-none lg:border-l lg:border-t-0">
+          className="guide-panel fixed inset-x-0 bottom-0 z-50 h-[86dvh] overflow-hidden rounded-t-2xl bg-white shadow-[0_-24px_60px_rgba(0,0,0,0.5)] lg:bottom-3 lg:left-auto lg:right-3 lg:top-3 lg:h-auto lg:w-[380px] lg:rounded-xl lg:shadow-[0_30px_80px_-24px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)]">
           <AssistantPanel dataset={dataset} snapshot={snapshot} open={docked} context={guideContext} focusKey={focusKey}
             onClose={() => toggleGuide(false)} onUnread={() => setUnread(true)} onAction={onGuideAction} />
         </aside>

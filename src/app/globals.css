@@ -287,10 +287,15 @@ body {
 .guide-panel { animation: guide-sheet 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 @media (min-width: 1024px) { .guide-panel { animation-name: guide-panel; } }
 
-.guide-scroll { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.15) transparent; }
+.guide-scroll { scrollbar-width: thin; scrollbar-color: rgba(0, 0, 0, 0.14) transparent; }
+
+/* Streaming caret and the step being worked on. */
+.guide-caret::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -0.15em; border-radius: 1px; background: #2f5454; animation: caret 1s steps(1) infinite; }
+@keyframes guide-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+.guide-pulse { color: #000; animation: guide-pulse 1.4s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .guide-in, .guide-dot, .guide-star, .guide-bar, .guide-panel { animation: none !important; }
+  .guide-in, .guide-dot, .guide-star, .guide-bar, .guide-panel, .guide-pulse, .guide-caret::after { animation: none !important; }
   .guide-draw { animation: none !important; stroke-dashoffset: 0; }
   .guide-flash { animation: none !important; outline-color: #3ddc6c; }
 }
