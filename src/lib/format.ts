@@ -25,4 +25,10 @@ export const verdictStyle: Record<Verdict, { label: string; dot: string; badge: 
   existing: { label: "In index", dot: "#475569", badge: "bg-slate-200 text-slate-800" },
 };
 
+export const recStyle: Record<"pass" | "mixed" | "fail", { label: string; badge: string }> = {
+  pass: { label: "Passes", badge: "bg-green-100 text-green-800" },
+  mixed: { label: "Mixed", badge: "bg-amber-100 text-amber-800" },
+  fail: { label: "Fails", badge: "bg-red-100 text-red-800" },
+};
+
 export const pct = (v: number, digits = 1) => `${v.toFixed(digits)}%`;

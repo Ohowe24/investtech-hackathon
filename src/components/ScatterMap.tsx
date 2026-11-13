@@ -6,6 +6,11 @@ import { formatValue, verdictStyle } from "@/lib/format";
 const W = 640;
 const H = 420;
 const PAD = { left: 64, right: 24, top: 24, bottom: 52 };
+// Chart window only (not data): values beyond it are pinned to the edge and marked "off chart",
+// so one extreme company cannot squash everyone else into a corner.
+const X_WINDOW = [-0.1, 1.6] as const;
+const Y_WINDOW = [-0.1, 0.3] as const;
+const clamp = (v: number, [lo, hi]: readonly [number, number]) => Math.min(hi, Math.max(lo, v));
 
 interface Props {
   dataset: Dataset;
@@ -21,8 +26,11 @@ export default function ScatterMap({ dataset, selected, onSelect }: Props) {
   const plotted = companies.filter((c) => c.metrics[map.x]?.value != null && c.metrics[map.y]?.value != null);
   const missing = companies.filter((c) => !plotted.includes(c));
 
-  const xs = [...plotted.map((c) => c.metrics[map.x].value as number), map.xThreshold];
-  const ys = [...plotted.map((c) => c.metrics[map.y].value as number), map.yThreshold];
+  const xv = (c: (typeof companies)[number]) => clamp(c.metrics[map.x].value as number, X_WINDOW);
+  const yv = (c: (typeof companies)[number]) => clamp(c.metrics[map.y].value as number, Y_WINDOW);
+  const offChart = (c: (typeof companies)[number]) => xv(c) !== c.metrics[map.x].value || yv(c) !== c.metrics[map.y].value;
+  const xs = [...plotted.map(xv), map.xThreshold];
+  const ys = [...plotted.map(yv), map.yThreshold];
   const pad = (lo: number, hi: number) => {
     const span = hi - lo || Math.abs(hi) || 1;
     return [lo - span * 0.12, hi + span * 0.12] as const;
@@ -62,14 +70,14 @@ export default function ScatterMap({ dataset, selected, onSelect }: Props) {
         <text x={left - 6} y={ty + 4} textAnchor="end" className="fill-slate-400 text-[11px]">{formatValue(map.yThreshold, yDef?.unit ?? "pct")}</text>
 
         {plotted.map((c) => {
-          const cx = sx(c.metrics[map.x].value as number);
-          const cy = sy(c.metrics[map.y].value as number);
+          const cx = sx(xv(c));
+          const cy = sy(yv(c));
           const isSel = c.ticker === selected;
           return (
             <g key={c.ticker} onClick={() => onSelect(c.ticker)} className="cursor-pointer">
               <circle cx={cx} cy={cy} r={isSel ? 10 : 7} fill={verdictStyle[c.verdict].dot} fillOpacity={0.85}
                 stroke={c.inIndex ? "#0f172a" : "white"} strokeWidth={c.inIndex ? 2.5 : 1.5} />
-              <text x={cx + 12} y={cy + 4} className={`text-[12px] ${isSel ? "fill-slate-900 font-semibold" : "fill-slate-700"}`}>{c.ticker}</text>
+              <text x={cx + 12} y={cy + 4} className={`text-[12px] ${isSel ? "fill-slate-900 font-semibold" : "fill-slate-700"}`}>{c.ticker}{offChart(c) ? " ↗ off chart" : ""}</text>
             </g>
           );
         })}

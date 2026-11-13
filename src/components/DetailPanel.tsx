@@ -1,7 +1,7 @@
 "use client";
 
 import type { Company, Dataset } from "@contract/types";
-import { formatMetric, verdictStyle } from "@/lib/format";
+import { formatMetric, recStyle, verdictStyle } from "@/lib/format";
 
 interface Props {
   dataset: Dataset;
@@ -37,7 +37,39 @@ export default function DetailPanel({ dataset, company }: Props) {
       <p className="mt-2 text-sm text-slate-600">
         Zone: <span className="font-medium text-slate-900">{company.zone}</span>
       </p>
-      {company.reason && <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm text-slate-800">{company.reason}</p>}
+      {company.reason && (
+        <p className="mt-3 rounded-lg bg-slate-50 p-3 text-sm text-slate-800">
+          {company.reason}
+          <span className="mt-1 block text-[11px] text-slate-400">
+            {company.verdictSource === "model" ? "Set by the model's declared rules" : "Set by a human reviewer"}
+          </span>
+        </p>
+      )}
+
+      {company.model && (
+        <div className="mt-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-sm font-semibold text-slate-900">The test</h4>
+            <span className={`rounded-full px-2.5 py-0.5 text-xs font-medium ${recStyle[company.model.recommendation].badge}`}>
+              {recStyle[company.model.recommendation].label} · {company.model.passed}/{company.model.available} scored · rank {company.model.rank}
+            </span>
+          </div>
+          <ul className="mt-2 space-y-1.5">
+            {company.model.checks.map((k) => (
+              <li key={k.id} className="flex items-start gap-2 text-sm">
+                <span className={`mt-1.5 inline-block h-2.5 w-2.5 shrink-0 rounded-full ${k.pass === null ? "border border-slate-300" : k.pass ? "bg-green-500" : "bg-red-500"}`} />
+                <span className="text-slate-700">
+                  <span className="font-medium text-slate-900">{k.label}</span>
+                  {k.kind === "gate" && <span className="ml-1 text-[11px] text-slate-400">must pass</span>}
+                  <span className="block text-xs text-slate-500">
+                    {k.rule}: {k.pass === null ? "no data" : k.pass ? "yes" : "no"}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <table className="mt-4 w-full text-sm">
         <tbody>
@@ -61,7 +93,7 @@ export default function DetailPanel({ dataset, company }: Props) {
                         return s?.url ? (
                           <a key={id} href={s.url} target="_blank" rel="noreferrer" className="mr-2 text-blue-600 underline">{s.label}</a>
                         ) : (
-                          <span key={id} className="mr-2 text-slate-400">{s?.label ?? id}</span>
+                          <span key={id} className="mr-2 text-slate-400" title={s?.quote}>{s?.label ?? id}{s?.quote ? `: “${s.quote}”` : ""}</span>
                         );
                       })}
                     </div>
