@@ -1,111 +1,91 @@
 "use client";
 
-import { useState } from "react";
-import type { Dataset, ModelResult } from "@contract/types";
-import { config } from "../../engine/config";
-import { compareRules, controls, defaultSettings, type RuleSettings } from "../../engine/sensitivity";
-import { formatValue, recStyle } from "@/lib/format";
-import { Card, Segmented } from "./ui";
+import type { Company, Dataset } from "@contract/types";
+import { formatValue, recStyle, verdictStyle } from "@/lib/format";
+import { Card } from "./ui";
 
-function Result({ value }: { value: ModelResult["recommendation"] }) {
-  return <span className={`inline-block rounded px-2 py-1 text-xs font-medium ${recStyle[value].badge}`}>{recStyle[value].label}</span>;
-}
-const status = (pass: boolean | null) => pass === null ? "Missing data" : pass ? "Pass" : "Fail";
+const status = (pass: boolean | null) => pass === null ? "Missing evidence" : pass ? "Meets rule" : "Below standard";
 
-export default function RuleLab({ dataset, settings, onSettings, onOpen }: {
+/** Explains the published thesis and decisions without changing the model's standards. */
+export default function RuleLab({ dataset, onOpen }: {
   dataset: Dataset;
-  settings: RuleSettings;
-  onSettings: (settings: RuleSettings) => void;
   onOpen: (ticker: string) => void;
 }) {
-  const [scope, setScope] = useState<"ca" | "all">("ca");
-  const rows = dataset.companies.filter((c) => scope === "all" || (c.hqCountry === "CA" && !c.inIndex))
-    .map((company) => ({ company, ...compareRules(company, settings) }));
-  const defaults = defaultSettings();
-  const edited = controls.some((c) => settings[c.id] !== defaults[c.id]);
-  const count = (which: "baseline" | "scenario") => rows.filter((r) => r[which].recommendation === "pass").length;
+  const candidates = dataset.companies.filter((c) => c.hqCountry === "CA" && !c.inIndex);
+  const additions = candidates.filter((c) => c.verdict === "add");
+  const others = candidates.filter((c) => c.verdict !== "add");
+
+  const evidence = (company: Company) => {
+    const model = company.model;
+    const supported = model?.checks.filter((c) => c.pass === true) ?? [];
+    const concerns = model?.checks.filter((c) => c.pass !== true) ?? [];
+    return (
+      <Card key={company.ticker} title={`${company.ticker} · ${company.name}`} right={<span className={`rounded px-2 py-1 text-xs ${verdictStyle[company.verdict].badge}`}>{verdictStyle[company.verdict].label}</span>}>
+        <div className="flex flex-wrap items-center gap-3 text-xs text-muted">
+          {model && <span className={`rounded px-2 py-1 ${recStyle[model.recommendation].badge}`}>Model: {recStyle[model.recommendation].label}</span>}
+          <span>Decision: {company.verdictSource === "human" ? "analyst override" : company.verdictSource === "model" ? "published model" : "published decision"}</span>
+          {model && <span>{supported.length}/{model.checks.length} checks meet the standard</span>}
+        </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <div><h3 className="text-sm font-semibold text-ink">Supporting evidence</h3>
+            <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{supported.map((check) => <li key={check.id}><span className="font-medium text-teal">✓ </span>{check.rule}.</li>)}</ul>
+            {supported.length === 0 && <p className="mt-2 text-xs text-muted">No passing checks are available in the published model.</p>}
+          </div>
+          <div><h3 className="text-sm font-semibold text-ink">What still needs attention</h3>
+            {concerns.length ? <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{concerns.map((check) => <li key={check.id}><span className="font-medium text-warn">{check.pass === null ? "Missing evidence" : "Does not meet rule"}: </span>{check.rule}.</li>)}</ul> : <p className="mt-2 text-xs leading-relaxed text-muted">{model ? "No failed or missing checks in this screen. Valuation and deal-level due diligence remain separate questions." : "Published model unavailable; no supporting conclusion can be drawn here."}</p>}
+            {company.verdictSource === "human" && company.reason && <p className="mt-2 text-xs text-muted">Analyst rationale: {company.reason}</p>}
+          </div>
+        </div>
+        <details className="mt-4 border-t border-line pt-3">
+          <summary className="cursor-pointer text-xs font-medium text-teal">Inspect figures, fixed rules and sources</summary>
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full min-w-[570px] text-left text-xs">
+              <caption className="sr-only">Published checks and supporting sources for {company.ticker}</caption>
+              <thead><tr className="border-b border-line text-muted">{["Measure / period", "Actual", "Fixed rule", "Evidence"].map((label) => <th key={label} className="px-2 py-2 font-medium">{label}</th>)}</tr></thead>
+              <tbody>{model?.checks.map((check) => {
+                const metric = company.metrics[check.metricId];
+                const def = dataset.metricDefs.find((m) => m.id === check.metricId);
+                return <tr key={check.id} className="border-b border-line text-muted">
+                  <td className="px-2 py-3"><span className="font-medium text-ink">{def?.short ?? def?.label ?? check.metricId}</span><div className="mt-1">{metric?.period ?? "Period unavailable"} · {check.kind === "gate" ? "Required gate" : "Scored check"}</div>{metric?.note && <p className="mt-1 max-w-sm">{metric.note}</p>}
+                    <div className="mt-1 flex flex-wrap gap-2">{metric?.sourceIds.map((id) => { const source = dataset.sources.find((s) => s.id === id); return source?.url ? <a key={id} href={source.url} target="_blank" rel="noreferrer" className="text-teal underline">{source.label}</a> : <span key={id}>{source?.label ?? id}</span>; })}</div>
+                  </td>
+                  <td className="px-2 py-3 tabular-nums text-ink">{formatValue(metric?.value, def?.unit ?? "pct")}</td>
+                  <td className="max-w-xs px-2 py-3">{check.rule}</td>
+                  <td className={`px-2 py-3 font-medium ${check.pass === true ? "text-teal" : "text-warn"}`}>{status(check.pass)}</td>
+                </tr>;
+              })}</tbody>
+            </table>
+          </div>
+        </details>
+        <button type="button" onClick={() => onOpen(company.ticker)} className="mt-4 text-xs font-medium text-teal underline">Open {company.ticker} company research →</button>
+      </Card>
+    );
+  };
 
   return (
     <div className="space-y-5">
-      <div className="max-w-2xl text-white">
-        <p className="text-xs uppercase tracking-widest text-white/50">Acquirer rule sensitivity</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Test the conclusion</h1>
-        <p className="mt-2 text-sm leading-relaxed text-white/70">Would you still choose the same acquirers if your standards changed? Adjust the limits, keep the company data fixed, and see exactly what changes the model’s answer.</p>
+      <div className="max-w-3xl text-white">
+        <p className="text-xs uppercase tracking-widest text-white/50">The case behind our selections</p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Tested thesis</h1>
+        <p className="mt-3 text-lg leading-relaxed">Select Canadian acquirers that turn growth into cash flow per share, with disciplined debt and adequate cash returns on invested capital.</p>
+        <p className="mt-2 text-sm leading-relaxed text-white/60">Getting bigger alone is not enough. We apply the same declared standards to every candidate and trace each result to the underlying figures.</p>
       </div>
-
-      <Card title="Your screening limits" right={<button type="button" onClick={() => onSettings(defaultSettings())} disabled={!edited} className="rounded-md border border-line px-3 py-1.5 text-xs font-medium text-ink disabled:opacity-40">Reset to defaults</button>}>
-        <div className="grid gap-6 md:grid-cols-3">
-          {controls.map((control) => (
-            <div key={control.id}>
-              <label htmlFor={`rule-${control.id}`} className="text-sm font-medium text-ink">{control.label}</label>
-              <div className="mt-3 flex items-baseline justify-between gap-2">
-                <output htmlFor={`rule-${control.id}`} className="text-2xl font-semibold tabular-nums text-ink">{formatValue(settings[control.id], control.unit)}</output>
-                <span className="text-xs text-muted">Default {formatValue(defaults[control.id], control.unit)}</span>
-              </div>
-              <input id={`rule-${control.id}`} type="range" min={control.min} max={control.max} step={control.step} value={settings[control.id]}
-                aria-valuetext={formatValue(settings[control.id], control.unit)}
-                onChange={(e) => onSettings({ ...settings, [control.id]: Number(e.target.value) })}
-                className="my-3 w-full cursor-pointer accent-teal" />
-              <p className="text-xs leading-relaxed text-muted">{control.why}</p>
-            </div>
-          ))}
+      <Card title="What the evidence supports">
+        <div className="grid gap-5 sm:grid-cols-3">
+          <div><p className="text-xs text-muted">Canadian candidates evaluated</p><p className="mt-1 text-2xl font-semibold text-ink">{candidates.length}</p></div>
+          <div><p className="text-xs text-muted">Published additions</p><p className="mt-1 text-2xl font-semibold text-teal">{additions.map((c) => c.ticker).join(" + ") || "None"}</p></div>
+          <div><p className="text-xs text-muted">Watch or reject</p><p className="mt-1 text-2xl font-semibold text-ink">{others.length}</p></div>
         </div>
-        <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted">Research sandbox: these settings last while you navigate this page. Refresh resets them. Saved company decisions, portfolio weights and the Map remain unchanged.</p>
+        <p className="mt-4 border-t border-line pt-4 text-sm leading-relaxed text-muted">The sections below explain the existing index decisions using the published model. Fixed rules make the case consistent: acquisition activity establishes theme fit, debt is a required gate, and per-share growth, cash return, share count and acquisition spending determine the score.</p>
       </Card>
-
-      <Card title="What changes?" right={<Segmented value={scope} onChange={setScope} options={[{ id: "ca", label: "Canadian candidates" }, { id: "all", label: "All companies" }]} />}>
-        <div role="status" aria-live="polite" className="mb-5 grid gap-3 sm:grid-cols-3">
-          {[["Pass default rules", count("baseline")], ["Pass your rules", count("scenario")], ["Changed model results", rows.filter((r) => r.changed).length]].map(([label, value]) => (
-            <div key={label} className="rounded-lg bg-soft px-4 py-3"><div className="text-2xl font-semibold tabular-nums text-ink">{value}<span className="text-sm font-normal text-muted"> / {rows.length}</span></div><div className="mt-1 text-xs text-muted">{label}</div></div>
-          ))}
-        </div>
-        <p className="mb-4 text-xs text-muted">A model pass is a research candidate, not an automatic addition. Open a company’s checks to inspect the evidence.</p>
-        <div className="space-y-3">
-          {rows.map(({ company, baseline, scenario, changedChecks, changed }) => (
-            <details key={company.ticker} className={`rounded-lg border ${changed ? "border-teal/40 bg-tealsoft/20" : "border-line"}`}>
-              <summary className="cursor-pointer px-4 py-3 text-sm text-ink">
-                <div className="ml-1 inline-flex w-[calc(100%-1.5rem)] flex-wrap items-center gap-x-3 gap-y-2 align-middle">
-                  <span className="min-w-0 flex-1"><strong>{company.ticker}</strong> <span className="text-muted">{company.name}</span><span className="block pt-1 text-xs text-muted">{company.inIndex ? "Existing holding" : "Candidate"} · {scenario.checks.filter((c) => c.pass !== null).length}/{scenario.checks.length} checks have data</span></span>
-                  <span className="flex items-center gap-2"><span className="sr-only">Default:</span><Result value={baseline.recommendation} /><span aria-hidden="true">→</span><span className="sr-only">Your rules:</span><Result value={scenario.recommendation} /></span>
-                  <span className="w-full text-xs text-muted">{changedChecks.length ? `${changedChecks.length} check${changedChecks.length === 1 ? "" : "s"} changed${changed ? "; model result changed" : "; overall result unchanged"}.` : "No check outcomes changed."}</span>
-                </div>
-              </summary>
-              <div className="border-t border-line px-4 py-4">
-                <p className="mb-3 text-xs text-muted">Your score: {scenario.passed}/{scenario.available} available scored checks pass. {scenario.checks.some((c) => c.kind === "gate" && c.pass === false) ? "A required gate fails." : scenario.checks.some((c) => c.kind === "gate" && c.pass === null) ? "A required gate is missing evidence." : "Both required gates pass."}</p>
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[620px] text-left text-xs">
-                    <caption className="sr-only">{company.ticker} default versus adjusted checks</caption>
-                    <thead><tr className="border-b border-line text-muted">{["Check / metric period", "Actual", "Default limit", "Your limit", "Outcome"].map((label) => <th key={label} className="px-2 py-2 font-medium">{label}</th>)}</tr></thead>
-                    <tbody>{scenario.checks.map((check, i) => {
-                      const metric = company.metrics[check.metricId];
-                      const def = dataset.metricDefs.find((m) => m.id === check.metricId);
-                      const unit = def?.unit ?? "pct";
-                      const differs = check.pass !== baseline.checks[i].pass;
-                      return <tr key={check.id} className={`border-b border-line ${differs ? "bg-tealsoft/50" : ""}`}>
-                        <td className="px-2 py-3"><span className="font-medium">{def?.short ?? def?.label ?? check.metricId}</span> <span className="text-muted">({check.kind === "gate" ? "required gate" : "scored"})</span><div className="mt-1 text-muted">{metric?.period ?? "Period unavailable"}</div>{metric?.note && <div className="mt-1 max-w-sm text-muted">{metric.note}</div>}
-                          <div className="mt-1 flex flex-wrap gap-2">{metric?.sourceIds.map((id) => { const source = dataset.sources.find((s) => s.id === id); return source?.url ? <a key={id} href={source.url} target="_blank" rel="noreferrer" className="text-teal underline">{source.label}</a> : <span key={id} className="text-muted">{source?.label ?? id}</span>; })}</div>
-                        </td>
-                        <td className="px-2 py-3 tabular-nums">{formatValue(metric?.value, unit)}</td>
-                        <td className="px-2 py-3 tabular-nums">{check.op} {formatValue(baseline.checks[i].threshold, unit)}</td>
-                        <td className="px-2 py-3 tabular-nums">{check.op} {formatValue(check.threshold, unit)}</td>
-                        <td className="px-2 py-3 font-medium">{differs ? `${status(baseline.checks[i].pass)} → ` : ""}{status(check.pass)}</td>
-                      </tr>;
-                    })}</tbody>
-                  </table>
-                </div>
-                <button type="button" onClick={() => onOpen(company.ticker)} className="mt-4 text-xs font-medium text-teal underline">Open {company.ticker} company research →</button>
-              </div>
-            </details>
-          ))}
-          {rows.length === 0 && <p className="text-sm text-muted">No companies in this scope.</p>}
-        </div>
-      </Card>
-
-      <Card title="Still the same acquirer model">
-        <p className="text-sm leading-relaxed text-muted">The acquisition theme, share-count check and acquisition-spend check stay fixed. Only your tolerance for leverage, per-share growth and cash return changes.</p>
-        <ul className="mt-3 list-disc space-y-1 pl-5 text-xs text-muted">{config.checks.filter((k) => !controls.some((c) => c.id === k.id)).map((k) => <li key={k.id}>{k.rule} ({k.kind === "gate" ? "required gate" : "scored"}).</li>)}</ul>
-        <p className="mt-3 text-xs leading-relaxed text-muted">Passes requires both gates, at least {config.scoring.minAvailable} scored checks with data, and {config.scoring.passShare * 100}% of available scored checks passing. Fails means a failed gate or fewer than {config.scoring.mixedShare * 100}% passing; otherwise Mixed. Missing evidence never becomes a pass or a zero.</p>
-        <p className="mt-3 text-xs leading-relaxed text-muted">This tests screening assumptions, not future returns, valuation or the probability of success. Cash return is FCF / average debt plus equity, not the return on individual deals. Share issuance alone does not prove value destruction; acquisition spend / operating cash flow does not establish how deals were financed. Those questions still need company research.</p>
+      <div><h2 className="text-lg font-semibold text-white">Why these additions</h2><p className="mt-1 text-sm text-white/60">The supporting evidence and remaining caveats, together.</p></div>
+      {additions.map(evidence)}
+      {!additions.length && <Card><p className="text-sm text-muted">The published dataset currently recommends no Canadian additions.</p></Card>}
+      <div><h2 className="text-lg font-semibold text-white">Why we did not select the others</h2><p className="mt-1 text-sm text-white/60">The same standards explain the watchlist and rejections.</p></div>
+      {others.map(evidence)}
+      <Card title="How to read this conclusion">
+        <p className="text-sm leading-relaxed text-muted">{dataset.rules?.result ?? "Published results use the declared acquirer gates and scored checks. Missing data stays unknown."}</p>
+        <p className="mt-3 text-xs leading-relaxed text-muted">This evidence supports fit with our selection framework; it does not prove that acquisitions caused the growth or that these stocks will outperform. Cash return is a company-wide measure. Share issuance and acquisition spending are screening signals, not proof of deal financing or value destruction. Source quality, valuation and individual deals still require research.</p>
       </Card>
     </div>
   );

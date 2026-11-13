@@ -8,7 +8,6 @@ import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import IndexBuilder from "./IndexBuilder";
 import RuleLab from "./RuleLab";
-import { defaultSettings } from "../../engine/sensitivity";
 import Recommendation from "./Recommendation";
 import { Card } from "./ui";
 
@@ -23,14 +22,13 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
   { id: "index", label: "Index" },
-  { id: "test", label: "Test the conclusion" },
+  { id: "test", label: "Tested thesis" },
 ];
 
 /** The whole app. The address hash holds the view (none = start page, #recommendation, #companies, #map, #index, #test) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
-  const [settings, setSettings] = useState(defaultSettings);
   const [hovered, setHovered] = useState<string | null>(null);
 
   useEffect(() => {
@@ -87,7 +85,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
             <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
           </Card>
         ) : tab === "test" ? (
-          <RuleLab dataset={dataset} settings={settings} onSettings={setSettings} onOpen={(t) => go(`c/${t}`)} />
+          <RuleLab dataset={dataset} onOpen={(t) => go(`c/${t}`)} />
         ) : tab === "index" ? (
           <IndexBuilder dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} />
         ) : (
