@@ -90,16 +90,14 @@ Each fiscal year in `history` also carries, all `null` when an input is missing:
 - `revenuePerShare` = revenue ÷ diluted shares.
 
 `totals` are strict sums over every year in `history` (null if any year is missing); `fcfAfterAcquisitions` = summed free cash flow − summed net acquisitions; `revenueAdded` and `goodwillAdded` = last year − first year.
-## Test the conclusion (rule sensitivity)
+## Tested thesis (presentation)
 
-The `#test` tab reruns the existing `passes()` / `tally()` model on the same sourced metrics.
-The default thresholds come directly from `config.checks`; tests require parity with every published company model.
-Users can adjust the net debt / 3-year average EBITDA ceiling (1–5×), annual FCF/share growth floor (0–15%),
-and cash return floor (0–20%). These are exploratory UI ranges, not empirically calibrated limits.
-Theme fit, share-count and acquisition-spend checks, scoring weights and missing-data requirements stay fixed.
-Comparisons show both overall results and individual check changes, including metrics, periods and available sources.
-Defaults and scenarios are recomputed; neither overwrites human decisions, published ranks, Map thresholds or index weights.
-Settings persist across tabs for the current page session and reset on refresh or with Reset to defaults.
-This is rule sensitivity, not a forecast, backtest or probability of investment success. A stable result only
-means it survived the specific settings tried. Stock issuance alone does not prove value destruction, and
-acquisition spending relative to OCF does not establish deal financing. Those fixed checks are screening proxies.
+The `#test` tab presents the existing investment thesis: select Canadian acquirers that turn growth
+into cash flow per share, with disciplined debt and adequate cash returns on invested capital.
+This wording synthesizes the project brief and the declared metric rationale in `engine/config.ts`.
+The page reads published company decisions and model checks directly from the dataset. It shows
+supporting checks, failed or missing checks, metric periods and source links for additions and other candidates.
+Human decisions remain distinct from model results. No thresholds, scores, company data or portfolio
+weights are changed. The former adjustable sliders are removed from the presentation; the pure
+sensitivity utilities and their tests remain available for development research.
+“Tested” means evaluated against the declared screen, not independently validated or proven to outperform.
