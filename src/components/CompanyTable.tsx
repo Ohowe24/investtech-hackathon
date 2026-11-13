@@ -16,22 +16,34 @@ interface Props {
   scope: "ca" | "all";
   onScope: (s: "ca" | "all") => void;
   onOpen: (ticker: string) => void;
+  /** a list the Guide asked to show; overrides the scope until cleared */
+  filter?: { tickers: string[]; title: string } | null;
+  onClearFilter?: () => void;
 }
 
 /** The overview: one row per company, best first. Click a row to open the company. */
-export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props) {
+export default function CompanyTable({ dataset, scope, onScope, onOpen, filter, onClearFilter }: Props) {
   const tested = dataset.companies.filter((c) => c.model);
   const candidates = tested.filter((c) => !c.inIndex);
   const metrics = scoredMetrics(dataset);
-  const rows = (scope === "ca" ? candidates : tested).sort((a, b) => a.model!.rank - b.model!.rank);
+  const rows = (filter ? tested.filter((c) => filter.tickers.includes(c.ticker)) : scope === "ca" ? candidates : tested)
+    .sort((a, b) => a.model!.rank - b.model!.rank);
 
   return (
-    <section key={scope} className="scan-once overflow-hidden rounded-xl border border-line bg-white">
+    <section key={filter ? `f:${filter.title}` : scope} data-guide="table" className="scan-once overflow-hidden rounded-xl border border-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
-        <Segmented value={scope} onChange={onScope} options={[
-          { id: "ca", label: `Canadian · ${candidates.length}` },
-          { id: "all", label: `All · ${tested.length}` },
-        ]} />
+        {filter ? (
+          <div className="flex min-w-0 items-center gap-2 rounded-lg bg-tealsoft px-3 py-1.5 text-xs text-teal">
+            <span aria-hidden>✦</span>
+            <span className="truncate">Guide filter: <span className="font-semibold">{filter.title}</span> · {rows.length} {rows.length === 1 ? "company" : "companies"}</span>
+            <button onClick={onClearFilter} className="ml-1 rounded-md bg-white px-2 py-0.5 font-medium text-ink shadow-sm hover:bg-soft">Clear</button>
+          </div>
+        ) : (
+          <Segmented value={scope} onChange={onScope} options={[
+            { id: "ca", label: `Canadian · ${candidates.length}` },
+            { id: "all", label: `All · ${tested.length}` },
+          ]} />
+        )}
         <div className="flex items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5"><Dot pass={true} size={8} /> Pass</span>
           <span className="flex items-center gap-1.5"><Dot pass={false} size={8} /> Fail</span>
@@ -81,7 +93,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                       <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md bg-soft font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
                       <div className="min-w-0">
                         <div className="truncate font-medium text-ink">{c.name}</div>
-                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Candidate" : ""}</div>
+                        <div className="truncate text-xs text-faint">{c.subSector}{(scope === "all" || filter) && !c.inIndex ? " · Candidate" : ""}</div>
                       </div>
                     </div>
                   </td>
