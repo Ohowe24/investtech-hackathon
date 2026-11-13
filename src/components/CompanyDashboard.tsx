@@ -1,11 +1,12 @@
 "use client";
 
-import type { Company, Dataset, MetricDef } from "@contract/types";
-import { formatMetric, pct, recStyle, verdictStyle } from "@/lib/format";
+import type { Company, Dataset, MetricDef, YearRow } from "@contract/types";
+import { formatMetric, formatValue, pct, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from "@/lib/rank";
 import DealTimeline from "./DealTimeline";
 import { Card, Explain } from "./ui";
+import { C, ChartCard, SplitBar, TrendChart } from "./charts";
 
 interface Props {
   dataset: Dataset;
@@ -83,16 +84,19 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         )}
       </section>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-        {scored.map((d) => <MetricCard key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} />)}
-        {context.map((d) => <MetricCard key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} />)}
+      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7">
+        {[...scored, ...context].map((d) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} />)}
       </div>
 
+      {company.history?.length ? <DeepDive company={company} /> : null}
+
       {company.history?.length ? (
-        <Card title="By year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
+        <Card title="Acquisitions by year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
           <DealTimeline dataset={dataset} company={company} />
         </Card>
       ) : null}
+
+      {company.history?.length ? <FinancialTable company={company} /> : null}
 
       {sourceLabels.length > 0 && (
         <div className="flex flex-wrap items-center gap-1.5 text-xs text-white/60">
@@ -127,78 +131,233 @@ function Stat({ label, value, unit, info }: { label: string; value: string; unit
   );
 }
 
-/** One metric: the value, its pass lines, and where it sits among every company tested. */
-function MetricCard({ dataset, company, def, onOpen }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void }) {
+/** One metric, small: the value, its pass lines, and where it sits among every company tested. */
+function MetricTile({ dataset, company, def, onOpen }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void }) {
   const tested = dataset.companies.filter((c) => c.model);
   const mv = company.metrics[def.id];
   const checks = company.model?.checks.filter((k) => k.metricId === def.id) ?? [];
-  const order = ranking(tested, def);
-  const withData = order.filter((c) => c.metrics[def.id]?.value != null);
+  const withData = ranking(tested, def).filter((c) => c.metrics[def.id]?.value != null);
   const pos = withData.findIndex((c) => c.ticker === company.ticker);
   const state = metricState(company, def.id);
   const lowFirst = def.higherIsBetter === false;
-  // Up to three rows of the ranking, centred on this company.
-  const from = Math.max(0, Math.min(pos - 1, withData.length - 3));
-  const around = pos < 0 ? [] : withData.slice(from, from + 3);
 
   return (
-    <section className="flex flex-col rounded-xl border border-line bg-white p-5">
-      <div className="flex items-start justify-between gap-3">
-        <Explain info={scoredMetricInfo(dataset, def.id)} className="text-[13px] font-medium text-muted">{def.short ?? def.label}</Explain>
-        <div className="flex flex-wrap justify-end gap-1">
-          {checks.map((k) => (
-            <span key={k.id} title={k.rule}
-              className={`rounded-md px-1.5 py-0.5 font-mono text-[11px] font-medium ${k.pass === null ? "bg-soft text-faint" : k.pass ? "bg-tealsoft text-teal" : "bg-badsoft text-bad"}`}>
-              {k.pass === null ? "" : k.pass ? "✓ " : "✕ "}{k.target}
-            </span>
-          ))}
-          {checks.length === 0 && <span className="rounded-md bg-soft px-1.5 py-0.5 text-[11px] text-faint">Not scored</span>}
-        </div>
+    <section className="flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note}>
+      <Explain info={scoredMetricInfo(dataset, def.id)} className="truncate text-left text-[11px] font-medium text-muted">{def.short ?? def.label}</Explain>
+      <div className={`mt-1.5 font-mono text-lg font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state]}`}>
+        {mv?.value == null ? "—" : formatMetric(mv, def.unit)}
       </div>
-
-      <div className="mt-3 flex items-baseline gap-2">
-        <span className={`font-mono text-[32px] font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state === "plain" ? "plain" : state]}`}>
-          {mv?.value == null ? "—" : formatMetric(mv, def.unit)}
-        </span>
-        {mv?.period && <span className="text-[11px] text-faint">{mv.period}</span>}
+      <div className="mt-1.5 flex flex-wrap gap-1">
+        {checks.map((k) => (
+          <span key={k.id} title={k.rule}
+            className={`rounded px-1 py-px font-mono text-[10px] font-medium ${k.pass === null ? "bg-soft text-faint" : k.pass ? "bg-tealsoft text-teal" : "bg-badsoft text-bad"}`}>
+            {k.pass === null ? "" : k.pass ? "✓ " : "✕ "}{k.target}
+          </span>
+        ))}
+        {checks.length === 0 && <span className="rounded bg-soft px-1 py-px text-[10px] text-faint">Not scored</span>}
       </div>
-
       {pos >= 0 ? (
-        <>
-          <div className="mt-4 flex items-baseline justify-between text-xs">
-            <span className="font-medium text-ink">{ordinal(pos + 1)} {lowFirst ? "lowest" : "highest"} <span className="font-normal text-muted">of {withData.length}</span></span>
-            {def.higherIsBetter != null && <span className="text-faint">{lowFirst ? "Lower is better" : "Higher is better"}</span>}
-          </div>
-          <div className="mt-2 flex items-end gap-[3px]" role="img" aria-label={`Ranked ${pos + 1} of ${withData.length}`}>
+        <div className="mt-auto pt-2">
+          <div className="flex items-end gap-px" role="img" aria-label={`Ranked ${pos + 1} of ${withData.length}`}>
             {withData.map((c) => {
               const me = c.ticker === company.ticker;
               return (
                 <button key={c.ticker} onClick={() => onOpen(c.ticker)} title={`${c.ticker} · ${formatMetric(c.metrics[def.id], def.unit)}`}
-                  className={`max-w-7 flex-1 rounded-[3px] transition-all ${stateBg[metricState(c, def.id)]} ${me ? "h-7 ring-2 ring-ink ring-offset-1" : "h-4 opacity-35 hover:opacity-100"}`} />
+                  className={`flex-1 rounded-[2px] ${stateBg[metricState(c, def.id)]} ${me ? "h-3.5" : "h-2 opacity-30 hover:opacity-100"}`} />
               );
             })}
           </div>
-          <ul className="mt-3 divide-y divide-line border-t border-line text-xs">
-            {around.map((c) => {
-              const me = c.ticker === company.ticker;
-              return (
-                <li key={c.ticker}>
-                  <button onClick={() => onOpen(c.ticker)} disabled={me}
-                    className={`flex w-full items-center gap-2 py-1.5 text-left ${me ? "font-semibold text-ink" : "text-muted hover:text-ink"}`}>
-                    <span className="w-5 font-mono tabular-nums text-faint">{withData.indexOf(c) + 1}</span>
-                    <span className="font-mono">{c.ticker}</span>
-                    <span className="truncate font-sans font-normal text-faint">{c.name}</span>
-                    <span className={`ml-auto font-mono tabular-nums ${me ? "" : stateText[metricState(c, def.id)]}`}>{formatMetric(c.metrics[def.id], def.unit)}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </>
+          <div className="mt-1 text-[10px] text-faint">{ordinal(pos + 1)} {lowFirst ? "lowest" : "highest"} of {withData.length}</div>
+        </div>
       ) : (
-        <p className="mt-4 text-xs text-muted">{mv?.note ?? "No data."}</p>
+        <p className="mt-auto pt-2 text-[10px] leading-snug text-faint">{mv?.note ?? "No data."}</p>
       )}
-      {pos >= 0 && mv?.note && <p className="mt-2 text-[11px] text-faint">{mv.note}</p>}
     </section>
+  );
+}
+
+const money = (v: number | null | undefined) => (v == null ? "—" : formatValue(v, "money"));
+const pc = (v: number | null | undefined, d = 1) => (v == null ? "—" : `${(v * 100).toFixed(d)}%`);
+const axisPct = (v: number) => `${Math.round(v * 100)}%`;
+const axisX = (v: number) => `${v.toFixed(1)}×`;
+const axisNum = (v: number) => Intl.NumberFormat("en", { notation: "compact", maximumFractionDigits: 1 }).format(v);
+
+/** The company taken apart: latest-year figures, where the cash went, and nine charts by fiscal year. */
+function DeepDive({ company }: { company: Company }) {
+  const h = [...company.history!].sort((a, b) => a.fiscalYear - b.fiscalYear);
+  const years = h.map((r) => r.fiscalYear);
+  const last = h[h.length - 1];
+  const t = company.totals;
+  const cur = company.reportingCurrency ?? "";
+  const col = <K extends keyof YearRow>(k: K) => h.map((r) => r[k] as number | null | undefined);
+  // Pass lines come from the model's checks. They are set on the whole-period figure, so on a yearly chart they are a guide.
+  const line = (metricId: string) =>
+    (company.model?.checks ?? []).filter((k) => k.metricId === metricId && k.threshold != null).map((k) => ({ value: k.threshold!, label: `Pass line ${k.target}` }));
+
+  const kpis: [string, string, string?][] = [
+    ["Revenue", money(last.revenue), last.revenueGrowth == null ? undefined : `${last.revenueGrowth >= 0 ? "+" : ""}${pc(last.revenueGrowth)} vs prior year`],
+    ["EBITDA", money(last.ebitda), last.ebitdaMargin == null ? undefined : `${pc(last.ebitdaMargin)} of revenue`],
+    ["Free cash flow", money(last.freeCashFlow), last.fcfMargin == null ? undefined : `${pc(last.fcfMargin)} of revenue`],
+    ["Spent on acquisitions", money(last.acquisitions), last.acqToOcf == null ? undefined : `${pc(last.acqToOcf, 0)} of operating cash flow`],
+    ["Net debt", money(last.netDebt), last.netDebtToEbitda == null ? undefined : `${last.netDebtToEbitda.toFixed(1)}× EBITDA`],
+    ["Goodwill", money(last.goodwill), last.goodwillToEquity == null ? undefined : `${pc(last.goodwillToEquity, 0)} of equity`],
+  ];
+
+  return (
+    <>
+      <section className="rounded-xl border border-line bg-white">
+        <div className="flex items-center justify-between border-b border-line px-5 py-3">
+          <h2 className="text-[13px] font-semibold text-ink">FY{last.fiscalYear} at a glance</h2>
+          <span className="text-xs text-faint">{cur}</span>
+        </div>
+        <div className="grid grid-cols-2 gap-y-1 md:grid-cols-3 xl:grid-cols-6 xl:divide-x xl:divide-line">
+          {kpis.map(([label, value, sub]) => (
+            <div key={label} className="px-5 py-3.5">
+              <div className="text-[11px] font-medium uppercase tracking-wide text-faint">{label}</div>
+              <div className={`mt-1 font-mono text-xl font-semibold tabular-nums tracking-tight ${value === "—" ? "text-faint" : "text-ink"}`}>{value}</div>
+              {sub && <div className="mt-0.5 text-[11px] text-muted">{sub}</div>}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {t && t.operatingCashFlow != null && t.capex != null && t.acquisitions != null && t.fcfAfterAcquisitions != null && t.operatingCashFlow > 0 && (
+        <ChartCard title={`Where the cash went, ${t.period}`}
+          sub={`Operating cash flow of ${money(t.operatingCashFlow)} ${cur} over the period, split into capital spending, acquisitions and what was left.`}>
+          {t.fcfAfterAcquisitions >= 0 && t.acquisitions >= 0 ? (
+            <SplitBar fmt={money} parts={[
+              { label: "Capital spending", value: t.capex, color: C.grey },
+              { label: "Acquisitions", value: t.acquisitions, color: C.teal },
+              { label: "Left for debt, buybacks, dividends", value: t.fcfAfterAcquisitions, color: C.sea },
+            ]} />
+          ) : (
+            <SplitBar fmt={money} parts={[
+              { label: "Operating cash flow", value: t.operatingCashFlow, color: C.sea },
+              { label: "Capital spending", value: t.capex, color: C.grey },
+              ...(t.acquisitions >= 0 ? [{ label: "Acquisitions", value: t.acquisitions, color: C.teal }] : []),
+            ]} />
+          )}
+          <p className="mt-2 text-[11px] text-muted">
+            {t.acquisitions < 0
+              ? `Net seller: it received ${money(-t.acquisitions)} more from selling businesses than it paid to buy them.`
+              : t.fcfAfterAcquisitions < 0
+                ? `Acquisitions and capital spending were ${money(-t.fcfAfterAcquisitions)} more than operating cash flow. The gap was funded with debt, shares or cash on hand.`
+                : "Acquisitions were paid for out of the company's own cash flow."}
+            {t.revenueAdded != null && ` Revenue added over the period: ${money(t.revenueAdded)}.`}
+            {t.goodwillAdded != null && ` Goodwill added: ${money(t.goodwillAdded)}.`}
+          </p>
+        </ChartCard>
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <ChartCard title="Revenue and growth" sub="Bars: revenue. Line: change from the year before.">
+          <TrendChart years={years} fmtLeft={axisNum} fmtRight={axisPct} series={[
+            { label: "Revenue", values: col("revenue"), kind: "bar", color: C.teal },
+            { label: "Growth", values: col("revenueGrowth"), kind: "line", color: C.ink, axis: "right" },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Margins" sub="Share of each revenue dollar kept as EBITDA, operating cash flow and free cash flow.">
+          <TrendChart years={years} fmtLeft={axisPct} series={[
+            { label: "EBITDA", values: col("ebitdaMargin"), kind: "line", color: C.ink },
+            { label: "Operating cash flow", values: col("ocfMargin"), kind: "line", color: C.teal },
+            { label: "Free cash flow", values: col("fcfMargin"), kind: "line", color: C.ochre },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Cash in, cash out" sub="Cash the business made each year next to what it spent buying other businesses.">
+          <TrendChart years={years} fmtLeft={axisNum} series={[
+            { label: "Operating cash flow", values: col("operatingCashFlow"), kind: "bar", color: C.sea },
+            { label: "Free cash flow", values: col("freeCashFlow"), kind: "bar", color: C.teal },
+            { label: "Acquisitions", values: col("acquisitions"), kind: "bar", color: C.ink },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Acquisition pace" sub="Acquisition spending as a share of that year's operating cash flow. Above 100% means it needed outside money.">
+          <TrendChart years={years} fmtLeft={axisPct} refs={line("acqIntensity")} series={[
+            { label: "Acquisitions ÷ operating cash flow", values: col("acqToOcf"), kind: "line", color: C.teal },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Per share" sub="What each share earned in free cash flow, and the revenue behind each share.">
+          <TrendChart years={years} fmtLeft={axisNum} fmtRight={axisNum} series={[
+            { label: "Free cash flow per share", values: col("fcfPerShare"), kind: "line", color: C.ink },
+            { label: "Revenue per share (right)", values: col("revenuePerShare"), kind: "line", color: C.sea, axis: "right", dashed: true },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Share count" sub="Diluted shares. Rising means owners are being diluted; falling means buybacks.">
+          <TrendChart years={years} fmtLeft={axisNum} series={[
+            { label: "Diluted shares", values: col("dilutedShares"), kind: "bar", color: C.grey },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Debt load" sub="Bars: debt minus cash. Line: that net debt against the year's EBITDA.">
+          <TrendChart years={years} fmtLeft={axisNum} fmtRight={axisX}
+            refs={line("netDebtToEbitda").map((r) => ({ ...r, axis: "right" as const }))} series={[
+              { label: "Net debt", values: col("netDebt"), kind: "bar", color: C.sea },
+              { label: "Net debt ÷ EBITDA", values: col("netDebtToEbitda"), kind: "line", color: C.ink, axis: "right" },
+            ]} />
+        </ChartCard>
+        <ChartCard title="Returns and cash conversion" sub="Free cash flow against the capital invested, and against EBITDA.">
+          <TrendChart years={years} fmtLeft={axisPct} fmtRight={axisPct} refs={line("cashReturn")} series={[
+            { label: "Return on capital", values: col("cashReturn"), kind: "line", color: C.teal },
+            { label: "Free cash flow ÷ EBITDA (right)", values: col("fcfConversion"), kind: "line", color: C.ochre, axis: "right", dashed: true },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Balance sheet" sub="Acquirers pile up goodwill: the premium paid over the assets bought. Line: goodwill against equity.">
+          <TrendChart years={years} fmtLeft={axisNum} fmtRight={axisPct} series={[
+            { label: "Debt", values: col("totalDebt"), kind: "bar", color: C.ink },
+            { label: "Cash", values: col("cash"), kind: "bar", color: C.sea },
+            { label: "Equity", values: col("totalEquity"), kind: "bar", color: C.teal },
+            { label: "Goodwill", values: col("goodwill"), kind: "bar", color: C.grey },
+            { label: "Goodwill ÷ equity", values: col("goodwillToEquity"), kind: "line", color: C.ochre, axis: "right" },
+          ]} />
+        </ChartCard>
+        <ChartCard title="Capital spending" sub="Money put back into the existing business, and its share of revenue. Low means an asset-light business.">
+          <TrendChart years={years} fmtLeft={axisNum} fmtRight={axisPct} series={[
+            { label: "Capital spending", values: col("capex"), kind: "bar", color: C.grey },
+            { label: "Share of revenue", values: col("capexIntensity"), kind: "line", color: C.ink, axis: "right" },
+          ]} />
+        </ChartCard>
+      </div>
+    </>
+  );
+}
+
+/** Every yearly figure in one table. */
+function FinancialTable({ company }: { company: Company }) {
+  const h = [...company.history!].sort((a, b) => a.fiscalYear - b.fiscalYear);
+  const x = (v: number | null | undefined) => (v == null ? "—" : `${v.toFixed(1)}×`);
+  const n2 = (v: number | null | undefined) => (v == null ? "—" : v.toFixed(2));
+  const groups: [string, [string, keyof YearRow, (v: number | null | undefined) => string][]][] = [
+    ["Income", [["Revenue", "revenue", money], ["Revenue growth", "revenueGrowth", pc], ["EBITDA", "ebitda", money], ["EBITDA margin", "ebitdaMargin", pc]]],
+    ["Cash flow", [["Operating cash flow", "operatingCashFlow", money], ["Capital spending", "capex", money], ["Free cash flow", "freeCashFlow", money],
+      ["Free cash flow margin", "fcfMargin", pc], ["Free cash flow ÷ EBITDA", "fcfConversion", pc], ["Acquisitions (net)", "acquisitions", money], ["Acquisitions ÷ operating cash flow", "acqToOcf", pc]]],
+    ["Balance sheet", [["Debt", "totalDebt", money], ["Cash", "cash", money], ["Net debt", "netDebt", money], ["Net debt ÷ EBITDA", "netDebtToEbitda", x],
+      ["Equity", "totalEquity", money], ["Goodwill", "goodwill", money], ["Goodwill ÷ equity", "goodwillToEquity", pc]]],
+    ["Per share", [["Diluted shares", "dilutedShares", money], ["Free cash flow per share", "fcfPerShare", n2], ["Revenue per share", "revenuePerShare", n2], ["Return on capital", "cashReturn", pc]]],
+  ];
+  return (
+    <Card title="All figures by year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
+      <div className="-mx-5 -my-5 overflow-x-auto">
+        <table className="w-full min-w-[560px] text-xs">
+          <thead>
+            <tr className="border-b border-line text-faint">
+              <th className="px-5 py-2 text-left font-medium" />
+              {h.map((r) => <th key={r.fiscalYear} className="px-3 py-2 text-right font-mono font-medium">FY{r.fiscalYear}</th>)}
+            </tr>
+          </thead>
+          {groups.map(([name, rows]) => (
+            <tbody key={name}>
+              <tr><td colSpan={h.length + 1} className="bg-soft px-5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-muted">{name}</td></tr>
+              {rows.map(([label, key, f]) => (
+                <tr key={key} className="border-b border-line last:border-0">
+                  <td className="px-5 py-1.5 text-muted">{label}</td>
+                  {h.map((r) => {
+                    const v = r[key] as number | null | undefined;
+                    return <td key={r.fiscalYear} className={`px-3 py-1.5 text-right font-mono tabular-nums ${v == null ? "text-faint" : v < 0 ? "text-bad" : "text-ink"}`}>{f(v)}</td>;
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          ))}
+        </table>
+      </div>
+    </Card>
   );
 }

@@ -65,6 +65,20 @@ export interface Company {
   history?: YearRow[];
   /** acquisitions and divestitures as disclosed in filings (only where the data pack covers the company) */
   deals?: Deal[];
+  /** sums across every year in history; null if any year is missing */
+  totals?: {
+    period: string;
+    operatingCashFlow: number | null;
+    capex: number | null;
+    freeCashFlow: number | null;
+    acquisitions: number | null;
+    /** free cash flow left after acquisitions */
+    fcfAfterAcquisitions: number | null;
+    /** revenue added from first to last year */
+    revenueAdded: number | null;
+    /** goodwill added from first to last year */
+    goodwillAdded: number | null;
+  };
   /** reporting currency of the money values in history, e.g. "USD" */
   reportingCurrency?: string;
 }
@@ -78,6 +92,9 @@ export interface CheckResult {
   rule: string;
   /** the pass line as a short token, e.g. "≥ 20%" or "≤ 3×" */
   target?: string;
+  /** the pass line as a number in the metric's unit (decimals for pct), for charts */
+  threshold?: number;
+  op?: ">=" | "<=";
   /** "gate" checks must pass; "score" checks count toward the score */
   kind: "gate" | "score";
   /** MetricDef.id the check reads */
@@ -113,6 +130,31 @@ export interface YearRow {
   fcfPerShare: number | null;
   /** free cash flow / average (debt + equity); decimal */
   cashReturn: number | null;
+  /** detail rows, all nullable; money in the reporting currency, ratios as decimals */
+  capex?: number | null;
+  ebitda?: number | null;
+  totalDebt?: number | null;
+  cash?: number | null;
+  totalEquity?: number | null;
+  goodwill?: number | null;
+  /** debt - cash; negative = net cash */
+  netDebt?: number | null;
+  /** revenue vs the prior fiscal year */
+  revenueGrowth?: number | null;
+  ebitdaMargin?: number | null;
+  ocfMargin?: number | null;
+  fcfMargin?: number | null;
+  /** free cash flow / EBITDA */
+  fcfConversion?: number | null;
+  /** capex / revenue */
+  capexIntensity?: number | null;
+  /** net acquisitions / operating cash flow, that year; 0 in a net-seller year */
+  acqToOcf?: number | null;
+  /** net debt / that year's EBITDA */
+  netDebtToEbitda?: number | null;
+  /** goodwill / total equity */
+  goodwillToEquity?: number | null;
+  revenuePerShare?: number | null;
   sourceIds: string[];
 }
 

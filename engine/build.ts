@@ -9,7 +9,7 @@ import { join } from "node:path";
 import type { CheckResult, Company, Deal, Dataset, MetricValue, ModelResult, Source, Verdict, YearRow } from "../contract/types";
 import { config } from "./config";
 import { num, parseCsv } from "./csv";
-import { acquisitionIntensity, meanStrict, cagr, cashReturnOnCapital, equalWeights, freeCashFlow, netDebtToEbitda, passes, pctChange, perShare, quadrant, sumStrict, tally } from "./metrics";
+import { acquisitionIntensity, meanStrict, cagr, cashReturnOnCapital, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, ratioOfPositive, pctChange, perShare, quadrant, sumStrict, tally } from "./metrics";
 
 const root = process.cwd();
 const realDir = join(root, "engine", "input");
@@ -41,6 +41,7 @@ interface Row {
   organic: number | null;
   equity: number | null;
   ebitda: number | null;
+  goodwill: number | null;
   currency: string;
   sourceId: string;
 }
@@ -66,6 +67,7 @@ for (const r of financialsCsv) {
     organic: num(r.organic_growth_pct),
     equity: num(r.total_equity),
     ebitda: num(r.ebitda),
+    goodwill: num(r.goodwill),
     currency: r.currency ?? "",
     sourceId: r.source_id,
   });
@@ -97,9 +99,46 @@ function historyFor(ticker: string): YearRow[] {
       dilutedShares: r.shares,
       fcfPerShare: perShare(fcf, r.shares),
       cashReturn: cashReturnFor(rows, i),
+      capex: r.capex,
+      ebitda: r.ebitda,
+      totalDebt: r.debt,
+      cash: r.cash,
+      totalEquity: r.equity,
+      goodwill: r.goodwill,
+      netDebt: netDebt(r.debt, r.cash),
+      revenueGrowth: rows[i - 1] && r.year - rows[i - 1].year === 1 ? pctChange(rows[i - 1].revenue, r.revenue) : null,
+      ebitdaMargin: ratioOfPositive(r.ebitda, r.revenue),
+      ocfMargin: ratioOfPositive(r.ocf, r.revenue),
+      fcfMargin: ratioOfPositive(fcf, r.revenue),
+      fcfConversion: ratioOfPositive(fcf, r.ebitda),
+      capexIntensity: ratioOfPositive(r.capex, r.revenue),
+      acqToOcf: acquisitionIntensity(r.acquisitions, r.ocf),
+      netDebtToEbitda: netDebtToEbitda(r.debt, r.cash, r.ebitda),
+      goodwillToEquity: ratioOfPositive(r.goodwill, r.equity),
+      revenuePerShare: perShare(r.revenue, r.shares),
       sourceIds: r.sourceId ? [r.sourceId] : [],
     };
   });
+}
+
+function totalsFor(ticker: string): Company["totals"] {
+  const rows = rowsFor(ticker);
+  if (rows.length === 0) return undefined;
+  const first = rows[0];
+  const last = rows[rows.length - 1];
+  const fcf = sumStrict(rows.map((r) => freeCashFlow(r.ocf, r.capex)));
+  const acq = sumStrict(rows.map((r) => r.acquisitions));
+  const diff = (a: number | null, b: number | null) => (a == null || b == null ? null : sumStrict([b, -a]));
+  return {
+    period: `FY${first.year}–FY${last.year}`,
+    operatingCashFlow: sumStrict(rows.map((r) => r.ocf)),
+    capex: sumStrict(rows.map((r) => r.capex)),
+    freeCashFlow: fcf,
+    acquisitions: acq,
+    fcfAfterAcquisitions: diff(acq, fcf),
+    revenueAdded: diff(first.revenue, last.revenue),
+    goodwillAdded: diff(first.goodwill, last.goodwill),
+  };
 }
 
 function metricsFor(ticker: string): Record<string, MetricValue> {
@@ -187,6 +226,8 @@ const drafts = companiesCsv.map((c) => {
     label: k.label,
     rule: k.rule,
     target: `${k.op === ">=" ? "≥" : "≤"} ${config.metricDefs.find((m) => m.id === k.metricId)?.unit === "multiple" ? `${k.threshold}×` : `${Math.round(k.threshold * 1000) / 10}%`}`,
+    threshold: k.threshold,
+    op: k.op,
     kind: k.kind,
     metricId: k.metricId,
     pass: passes(metrics[k.metricId]?.value, k.op, k.threshold),
@@ -264,6 +305,7 @@ const companies: Company[] = drafts.map((d) => {
     reason: c.reason || (human === "existing" ? undefined : modelReason(d)),
     model: { checks: d.checks, ...d.t, rank: rankOf.get(c.ticker)! },
     history: historyFor(c.ticker),
+    totals: totalsFor(c.ticker),
     ...(deals ? { deals } : {}),
     reportingCurrency: rows[rows.length - 1]?.currency || undefined,
   };
