@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { IndexDef } from "@contract/types";
-import { completeIndex, countryMix, sharePct } from "./indexMath";
+import { amountFor, completeIndex, countryMix, sharePct } from "./indexMath";
 
 const index: IndexDef = {
   name: "Test index",
@@ -39,5 +39,12 @@ describe("completeIndex", () => {
     expect(relabels).toEqual([{ ticker: "WCN", labelled: "US", actual: "CA" }]);
     expect(sharePct(before, "CA")).toBeCloseTo(30);
     expect(countryMix(before)[0]).toEqual({ code: "US", pct: 60 });
+  });
+});
+
+describe("amountFor", () => {
+  it("turns a weight into money at the index's total value", () => {
+    expect(amountFor(4.1, 100_000)).toBeCloseTo(4_100);
+    expect(amountFor(0, 100_000)).toBe(0);
   });
 });
