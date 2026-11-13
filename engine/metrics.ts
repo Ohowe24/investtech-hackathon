@@ -163,3 +163,16 @@ export function equalWeights(groups: string[][], sleevePct: number, capPct: numb
   for (const g of live) for (const t of g) out[t] = Math.round((perGroup / g.length) * 100) / 100;
   return out;
 }
+
+/** Apply declared screening rules without changing metrics or saved investment decisions. */
+export function evaluateScreen(
+  metrics: Record<string, { value: number | null }>,
+  checks: { id: string; metricId: string; kind: "gate" | "score"; op: ">=" | "<="; threshold: number }[],
+  rules: { passShare: number; mixedShare: number; minAvailable: number },
+) {
+  const results = checks.map((check) => ({ ...check, pass: passes(metrics[check.metricId]?.value, check.op, check.threshold) }));
+  return {
+    checks: results,
+    ...tally(results.filter((c) => c.kind === "gate").map((c) => c.pass), results.filter((c) => c.kind === "score").map((c) => c.pass), rules),
+  };
+}
