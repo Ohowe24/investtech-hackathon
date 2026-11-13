@@ -30,6 +30,8 @@ export interface MetricDef {
   formula?: string;
   /** one plain sentence: why it matters when judging the company */
   why?: string;
+  /** research figures behind the choice of this metric, each naming its source */
+  facts?: string[];
   higherIsBetter?: boolean;
 }
 
