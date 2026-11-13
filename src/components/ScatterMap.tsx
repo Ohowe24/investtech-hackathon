@@ -3,7 +3,8 @@
 import { useState } from "react";
 import type { Company, Dataset } from "@contract/types";
 import { formatValue, recStyle } from "@/lib/format";
-import { Segmented } from "./ui";
+import { metricInfo } from "@/lib/explain";
+import { Explain, Segmented } from "./ui";
 
 const W = 680;
 const H = 440;
@@ -16,16 +17,16 @@ const clamp = (v: number, [lo, hi]: readonly [number, number]) => Math.min(hi, M
 
 interface Props {
   dataset: Dataset;
-  selected: string | null;
   hovered: string | null;
-  onSelect: (ticker: string) => void;
   onHover: (ticker: string | null) => void;
+  onSelect: (ticker: string) => void;
 }
 
 type Show = "all" | "candidates" | "holdings";
 
-export default function ScatterMap({ dataset, selected, hovered, onSelect, onHover }: Props) {
+export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Props) {
   const [show, setShow] = useState<Show>("all");
+  const selected: string | null = null;
   const { map, metricDefs, companies } = dataset;
   const xDef = metricDefs.find((d) => d.id === map.x);
   const yDef = metricDefs.find((d) => d.id === map.y);
@@ -78,17 +79,17 @@ export default function ScatterMap({ dataset, selected, hovered, onSelect, onHov
             </span>
           ))}
           <span className="flex items-center gap-1.5">
-            <span className="inline-block h-2.5 w-2.5 rounded-full border-2 border-ink bg-white" /> Candidate
+            <span className="inline-block h-2.5 w-2.5 rounded-full border-2 border-ink bg-white" /> Black ring = candidate
           </span>
         </div>
         <Segmented value={show} onChange={setShow} options={[
           { id: "all", label: "All" },
-          { id: "candidates", label: "Candidates" },
+          { id: "candidates", label: "Canadian" },
           { id: "holdings", label: "Holdings" },
         ]} />
       </div>
 
-      <div className="relative">
+      <div className="relative mx-auto max-w-3xl">
         <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" role="img" aria-label="Company map" onMouseLeave={() => onHover(null)}>
           <rect x={tx} y={top} width={right - tx} height={ty - top} fill="#e6eeee" />
           <rect x={tx} y={ty} width={right - tx} height={bottom - ty} fill="#fbe9e7" opacity={0.6} />
@@ -98,10 +99,11 @@ export default function ScatterMap({ dataset, selected, hovered, onSelect, onHov
           <line x1={left} x2={right} y1={bottom} y2={bottom} stroke="#000" />
           <line x1={left} x2={left} y1={top} y2={bottom} stroke="#000" />
 
-          <text x={right - 10} y={top + 20} textAnchor="end" className="fill-teal text-[13px] font-semibold">{map.zones.topRight}</text>
-          <text x={left + 10} y={top + 20} className="fill-faint text-[13px] font-medium">{map.zones.topLeft}</text>
-          <text x={right - 10} y={bottom - 12} textAnchor="end" className="fill-bad text-[13px] font-semibold">{map.zones.bottomRight}</text>
-          <text x={left + 10} y={bottom - 12} className="fill-faint text-[13px] font-medium">{map.zones.bottomLeft}</text>
+          <Zone x={(tx + right) / 2} y={top + 20} text={map.zones.topRight} className="fill-teal font-semibold" />
+          <Zone x={(tx + right) / 2} y={bottom - 26} text={map.zones.bottomRight} className="fill-bad font-semibold" />
+          {/* The left side is one grey band (fails the acquirer line), so it gets one label. */}
+          <text x={(left + tx) / 2} y={(top + bottom) / 2} textAnchor="middle" transform={`rotate(-90 ${(left + tx) / 2} ${(top + bottom) / 2})`}
+            className="fill-faint text-[12px] font-medium">{map.zones.topLeft.split(" · ")[0]}</text>
 
           <text x={(left + right) / 2} y={H - 8} textAnchor="middle" className="fill-muted text-[12px]">{xDef?.label ?? map.x} →</text>
           <text x={14} y={(top + bottom) / 2} textAnchor="middle" transform={`rotate(-90 14 ${(top + bottom) / 2})`} className="fill-muted text-[12px]">{yDef?.label ?? map.y} →</text>
@@ -151,19 +153,24 @@ export default function ScatterMap({ dataset, selected, hovered, onSelect, onHov
               <div className="flex justify-between"><span>{yDef?.label}</span><span className="tabular-nums text-white">{formatValue(rawY(focus), yUnit)}</span></div>
               {focus.model && (
                 <div className="flex justify-between border-t border-white/15 pt-1">
-                  <span>{focus.zone}</span>
-                  <span className="text-white">{recStyle[focus.model.recommendation].label} · {focus.model.passed}/{focus.model.available}</span>
+                  <span>Result</span>
+                  <span className="text-white">{recStyle[focus.model.recommendation].label}</span>
                 </div>
               )}
             </div>
-            {offChart(focus) && <div className="mt-1 text-white/55">Beyond the chart window. Pinned to the edge.</div>}
+            {offChart(focus) && <div className="mt-1 text-white/55">Value is beyond the chart; shown at the edge.</div>}
           </div>
         )}
       </div>
 
+      <div className="mx-auto mt-2 flex max-w-3xl flex-wrap gap-x-6 gap-y-1 text-xs text-muted">
+        <span>Across: <Explain info={{ ...metricInfo(dataset, map.x), note: `Dashed line at ${formatValue(map.xThreshold, xUnit)}.` }} className="font-medium text-ink">{xDef?.label ?? map.x}</Explain></span>
+        <span>Up: <Explain info={{ ...metricInfo(dataset, map.y), note: `Dashed line at ${formatValue(map.yThreshold, yUnit)}.` }} className="font-medium text-ink">{yDef?.label ?? map.y}</Explain></span>
+      </div>
+
       {missing.length > 0 && (
-        <p className="mt-2 text-xs text-muted">
-          Not on the map (a value is missing):{" "}
+        <p className="mx-auto mt-2 max-w-3xl text-xs text-muted">
+          Not shown (a value is missing):{" "}
           {missing.map((c, i) => (
             <button key={c.ticker} onClick={() => onSelect(c.ticker)} className="underline hover:text-ink">
               {c.ticker}{i < missing.length - 1 ? ", " : ""}
@@ -171,6 +178,17 @@ export default function ScatterMap({ dataset, selected, hovered, onSelect, onHov
           ))}
         </p>
       )}
+
     </div>
+  );
+}
+
+/** Quadrant name, split onto two lines at " · ". */
+function Zone({ x, y, text, className }: { x: number; y: number; text: string; className: string }) {
+  const lines = text.split(" · ");
+  return (
+    <text x={x} y={y} textAnchor="middle" pointerEvents="none" className={`text-[12px] ${className}`}>
+      {lines.map((l, i) => <tspan key={i} x={x} dy={i === 0 ? 0 : 14}>{l}</tspan>)}
+    </text>
   );
 }

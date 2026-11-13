@@ -20,10 +20,14 @@ export interface MetricValue {
 export interface MetricDef {
   id: string;
   label: string;
+  /** two or three words, for column headers and card titles */
+  short?: string;
   /** "pct" values are stored as decimals: 0.12 means 12% */
   unit: Unit;
-  /** one plain sentence */
+  /** one plain sentence: what it shows */
   description: string;
+  /** one or two plain sentences: how it is calculated */
+  formula?: string;
   higherIsBetter?: boolean;
 }
 
@@ -68,6 +72,8 @@ export interface CheckResult {
   label: string;
   /** plain-language rule, e.g. "FCF per share grew at least 7% a year" */
   rule: string;
+  /** the pass line as a short token, e.g. "≥ 20%" or "≤ 3×" */
+  target?: string;
   /** "gate" checks must pass; "score" checks count toward the score */
   kind: "gate" | "score";
   /** MetricDef.id the check reads */
@@ -155,6 +161,13 @@ export interface Dataset {
   /** the one question the tool answers */
   question: string;
   metricDefs: MetricDef[];
+  /** plain-language rules, composed by the engine from config values */
+  rules?: {
+    /** how check results become Passes / Mixed / Fails */
+    result: string;
+    /** how proposed weights are set */
+    weight: string;
+  };
   map: MapConfig;
   companies: Company[];
   sources: Source[];

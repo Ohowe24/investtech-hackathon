@@ -1,69 +1,87 @@
 {
   "isFake": false,
-  "generatedAt": "2026-11-13T00:40:14.445Z",
+  "generatedAt": "2026-11-13T00:52:16.283Z",
   "indexName": "Serial acquirers & consolidators",
   "currency": "USD",
-  "question": "Which Canadian companies truly belong in this index, and which only look like they do?",
+  "question": "Which Canadian companies should be added to the serial acquirers index?",
   "metricDefs": [
     {
       "id": "acqIntensity",
-      "label": "Acquisition intensity",
+      "short": "Acquisition spend",
+      "label": "Acquisitions ÷ operating cash flow",
       "unit": "pct",
-      "description": "Cash spent buying businesses as a share of operating cash flow, summed over the period."
+      "description": "Share of the cash the business generated that went into buying companies.",
+      "formula": "Cash paid for acquisitions minus cash from selling businesses, all years added up, ÷ operating cash flow, all years added up. A net seller shows 0%."
     },
     {
       "id": "fcfPerShareCagr",
-      "label": "FCF per share growth / yr",
+      "short": "FCF per share",
+      "label": "Free cash flow per share, growth per year",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Annual growth in free cash flow per diluted share: did owners get richer per share?"
+      "description": "Whether each share earned more cash over time.",
+      "formula": "Free cash flow = operating cash flow − capital spending. Divide by diluted shares. Average yearly growth from the first year to the last."
     },
     {
       "id": "revenueCagr",
-      "label": "Revenue growth / yr",
+      "short": "Revenue growth",
+      "label": "Revenue growth per year",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Annual growth in total revenue: how much bigger the company got."
+      "description": "How much bigger the company got.",
+      "formula": "Average yearly growth in revenue from the first year to the last."
     },
     {
       "id": "shareCountChange",
+      "short": "Share count",
       "label": "Share count change",
       "unit": "pct",
       "higherIsBetter": false,
-      "description": "Change in diluted shares over the period. Positive means new shares were issued."
+      "description": "Whether owners were diluted by new shares.",
+      "formula": "Diluted shares in the last year ÷ diluted shares in the first year − 1. Positive means new shares were issued."
     },
     {
       "id": "cashReturn",
-      "label": "Cash return on capital",
+      "short": "Return on capital",
+      "label": "Return on capital (free cash flow)",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Free cash flow as a share of all the debt and equity invested, goodwill included (latest year)."
+      "description": "Cash earned on all the money invested in the company, including what it paid for acquisitions.",
+      "formula": "Last year's free cash flow ÷ average of (debt + equity) at the start and end of that year."
     },
     {
       "id": "netDebtToEbitda",
-      "label": "Net debt / 3-yr EBITDA",
+      "short": "Net debt",
+      "label": "Net debt ÷ EBITDA",
       "unit": "multiple",
       "higherIsBetter": false,
-      "description": "Latest net debt compared with average EBITDA over the last three years. Negative means more cash than debt."
+      "description": "How many years of operating profit it would take to pay off the debt.",
+      "formula": "(Debt − cash) at the last year-end ÷ average EBITDA of the last 3 years. EBITDA = profit before interest, tax, depreciation and amortization. Negative means more cash than debt."
     },
     {
       "id": "organicGrowth",
-      "label": "Organic growth (reported)",
+      "short": "Organic growth",
+      "label": "Organic growth (company-reported)",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Growth excluding acquisitions, as reported by the company (latest year). Shown for context, not scored: only some companies report it in our data."
+      "description": "Revenue growth not counting acquisitions.",
+      "formula": "Taken as reported by the company, latest year. Not scored, because only some companies report it."
     }
   ],
+  "rules": {
+    "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Missing data is never counted as a fail.",
+    "weight": "15% of the index is split equally among the companies we add, at most 8.2% each. CSU and TOI share one slot (one controls the other)."
+  },
   "map": {
     "x": "acqIntensity",
     "y": "fcfPerShareCagr",
     "xThreshold": 0.2,
     "yThreshold": 0.07,
     "zones": {
-      "topRight": "Compounders",
-      "bottomRight": "Empire builders",
-      "topLeft": "Organic growers",
-      "bottomLeft": "Stalled"
+      "topRight": "Acquirer · strong per-share growth",
+      "bottomRight": "Acquirer · weak per-share growth",
+      "topLeft": "Light acquirer · strong per-share growth",
+      "bottomLeft": "Light acquirer · weak per-share growth"
     }
   },
   "companies": [
@@ -135,57 +153,63 @@
           ]
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 4.1,
-      "reason": "Passes 4 of 4 scored checks with data.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -725,57 +749,63 @@
           ]
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 4.1,
-      "reason": "Passes 3 of 4 scored checks with data; fails: no dilution.",
+      "reason": "Failed: Share count up ≤ 5%.",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -1099,56 +1129,62 @@
           ]
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "watch",
       "verdictSource": "model",
-      "reason": "Passes 2 of 4 scored checks with data; fails: no dilution, self-funded deals.",
+      "reason": "Failed: Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow.",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -1764,56 +1800,62 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Passes 4 of 4 scored checks with data; fails: debt under control.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA.",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -2074,53 +2116,59 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Passes 2 of 3 scored checks with data; fails: really an acquirer, capital earns its keep; no data for: owners gained.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": false
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": null
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": false
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -2543,55 +2591,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -2712,55 +2766,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -2907,55 +2967,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": false
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -3102,55 +3168,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -3297,55 +3369,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -3492,55 +3570,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Organic growers",
+      "zone": "Light acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": false
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -3687,55 +3771,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -3882,55 +3972,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -4077,55 +4173,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -4272,55 +4374,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Organic growers",
+      "zone": "Light acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": false
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -4467,55 +4575,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Compounders",
+      "zone": "Acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
@@ -4662,55 +4776,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": false
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -4857,55 +4977,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -5052,55 +5178,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Organic growers",
+      "zone": "Light acquirer · strong per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": false
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": true
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": true
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": false
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
@@ -5247,55 +5379,61 @@
           "note": "Not reported in the data provided"
         }
       },
-      "zone": "Empire builders",
+      "zone": "Acquirer · weak per-share growth",
       "verdict": "existing",
       "verdictSource": "human",
       "model": {
         "checks": [
           {
             "id": "themeFit",
-            "label": "Really an acquirer",
-            "rule": "Spent at least 20% of its operating cash flow on acquisitions",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
             "kind": "gate",
             "metricId": "acqIntensity",
             "pass": true
           },
           {
             "id": "debtLimit",
-            "label": "Debt under control",
-            "rule": "Net debt is at most 3× average EBITDA of the last three years",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
           },
           {
             "id": "ownersGain",
-            "label": "Owners gained",
+            "label": "Free cash flow per share ≥ 7%/yr",
             "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
             "kind": "score",
             "metricId": "fcfPerShareCagr",
             "pass": false
           },
           {
             "id": "cashReturn",
-            "label": "Capital earns its keep",
-            "rule": "Free cash flow is at least 8% of the capital invested, goodwill included",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
             "kind": "score",
             "metricId": "cashReturn",
             "pass": false
           },
           {
             "id": "noDilution",
-            "label": "No dilution",
-            "rule": "Share count grew by no more than 5% over the period",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
             "kind": "score",
             "metricId": "shareCountChange",
             "pass": true
           },
           {
             "id": "selfFunded",
-            "label": "Self-funded deals",
-            "rule": "Acquisition spending did not exceed operating cash flow",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true

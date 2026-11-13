@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import type { Dataset, IndexSnapshot } from "@contract/types";
 import { completeIndex, countryMix, sharePct, type IndexState } from "@/lib/indexMath";
 import { pct } from "@/lib/format";
@@ -9,15 +8,11 @@ import { Card } from "./ui";
 interface Props {
   dataset: Dataset;
   snapshot: IndexSnapshot;
-  onSelect: (ticker: string) => void;
+  onOpen: (ticker: string) => void;
 }
 
-export default function IndexBuilder({ dataset, snapshot, onSelect }: Props) {
-  const defaultName = snapshot.indexes.some((i) => i.name === dataset.indexName)
-    ? dataset.indexName
-    : snapshot.indexes[0]?.name;
-  const [indexName, setIndexName] = useState(defaultName);
-  const index = snapshot.indexes.find((i) => i.name === indexName);
+export default function IndexBuilder({ dataset, snapshot, onOpen }: Props) {
+  const index = snapshot.indexes.find((i) => i.name === dataset.indexName) ?? snapshot.indexes[0];
   if (!index) return null;
 
   const additions = dataset.companies
@@ -36,15 +31,8 @@ export default function IndexBuilder({ dataset, snapshot, onSelect }: Props) {
 
   return (
     <Card
-      label="Complete the index"
-      lead="Additions are funded from cash."
-      rest={`Organizers' live holdings as of ${new Date(snapshot.updatedAt).toLocaleString("en-CA")} · ${snapshot.source}`}
-      right={
-        <select value={indexName} onChange={(e) => setIndexName(e.target.value)}
-          className="rounded-lg border border-line bg-white px-2.5 py-1.5 text-xs font-medium text-ink">
-          {snapshot.indexes.map((i) => <option key={i.name}>{i.name}</option>)}
-        </select>
-      }
+      title="Before and after"
+      right={<span className="text-xs text-faint">Additions funded from cash · holdings as of {new Date(snapshot.updatedAt).toLocaleDateString("en-CA")}</span>}
     >
       <div className="grid gap-4 md:grid-cols-2">
         <StateCard title="Before" state={before} />
@@ -55,20 +43,19 @@ export default function IndexBuilder({ dataset, snapshot, onSelect }: Props) {
         <div className="mt-4 rounded-xl bg-warnsoft p-3 text-sm text-warn">
           {relabels.map((r) => (
             <div key={r.ticker}>
-              <span className="font-semibold">{r.ticker}</span> is labelled {r.labelled} in the index, but our data says it is headquartered in {r.actual}.
+              <span className="font-semibold">{r.ticker}</span> is listed as {r.labelled} in the index, but is headquartered in {r.actual}.
             </div>
           ))}
         </div>
       )}
 
       <div className="mt-5 grid gap-4 md:grid-cols-3">
-        <List title={`Added (${additions.length})`} empty="No additions yet"
-          items={additions.map((a) => ({ ticker: a.ticker, text: `${pct(a.weightPct)} · ${dataset.companies.find((c) => c.ticker === a.ticker)?.reason ?? ""}` }))}
-          onSelect={onSelect} tone="text-teal" />
-        <List title={`Rejected (${rejected.length})`} empty="Nothing rejected yet"
-          items={rejected.map((c) => ({ ticker: c.ticker, text: c.reason ?? "" }))} onSelect={onSelect} tone="text-bad" />
-        <List title={`Watching (${watch.length})`} empty="Nothing on watch"
-          items={watch.map((c) => ({ ticker: c.ticker, text: c.reason ?? "" }))} onSelect={onSelect} tone="text-warn" />
+        <List title={`Add (${additions.length})`} empty="None"
+          items={additions.map((a) => ({ ticker: a.ticker, text: pct(a.weightPct, 2) }))} tone="text-teal" onOpen={onOpen} />
+        <List title={`Watch (${watch.length})`} empty="None"
+          items={watch.map((c) => ({ ticker: c.ticker, text: c.reason ?? "" }))} tone="text-warn" onOpen={onOpen} />
+        <List title={`Reject (${rejected.length})`} empty="None"
+          items={rejected.map((c) => ({ ticker: c.ticker, text: c.reason ?? "" }))} tone="text-bad" onOpen={onOpen} />
       </div>
     </Card>
   );
@@ -83,7 +70,7 @@ function StateCard({ title, state }: { title: string; state: IndexState }) {
       <div className="mt-2 grid grid-cols-3 gap-2 text-center">
         <Stat label="Holdings" value={String(state.rows.length)} />
         <Stat label="Cash" value={pct(state.cashPct)} />
-        <Stat label="Canada" value={pct(ca)} />
+        <Stat label="Canadian" value={pct(ca)} />
       </div>
       <div className="mt-3 space-y-1">
         {mix.map((m) => (
@@ -109,11 +96,11 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function List({ title, items, empty, onSelect, tone }: {
+function List({ title, items, empty, tone, onOpen }: {
+  onOpen: (t: string) => void;
   title: string;
   items: { ticker: string; text: string }[];
   empty: string;
-  onSelect: (t: string) => void;
   tone: string;
 }) {
   return (
@@ -125,7 +112,7 @@ function List({ title, items, empty, onSelect, tone }: {
         <ul className="mt-1 space-y-2">
           {items.map((i) => (
             <li key={i.ticker} className="text-xs text-ink">
-              <button onClick={() => onSelect(i.ticker)} className="font-semibold underline">{i.ticker}</button>{" "}
+              <button onClick={() => onOpen(i.ticker)} className="font-mono font-semibold hover:underline">{i.ticker}</button>{" "}
               {i.text}
             </li>
           ))}

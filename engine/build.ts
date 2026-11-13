@@ -186,6 +186,7 @@ const drafts = companiesCsv.map((c) => {
     id: k.id,
     label: k.label,
     rule: k.rule,
+    target: `${k.op === ">=" ? "≥" : "≤"} ${config.metricDefs.find((m) => m.id === k.metricId)?.unit === "multiple" ? `${k.threshold}×` : `${Math.round(k.threshold * 1000) / 10}%`}`,
     kind: k.kind,
     metricId: k.metricId,
     pass: passes(metrics[k.metricId]?.value, k.op, k.threshold),
@@ -226,13 +227,12 @@ for (const t of adds) {
 const modelWeights = equalWeights(groups, config.sleevePct, config.maxWeightPct);
 
 const modelReason = (d: (typeof drafts)[number]): string => {
-  const failed = d.checks.filter((k) => k.pass === false).map((k) => k.label.toLowerCase());
-  const unknown = d.checks.filter((k) => k.pass === null).map((k) => k.label.toLowerCase());
-  const head = `Passes ${d.t.passed} of ${d.t.available} scored checks with data`;
-  const parts = [head];
-  if (failed.length) parts.push(`fails: ${failed.join(", ")}`);
-  if (unknown.length) parts.push(`no data for: ${unknown.join(", ")}`);
-  return parts.join("; ") + ".";
+  const failed = d.checks.filter((k) => k.pass === false).map((k) => k.label);
+  const unknown = d.checks.filter((k) => k.pass === null).map((k) => k.label);
+  const parts: string[] = [];
+  if (failed.length) parts.push(`Failed: ${failed.join(", ")}.`);
+  if (unknown.length) parts.push(`No data: ${unknown.join(", ")}.`);
+  return parts.join(" ") || "Passed every check.";
 };
 
 const companies: Company[] = drafts.map((d) => {
@@ -276,6 +276,14 @@ const dataset: Dataset = {
   currency: config.currency,
   question: config.question,
   metricDefs: config.metricDefs,
+  rules: {
+    result:
+      `Passes: both must-pass checks pass, and at least ${config.scoring.passShare * 100}% of the other checks with data pass (${config.scoring.minAvailable} or more with data). ` +
+      `Fails: a must-pass check fails, or fewer than ${config.scoring.mixedShare * 100}% pass. Mixed: anything else. Missing data is never counted as a fail.`,
+    weight:
+      `${config.sleevePct}% of the index is split equally among the companies we add, at most ${config.maxWeightPct}% each. ` +
+      config.relatedGroups.map((g) => `${g.join(" and ")} share one slot (one controls the other).`).join(" "),
+  },
   map: config.map,
   companies,
   sources,

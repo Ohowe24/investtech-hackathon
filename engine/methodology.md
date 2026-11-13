@@ -37,12 +37,12 @@ Two gates must pass. Five checks are scored.
 
 | Check | Kind | Rule | Why this line |
 |---|---|---|---|
-| Really an acquirer | gate | `acqIntensity` ≥ 20% | Below this, acquisitions are not what drives the company, so it does not fit the theme |
-| Debt under control | gate | `netDebtToEbitda` ≤ 3× | The cap Lifco, a model serial acquirer, sets for itself. Research treats leverage as a limit, not a score. Measured against 3-year average EBITDA so a cyclical company at a good point in its cycle (TFI) is not flattered |
-| Owners gained | score | `fcfPerShareCagr` ≥ 7% | Per-share cash is the best single proxy for value growth (Constellation's 2018 letter). 7% is a plain hurdle for an equity investor |
-| Capital earns its keep | score | `cashReturn` ≥ 8% | Cash earned on everything invested, goodwill included, should clear a basic cost of capital |
-| No dilution | score | `shareCountChange` ≤ +5% | Stock-funded deals are the best-documented value destroyer in the M&A research |
-| Self-funded deals | score | `acqIntensity` ≤ 100% | Deals paid from the business's own cash flow, not outside money |
+| Acquisitions ≥ 20% of cash flow | gate | `acqIntensity` ≥ 20% | Below this, acquisitions are not what drives the company, so it does not fit the theme |
+| Net debt ≤ 3× EBITDA | gate | `netDebtToEbitda` ≤ 3× | The cap Lifco, a model serial acquirer, sets for itself. Research treats leverage as a limit, not a score. Measured against 3-year average EBITDA so a cyclical company at a good point in its cycle (TFI) is not flattered |
+| Free cash flow per share ≥ 7%/yr | score | `fcfPerShareCagr` ≥ 7% | Per-share cash is the best single proxy for value growth (Constellation's 2018 letter). 7% is a plain hurdle for an equity investor |
+| Return on capital ≥ 8% | score | `cashReturn` ≥ 8% | Cash earned on everything invested, goodwill included, should clear a basic cost of capital |
+| Share count up ≤ 5% | score | `shareCountChange` ≤ +5% | Stock-funded deals are the best-documented value destroyer in the M&A research |
+| Acquisitions ≤ 100% of cash flow | score | `acqIntensity` ≤ 100% | Deals paid from the business's own cash flow, not outside money |
 
 **Organic growth is shown, not scored.** Only CSU, TOI and WSP report it in our data, so scoring it gave those three an extra check the holdings could not take.
 
@@ -62,8 +62,9 @@ Two gates must pass. Five checks are scored.
 
 ## The map
 
-- **Across (x):** `acqIntensity`, split at 20% (the "Really an acquirer" gate).
-- **Up (y):** `fcfPerShareCagr`, split at 7% (the "Owners gained" check).
+- **Across (x):** `acqIntensity`, split at 20% (the "Acquisitions ≥ 20% of cash flow" gate).
+- **Up (y):** `fcfPerShareCagr`, split at 7% (the "Free cash flow per share ≥ 7%/yr" check).
+- Quadrants: right = acquirer, left = light acquirer; top = strong per-share growth, bottom = weak.
 - Values outside the chart window are pinned to the edge and labelled "off chart".
 
 ## Known limits
