@@ -100,6 +100,18 @@ export function netDebtToEbitda(debt: N, cash: N, ebitda: N): number | null {
   return (debt - cash) / ebitda;
 }
 
+/** debt - cash. Null if either is missing. Negative means net cash. */
+export function netDebt(debt: N, cash: N): number | null {
+  if (!isNum(debt) || !isNum(cash)) return null;
+  return debt - cash;
+}
+
+/** part / base, only when base is positive (margins, shares of cash flow). Null otherwise. */
+export function ratioOfPositive(part: N, base: N): number | null {
+  if (!isNum(part) || !isNum(base) || base <= 0) return null;
+  return part / base;
+}
+
 /** One threshold test. Null value -> null (unknown), never a fail. */
 export function passes(value: N, op: ">=" | "<=", threshold: number): boolean | null {
   if (!isNum(value)) return null;

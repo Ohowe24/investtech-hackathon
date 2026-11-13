@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
+import { netDebt, ratioOfPositive,
   acquisitionIntensity,
   meanStrict,
   cashReturnOnCapital,
@@ -169,5 +169,23 @@ describe("equalWeights", () => {
   });
   it("returns nothing when there is nothing to add", () => {
     expect(equalWeights([], 15, 8.2)).toEqual({});
+  });
+});
+
+describe("netDebt", () => {
+  it("subtracts cash from debt, negative when net cash", () => {
+    expect(netDebt(500, 200)).toBe(300);
+    expect(netDebt(100, 300)).toBe(-200);
+    expect(netDebt(null, 300)).toBeNull();
+  });
+});
+
+describe("ratioOfPositive", () => {
+  it("divides only by a positive base", () => {
+    expect(ratioOfPositive(25, 100)).toBe(0.25);
+    expect(ratioOfPositive(-10, 100)).toBe(-0.1);
+    expect(ratioOfPositive(10, 0)).toBeNull();
+    expect(ratioOfPositive(10, -5)).toBeNull();
+    expect(ratioOfPositive(null, 5)).toBeNull();
   });
 });

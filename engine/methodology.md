@@ -78,3 +78,15 @@ Two gates must pass. Five checks are scored.
 ## What counts as Canadian
 
 Canadian **headquarters or incorporation**, whatever the stock listing. Example: Waste Connections (WCN) is labelled US in the index, but its SEC filings show it is an Ontario corporation headquartered in Woodbridge, Ontario.
+
+## Yearly detail rows (company page charts)
+
+Each fiscal year in `history` also carries, all `null` when an input is missing:
+
+- `netDebt` = debt − cash. `netDebtToEbitda` = net debt ÷ that year's EBITDA (null if EBITDA ≤ 0).
+- `revenueGrowth` = revenue ÷ prior year's revenue − 1 (null without a consecutive prior year).
+- `ebitdaMargin`, `ocfMargin`, `fcfMargin`, `capexIntensity` = EBITDA, operating cash flow, free cash flow, capex ÷ revenue (null if revenue ≤ 0).
+- `fcfConversion` = free cash flow ÷ EBITDA. `acqToOcf` = net acquisitions ÷ operating cash flow, with the same rule as the period figure (a net-seller year is 0). `goodwillToEquity` = goodwill ÷ equity. Each null if the base ≤ 0.
+- `revenuePerShare` = revenue ÷ diluted shares.
+
+`totals` are strict sums over every year in `history` (null if any year is missing); `fcfAfterAcquisitions` = summed free cash flow − summed net acquisitions; `revenueAdded` and `goodwillAdded` = last year − first year.
