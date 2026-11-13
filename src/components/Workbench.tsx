@@ -7,6 +7,7 @@ import DetailPanel from "./DetailPanel";
 import IndexBuilder from "./IndexBuilder";
 import Scorecard from "./Scorecard";
 import DealTimeline from "./DealTimeline";
+import { Card } from "./ui";
 
 interface Props {
   dataset: Dataset;
@@ -14,74 +15,84 @@ interface Props {
 }
 
 export default function Workbench({ dataset, snapshot }: Props) {
-  const [selected, setSelected] = useState<string | null>(null);
+  const tested = dataset.companies.filter((c) => c.model);
+  const candidates = tested.filter((c) => !c.inIndex);
+  const holdings = tested.filter((c) => c.inIndex);
+  // Open on the best-ranked candidate so the page is never empty.
+  const first = [...candidates].sort((a, b) => a.model!.rank - b.model!.rank)[0]?.ticker ?? null;
+  const [selected, setSelected] = useState<string | null>(first);
+  const [hovered, setHovered] = useState<string | null>(null);
   const company = dataset.companies.find((c) => c.ticker === selected) ?? null;
 
   const select = (ticker: string) => {
     setSelected(ticker);
-    document.getElementById("detail")?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    document.getElementById("profile")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-
-  const tested = dataset.companies.filter((c) => c.model);
-  const candidates = tested.filter((c) => !c.inIndex);
-  const holdings = tested.filter((c) => c.inIndex);
   const passing = (list: typeof tested) => list.filter((c) => c.model!.recommendation === "pass").length;
   const sleeve = candidates.reduce((s, c) => s + (c.proposedWeightPct ?? 0), 0);
 
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-6 md:px-8">
+    <div className="w-full">
       {dataset.isFake && (
-        <div className="mb-4 rounded-lg bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">
+        <div className="bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">
           FAKE SAMPLE DATA: not real companies or numbers
         </div>
       )}
 
-      <header className="mb-6">
-        <p className="text-xs font-semibold uppercase tracking-widest text-red-600">InvestTech Hackathon</p>
-        <h1 className="mt-1 text-2xl font-semibold text-slate-900 md:text-3xl">{dataset.question}</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Index: {dataset.indexName} · Built {new Date(dataset.generatedAt).toLocaleString("en-CA")} · Every number links to its source
-        </p>
+      <div className="bg-signal px-4 py-1.5 text-center text-xs font-medium text-ink">
+        InvestTech Hackathon, Montréal · Built on Onesheet data · {new Date(dataset.generatedAt).toLocaleDateString("en-CA")}
+      </div>
+
+      <header className="bg-ink text-white">
+        <div className="mx-auto w-full max-w-6xl px-5 pb-12 pt-10 md:px-8 md:pb-16 md:pt-14">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-lg font-extrabold tracking-tight">acquirer x-ray<span className="text-signal">.</span></span>
+            <span className="text-white/60">Index: {dataset.indexName}</span>
+          </div>
+          <h1 className="display mt-10 max-w-4xl text-5xl md:text-7xl">Bigger, or better for owners?</h1>
+          <p className="mt-5 max-w-2xl text-base text-white/65 md:text-lg">
+            {dataset.question} One declared test, applied to the Canadian candidates and to every company the index already holds. Every number traces to its source.
+          </p>
+          {tested.length > 0 && (
+            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+              <Headline value={`${passing(candidates)} of ${candidates.length}`} label="Canadian candidates pass" />
+              <Headline value={`${passing(holdings)} of ${holdings.length}`} label="current holdings pass the same test" />
+              <Headline value={`${sleeve.toFixed(1)}%`} label="of the index proposed for Canada" />
+            </div>
+          )}
+        </div>
       </header>
 
-      {tested.length > 0 && (
-        <section className="mb-6 grid gap-3 sm:grid-cols-3">
-          <Headline value={`${passing(candidates)} of ${candidates.length}`} label="Canadian candidates pass the test" />
-          <Headline value={`${passing(holdings)} of ${holdings.length}`} label="current holdings pass the same test" />
-          <Headline value={`${sleeve.toFixed(1)}%`} label="of the index proposed for Canadian additions" />
-        </section>
-      )}
+      <main className="mx-auto w-full max-w-6xl space-y-6 px-5 py-8 md:px-8 md:py-12">
+        <Scorecard dataset={dataset} selected={selected} hovered={hovered} onSelect={select} onHover={setHovered} />
 
-      <section className="mb-6">
-        <Scorecard dataset={dataset} selected={selected} onSelect={select} />
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[3fr_2fr]">
-        <div className="rounded-xl border border-slate-200 p-4">
-          <h2 className="mb-2 text-lg font-semibold text-slate-900">The map</h2>
-          <ScatterMap dataset={dataset} selected={selected} onSelect={select} />
+        <div id="profile" className="grid scroll-mt-6 grid-cols-1 items-start gap-6 lg:grid-cols-[3fr_2fr]">
+          <Card label="The map" lead="Buying a lot is not the same as compounding."
+            rest="Right of the line, acquisitions drive the company. Above it, each share's cash grew. Hover a dot to read it, click to open it.">
+            <ScatterMap dataset={dataset} selected={selected} hovered={hovered} onSelect={setSelected} onHover={setHovered} />
+          </Card>
+          <div className="lg:sticky lg:top-6">
+            <DetailPanel dataset={dataset} company={company} />
+          </div>
         </div>
-        <div id="detail">
-          <DetailPanel dataset={dataset} company={company} />
-        </div>
-      </section>
 
-      <section className="mt-6">
-        <DealTimeline dataset={dataset} company={company} />
-      </section>
+        <DealTimeline key={selected ?? "none"} dataset={dataset} company={company} />
 
-      <section className="mt-6">
         <IndexBuilder dataset={dataset} snapshot={snapshot} onSelect={select} />
-      </section>
-    </main>
+      </main>
+
+      <footer className="bg-ink px-5 py-8 text-center text-xs text-white/50">
+        Not investment advice. A hackathon research tool. Statements from the Onesheet API; deals and organic growth quoted from SEDAR filings in the Onesheet data pack.
+      </footer>
+    </div>
   );
 }
 
 function Headline({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-xl border border-slate-200 px-5 py-4">
-      <div className="text-3xl font-semibold tabular-nums text-slate-900">{value}</div>
-      <div className="mt-0.5 text-sm text-slate-500">{label}</div>
+    <div className="rounded-2xl border border-white/15 bg-white/[0.04] px-5 py-4">
+      <div className="text-4xl font-semibold tabular-nums tracking-tight">{value}</div>
+      <div className="mt-1 text-sm text-white/60">{label}</div>
     </div>
   );
 }

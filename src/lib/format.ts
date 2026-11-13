@@ -19,16 +19,16 @@ export function formatMetric(m: MetricValue | undefined, unit: Unit): string {
 }
 
 export const verdictStyle: Record<Verdict, { label: string; dot: string; badge: string }> = {
-  add: { label: "Add", dot: "#16a34a", badge: "bg-green-100 text-green-800" },
-  reject: { label: "Reject", dot: "#dc2626", badge: "bg-red-100 text-red-800" },
-  watch: { label: "Watch", dot: "#d97706", badge: "bg-amber-100 text-amber-800" },
-  existing: { label: "In index", dot: "#475569", badge: "bg-slate-200 text-slate-800" },
+  add: { label: "Add", dot: "#2f5454", badge: "bg-tealsoft text-teal" },
+  reject: { label: "Reject", dot: "#c8372d", badge: "bg-badsoft text-bad" },
+  watch: { label: "Watch", dot: "#d4a017", badge: "bg-warnsoft text-warn" },
+  existing: { label: "In index", dot: "#9a9a9a", badge: "bg-soft text-muted" },
 };
 
-export const recStyle: Record<"pass" | "mixed" | "fail", { label: string; badge: string }> = {
-  pass: { label: "Passes", badge: "bg-green-100 text-green-800" },
-  mixed: { label: "Mixed", badge: "bg-amber-100 text-amber-800" },
-  fail: { label: "Fails", badge: "bg-red-100 text-red-800" },
+export const recStyle: Record<"pass" | "mixed" | "fail", { label: string; badge: string; dot: string }> = {
+  pass: { label: "Passes", badge: "bg-tealsoft text-teal", dot: "#2f5454" },
+  mixed: { label: "Mixed", badge: "bg-warnsoft text-warn", dot: "#d4a017" },
+  fail: { label: "Fails", badge: "bg-badsoft text-bad", dot: "#c8372d" },
 };
 
 export const pct = (v: number, digits = 1) => `${v.toFixed(digits)}%`;

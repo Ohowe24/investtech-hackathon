@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #000000;
 }
 
 @theme inline {
@@ -10,11 +10,39 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  /* Visual language: black, white, hairline greys, one dark teal, one signal green. */
+  --color-ink: #000000;
+  --color-muted: #616161;
+  --color-faint: #8a8a8a;
+  --color-line: #e4e4e4;
+  --color-soft: #f5f5f5;
+  --color-teal: #2f5454;
+  --color-tealsoft: #e6eeee;
+  --color-signal: #3ddc6c;
+  --color-bad: #c8372d;
+  --color-badsoft: #fbe9e7;
+  --color-warn: #a16207;
+  --color-warnsoft: #fdf3d7;
 }
-
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+.display {
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+}
+
+.chip {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 11px;
+  background: #f3f3f3;
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #3e3e3e;
+  white-space: nowrap;
 }
