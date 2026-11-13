@@ -17,6 +17,18 @@ export function sumStrict(values: N[]): number | null {
   return (values as number[]).reduce((s, v) => s + v, 0);
 }
 
+/**
+ * Net acquisition spending as a share of operating cash flow, both summed over the period.
+ * Null if either sum is missing or operating cash flow is not positive (the ratio means nothing then).
+ * A net seller (divestiture proceeds exceed acquisition spending) spent no net cash buying
+ * businesses, so the answer is 0, not a negative ratio whose size only reflects how small OCF was.
+ */
+export function acquisitionIntensity(acqSum: N, ocfSum: N): number | null {
+  if (!isNum(acqSum) || !isNum(ocfSum) || ocfSum <= 0) return null;
+  if (acqSum <= 0) return 0;
+  return acqSum / ocfSum;
+}
+
 /** Compound annual growth rate. Null if either end is <= 0 (undefined across sign changes). */
 export function cagr(start: N, end: N, years: number): number | null {
   if (!isNum(start) || !isNum(end) || years <= 0) return null;
@@ -74,6 +86,12 @@ export function cashReturnOnCapital(fcf: N, debtStart: N, equityStart: N, debtEn
   const avg = (debtStart + equityStart + debtEnd + equityEnd) / 2;
   if (avg <= 0) return null;
   return fcf / avg;
+}
+
+/** Mean of values; null if any value is missing (strict, so gaps are visible). */
+export function meanStrict(values: N[]): number | null {
+  const s = sumStrict(values);
+  return s == null ? null : s / values.length;
 }
 
 /** (debt - cash) / EBITDA. Null if EBITDA <= 0. Negative means net cash. */

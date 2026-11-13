@@ -17,11 +17,11 @@ This file says what each metric means and why the thresholds are where they are.
 
 | id | Formula | Edge cases |
 |---|---|---|
-| `acqIntensity` | Σ acquisition spending ÷ Σ operating cash flow, all years | Null if a year is missing or Σ OCF ≤ 0. Negative = sold more than it bought |
+| `acqIntensity` | Σ acquisition spending ÷ Σ operating cash flow, all years | Null if a year is missing or Σ OCF ≤ 0. A net seller (Σ acquisitions ≤ 0) is 0%, with a note: it spent no net cash buying businesses |
 | `fcfPerShareCagr` | FCF per share = (OCF − capex) ÷ diluted shares; CAGR first to last year | Null if either end ≤ 0 |
 | `cashReturn` | Latest-year FCF ÷ average (total debt + total equity) at the start and end of that year | Null without two consecutive years |
 | `shareCountChange` | Last diluted shares ÷ first − 1 | Positive = dilution |
-| `netDebtToEbitda` | (Total debt − cash) ÷ EBITDA, latest year | Null if EBITDA ≤ 0. Negative = net cash |
+| `netDebtToEbitda` | (Total debt − cash), latest year ÷ average EBITDA of the last 3 years | Null without 3 years, or if average EBITDA ≤ 0. Negative = net cash |
 | `organicGrowth` | As reported by the company, latest full year (latest quarter if no annual figure) | Null if not reported. Never estimated |
 | `revenueCagr` | CAGR of revenue | Shown for context, not scored |
 
@@ -31,21 +31,22 @@ This file says what each metric means and why the thresholds are where they are.
 
 **Currencies:** every metric is a ratio or growth rate inside one company, so USD, EUR and CAD reporters compare without conversion.
 
-## The test (declared before results; thresholds in `engine/config.ts`)
+## The test (thresholds in `engine/config.ts`)
 
 Two gates must pass. Five checks are scored.
 
 | Check | Kind | Rule | Why this line |
 |---|---|---|---|
 | Really an acquirer | gate | `acqIntensity` ≥ 20% | Below this, acquisitions are not what drives the company, so it does not fit the theme |
-| Debt under control | gate | `netDebtToEbitda` ≤ 3× | The cap Lifco, a model serial acquirer, sets for itself. Research treats leverage as a limit, not a score |
+| Debt under control | gate | `netDebtToEbitda` ≤ 3× | The cap Lifco, a model serial acquirer, sets for itself. Research treats leverage as a limit, not a score. Measured against 3-year average EBITDA so a cyclical company at a good point in its cycle (TFI) is not flattered |
 | Owners gained | score | `fcfPerShareCagr` ≥ 7% | Per-share cash is the best single proxy for value growth (Constellation's 2018 letter). 7% is a plain hurdle for an equity investor |
 | Capital earns its keep | score | `cashReturn` ≥ 8% | Cash earned on everything invested, goodwill included, should clear a basic cost of capital |
 | No dilution | score | `shareCountChange` ≤ +5% | Stock-funded deals are the best-documented value destroyer in the M&A research |
 | Self-funded deals | score | `acqIntensity` ≤ 100% | Deals paid from the business's own cash flow, not outside money |
-| Still growing underneath | score | `organicGrowth` ≥ 0 | Health check on businesses already bought. Scored only where reported |
 
-**TODO (Max):** the thresholds are first proposals. Confirm or change each one on purpose, and never to move a result.
+**Organic growth is shown, not scored.** Only CSU, TOI and WSP report it in our data, so scoring it gave those three an extra check the holdings could not take.
+
+**Changes after first results (Nov 12):** the leverage test moved from latest-year EBITDA to 3-year average EBITDA, and organic growth stopped being scored. A net seller's acquisition intensity is 0% rather than a negative ratio.
 
 **Recommendation** (`tally()` in `metrics.ts`):
 - **Fails:** any gate fails, or fewer than half of the scored checks with data pass.
@@ -69,7 +70,7 @@ Two gates must pass. Five checks are scored.
 
 - **Statement data is from an aggregator feed**, not read from filings line by line. Spot-check anything on the demo path against the company's own report.
 - **Share counts are weighted average diluted shares as reported in the feed.** A change in share structure (for example Topicus) can look like dilution. Check before relying on it.
-- **`acquisitions` is net of disposals.** A big sale makes the figure negative for that year (Aecon, FY2023).
+- **`acquisitions` is net of disposals.** A big sale makes the figure negative for that year (Aecon FY2023, TFI FY2022), which lowers that company's acquisition intensity. Aecon is a net seller over FY2021–FY2025, so its intensity is 0%: the ratio would be −300%, a size that only reflects how small its operating cash flow was.
 - **Bending Spoons has 3 years of data**, the others 5.
 - **No backtest:** these checks reflect practitioner consensus and indirect academic evidence (see `reports/`), not proven return predictors.
 

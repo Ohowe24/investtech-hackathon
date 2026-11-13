@@ -9,7 +9,7 @@ import { join } from "node:path";
 import type { CheckResult, Company, Deal, Dataset, MetricValue, ModelResult, Source, Verdict, YearRow } from "../contract/types";
 import { config } from "./config";
 import { num, parseCsv } from "./csv";
-import { cagr, cashReturnOnCapital, equalWeights, freeCashFlow, netDebtToEbitda, passes, pctChange, perShare, quadrant, safeDiv, sumStrict, tally } from "./metrics";
+import { acquisitionIntensity, meanStrict, cagr, cashReturnOnCapital, equalWeights, freeCashFlow, netDebtToEbitda, passes, pctChange, perShare, quadrant, sumStrict, tally } from "./metrics";
 
 const root = process.cwd();
 const realDir = join(root, "engine", "input");
@@ -131,9 +131,15 @@ function metricsFor(ticker: string): Record<string, MetricValue> {
 
   return {
     acqIntensity: mv(
-      ocfSum != null && ocfSum > 0 ? safeDiv(acqSum, ocfSum) : null,
+      acquisitionIntensity(acqSum, ocfSum),
       allSources,
-      acqSum == null ? "Acquisition spending missing for at least one year" : ocfSum == null || ocfSum <= 0 ? "Operating cash flow missing or not positive" : undefined,
+      acqSum == null
+        ? "Acquisition spending missing for at least one year"
+        : ocfSum == null || ocfSum <= 0
+          ? "Operating cash flow missing or not positive"
+          : acqSum <= 0
+            ? "Net seller over the period: divestiture proceeds exceeded acquisition spending, so net acquisition spending is zero"
+            : undefined,
     ),
     fcfPerShareCagr: mv(
       cagr(fcfpsFirst, fcfpsLast, years),
@@ -148,12 +154,22 @@ function metricsFor(ticker: string): Record<string, MetricValue> {
       rows.length < 2 ? "Needs two consecutive years" : undefined,
       last ? `FY${last.year}` : undefined,
     ),
-    netDebtToEbitda: mv(
-      last ? netDebtToEbitda(last.debt, last.cash, last.ebitda) : null,
-      last?.sourceId ? [last.sourceId] : [],
-      last?.ebitda != null && last.ebitda <= 0 ? "Latest EBITDA not positive, so the ratio is meaningless" : undefined,
-      last ? `FY${last.year}` : undefined,
-    ),
+    netDebtToEbitda: (() => {
+      // Latest net debt against average EBITDA of the last three years, so one good year
+      // at the top of a cycle cannot make the debt look small.
+      const lastThree = rows.slice(-3);
+      const avgEbitda = lastThree.length === 3 ? meanStrict(lastThree.map((r) => r.ebitda)) : null;
+      return mv(
+        last ? netDebtToEbitda(last.debt, last.cash, avgEbitda) : null,
+        [...new Set(lastThree.map((r) => r.sourceId).filter(Boolean))],
+        lastThree.length < 3
+          ? "Needs three years of EBITDA"
+          : avgEbitda != null && avgEbitda <= 0
+            ? "Average EBITDA not positive, so the ratio is meaningless"
+            : undefined,
+        last ? `FY${last.year} debt, FY${lastThree[0].year}–FY${last.year} EBITDA` : undefined,
+      );
+    })(),
     organicGrowth: (() => {
       const o = organicCsv.find((r) => r.ticker === ticker);
       const v = o ? num(o.organic_growth_pct) : null;

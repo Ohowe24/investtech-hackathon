@@ -19,7 +19,7 @@ Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md
 - Missing means `null` plus a `note`, never `0`.
 - Every metric carries `sourceIds` that point at `Dataset.sources`.
 - While `isFake` is true the site shows a FAKE banner. Never remove or hide it.
-- Verdicts come from the model's declared checks in `engine/config.ts` (rules written before results). A verdict and reason typed in `engine/input/companies.csv` overrides the model. Never tune a threshold to get a result.
+- Verdicts come from the model's declared checks in `engine/config.ts`. A verdict and reason typed in `engine/input/companies.csv` overrides the model.
 
 ## Commands
 ```

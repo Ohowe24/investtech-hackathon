@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
+  acquisitionIntensity,
+  meanStrict,
   cashReturnOnCapital,
   equalWeights,
   netDebtToEbitda,
@@ -68,6 +70,29 @@ describe("helpers", () => {
     expect(netDebtToFcf(500, 100, 200)).toBe(2);
     expect(netDebtToFcf(500, 100, 0)).toBeNull();
     expect(netDebtToFcf(500, 100, -50)).toBeNull();
+  });
+});
+
+describe("acquisitionIntensity", () => {
+  it("divides net acquisition spending by operating cash flow", () => {
+    expect(acquisitionIntensity(50, 200)).toBe(0.25);
+  });
+  it("is null when operating cash flow is not positive or data is missing", () => {
+    expect(acquisitionIntensity(50, 0)).toBeNull();
+    expect(acquisitionIntensity(50, -10)).toBeNull();
+    expect(acquisitionIntensity(null, 200)).toBeNull();
+  });
+  it("treats a net seller as zero, not a negative ratio (Aecon FY2021-FY2025 shape)", () => {
+    expect(acquisitionIntensity(-246_650_000, 82_247_000)).toBe(0);
+    expect(acquisitionIntensity(0, 100)).toBe(0);
+  });
+});
+
+describe("meanStrict", () => {
+  it("averages and refuses to hide gaps", () => {
+    expect(meanStrict([1, 2, 3])).toBe(2);
+    expect(meanStrict([1, null, 3])).toBeNull();
+    expect(meanStrict([])).toBeNull();
   });
 });
 

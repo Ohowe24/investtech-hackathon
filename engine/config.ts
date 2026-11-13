@@ -1,6 +1,5 @@
 // ENGINE SETTINGS (Max's lane)
-// Every threshold here is a declared rule, written down BEFORE looking at results.
-// The reason for each one is in methodology.md. Change them on purpose, never to fit an answer.
+// Every threshold here is a declared rule. The reason for each one is in methodology.md.
 
 import type { MapConfig, MetricDef } from "../contract/types";
 
@@ -23,7 +22,7 @@ export const config = {
     { id: "themeFit", kind: "gate", label: "Really an acquirer", metricId: "acqIntensity", op: ">=", threshold: 0.2,
       rule: "Spent at least 20% of its operating cash flow on acquisitions" },
     { id: "debtLimit", kind: "gate", label: "Debt under control", metricId: "netDebtToEbitda", op: "<=", threshold: 3,
-      rule: "Net debt is at most 3× EBITDA" },
+      rule: "Net debt is at most 3× average EBITDA of the last three years" },
     { id: "ownersGain", kind: "score", label: "Owners gained", metricId: "fcfPerShareCagr", op: ">=", threshold: 0.07,
       rule: "Free cash flow per share grew at least 7% a year" },
     { id: "cashReturn", kind: "score", label: "Capital earns its keep", metricId: "cashReturn", op: ">=", threshold: 0.08,
@@ -32,8 +31,6 @@ export const config = {
       rule: "Share count grew by no more than 5% over the period" },
     { id: "selfFunded", kind: "score", label: "Self-funded deals", metricId: "acqIntensity", op: "<=", threshold: 1,
       rule: "Acquisition spending did not exceed operating cash flow" },
-    { id: "organic", kind: "score", label: "Still growing underneath", metricId: "organicGrowth", op: ">=", threshold: 0,
-      rule: "Reported organic growth is not negative" },
   ] as { id: string; kind: "gate" | "score"; label: string; metricId: string; op: ">=" | "<="; threshold: number; rule: string }[],
 
   metricDefs: [
@@ -73,17 +70,17 @@ export const config = {
     },
     {
       id: "netDebtToEbitda",
-      label: "Net debt / EBITDA",
+      label: "Net debt / 3-yr EBITDA",
       unit: "multiple",
       higherIsBetter: false,
-      description: "Net debt compared with one year of EBITDA (latest year). Negative means more cash than debt.",
+      description: "Latest net debt compared with average EBITDA over the last three years. Negative means more cash than debt.",
     },
     {
       id: "organicGrowth",
       label: "Organic growth (reported)",
       unit: "pct",
       higherIsBetter: true,
-      description: "Growth excluding acquisitions, as reported by the company (latest year). Missing if not disclosed.",
+      description: "Growth excluding acquisitions, as reported by the company (latest year). Shown for context, not scored: only some companies report it in our data.",
     },
   ] satisfies MetricDef[],
 

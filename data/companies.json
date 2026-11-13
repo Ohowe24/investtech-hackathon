@@ -1,6 +1,6 @@
 {
   "isFake": false,
-  "generatedAt": "2026-11-12T23:55:34.419Z",
+  "generatedAt": "2026-11-13T00:40:14.445Z",
   "indexName": "Serial acquirers & consolidators",
   "currency": "USD",
   "question": "Which Canadian companies truly belong in this index, and which only look like they do?",
@@ -41,17 +41,17 @@
     },
     {
       "id": "netDebtToEbitda",
-      "label": "Net debt / EBITDA",
+      "label": "Net debt / 3-yr EBITDA",
       "unit": "multiple",
       "higherIsBetter": false,
-      "description": "Net debt compared with one year of EBITDA (latest year). Negative means more cash than debt."
+      "description": "Latest net debt compared with average EBITDA over the last three years. Negative means more cash than debt."
     },
     {
       "id": "organicGrowth",
       "label": "Organic growth (reported)",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Growth excluding acquisitions, as reported by the company (latest year). Missing if not disclosed."
+      "description": "Growth excluding acquisitions, as reported by the company (latest year). Shown for context, not scored: only some companies report it in our data."
     }
   ],
   "map": {
@@ -119,9 +119,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.0395746855447596,
-          "period": "FY2025",
+          "value": 1.0785922989511838,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-CSU-FY2023",
+            "os-CSU-FY2024",
             "os-CSU-FY2025"
           ]
         },
@@ -136,8 +138,8 @@
       "zone": "Compounders",
       "verdict": "add",
       "verdictSource": "model",
-      "proposedWeightPct": 3.75,
-      "reason": "Passes 5 of 5 scored checks with data.",
+      "proposedWeightPct": 4.1,
+      "reason": "Passes 4 of 4 scored checks with data.",
       "model": {
         "checks": [
           {
@@ -151,7 +153,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -187,19 +189,11 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": true
           }
         ],
-        "passed": 5,
-        "available": 5,
-        "total": 5,
+        "passed": 4,
+        "available": 4,
+        "total": 4,
         "recommendation": "pass",
         "rank": 1
       },
@@ -715,9 +709,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.0854478973316166,
-          "period": "FY2025",
+          "value": 1.2476078900006202,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-TOI-FY2023",
+            "os-TOI-FY2024",
             "os-TOI-FY2025"
           ]
         },
@@ -732,8 +728,8 @@
       "zone": "Compounders",
       "verdict": "add",
       "verdictSource": "model",
-      "proposedWeightPct": 3.75,
-      "reason": "Passes 4 of 5 scored checks with data; fails: no dilution.",
+      "proposedWeightPct": 4.1,
+      "reason": "Passes 3 of 4 scored checks with data; fails: no dilution.",
       "model": {
         "checks": [
           {
@@ -747,7 +743,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -783,19 +779,11 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 5,
-        "total": 5,
+        "passed": 3,
+        "available": 4,
+        "total": 4,
         "recommendation": "pass",
         "rank": 4
       },
@@ -1095,9 +1083,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.8104075076090633,
-          "period": "FY2025",
+          "value": 2.1817857628039667,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-WSP-FY2023",
+            "os-WSP-FY2024",
             "os-WSP-FY2025"
           ]
         },
@@ -1112,7 +1102,7 @@
       "zone": "Compounders",
       "verdict": "watch",
       "verdictSource": "model",
-      "reason": "Passes 3 of 5 scored checks with data; fails: no dilution, self-funded deals.",
+      "reason": "Passes 2 of 4 scored checks with data; fails: no dilution, self-funded deals.",
       "model": {
         "checks": [
           {
@@ -1126,7 +1116,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -1162,21 +1152,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 5,
-        "total": 5,
+        "passed": 2,
+        "available": 4,
+        "total": 4,
         "recommendation": "mixed",
-        "rank": 8
+        "rank": 7
       },
       "history": [
         {
@@ -1767,9 +1749,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 2.903894356385174,
-          "period": "FY2025",
+          "value": 3.218793091109699,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-TFII-FY2023",
+            "os-TFII-FY2024",
             "os-TFII-FY2025"
           ]
         },
@@ -1781,10 +1765,9 @@
         }
       },
       "zone": "Compounders",
-      "verdict": "add",
+      "verdict": "reject",
       "verdictSource": "model",
-      "proposedWeightPct": 7.5,
-      "reason": "Passes 4 of 4 scored checks with data; no data for: still growing underneath.",
+      "reason": "Passes 4 of 4 scored checks with data; fails: debt under control.",
       "model": {
         "checks": [
           {
@@ -1798,10 +1781,10 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
-            "pass": true
+            "pass": false
           },
           {
             "id": "ownersGain",
@@ -1834,21 +1817,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 5,
-        "recommendation": "pass",
-        "rank": 2
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 13
       },
       "history": [
         {
@@ -2036,7 +2011,7 @@
       "inIndex": false,
       "metrics": {
         "acqIntensity": {
-          "value": -2.998881430325726,
+          "value": 0,
           "period": "FY2021–FY2025",
           "sourceIds": [
             "os-ARE-FY2021",
@@ -2044,7 +2019,8 @@
             "os-ARE-FY2023",
             "os-ARE-FY2024",
             "os-ARE-FY2025"
-          ]
+          ],
+          "note": "Net seller over the period: divestiture proceeds exceeded acquisition spending, so net acquisition spending is zero"
         },
         "fcfPerShareCagr": {
           "value": null,
@@ -2080,9 +2056,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 0.5900848983792127,
-          "period": "FY2025",
+          "value": 1.4250111830878576,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-ARE-FY2023",
+            "os-ARE-FY2024",
             "os-ARE-FY2025"
           ]
         },
@@ -2096,7 +2074,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Passes 2 of 3 scored checks with data; fails: really an acquirer, capital earns its keep; no data for: owners gained, still growing underneath.",
+      "reason": "Passes 2 of 3 scored checks with data; fails: really an acquirer, capital earns its keep; no data for: owners gained.",
       "model": {
         "checks": [
           {
@@ -2110,7 +2088,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -2146,21 +2124,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 3,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 17
+        "rank": 16
       },
       "history": [
         {
@@ -2558,9 +2528,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 4.967973730523661,
-          "period": "FY2025",
+          "value": 8.196143157759465,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-BSP-FY2023",
+            "os-BSP-FY2024",
             "os-BSP-FY2025"
           ]
         },
@@ -2587,7 +2559,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
@@ -2623,21 +2595,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 18
+        "rank": 17
       },
       "history": [
         {
@@ -2733,9 +2697,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 0.8193595630988053,
-          "period": "FY2025",
+          "value": 0.8726121966156762,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-AME-FY2023",
+            "os-AME-FY2024",
             "os-AME-FY2025"
           ]
         },
@@ -2762,7 +2728,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -2798,21 +2764,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "pass",
-        "rank": 3
+        "rank": 2
       },
       "history": [
         {
@@ -2934,9 +2892,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 3.111894248378724,
-          "period": "FY2025",
+          "value": 3.6240379024360765,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-WCN-FY2023",
+            "os-WCN-FY2024",
             "os-WCN-FY2025"
           ]
         },
@@ -2963,7 +2923,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
@@ -2999,21 +2959,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 20
+        "rank": 19
       },
       "history": [
         {
@@ -3135,9 +3087,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 3.4505549949545915,
-          "period": "FY2025",
+          "value": 3.9027962716378166,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-BRO-FY2023",
+            "os-BRO-FY2024",
             "os-BRO-FY2025"
           ]
         },
@@ -3164,7 +3118,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
@@ -3200,21 +3154,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 19
+        "rank": 18
       },
       "history": [
         {
@@ -3336,9 +3282,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.4040951853901493,
-          "period": "FY2025",
+          "value": 1.3955995599559956,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-IEX-FY2023",
+            "os-IEX-FY2024",
             "os-IEX-FY2025"
           ]
         },
@@ -3365,7 +3313,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -3401,21 +3349,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "pass",
-        "rank": 6
+        "rank": 5
       },
       "history": [
         {
@@ -3537,9 +3477,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.7005804579168011,
-          "period": "FY2025",
+          "value": 1.884065737763487,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-ETN-FY2023",
+            "os-ETN-FY2024",
             "os-ETN-FY2025"
           ]
         },
@@ -3566,7 +3508,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -3602,21 +3544,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 14
+        "rank": 12
       },
       "history": [
         {
@@ -3738,9 +3672,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 2.8498718070458646,
-          "period": "FY2025",
+          "value": 3.0481069796309876,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-ROP-FY2023",
+            "os-ROP-FY2024",
             "os-ROP-FY2025"
           ]
         },
@@ -3767,10 +3703,10 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
-            "pass": true
+            "pass": false
           },
           {
             "id": "ownersGain",
@@ -3803,21 +3739,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
-        "recommendation": "mixed",
-        "rank": 10
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 20
       },
       "history": [
         {
@@ -3939,9 +3867,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.53629898013956,
-          "period": "FY2025",
+          "value": 1.655723479644226,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-TDY-FY2023",
+            "os-TDY-FY2024",
             "os-TDY-FY2025"
           ]
         },
@@ -3968,7 +3898,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -4004,21 +3934,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "mixed",
-        "rank": 9
+        "rank": 8
       },
       "history": [
         {
@@ -4140,9 +4062,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 6.244968372627947,
-          "period": "FY2026",
+          "value": 7.189936736795645,
+          "period": "FY2026 debt, FY2024–FY2026 EBITDA",
           "sourceIds": [
+            "os-TDG-FY2024",
+            "os-TDG-FY2025",
             "os-TDG-FY2026"
           ]
         },
@@ -4169,7 +4093,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": false
@@ -4205,21 +4129,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 13
+        "rank": 11
       },
       "history": [
         {
@@ -4341,9 +4257,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.3922079652607404,
-          "period": "FY2025",
+          "value": 1.83321400888517,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-ACM-FY2023",
+            "os-ACM-FY2024",
             "os-ACM-FY2025"
           ]
         },
@@ -4370,7 +4288,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -4406,21 +4324,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 15
+        "rank": 14
       },
       "history": [
         {
@@ -4542,9 +4452,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.6202449022432837,
-          "period": "FY2025",
+          "value": 1.9891297016456453,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-HEI-FY2023",
+            "os-HEI-FY2024",
             "os-HEI-FY2025"
           ]
         },
@@ -4571,7 +4483,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -4607,21 +4519,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "pass",
-        "rank": 5
+        "rank": 3
       },
       "history": [
         {
@@ -4743,9 +4647,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.5907895744793337,
-          "period": "FY2025",
+          "value": 1.3917238996726486,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-J-FY2023",
+            "os-J-FY2024",
             "os-J-FY2025"
           ]
         },
@@ -4772,7 +4678,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -4808,21 +4714,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "mixed",
-        "rank": 11
+        "rank": 9
       },
       "history": [
         {
@@ -4944,9 +4842,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 2.2634498717175604,
-          "period": "FY2025",
+          "value": 2.061407812123865,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-POOL-FY2023",
+            "os-POOL-FY2024",
             "os-POOL-FY2025"
           ]
         },
@@ -4973,7 +4873,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -5009,21 +4909,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "pass",
-        "rank": 7
+        "rank": 6
       },
       "history": [
         {
@@ -5145,9 +5037,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 0.058233132163167944,
-          "period": "FY2025",
+          "value": 0.057425669272061344,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-WSO-FY2023",
+            "os-WSO-FY2024",
             "os-WSO-FY2025"
           ]
         },
@@ -5174,7 +5068,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -5210,21 +5104,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "fail",
-        "rank": 16
+        "rank": 15
       },
       "history": [
         {
@@ -5346,9 +5232,11 @@
           ]
         },
         "netDebtToEbitda": {
-          "value": 1.9874730021598273,
-          "period": "FY2025",
+          "value": 1.9064917127071823,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
           "sourceIds": [
+            "os-DHR-FY2023",
+            "os-DHR-FY2024",
             "os-DHR-FY2025"
           ]
         },
@@ -5375,7 +5263,7 @@
           {
             "id": "debtLimit",
             "label": "Debt under control",
-            "rule": "Net debt is at most 3× EBITDA",
+            "rule": "Net debt is at most 3× average EBITDA of the last three years",
             "kind": "gate",
             "metricId": "netDebtToEbitda",
             "pass": true
@@ -5411,21 +5299,13 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
-          },
-          {
-            "id": "organic",
-            "label": "Still growing underneath",
-            "rule": "Reported organic growth is not negative",
-            "kind": "score",
-            "metricId": "organicGrowth",
-            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 5,
+        "total": 4,
         "recommendation": "mixed",
-        "rank": 12
+        "rank": 10
       },
       "history": [
         {
