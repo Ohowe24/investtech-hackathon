@@ -16,7 +16,7 @@ The lanes only touch at that one file, so **nobody waits on anybody**. Oscar bui
 
 **If Max doesn't code:** Max does the finance work in a spreadsheet from Onesheet's data, and that sheet becomes the answer key. A Claude Code session, driven by either of you, turns the sheet into `companies.json`. Max's real value is the finance judgment, not the code.
 
-> Swap the lanes if your skills are the other way round. What matters is one owner per lane.
+> These lanes only describe who usually works where. Oscar and Max both have full access and can change anything.
 
 ---
 
@@ -26,7 +26,7 @@ The lanes only touch at that one file, so **nobody waits on anybody**. Oscar bui
 investtech-hackathon/
   CLAUDE.md                 rules every Claude session reads (lanes, no invented numbers)
   README.md                 how to run it
-  contract/types.ts         BOTH: shape of data/companies.json (change only together)
+  contract/types.ts         shared: shape of data/companies.json (update engine and site together)
   engine/                   MAX
     config.ts               which metrics, map axes, thresholds
     metrics.ts (+ tests)    the finance formulas
@@ -61,7 +61,7 @@ Missing values are `null` plus a note, never `0`. Percentages are decimals.
 
 ## 4. Ground rules
 
-1. **Stay in your lane.** Oscar edits `src/`; Max edits `engine/`. `contract/` changes only when you agree out loud.
+1. **Full access for both.** Oscar and Max can each change any folder, commit and push.
 2. **No hand-typed numbers in the app.** Every number on screen comes from `companies.json`.
 3. **Fake data says FAKE on screen**, so it can't slip into the demo.
 4. **Small commits, push often.** Run `git pull --rebase` before every push, and never use `git stash pop`.
@@ -135,8 +135,8 @@ Run the demo twice with a timer and record a screen-capture backup. **20:45 code
 
 ## 7. Using Claude Code as a pair of pairs
 
-- Each of you runs your **own** Claude Code session, working only in your own lane's folder.
-- The repo's `CLAUDE.md` gives both sessions the same context: the brief, the contract, the lane rule, and "never invent numbers."
+- Each of you runs your **own** Claude Code session, and either session can work in any folder.
+- The repo's `CLAUDE.md` gives both sessions the same context: the brief, the contract, and "never invent numbers."
 - When the contract changes, both of you tell your Claude session to re-read `contract/types.ts`.
 
 ---

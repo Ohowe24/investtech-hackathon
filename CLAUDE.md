@@ -2,19 +2,16 @@
 
 @AGENTS.md
 
-Two people build this repo at the same time: **Oscar** (website) and **Max** (engine). Each runs their own Claude session.
+Two people build this repo: **Oscar** and **Max**. Both have full access. Either of them, and any Claude session working for either of them, may change any file or folder, commit and push.
 Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md` (how and when) `docs/KICKOFF_NOTES.md` (what the organizers said at kickoff) and `docs/DATA_PACK.md` (the 10 candidate companies' Onesheet data, in `engine/raw/datapack/`).
 
-## Lanes: the most important rule
-| Folder | Owner | What it is |
-|---|---|---|
-| `engine/` | **Max** | Spreadsheets in → `data/companies.json` out. All finance math. |
-| `src/` | **Oscar** | The website. Reads `data/companies.json` and `data/indexes.json`, nothing else. |
-| `contract/types.ts` | **Both** | Shape of `data/companies.json`. Change only if the user says both agreed. |
-| `data/companies.json` | Engine output | Never hand-edit. Regenerate with `npm run engine`. |
-
-- Ask who you're working with, if it's unclear, and edit only that person's lane.
-- If a change needs the other lane, say so and describe it. Don't make it.
+## Map of the repo
+| Folder | What it is |
+|---|---|
+| `engine/` | Spreadsheets in → `data/companies.json` out. All finance math. |
+| `src/` | The website. Reads `data/companies.json` and `data/indexes.json`. |
+| `contract/types.ts` | Shape of `data/companies.json`, shared by the engine and the website. When it changes, update both sides. |
+| `data/companies.json` | Engine output. Regenerate it with `npm run engine`; hand edits are overwritten on the next run. |
 
 ## Numbers: zero tolerance
 - Never invent, estimate or hand-type a financial number, in code, data or copy.
