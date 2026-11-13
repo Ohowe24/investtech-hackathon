@@ -7,6 +7,7 @@ import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from
 import DealTimeline from "./DealTimeline";
 import { Card, Explain } from "./ui";
 import { C, ChartCard, SplitBar, TrendChart } from "./charts";
+import { Decode, DecodeInView } from "./live/motion";
 
 interface Props {
   dataset: Dataset;
@@ -37,7 +38,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
   )];
 
   return (
-    <div className="space-y-5">
+    <div className="enter space-y-5">
       <div className="flex items-center justify-between text-[13px]">
         <button onClick={onBack} className="font-medium text-white/70 hover:text-white">← Companies</button>
         <div className="flex items-center gap-1 text-white/70">
@@ -47,12 +48,12 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
       </div>
 
-      <section className="rounded-xl border border-line bg-white">
+      <section className="spot scan-once rounded-xl border border-line bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-5">
           <div className="flex items-center gap-4">
-            <span className="grid h-12 w-16 place-items-center rounded-lg bg-ink font-mono text-sm font-semibold text-white">{company.ticker}</span>
+            <span className="logo-scan grid h-12 w-16 place-items-center rounded-lg bg-ink font-mono text-sm font-semibold text-white">{company.ticker}</span>
             <div>
-              <h1 className="text-xl font-semibold tracking-tight text-ink">{company.name}</h1>
+              <h1 className="text-xl font-semibold tracking-tight text-ink"><Decode text={company.name} letters duration={700} /></h1>
               <div className="mt-0.5 text-xs text-muted">
                 {[company.subSector, `HQ ${company.hqCountry}`, company.listedOn, years.length ? `FY${years[0]}–FY${years[years.length - 1]}` : null,
                   company.inIndex ? "In the index" : "Candidate"].filter(Boolean).join(" · ")}
@@ -60,9 +61,9 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
-            {m && <span className={`rounded-full px-3 py-1.5 font-medium ${recStyle[m.recommendation].badge}`}>{recStyle[m.recommendation].label}</span>}
+            {m && <span className={`a-stamp rounded-full px-3 py-1.5 font-medium ${recStyle[m.recommendation].badge}`} style={{ animationDelay: "700ms" }}>{recStyle[m.recommendation].label}</span>}
             {!company.inIndex && (
-              <span className={`rounded-full px-3 py-1.5 font-medium ${verdictStyle[company.verdict].badge}`}>{verdictStyle[company.verdict].label}</span>
+              <span className={`a-stamp rounded-full px-3 py-1.5 font-medium ${verdictStyle[company.verdict].badge}`} style={{ animationDelay: "850ms" }}>{verdictStyle[company.verdict].label}</span>
             )}
           </div>
         </div>
@@ -84,8 +85,8 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         )}
       </section>
 
-      <div className="grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7">
-        {[...scored, ...context].map((d) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} />)}
+      <div className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
+        {[...scored, ...context].map((d, i) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} i={i} />)}
       </div>
 
       {company.history?.length ? <DeepDive company={company} /> : null}
@@ -124,7 +125,7 @@ function Stat({ label, value, unit, info }: { label: string; value: string; unit
         {info ? <Explain info={info} className="uppercase tracking-wide">{label}</Explain> : label}
       </div>
       <div className="mt-1 flex items-baseline gap-1.5">
-        <span className="font-mono text-xl font-semibold tabular-nums tracking-tight text-ink">{value}</span>
+        <Decode text={value} delay={350} duration={800} className="font-mono text-xl font-semibold tabular-nums tracking-tight text-ink" />
         {unit && <span className="text-xs text-muted">{unit}</span>}
       </div>
     </div>
@@ -132,7 +133,7 @@ function Stat({ label, value, unit, info }: { label: string; value: string; unit
 }
 
 /** One metric, small: the value, its pass lines, and where it sits among every company tested. */
-function MetricTile({ dataset, company, def, onOpen }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void }) {
+function MetricTile({ dataset, company, def, onOpen, i }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void; i: number }) {
   const tested = dataset.companies.filter((c) => c.model);
   const mv = company.metrics[def.id];
   const checks = company.model?.checks.filter((k) => k.metricId === def.id) ?? [];
@@ -142,10 +143,10 @@ function MetricTile({ dataset, company, def, onOpen }: { dataset: Dataset; compa
   const lowFirst = def.higherIsBetter === false;
 
   return (
-    <section className="flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note}>
+    <section className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
       <Explain info={scoredMetricInfo(dataset, def.id)} className="truncate text-left text-[11px] font-medium text-muted">{def.short ?? def.label}</Explain>
       <div className={`mt-1.5 font-mono text-lg font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state]}`}>
-        {mv?.value == null ? "—" : formatMetric(mv, def.unit)}
+        {mv?.value == null ? "—" : <Decode text={formatMetric(mv, def.unit)} delay={300 + i * 70} duration={700} />}
       </div>
       <div className="mt-1.5 flex flex-wrap gap-1">
         {checks.map((k) => (
@@ -159,11 +160,12 @@ function MetricTile({ dataset, company, def, onOpen }: { dataset: Dataset; compa
       {pos >= 0 ? (
         <div className="mt-auto pt-2">
           <div className="flex items-end gap-px" role="img" aria-label={`Ranked ${pos + 1} of ${withData.length}`}>
-            {withData.map((c) => {
+            {withData.map((c, j) => {
               const me = c.ticker === company.ticker;
               return (
                 <button key={c.ticker} onClick={() => onOpen(c.ticker)} title={`${c.ticker} · ${formatMetric(c.metrics[def.id], def.unit)}`}
-                  className={`flex-1 rounded-[2px] ${stateBg[metricState(c, def.id)]} ${me ? "h-3.5" : "h-2 opacity-30 hover:opacity-100"}`} />
+                  style={{ transformOrigin: "center bottom", animationDelay: `${450 + i * 70 + j * 25}ms` }}
+                  className={`a-grow-y flex-1 rounded-[2px] ${stateBg[metricState(c, def.id)]} ${me ? "h-3.5 shadow-[0_0_8px_rgba(61,220,108,0.9)]" : "h-2 opacity-30 hover:opacity-100"}`} />
               );
             })}
           </div>
@@ -205,7 +207,7 @@ function DeepDive({ company }: { company: Company }) {
 
   return (
     <>
-      <section className="rounded-xl border border-line bg-white">
+      <section className="spot rounded-xl border border-line bg-white">
         <div className="flex items-center justify-between border-b border-line px-5 py-3">
           <h2 className="text-[13px] font-semibold text-ink">FY{last.fiscalYear} at a glance</h2>
           <span className="text-xs text-faint">{cur}</span>
@@ -214,7 +216,9 @@ function DeepDive({ company }: { company: Company }) {
           {kpis.map(([label, value, sub]) => (
             <div key={label} className="px-5 py-3.5">
               <div className="text-[11px] font-medium uppercase tracking-wide text-faint">{label}</div>
-              <div className={`mt-1 font-mono text-xl font-semibold tabular-nums tracking-tight ${value === "—" ? "text-faint" : "text-ink"}`}>{value}</div>
+              <div className={`mt-1 font-mono text-xl font-semibold tabular-nums tracking-tight ${value === "—" ? "text-faint" : "text-ink"}`}>
+                {value === "—" ? value : <DecodeInView text={value} duration={800} />}
+              </div>
               {sub && <div className="mt-0.5 text-[11px] text-muted">{sub}</div>}
             </div>
           ))}

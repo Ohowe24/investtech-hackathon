@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { useInView } from "./live/motion";
 
 /** Series colours: ink, the dark teal, a light teal, a warm ochre, grey. */
 export const C = { ink: "#000000", teal: "#2f5454", sea: "#8fb3b3", ochre: "#c9982a", grey: "#b5b5b5", bad: "#c8372d" };
@@ -106,12 +107,13 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
             const y1 = y(v, s.axis);
             return (
               <rect key={`${s.label}-${i}`} x={cx(i) - (barW * bars.length) / 2 + b * barW + 1} width={Math.max(barW - 2, 1)}
-                y={Math.min(y0, y1)} height={Math.max(Math.abs(y1 - y0), 0.5)} rx={2} fill={s.color} pointerEvents="none" />
+                y={Math.min(y0, y1)} height={Math.max(Math.abs(y1 - y0), 0.5)} rx={2} fill={s.color} pointerEvents="none"
+                className="a-grow-y" style={{ transformOrigin: y1 <= y0 ? "center bottom" : "center top", animationDelay: `${120 + i * 70 + b * 35}ms` }} />
             );
           }),
         )}
         {refs.map((r) => (
-          <g key={r.label} pointerEvents="none">
+          <g key={r.label} pointerEvents="none" className="a-grow-x" style={{ transformBox: "fill-box", animationDelay: "500ms" }}>
             <line x1={PAD.left} x2={W - padR} y1={y(r.value, r.axis)} y2={y(r.value, r.axis)} stroke={C.bad} strokeWidth={1} strokeDasharray="4 3" />
             <text x={PAD.left + 4} y={y(r.value, r.axis) - 4} className="text-[9px] font-medium" fill={C.bad}>{r.label}</text>
           </g>
@@ -124,10 +126,12 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
             <g key={s.label} pointerEvents="none">
               {segs.filter((g) => g.length > 1).map((g, k) => (
                 <polyline key={k} points={g.join(" ")} fill="none" stroke={s.color} strokeWidth={2} strokeDasharray={s.dashed ? "5 4" : undefined}
-                  strokeLinejoin="round" strokeLinecap="round" />
+                  strokeLinejoin="round" strokeLinecap="round" pathLength={s.dashed ? undefined : 1}
+                  className={s.dashed ? "a-fade" : "a-draw"} style={{ animationDelay: "250ms" }} />
               ))}
               {s.values.map((v, i) => v == null ? null : (
-                <circle key={i} cx={cx(i)} cy={y(v, s.axis)} r={at === i ? 4 : 2.75} fill="#fff" stroke={s.color} strokeWidth={2} />
+                <circle key={i} cx={cx(i)} cy={y(v, s.axis)} r={at === i ? 4 : 2.75} fill="#fff" stroke={s.color} strokeWidth={2}
+                  className="a-pop" style={{ animationDelay: `${300 + (i / Math.max(years.length - 1, 1)) * 1100}ms` }} />
               ))}
             </g>
           );
@@ -154,8 +158,9 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
 
 /** A chart panel: title, one line on how to read it, the chart. */
 export function ChartCard({ title, sub, children }: { title: string; sub?: string; children: ReactNode }) {
+  const [ref, inView] = useInView<HTMLElement>();
   return (
-    <section className="min-w-0 rounded-xl border border-line bg-white p-4">
+    <section ref={ref} className={`spot reveal ${inView ? "is-in" : ""} min-w-0 rounded-xl border border-line bg-white p-4`}>
       <h3 className="text-[13px] font-semibold text-ink">{title}</h3>
       {sub && <p className="mt-0.5 text-[11px] leading-snug text-faint">{sub}</p>}
       <div className="mt-3">{children}</div>
@@ -168,7 +173,7 @@ export function SplitBar({ parts, fmt }: { parts: { label: string; value: number
   const shown = parts.filter((p) => p.value > 0);
   return (
     <div>
-      <div className="flex h-7 w-full overflow-hidden rounded-md">
+      <div className="a-grow-x flex h-7 w-full overflow-hidden rounded-md" style={{ animationDelay: "200ms" }}>
         {shown.map((p) => <div key={p.label} title={`${p.label} · ${fmt(p.value)}`} style={{ flexGrow: p.value, flexBasis: 0, background: p.color }} />)}
       </div>
       <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-muted">
