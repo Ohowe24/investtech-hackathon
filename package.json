@@ -10,7 +10,9 @@
     "engine": "tsx engine/build.ts",
     "test": "vitest run",
     "refresh-index": "node scripts/refresh-index.mjs",
-    "onesheet": "node engine/onesheet-try.mjs"
+    "onesheet": "node engine/onesheet-try.mjs",
+    "inputs": "tsx engine/make-inputs.ts",
+    "fetch-statements": "node engine/fetch-statements.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

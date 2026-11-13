@@ -22,11 +22,13 @@ Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md
 - Missing means `null` plus a `note`, never `0`.
 - Every metric carries `sourceIds` that point at `Dataset.sources`.
 - While `isFake` is true the site shows a FAKE banner. Never remove or hide it.
-- Verdicts and reasons are human decisions from `engine/input/companies.csv`. Don't auto-generate them.
+- Verdicts come from the model's declared checks in `engine/config.ts` (rules written before results). A verdict and reason typed in `engine/input/companies.csv` overrides the model. Never tune a threshold to get a result.
 
 ## Commands
 ```
 npm run dev            # website at http://localhost:3000
+npm run fetch-statements  # download annual statements for all 20 companies into engine/raw/ (needs .env.local)
+npm run inputs         # engine/raw/ -> engine/input/*.csv + deals.json (never overwrites companies.csv)
 npm run engine         # rebuild data/companies.json (uses engine/input/ if present, else FAKE sample)
 npm test               # formula + index-math tests
 npm run build          # production build; must pass before pushing

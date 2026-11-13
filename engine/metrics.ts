@@ -63,3 +63,73 @@ export function quadrant(x: N, y: N, xThreshold: number, yThreshold: number, zon
   if (top) return right ? zones.topRight : zones.topLeft;
   return right ? zones.bottomRight : zones.bottomLeft;
 }
+
+/**
+ * Cash return on invested capital: free cash flow / average (debt + equity).
+ * Goodwill is counted because the debt and equity that paid for acquisitions stay in the denominator.
+ * Null if anything is missing or average capital <= 0.
+ */
+export function cashReturnOnCapital(fcf: N, debtStart: N, equityStart: N, debtEnd: N, equityEnd: N): number | null {
+  if (!isNum(fcf) || !isNum(debtStart) || !isNum(equityStart) || !isNum(debtEnd) || !isNum(equityEnd)) return null;
+  const avg = (debtStart + equityStart + debtEnd + equityEnd) / 2;
+  if (avg <= 0) return null;
+  return fcf / avg;
+}
+
+/** (debt - cash) / EBITDA. Null if EBITDA <= 0. Negative means net cash. */
+export function netDebtToEbitda(debt: N, cash: N, ebitda: N): number | null {
+  if (!isNum(debt) || !isNum(cash) || !isNum(ebitda) || ebitda <= 0) return null;
+  return (debt - cash) / ebitda;
+}
+
+/** One threshold test. Null value -> null (unknown), never a fail. */
+export function passes(value: N, op: ">=" | "<=", threshold: number): boolean | null {
+  if (!isNum(value)) return null;
+  return op === ">=" ? value >= threshold : value <= threshold;
+}
+
+export interface Tally {
+  passed: number;
+  available: number;
+  total: number;
+  recommendation: "pass" | "mixed" | "fail";
+}
+
+/**
+ * Turns check results into a recommendation.
+ * - Any gate that fails -> "fail".
+ * - "pass" needs every gate to pass (unknown gates don't count as passed), at least `minAvailable`
+ *   scored checks with data, and at least `passShare` of those passed.
+ * - "fail" also if fewer than `mixedShare` of scored checks with data pass.
+ * - Everything else is "mixed".
+ */
+export function tally(
+  gates: (boolean | null)[],
+  scored: (boolean | null)[],
+  rules: { passShare: number; mixedShare: number; minAvailable: number },
+): Tally {
+  const known = scored.filter((s) => s !== null);
+  const passed = known.filter(Boolean).length;
+  const available = known.length;
+  const base = { passed, available, total: scored.length };
+  if (gates.some((g) => g === false)) return { ...base, recommendation: "fail" };
+  const share = available > 0 ? passed / available : 0;
+  if (available > 0 && share < rules.mixedShare) return { ...base, recommendation: "fail" };
+  const gatesOk = gates.every((g) => g === true);
+  if (gatesOk && available >= rules.minAvailable && share >= rules.passShare) return { ...base, recommendation: "pass" };
+  return { ...base, recommendation: "mixed" };
+}
+
+/**
+ * Equal-weight split of a sleeve across groups of related companies.
+ * Each group gets min(cap, sleeve / groups); members of a group share it equally.
+ * Returns ticker -> weight in percent.
+ */
+export function equalWeights(groups: string[][], sleevePct: number, capPct: number): Record<string, number> {
+  const out: Record<string, number> = {};
+  const live = groups.filter((g) => g.length > 0);
+  if (live.length === 0 || sleevePct <= 0) return out;
+  const perGroup = Math.min(capPct, sleevePct / live.length);
+  for (const g of live) for (const t of g) out[t] = Math.round((perGroup / g.length) * 100) / 100;
+  return out;
+}

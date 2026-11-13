@@ -1,6 +1,6 @@
 // ENGINE SETTINGS (Max's lane)
-// Change these at the 17:20 go / no-go once the real data is visible.
-// Thresholds below are PLACEHOLDERS. Set them on purpose and write why in methodology.md.
+// Every threshold here is a declared rule, written down BEFORE looking at results.
+// The reason for each one is in methodology.md. Change them on purpose, never to fit an answer.
 
 import type { MapConfig, MetricDef } from "../contract/types";
 
@@ -9,8 +9,32 @@ export const config = {
   indexName: "Serial acquirers & consolidators",
   currency: "USD",
   question: "Which Canadian companies truly belong in this index, and which only look like they do?",
-  /** used when a company has verdict "add" but no proposed_weight_pct */
-  defaultAddWeightPct: 2.5,
+  /** share of the index we fill with additions. Organizers said the ~18% cash could drop toward 15%. */
+  sleevePct: 15,
+  /** no single addition above the index's own top-tier weight (five holdings sit at about 8.2%) */
+  maxWeightPct: 8.2,
+  /** related companies share one slot. Constellation controls Topicus, so both together count once. */
+  relatedGroups: [["CSU", "TOI"]] as string[][],
+  /** how check results become a recommendation (see tally() in metrics.ts) */
+  scoring: { passShare: 0.75, mixedShare: 0.5, minAvailable: 3 },
+
+  /** The declared test. "gate" checks must pass; "score" checks count toward the score. */
+  checks: [
+    { id: "themeFit", kind: "gate", label: "Really an acquirer", metricId: "acqIntensity", op: ">=", threshold: 0.2,
+      rule: "Spent at least 20% of its operating cash flow on acquisitions" },
+    { id: "debtLimit", kind: "gate", label: "Debt under control", metricId: "netDebtToEbitda", op: "<=", threshold: 3,
+      rule: "Net debt is at most 3× EBITDA" },
+    { id: "ownersGain", kind: "score", label: "Owners gained", metricId: "fcfPerShareCagr", op: ">=", threshold: 0.07,
+      rule: "Free cash flow per share grew at least 7% a year" },
+    { id: "cashReturn", kind: "score", label: "Capital earns its keep", metricId: "cashReturn", op: ">=", threshold: 0.08,
+      rule: "Free cash flow is at least 8% of the capital invested, goodwill included" },
+    { id: "noDilution", kind: "score", label: "No dilution", metricId: "shareCountChange", op: "<=", threshold: 0.05,
+      rule: "Share count grew by no more than 5% over the period" },
+    { id: "selfFunded", kind: "score", label: "Self-funded deals", metricId: "acqIntensity", op: "<=", threshold: 1,
+      rule: "Acquisition spending did not exceed operating cash flow" },
+    { id: "organic", kind: "score", label: "Still growing underneath", metricId: "organicGrowth", op: ">=", threshold: 0,
+      rule: "Reported organic growth is not negative" },
+  ] as { id: string; kind: "gate" | "score"; label: string; metricId: string; op: ">=" | "<="; threshold: number; rule: string }[],
 
   metricDefs: [
     {
@@ -41,11 +65,18 @@ export const config = {
       description: "Change in diluted shares over the period. Positive means new shares were issued.",
     },
     {
-      id: "netDebtToFcf",
-      label: "Net debt / FCF",
+      id: "cashReturn",
+      label: "Cash return on capital",
+      unit: "pct",
+      higherIsBetter: true,
+      description: "Free cash flow as a share of all the debt and equity invested, goodwill included (latest year).",
+    },
+    {
+      id: "netDebtToEbitda",
+      label: "Net debt / EBITDA",
       unit: "multiple",
       higherIsBetter: false,
-      description: "Years of free cash flow needed to pay off net debt (latest year).",
+      description: "Net debt compared with one year of EBITDA (latest year). Negative means more cash than debt.",
     },
     {
       id: "organicGrowth",
@@ -59,8 +90,8 @@ export const config = {
   map: {
     x: "acqIntensity",
     y: "fcfPerShareCagr",
-    xThreshold: 0.5, // PLACEHOLDER: "acquisition-led" if it spends >= 50% of operating cash flow on deals
-    yThreshold: 0.05, // PLACEHOLDER: "owners got richer" if FCF/share grows >= 5% a year
+    xThreshold: 0.2, // same line as the "Really an acquirer" gate
+    yThreshold: 0.07, // same line as the "Owners gained" check
     zones: {
       topRight: "Compounders",
       bottomRight: "Empire builders",

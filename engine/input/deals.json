@@ -1,0 +1,1422 @@
+{
+  "CSU": [
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-06-01",
+      "fiscalYear": 2026,
+      "counterparty": "DerbySoft Holdings Limited",
+      "summary": "Constellation Software acquired 91.8% of DerbySoft Holdings Limited on June 1, 2026 for total consideration of $391.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "On June 1, 2026, the Company effectively acquired 91.8% of the outstanding shares of DerbySoft Holdings Limited ('DerbySoft'), thereby obtaining control, for cash consideration of $363 plus cash holdbacks of $14 and contingent consideration with an estimated acquisition date fair value of $15. The total consideration was $392."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "On June 1, 2026, the Company effectively acquired 91.8% of the outstanding shares of DerbySoft Holdings Limited ('DerbySoft'), thereby obtaining control, for cash consideration of $363 plus cash holdbacks of $13 and contingent consideration with an estimated acquisition date fair value of $15. The total consideration was $391."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-13",
+      "fiscalYear": 2026,
+      "counterparty": "Synchronoss Technologies, Inc.",
+      "summary": "Constellation Software completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. for cash proceeds of $309 million on February 13, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-12",
+          "quote": "On February 13, 2026, the Company completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. ('Synchronoss') for cash proceeds of $309."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "On February 13, 2026, the Company completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. ('Synchronoss') for cash proceeds of $309."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "On February 13, 2026, the Company completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. ('Synchronoss') for cash proceeds of $309."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q3 2026",
+      "fiscalYear": 2026,
+      "counterparty": "multiple businesses",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $1,241 plus cash holdbacks of $313 and contingent consideration with an estimated fair value of $51, totaling $1,605 for the nine months ended September 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-09",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $707 million on closing plus total estimated deferred payments of $96 million for total consideration of $802 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-12",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $627 million on closing plus total estimated deferred payments of $159 million for total consideration of $786 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-11",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $669 million on closing plus total estimated deferred payments of $149 million for total consideration of $818 million."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "the Company completed a number of additional acquisitions for aggregate cash consideration of $1,241 plus cash holdbacks of $313 and contingent consideration with an estimated acquisition date fair value of $51. The total consideration resulting from the additional acquisitions in the nine months ended September 30, 2026 was $1,605."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $757 plus holdbacks and contingent consideration, totaling $999, in the six months ended June 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $384 on closing plus total estimated deferred payments of $71 for total consideration of $454."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "the Company completed a number of additional acquisitions for aggregate cash consideration of $1,000 plus cash holdbacks of $253 and contingent consideration with an estimated acquisition date fair value of $68. The total consideration resulting from the additional acquisitions in the year ended December 31, 2025 was $1,321."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $707 on closing plus cash holdbacks of $80 and contingent consideration with an estimated fair value of $16 for total consideration of $802."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-12",
+          "quote": "the Company completed a number of additional acquisitions for aggregate cash consideration of $388 plus cash holdbacks of $91 and contingent consideration with an estimated acquisition date fair value of $21. The total consideration resulting from the additional acquisitions in the three months ended March 31, 2026 was $500."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "the Company completed a number of additional acquisitions for aggregate cash consideration of $757 plus cash holdbacks of $199 and contingent consideration with an estimated acquisition date fair value of $42. The total consideration resulting from the additional acquisitions in the six months ended June 30, 2026 was $999."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-04",
+      "fiscalYear": 2025,
+      "counterparty": "Adam Góral Family Foundation",
+      "summary": "On December 4, 2025, Topicus disposed of 1.7% (1,411,006 shares) of Asseco under the exercised shareholders' agreement, receiving proceeds of $33 million, reducing its shareholding to 23.14%.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "On December 4, 2025, the agreement was exercised for 1.7% (1,411,006 shares) of Asseco and the Company received total proceeds of $33 and the derivative is no longer presented on the balance sheet. As a result, Topicus' shareholding decreased to 23.14%"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-09",
+          "quote": "On December 4, 2025, the agreement was exercised and the Company received total proceeds of $33 million and the derivative liability is no longer presented on the balance sheet. As a result, Topicus' shareholding in Asseco decreased to 23.14% as at December 31, 2025."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "Topicus completed the acquisition of 12,318,863 treasury shares of Asseco (14.84% of share capital) on October 1, 2025 for total purchase price of $289 million (EUR 246 million).",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "The acquisition of the treasury shares closed on October 1, 2025. On October 1, 2025, the restriction was released on the cash consideration and the total purchase price for the treasury shares was $289 (EUR 246)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "the acquisition of the 14.84% of Asseco's share capital which closed on October 1, 2025 (note 20), the Company's expected cash consideration held at September 30, 2025 for the purchase of these shares in the amount of $289 (EUR 246)"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-11-07",
+          "quote": "The acquisition of the treasury shares closed on October 1, 2025. On October 1, 2025, the restriction was released on the cash consideration and the total purchase price for the treasury shares was $289 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Constellation Software Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-08",
+          "quote": "On June 2, 2025, the Company completed the acquisition of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of $228 plus issued an estimated cash holdback payable of $23 and contingent consideration with an estimated acquisition date fair value of $7. The total consideration resulting from acquisition of CS is $258."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "On June 2, 2025, the Company completed the acquisition of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of $228 plus issued an estimated cash holdback payable of $23 and contingent consideration with an estimated acquisition date fair value of $7. The total consideration resulting from acquisition of CS is $258."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "On June 2, 2025, the Company completed the acquisition of 100% of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of $228 plus issued an estimated cash holdback payable of $23 and contingent consideration with an estimated acquisition date fair value of $7. The total consideration resulting from acquisition of CS is $258."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software entered into a binding agreement on February 4, 2025 to acquire 12,318,863 treasury shares of Asseco Poland S.A. representing 14.84% of issued share capital at 85 PLN per share.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-07",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-03-07",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-12",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco Poland S.A. ('Asseco'). These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-05-12",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco Poland S.A. ('Asseco'). These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-08",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco Poland S.A. ('Asseco'). These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco Poland S.A. ('Asseco'). These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco for 85 PLN/share. These shares represent 14.84% of Asseco's issued share capital."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "On February 4, 2025, Constellation Software entered into a binding agreement to acquire 14.84% of Asseco's share capital (12,318,863 treasury shares) at PLN 85 per share, subject to regulatory approvals.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-12",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-05-12",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-08-08",
+          "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software purchased 8,300,029 shares (approximately 9.99%) in Asseco Poland S.A. at 85 PLN per share for total consideration of $174 million on January 31, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-12",
+          "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The shares were acquired at a price of 85 PLN per share for total consideration of $174."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-07",
+          "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of $174."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-09",
+          "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of $174."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-04-30",
+      "fiscalYear": 2024,
+      "counterparty": "Conduent Incorporated",
+      "summary": "Constellation Software completed the acquisition of the Public Safety Businesses from Conduent Incorporated for total consideration of $280 million on April 30, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-07",
+          "quote": "On April 30, 2024, the Company completed the acquisition of the Public Safety Businesses from Conduent Incorporated ('Conduent'). The Company paid cash of $174 plus issued an estimated cash holdback payable of $106. The total consideration resulting from acquisition of the Public Safety Business from Conduent is $280."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2023-02-22",
+      "fiscalYear": 2023,
+      "counterparty": "WideOrbit Inc.",
+      "summary": "Lumine issued 10,204,294 Lumine Special Shares to WideOrbit sellers for approximately $222 million as part of the WideOrbit acquisition completed February 22, 2023.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-07",
+          "quote": "On February 22, 2023, the Company completed the acquisition of 100% of the shares of WideOrbit Inc. ('WideOrbit'). In conjunction with the acquisition of WideOrbit, Lumine issued 10,204,294 Lumine Special Shares to the sellers of WideOrbit for an initial subscription price of approximately $222"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2022-05-02",
+      "fiscalYear": 2022,
+      "counterparty": "Allscripts Healthcare Solutions",
+      "summary": "Constellation, through N. Harris Computer Corporation, completed the purchase of Allscripts' Hospitals and Large Physician Practices business segment from Allscripts Healthcare Solutions on May 2, 2022; the segment now operates as Altera.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-11",
+          "quote": "On May 2, 2022, Constellation, through its wholly-owned subsidiary, N. Harris Computer Corporation, completed the purchase from Allscripts Healthcare Solutions ('Allscripts') of Allscripts' Hospitals and Large Physician Practices business segment."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-06",
+          "quote": "On May 2, 2022, Constellation, through its wholly-owned subsidiary, N. Harris Computer Corporation, completed the purchase from Allscripts of Allscripts' Hospitals and Large Physician Practices business segment. This business segment now operates under the name Altera."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "DerbySoft",
+      "summary": "Constellation Software acquired DerbySoft, a software company operating in the travel vertical, with results included from the acquisition date in the nine months ended September 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "DerbySoft is a software company that operates in the travel vertical. The acquisition has been accounted for using the acquisition method with the results of operations included in the condensed consolidated interim financial statements for six months ended June 30, 2026 from the date of the acquisition."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "DerbySoft is a software company that operates in the travel vertical. The acquisition has been accounted for using the acquisition method with the results of operations included in the condensed consolidated interim financial statements for nine months ended September 30, 2026 from the date of the acquisition."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Optimal Blue",
+      "summary": "Constellation Software acquired Optimal Blue and entered into a promissory note agreement as part of the acquisition financing.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "In conjunction with the acquisition of Optimal Blue, the Company had entered into a promissory note agreement ('Promissory Note')."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Synchronoss",
+      "summary": "Constellation Software acquired Synchronoss, which contributed revenue of $107 and a net loss of $2 for the nine months ended September 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-12",
+          "quote": "The impact of acquisition accounting applied on a provisional basis in connection with the acquisition of Synchronoss is as follows:"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "The acquisition of Synchronoss contributed revenue of $64 and a net loss of $4 for the six months ended June 30, 2026."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-06",
+          "quote": "The acquisition of Synchronoss contributed revenue of $107 and a net loss of $2 for the nine months ended September 30, 2026."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Conduent",
+      "summary": "Constellation Software acquired the Public Safety Business from Conduent, contributing $105 million in revenue and $9 million in net income for the year ended December 31, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-07",
+          "quote": "The acquisition of Public Safety Businesses contributed revenue of $105 and net income of $9 for the year ended December 31, 2024."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "summary": "Subsequent to June 30, 2025, Constellation Software completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $210 million plus estimated deferred payments of $109 million, totalling $320 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2025-03-07",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $289 million on closing plus cash holdbacks of $44 million and contingent consideration with an estimated fair value of $23 million for total consideration of $357 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-05-12",
+          "quote": "Subsequent to March 31, 2025, the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $342 million on closing plus total estimated deferred payments of $85 million for total consideration of $427 million."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-08",
+          "quote": "Subsequent to June 30, 2025, the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $210 on closing plus total estimated deferred payments of $109 for total consideration of $320."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "multiple",
+      "summary": "Subsequent to June 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $818 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-11",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $669 on closing plus total estimated deferred payments of $149 for total consideration of $818."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "multiple software businesses",
+      "summary": "Subsequent to September 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $673 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-06",
+          "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $526 million on closing plus total estimated deferred payments of $148 million for total consideration of $673 million."
+        }
+      ]
+    }
+  ],
+  "TOI": [
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "Topicus.com Inc. completed multiple acquisitions during Q1 2026 for total consideration of EUR 22,508 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "acquisitions for an aggregate of €336.6 million (including payments for holdbacks relating to prior acquisitions) offset by €62.7 million of acquired cash"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-05",
+          "quote": "the Company completed acquisitions for aggregate cash consideration of EUR 15,028, plus cash holdbacks of EUR 4,735 and contingent consideration with an estimated acquisition date fair value of EUR 2,745 resulting in total consideration of EUR 22,508"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various software companies",
+      "summary": "Topicus.com Inc. completed multiple acquisitions of software companies across various verticals during the six-month period ended June 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "None of the additional acquisitions completed during the year ended December 31, 2025 were deemed to be individually significant. All of the businesses acquired during the period were acquisitions of shares."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-05",
+          "quote": "The acquisitions during the six-month period ended June 30, 2026 include software companies catering to the automotive, planning, government, chemicals, healthcare, legal, gaming, financial services, printing, laboratory, enterprise resource planning and education verticals"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-04",
+      "fiscalYear": 2025,
+      "counterparty": "Adam Góral Family Foundation",
+      "summary": "On December 4, 2025, the shareholders' agreement derivative was exercised, resulting in Topicus selling 1.7% (1,411,006 shares) of Asseco and receiving total proceeds of EUR 28,368.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "On December 4, 2025, the agreement was exercised for 1.7% (1,411,006 shares) of Asseco and the company received total proceeds of EUR 28,368 and the derivative is no longer presented on the balance sheet."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Topicus.com Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "On June 2, 2025, the Company completed the acquisition of 100% of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of EUR 197,607 plus issued an estimated cash holdback payable of EUR 20,000 and contingent consideration with an estimated acquisition date fair value of EUR 6,022. The total consideration resulting from acquisition of CS is EUR 223,629."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Cyfrowy Polsat S.A.",
+      "summary": "On January 31, 2025, Topicus purchased 8,300,029 shares in Asseco Poland from Cyfrowy Polsat S.A., representing approximately 9.99% of Asseco's issued shares, for total consideration of €168.0 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of EUR 167,977."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "The acquisition of the 14.84% interest in Asseco's share capital was completed on October 1, 2025, increasing the Company's total shareholding to 24.84% and the derivative is no longer presented on the balance sheet."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "The acquisition of the 14.84% interest in Asseco's share capital was completed on October 1, 2025."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco from Cyfrowy Polsat S.A., representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of €168.0 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Cipal",
+      "summary": "Topicus.com acquired a 50% interest in Remmicom JV NV as part of the acquisition of Cipal, applying the equity method of accounting.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "As a result of the acquisition of Cipal (note 4), the Company acquired a 50% interest in Remmicom JV NV."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "counterparty": "multiple software companies",
+      "summary": "Subsequent to December 31, 2025, Topicus.com Inc. entered into agreements to acquire a number of businesses in automotive, planning, government, chemicals, healthcare, and legal verticals for total consideration of EUR 20,284 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "Subsequent to December 31, 2025 the Company completed or have entered into agreements to acquire a number of additional businesses for aggregate cash consideration of EUR 13,299 on closing plus cash holdbacks of EUR 3,878 and contingent consideration with an estimated fair value of EUR 3,107 for total consideration of EUR 20,284."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "counterparty": "undisclosed fleet, healthcare and education software companies",
+      "summary": "Subsequent to June 30, 2026, Topicus.com Inc. completed or has open commitments to acquire a number of businesses in the fleet, healthcare, and education verticals for total consideration of €56.1 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-05",
+          "quote": "Subsequent to June 30, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 43,384 on closing plus total estimated deferred payments of EUR 12,739 for total consideration of EUR 56,123."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-05",
+          "quote": "Subsequent to June 30, 2026 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €43.4 million on closing plus total estimated deferred payments of €12.7 million for total consideration of €56.1 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "counterparty": "undisclosed software companies",
+      "summary": "Subsequent to March 31, 2026, Topicus.com completed or has open commitments to acquire a number of businesses in local government, financial services, printing, and healthcare verticals for total consideration of EUR 37,678 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-05",
+          "quote": "Subsequent to March 31, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 29,285 on closing plus total estimated deferred payments of EUR 8,393 for total consideration of EUR 37,678."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "counterparty": "undisclosed healthcare and real estate software companies",
+      "summary": "Subsequent to September 30, 2026, Topicus.com Inc. completed or has open commitments to acquire additional businesses in healthcare and real estate verticals for total consideration of €16.5 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "Subsequent to September 30, 2026 the Company completed or has open commitments to acquire businesses for aggregate cash consideration of EUR 11,011 on closing plus total estimated deferred payments of EUR 5,503 for total consideration of EUR 16,514."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "Subsequent to September 30, 2026 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €11.0 million on closing plus total estimated deferred payments of €5.5 million for total consideration of €16.5 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "counterparty": "multiple businesses",
+      "summary": "Topicus.com completed or has open commitments to acquire several businesses in local government, financial services, printing, and healthcare verticals for total consideration of €37.7 million subsequent to March 31, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "Subsequent to December 31, 2025 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €13.3 million on closing plus total estimated deferred payments of €7.0 million for total consideration of €20.3 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-05",
+          "quote": "Subsequent to March 31, 2026 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €29.3 million on closing plus total estimated deferred payments of €8.4 million for total consideration of €37.7 million."
+        }
+      ]
+    }
+  ],
+  "WSP": [
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "date": "Q4 2026",
+      "periodLabel": "Q4 2026",
+      "fiscalYear": null,
+      "counterparty": "GCM Corpo Inc.",
+      "summary": "WSP entered into an agreement in October 2026 to acquire GCM Corpo Inc., a Canadian engineering consulting firm, with closing expected in Q4 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "In October 2026, WSP entered into an agreement to acquire GCM Corpo Inc. (\"GCM Corpo\"), a Canadian provider of engineering consulting and specialist services for the energy and industrial sectors, with approximately 600 professionals."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-09-01",
+      "fiscalYear": 2026,
+      "counterparty": "Hulley & Kirkwood",
+      "summary": "WSP acquired Hulley & Kirkwood, a UK-based building services consultancy, in September 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "In September 2026, WSP acquired Hulley & Kirkwood, a UK-based building services consultancy."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "date": "2026-07-24",
+      "fiscalYear": 2026,
+      "counterparty": "Arcadis N.V.",
+      "summary": "WSP submitted a revised non-binding indicative proposal to acquire all shares of Arcadis N.V. at €51.50 per share on July 24, 2026, which was unanimously rejected by Arcadis on July 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-05",
+          "quote": "WSP announced that it had submitted a non-binding indicative proposal to acquire all issued and outstanding shares of Arcadis N.V. (\"Arcadis\") for €51.50 per share"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "WSP announced that it had submitted a non-binding indicative proposal to acquire all issued and outstanding shares of Arcadis N.V. (\"Arcadis\") for €51.50 per share"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC Companies",
+      "summary": "WSP acquired TRC Companies on February 24, 2026 for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion).",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "on February 24, 2026, WSP acquired TRC Companies (\"TRC\") for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "the higher cash balance following the issuance of common shares, which was used to fund a portion of the purchase price for the acquisition of TRC Companies ('TRC') in 2026."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-06",
+          "quote": "On February 24, 2026, WSP acquired TRC Companies (\"TRC\") for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion (the \"TRC Acquisition\")."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "On February 24, 2026, WSP acquired TRC Companies (\"TRC\") for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC on February 24, 2026 for a total cash purchase price of US$3.3 billion ($4.5 billion).",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "on February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-01",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC in February 2026, adding approximately 7,800 employees to the Americas segment.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "On February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "cash outflows used for investing activities related mainly to the TRC Acquisition, including repayment of TRC's long-term debt of US$1.0 billion"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "approximately 7,800 employees were added through the acquisition of TRC in February 2026, net of the divestiture of the underground storage business in the US completed in January 2026."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-01",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP completed the acquisition of TRC in February 2026, adding approximately 7,800 employees net of the underground storage business divestiture.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "Acquisition growth was mainly due to the acquisition of TRC in February 2026"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-01-01",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "WSP completed the sale of its underground storage business in the US in January 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "the divestiture impact related to the sale of the underground storage business in the US. In addition, net revenues in the three-month period ended March 27, 2026 were negatively impacted by foreign exchange"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-01-01",
+      "fiscalYear": 2026,
+      "summary": "WSP divested its underground storage business in the US in January 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "the divestiture impact related to the sale of the underground storage business in the US"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-12-01",
+      "fiscalYear": 2025,
+      "counterparty": "Harmonic Analytics",
+      "summary": "WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand, in December 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "In December 2025, WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Ricardo",
+      "summary": "WSP Global completed the acquisition of Ricardo in October 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-06",
+          "quote": "WSP purchased a 19.9% interest in Ricardo plc ('Ricardo') and reached an agreement to acquire the entire issued and to be issued share capital of Ricardo for 430 pence per share (the 'Ricardo Acquisition')"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-08-06",
+          "quote": "WSP reached agreements to acquire the entire issued and to be issued share capital of Ricardo plc ('Ricardo') for 430 pence per share (the 'Ricardo Acquisition'), which reflects an enterprise value of approximately £363.1 million (approximately $670 million)"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-08-06",
+          "quote": "the purchase of a 19.9% interest in Ricardo, which WSP acquired from Science Group plc in June 2025"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-05",
+          "quote": "on October 9, 2025, WSP acquired the remaining share capital of Ricardo plc ('Ricardo') for 430 pence per share (the 'Ricardo Acquisition'), pursuant to an agreement and plan of merger announced on June 11, 2025."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-11-05",
+          "quote": "on October 9, 2025, WSP acquired the remaining share capital of Ricardo plc ('Ricardo') for 430 pence per share (the 'Ricardo Acquisition'), pursuant to an agreement and plan of merger announced on June 11, 2025. The Ricardo Acquisition reflects an enterprise value of £363.1 million (approximately $680 million)."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-11-05",
+          "quote": "the purchase of a 19.9% interest in Ricardo, which WSP acquired from Science Group plc in June 2025"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "WSP acquired the shares of Ricardo plc ('Ricardo' and the 'Ricardo Acquisition'). The Ricardo Acquisition reflects a purchase price of £371.1 million ($691.9 million), including repayment of long-term debt of £91.0 million ($169.7 million)."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "In October 2025, WSP acquired the shares of Ricardo plc ('Ricardo' and the 'Ricardo Acquisition'). The Ricardo Acquisition reflects an enterprise value of £371.1 million ($691.9 million), including repayment of long-term debt of £91.0 million ($169.7 million)."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "cash outflows used for investing activities related mainly to the acquisition of Ricardo and net capital expenditures"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "Acquisition growth was mainly attributable to the acquisition of TRC completed in February 2026 and Ricardo completed in October 2025."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-06-01",
+      "fiscalYear": 2025,
+      "counterparty": "Lexica Health and Life Sciences Consultancy Ltd.",
+      "summary": "WSP completed the acquisition of Lexica Health and Life Sciences Consultancy Ltd. in June 2025, contributing to EMEIA acquisition growth in the nine-month period ended September 25, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-06",
+          "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-08-06",
+          "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-05",
+          "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd., a UK-based consulting firm specializing in healthcare and life sciences with 90 UKbased employees."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "acquisition growth also included the acquisition of Lexica Health and Life Sciences Consultancy Ltd. completed in June 2025."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-06-01",
+      "periodLabel": "Q2 2025",
+      "fiscalYear": 2025,
+      "summary": "WSP disposed of a business in Central Europe during the second quarter of 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-06",
+          "quote": "During the second quarter ended June 28, 2025, the Corporation disposed of a business in Central Europe."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-05",
+          "quote": "During the second quarter of 2025, the Corporation disposed of a business in Central Europe."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-10-01",
+      "fiscalYear": 2024,
+      "counterparty": "POWER Engineers, Incorporated",
+      "summary": "WSP acquired POWER Engineers, Incorporated on October 1, 2024 for US$1.75 billion ($2.36 billion).",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2024-11-06",
+          "quote": "on October 1, 2024, WSP acquired POWER Engineers, Incorporated ('POWER'), pursuant to an agreement and plan of merger announced on August 12, 2024 (the 'POWER Acquisition'), for a purchase price of US$1.78 billion (approximately $2.44 billion), subject to final adjustments."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-02-26",
+          "quote": "On October 1, 2024, WSP acquired POWER Engineers, Incorporated ('POWER'), pursuant to an agreement and plan of merger announced on August 12, 2024 (the 'POWER Acquisition'), for a purchase price of US$1.75 billion ($2.36 billion)."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "As part of the completion of the POWER Acquisition on October 1, 2024, the Corporation drew down, under an incremental facility supplement to the existing credit agreement, two term loans totalling US$350 million, with maturities in October 2026 and 2027."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "cash outflows used in investing activities of $2,218.0 million and $2,436.6 million, respectively, related mainly to the POWER Acquisition"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-05",
+          "quote": "The net proceeds of the Public Offering and the Concurrent Private Placement were used to fund a portion of the purchase price for the acquisition of POWER Engineers."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "On October 1, 2024, WSP acquired POWER Engineers, Incorporated ('POWER Engineers'), pursuant to an agreement and plan of merger announced on August 12, 2024 (the 'POWER Engineers Acquisition'), for a purchase price of US$1.75 billion ($2.36 billion)."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "1A Ingenieros, S.L.",
+      "summary": "WSP acquired 1A Ingenieros, S.L. in May 2024, a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2024-11-06",
+          "quote": "Also in May 2024, WSP acquired 1A Ingenieros, S.L. ('1A Ingenieros'), a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-02-26",
+          "quote": "In May 2024, WSP acquired 1A Ingenieros, S.L. ('1A Ingenieros'), a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "In May 2024, WSP acquired 1A Ingenieros, S.L. ('1A Ingenieros'), a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "AKF Group LLC",
+      "summary": "WSP acquired AKF Group LLC in May 2024, a specialized mechanical, electrical, and plumbing firm with 365 professionals operating in the eastern United States and Mexico.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2024-11-06",
+          "quote": "In May 2024, WSP acquired AKF Group LLC ('AKF'), a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-02-26",
+          "quote": "In May 2024, WSP acquired AKF Group LLC ('AKF'), a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities. AKF's 365 professionals operate throughout the eastern United States"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "In May 2024, WSP acquired AKF Group LLC ('AKF'), a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities. AKF's 365 professionals operate throughout the eastern United States"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Proxion Oy",
+      "summary": "WSP acquired Proxion Plan Oy and Proxion Pro Oy (together Proxion) in March 2024, two Finnish rail consultancy firms with a combined workforce of 150 employees.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2024-11-06",
+          "quote": "In March 2024, WSP acquired Proxion Plan Oy and Proxion Pro Oy, both Finnish companies and subsidiaries of Proxion Oy."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-02-26",
+          "quote": "In March 2024, WSP acquired Proxion Plan Oy and Proxion Pro Oy (together 'Proxion'), both Finnish companies and subsidiaries of Proxion Oy. With their combined workforce of 150 employees"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "In March 2024, WSP acquired Proxion Plan Oy and Proxion Pro Oy (together 'Proxion'), both Finnish companies and subsidiaries of Proxion Oy. With their combined workforce of 150 employees"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Communica Public Affairs Inc.",
+      "summary": "WSP completed the acquisition of Communica Public Affairs Inc. in March 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2024-11-06",
+          "quote": "Also in March 2024, WSP acquired Communica Public Affairs Inc., a 50-employee Canadian firm specializing in Indigenous and stakeholder engagement and information management consulting."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-02-26",
+          "quote": "In March 2024, WSP acquired Communica Public Affairs Inc. ('Communica'), a 50-employee Canadian firm specializing in Indigenous and stakeholder engagement and information management consulting."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "Acquisition growth in both the quarter and year was due to the acquisition of Communica in March 2024"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "In March 2024, WSP acquired Communica Public Affairs Inc. ('Communica'), one of Canada's leading Indigenous and stakeholder engagement and information management consulting firms, with 50 highly skilled professionals."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "The year acquisition growth also included the acquisition of Communica Public Affairs Inc. completed in March 2024."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "2024",
+      "fiscalYear": 2024,
+      "counterparty": "Calibre Professional Services One Pty Ltd",
+      "summary": "WSP's APAC segment acquired Calibre Professional Services One Pty Ltd during 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "Acquisition growth in the year stemmed from the acquisition of Calibre Professional Services One Pty Ltd"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2023-08-01",
+      "fiscalYear": 2023,
+      "summary": "WSP sold Louis Berger Services Inc. in August 2023, resulting in a divestiture impact of 2.9% on net revenues in the Americas segment for the year ended December 31, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2025-02-26",
+          "quote": "The sale of Louis Berger Services Inc. (\"LBS\") in August 2023 resulted in a divestiture impact on a constant currency basis of 2.9% in the year ended December 31, 2024."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "TRC",
+      "summary": "WSP Global Inc. acquired TRC, financing it with long-term debt issuance, which increased the leverage ratio to 2.2x.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-05",
+          "quote": "the issuance of long-term debt used to finance the acquisition of TRC"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "the increase in the leverage ratio compared to 0.9 as at December 31, 2025, and slightly above Management's target range of 1.0x to 2.0x, is mainly due to the issuance of long-term debt used to finance the acquisition of TRC."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "summary": "WSP Global disposed of non-core businesses in Central Europe and the UK during 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2025-08-06",
+          "quote": "Backlog decreased slightly due to the disposal of a business in Central Europe."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "During 2025, the Corporation disposed of non-core businesses in Central Europe and the UK."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "summary": "WSP divested a non-core business in the UK, which was netted against employee additions from acquisitions in the trailing-twelve month period ended September 25, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "approximately 2,000 employees were added through business acquisitions, net of the divestiture of a non-core business in the UK."
+        }
+      ]
+    }
+  ],
+  "TFII": [
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-02-08",
+      "fiscalYear": 2026,
+      "summary": "TFI International acquired a non-material business for a total purchase price of $48.9 million on February 8, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On February 8, 2026, the Group acquired a non-material business for a total purchase price of $48.9 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "Triangle Warehouse",
+      "summary": "TFI International acquired Triangle Warehouse, which now operates as part of the Truckload segment.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-04-27",
+          "quote": "During the first quarter, the Company acquired Triangle Warehouse which now operates as part of the Truckload segment."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-12-15",
+      "fiscalYear": 2025,
+      "counterparty": "Hearn Industrial Services",
+      "summary": "TFI International completed the acquisition of Hearn Industrial Services on December 15, 2025, for a total purchase price of $304.3 million, reported in the Logistics segment.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On December 15, 2025, the Group completed the acquisition of Hearn. Hearn is reported in the Logistics segment. The purchase price for the business acquisition totaled $304.3 million, which includes $95.5 million of contingent consideration measured at fair value at acquisition date."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "the Group acquired four businesses during 2025, of which Hearn Industrial Services (\"Hearn\") was considered material. All other acquisitions were not considered to be material."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-17",
+          "quote": "TFI International acquired Hearn Industrial Services (\"Hearn\"), which now operates as part of the Logistics business segment."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q4 2025",
+      "fiscalYear": 2025,
+      "counterparty": "four businesses",
+      "summary": "TFI International acquired four businesses during the year ended December 31, 2025 for a total of $201.3 million net of cash acquired.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-17",
+          "quote": "cash used in business acquisitions, net of cash acquired, totaled $201.3 million to acquire four businesses"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "9M 2025",
+      "fiscalYear": 2025,
+      "summary": "TFI International acquired three businesses during the nine months ended September 30, 2025 for $36.4 million net of cash acquired.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-04-27",
+          "quote": "the Group acquired one business during 2026, which was not considered to be material. This transaction was concluded in order to add density in the Group's current network and further expand value-added services."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-07-27",
+          "quote": "the Group acquired one business during 2026, which was not considered to be material. This transaction was concluded in order to add density in the Group's current network and further expand value-added services."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-07-27",
+          "quote": "cash used in business acquisitions, net of cash acquired, totaled $57.4 million to acquire a business"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "the Group acquired one business during 2026, which was not considered to be material. This transaction was concluded in order to add density in the Group's current network and further expand value-added services."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-10-29",
+          "quote": "$36.4 million incurred in 2025 to acquire three businesses"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-04-01",
+      "fiscalYear": 2024,
+      "counterparty": "Daseke Inc.",
+      "summary": "TFI International completed the acquisition of Daseke, Inc. on April 1, 2024, for a total purchase price of $817.0 million, reported in the Truckload segment.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On April 1, 2024, the Group completed the acquisition of Daseke, Inc. Daseke is reported in the Truckload segment. The purchase price for the business acquisition totaled $817.0 million, which was funded by a $500.0 million term loan obtained and the remaining balance was drawn from cash on hand"
+        }
+      ]
+    }
+  ],
+  "ARE": [
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon Utilities Group Inc. (AUGI) completed the acquisition of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-05",
+          "quote": "On December 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired all of the property and assets of Ainsworth Power Construction, an electrical services and power systems business unit of Ainsworth Inc., headquartered in Toronto, Ontario, from GDI Integrated Facility Services."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "Aecon Utilities Group Inc. ('AUGI') completed the acquisition of 100% of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively 'KPC'), headquartered in Ontario for $40,000 plus contingent consideration."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On December 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired all of the property and assets of Ainsworth Power Construction, an electrical services and power systems business unit of Ainsworth Inc."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "Aecon Utilities acquired after year-end KPC in Ontario. KPC's high-voltage testing, commissioning and metering solutions capabilities accelerate Aecon Utilities' ability to harness grid modernization, electrification, and infrastructure upgrade opportunities"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "On January 6, 2026, Aecon Utilities Group Inc. ('AUGI') completed the acquisition of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively 'KPC'), headquartered in Ontario."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-04-28",
+          "quote": "On January 6, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-04-28",
+          "quote": "On January 6, 2026, AUGI completed the acquisition of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively 'KPC'), headquartered in Ontario. The acquisition was financed through AUGI's standalone committed revolving credit facility."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-04-28",
+          "quote": "On March 9, 2026, Aecon Utilities Group Inc ('AUGI') completed the acquisition of Duna Services, LLC ('Duna Services') and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC ('KNX') from Ryker Holdings Inc."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-07-30",
+          "quote": "On January 6, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-07-30",
+          "quote": "On June 25, 2026, Aecon entered into an agreement to acquire Oaktree's as-converted 27.5% ownership interest in Aecon Utilities for a purchase price of $320,000. Closing of the transaction is expected to take place in the fourth quarter of 2026."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-07-30",
+          "quote": "On January 6, 2026, AUGI completed the acquisition of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively 'KPC'), headquartered in Ontario."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-07-30",
+          "quote": "On June 25, 2026, Aecon announced it had entered into an agreement to purchase in the fourth quarter of 2026 the Preferred Shares held by Oaktree"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-07-30",
+          "quote": "On March 9, 2026, AUGI completed the acquisition of Duna Services, LLC ('Duna Services') and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC ('KNX') from Ryker Holdings Inc."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-07-30",
+          "quote": "the Company announced that it had entered into an agreement to purchase the convertible preferred equity investment (the 'Preferred Shares') held by funds managed by the Power Opportunities strategy of Oaktree Capital Management, L.P. ('Oaktree') in Aecon's utility infrastructure subsidiary"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "On January 6, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively, 'KPC')."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "On June 25, 2026, Aecon entered into an agreement to acquire Oaktree's as-converted 27.5% ownership interest in Aecon Utilities for a purchase price of $320,000. Closing of the transaction is expected to take place in the fourth quarter of 2026."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-10-29",
+          "quote": "On January 6, 2026, AUGI completed the acquisition of K.P.C. Power Electrical Ltd. and K.P.C. Energy Metering Solutions Ltd. (collectively 'KPC'), headquartered in Ontario. The acquisition was financed through AUGI's standalone committed revolving credit facility."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-10-29",
+          "quote": "On March 9, 2026, AUGI completed the acquisition of Duna Services, LLC ('Duna Services') and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC ('KNX') from Ryker Holdings Inc."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-10-29",
+          "quote": "the Company announced that it had entered into an agreement to purchase the convertible preferred equity investment (the 'Preferred Shares') held by funds managed by the Power Opportunities strategy of Oaktree Capital Management, L.P. ('Oaktree') in Aecon's utility infrastructure subsidiary, Aecon Utilities Group Inc."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon, through Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-04-28",
+          "quote": "On March 9, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC (collectively, 'Duna'), as well as a 49% ownership interest in KNX Utility Services, LLC ('KNX'), from Ryker Holdings Inc."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-07-30",
+          "quote": "On March 9, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC (collectively, 'Duna'), as well as a 49% ownership interest in KNX Utility Services, LLC ('KNX'), from Ryker Holdings Inc."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "On March 9, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC (collectively, 'Duna'), as well as a 49% ownership interest in KNX Utility Services, LLC ('KNX'), from Ryker Holdings Inc."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-09-18",
+      "fiscalYear": 2025,
+      "counterparty": "Trinity Industrial Services",
+      "summary": "Aecon Group Inc. acquired all of the property and assets of Trinity Industrial Services, headquartered in Beaumont, Texas, on September 18, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-10-29",
+          "quote": "On September 18, 2025, the Company acquired the business of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas provides multidisciplinary services supporting maintenance, capital projects, turnarounds and fabrication for core industrial clients"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-10-29",
+          "quote": "On September 18, 2025, Aecon acquired Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On September 18, 2025, the Company acquired all of the property and assets of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "On September 18, 2025, Aecon acquired Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-04-28",
+          "quote": "On September 18, 2025, the Company acquired all of the property and assets of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas provides multidisciplinary services supporting maintenance, capital projects, turnarounds and fabrication for core industrial clients, primarily in Texas and across the Gulf Coast Region."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-07-30",
+          "quote": "On September 18, 2025, the Company acquired all of the property and assets of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "On September 18, 2025, the Company acquired all of the property and assets of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-08-07",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell Construction Company",
+      "summary": "Aecon acquired Bodell Construction Company, an industrial construction company headquartered in Salt Lake City, Utah, on August 7, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-10-29",
+          "quote": "On August 7, 2025, the Company acquired Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2025-10-29",
+          "quote": "On August 7, 2025, Aecon acquired Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On August 7, 2025, the Company acquired 100% of Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "On August 7, 2025, Aecon acquired Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-04-28",
+          "quote": "On August 7, 2025, the Company acquired 100% of Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-07-30",
+          "quote": "On August 7, 2025, the Company acquired 100% of Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-10-29",
+          "quote": "On August 7, 2025, the Company acquired 100% of Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q3 2025",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell and Trinity",
+      "summary": "Aecon completed the Bodell and Trinity acquisitions in the third quarter of 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "higher revenue in the U.S. following the Bodell and Trinity acquisitions in the third quarter of 2025"
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "incremental revenue in the U.S. from the Bodell and Trinity acquisitions completed in the third quarter of 2025"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-12-17",
+      "fiscalYear": 2024,
+      "counterparty": "CriticalPoint Capital, LLC",
+      "summary": "Aecon Group Inc. acquired United Engineers & Constructors Inc. from affiliates of CriticalPoint Capital, LLC on December 17, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-05",
+          "quote": "On December 17, 2024, the Company acquired United Engineers & Constructors Inc. ('United'), a nuclear and conventional power engineer and contractor headquartered in Mount Laurel, New Jersey, from affiliates of CriticalPoint Capital, LLC."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On December 17, 2024, the Company acquired United Engineers & Constructors Inc. ('United'), a nuclear and conventional power engineer and contractor headquartered in Mount Laurel, New Jersey, from affiliates of CriticalPoint Capital, LLC."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-07-02",
+      "fiscalYear": 2024,
+      "counterparty": "Xtreme Powerline Construction Inc",
+      "summary": "Aecon, through its subsidiary Aecon Utilities, acquired Xtreme Powerline Construction Inc., an electrical distribution utility contractor based in Port Huron, Michigan, on July 2, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-05",
+          "quote": "On July 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired a 94.34% interest in Xtreme Powerline Construction Inc. ('Xtreme'), an electrical distribution utility contractor headquartered in Port Huron, Michigan."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On July 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired Xtreme Powerline Construction Inc. ('Xtreme'), an electrical distribution utility contractor headquartered in Port Huron, Michigan."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2023-05-01",
+      "fiscalYear": 2023,
+      "counterparty": "Green Infrastructure Partners Inc.",
+      "summary": "Aecon completed the sale of its Aecon Transportation East roadbuilding, aggregates and materials businesses in Ontario to Green Infrastructure Partners Inc. on May 1, 2023.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2025-03-05",
+          "quote": "On May 1, 2023, the Company completed the sale of its Aecon Transportation East ('ATE') roadbuilding, aggregates and materials businesses in Ontario to Green Infrastructure Partners Inc. Gross cash proceeds received on closing, net of debt assumed by the purchaser, were $162,657."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Bodell",
+      "summary": "Aecon acquired Bodell, a U.S. industrial construction company, in 2025 to expand industrial capabilities.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "In the U.S., Aecon acquired Bodell and Trinity. Bodell is an industrial construction company that specializes in capital expenditure projects across the oil and gas, mining, water and wastewater, and power generation sectors in the Western and Southern U.S."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "counterparty": "Trinity",
+      "summary": "Aecon acquired Trinity, a U.S. industrial services company, in 2025 to expand industrial capabilities.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "Trinity is an industrial services company that specializes in fabrication and O&M projects for industrial clients primarily in Texas and across the Gulf Coast Region"
+        }
+      ]
+    }
+  ]
+}

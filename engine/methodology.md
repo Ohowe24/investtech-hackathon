@@ -3,49 +3,75 @@
 Every number on the site is computed by `engine/metrics.ts` from the spreadsheets in `engine/input/`.
 This file says what each metric means and why the thresholds are where they are. Judges will ask.
 
-## Inputs (`engine/input/financials.csv`, one row per company per fiscal year)
+## Where the numbers come from
 
-| Column | Meaning | Notes |
+| Data | Source | File |
 |---|---|---|
-| `revenue` | Total revenue | Reporting currency; keep one currency across companies or note it |
-| `operating_cash_flow` | Cash from operations | |
-| `capex` | Capital expenditure | **Positive** amount spent |
-| `acquisitions` | Cash paid for acquisitions, net of cash acquired | **Positive** amount spent. Leave empty if unknown |
-| `diluted_shares` | Weighted average diluted shares | Adjust for splits so they don't look like dilution |
-| `total_debt` | Total debt at year end | |
-| `cash` | Cash and equivalents at year end | |
-| `organic_growth_pct` | Organic growth as **reported** by the company, as a decimal | Empty if not disclosed. Never estimate it |
-| `source_id` | Which source this row came from | Must exist in `sources.csv` |
+| Annual statements FY2021–FY2025, all 20 companies (5 candidates + 15 holdings) | Onesheet API `/financials/statements` | `engine/raw/statements/` → `engine/input/financials.csv` |
+| Reported organic growth (CSU, TOI, WSP only) | Onesheet data pack, with the SEDAR quote | `engine/input/organic.csv` |
+| Deals (acquisitions, divestitures) for the 5 candidates | Onesheet data pack events, with SEDAR quotes | `engine/input/deals.json` |
+
+`npm run inputs` copies values from the raw files. Nothing is typed by hand. Missing stays empty and becomes `null`.
 
 ## Metrics
 
 | id | Formula | Edge cases |
 |---|---|---|
-| `acqIntensity` | Σ acquisitions ÷ Σ operating cash flow, over all years | Null if any year is missing, or if Σ OCF ≤ 0 |
-| `fcfPerShareCagr` | FCF per share = (OCF − capex) ÷ diluted shares; CAGR from first to last year | Null if either end ≤ 0 (growth undefined) |
-| `revenueCagr` | CAGR of revenue, first to last year | Null if either end ≤ 0 |
-| `shareCountChange` | last shares ÷ first shares − 1 | Positive means dilution |
-| `netDebtToFcf` | (debt − cash) ÷ FCF, latest year | Null if FCF ≤ 0 |
-| `organicGrowth` | As reported, latest year | Null if not disclosed |
+| `acqIntensity` | Σ acquisition spending ÷ Σ operating cash flow, all years | Null if a year is missing or Σ OCF ≤ 0. Negative = sold more than it bought |
+| `fcfPerShareCagr` | FCF per share = (OCF − capex) ÷ diluted shares; CAGR first to last year | Null if either end ≤ 0 |
+| `cashReturn` | Latest-year FCF ÷ average (total debt + total equity) at the start and end of that year | Null without two consecutive years |
+| `shareCountChange` | Last diluted shares ÷ first − 1 | Positive = dilution |
+| `netDebtToEbitda` | (Total debt − cash) ÷ EBITDA, latest year | Null if EBITDA ≤ 0. Negative = net cash |
+| `organicGrowth` | As reported by the company, latest full year (latest quarter if no annual figure) | Null if not reported. Never estimated |
+| `revenueCagr` | CAGR of revenue | Shown for context, not scored |
 
-**Known simplification:** FCF here doesn't subtract acquisition spending. That's deliberate: acquisitions are shown separately as `acqIntensity`.
+**Why cash return and not ROIC on operating income:** the debt and equity that paid for acquisitions stay in the denominator, so goodwill is counted and overpaying shows up. Cash flow is used because operating income in the statements feed is not defined consistently across years for some companies.
+
+**FCF is computed one way for everyone** (OCF − capex). It will not match company-defined figures such as Constellation's FCFA2S.
+
+**Currencies:** every metric is a ratio or growth rate inside one company, so USD, EUR and CAD reporters compare without conversion.
+
+## The test (declared before results; thresholds in `engine/config.ts`)
+
+Two gates must pass. Five checks are scored.
+
+| Check | Kind | Rule | Why this line |
+|---|---|---|---|
+| Really an acquirer | gate | `acqIntensity` ≥ 20% | Below this, acquisitions are not what drives the company, so it does not fit the theme |
+| Debt under control | gate | `netDebtToEbitda` ≤ 3× | The cap Lifco, a model serial acquirer, sets for itself. Research treats leverage as a limit, not a score |
+| Owners gained | score | `fcfPerShareCagr` ≥ 7% | Per-share cash is the best single proxy for value growth (Constellation's 2018 letter). 7% is a plain hurdle for an equity investor |
+| Capital earns its keep | score | `cashReturn` ≥ 8% | Cash earned on everything invested, goodwill included, should clear a basic cost of capital |
+| No dilution | score | `shareCountChange` ≤ +5% | Stock-funded deals are the best-documented value destroyer in the M&A research |
+| Self-funded deals | score | `acqIntensity` ≤ 100% | Deals paid from the business's own cash flow, not outside money |
+| Still growing underneath | score | `organicGrowth` ≥ 0 | Health check on businesses already bought. Scored only where reported |
+
+**TODO (Max):** the thresholds are first proposals. Confirm or change each one on purpose, and never to move a result.
+
+**Recommendation** (`tally()` in `metrics.ts`):
+- **Fails:** any gate fails, or fewer than half of the scored checks with data pass.
+- **Passes:** both gates pass, at least 3 scored checks have data, and at least 75% of those pass.
+- **Mixed:** everything else.
+- Missing data is never a fail. It lowers the count of checks available, which is shown.
+
+**Verdict:** model `Passes` → add, `Mixed` → watch, `Fails` → reject. A verdict typed in `companies.csv` overrides the model and is marked as a human decision. Holdings keep the verdict `existing`; the model result is shown beside it.
+
+**Weights:** equal split of a 15% sleeve across the additions, capped at 8.2% each (the index's own top-tier weight). Constellation and Topicus share one slot because Constellation controls Topicus. Cash not needed stays as cash.
+
+**Rank:** recommendation, then share of scored checks passed, then number of checks with data, then FCF per share growth.
 
 ## The map
 
-- **Across (x):** `acqIntensity`. How much growth is bought.
-- **Up (y):** `fcfPerShareCagr`. Whether owners got richer per share.
-- **Thresholds:** x = 0.50 and y = 0.05 are **placeholders**. TODO (Max): set them deliberately and write the reason here.
+- **Across (x):** `acqIntensity`, split at 20% (the "Really an acquirer" gate).
+- **Up (y):** `fcfPerShareCagr`, split at 7% (the "Owners gained" check).
+- Values outside the chart window are pinned to the edge and labelled "off chart".
 
-| Zone | Meaning |
-|---|---|
-| Compounders (top right) | Buys a lot **and** per-share cash flow grows |
-| Empire builders (bottom right) | Buys a lot, but per-share cash flow doesn't grow |
-| Organic growers (top left) | Grows per share without buying much (may not fit the theme) |
-| Stalled (bottom left) | Neither |
+## Known limits
 
-## Verdicts (human decisions, in `companies.csv`)
-
-`add` / `reject` / `watch` / `existing`, plus a one-sentence `reason` that a judge can check against the numbers.
+- **Statement data is from an aggregator feed**, not read from filings line by line. Spot-check anything on the demo path against the company's own report.
+- **Share counts are weighted average diluted shares as reported in the feed.** A change in share structure (for example Topicus) can look like dilution. Check before relying on it.
+- **`acquisitions` is net of disposals.** A big sale makes the figure negative for that year (Aecon, FY2023).
+- **Bending Spoons has 3 years of data**, the others 5.
+- **No backtest:** these checks reflect practitioner consensus and indirect academic evidence (see `reports/`), not proven return predictors.
 
 ## What counts as Canadian
 
