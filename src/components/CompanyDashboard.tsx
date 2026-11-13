@@ -38,8 +38,8 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between text-[13px]">
-        <button onClick={onBack} className="font-medium text-muted hover:text-ink">← Companies</button>
-        <div className="flex items-center gap-1 text-muted">
+        <button onClick={onBack} className="font-medium text-white/70 hover:text-white">← Companies</button>
+        <div className="flex items-center gap-1 text-white/70">
           <NavBtn disabled={!prev} onClick={() => prev && onOpen(prev.ticker)} label={prev ? `Previous: ${prev.ticker}` : "Previous"}>‹</NavBtn>
           <span className="px-1 font-mono text-xs tabular-nums">{i + 1} / {tested.length}</span>
           <NavBtn disabled={!next} onClick={() => next && onOpen(next.ticker)} label={next ? `Next: ${next.ticker}` : "Next"}>›</NavBtn>
@@ -95,7 +95,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
       ) : null}
 
       {sourceLabels.length > 0 && (
-        <div className="flex flex-wrap items-center gap-1.5 text-xs text-faint">
+        <div className="flex flex-wrap items-center gap-1.5 text-xs text-white/60">
           <span className="mr-1">Sources</span>
           {sourceLabels.map((l) => <span key={l} className="chip !whitespace-normal">{l}</span>)}
         </div>

@@ -36,6 +36,7 @@ export default function StartPage({ dataset, snapshot, onDone }: Props) {
   if (step != null) {
     return (
       <div className="mx-auto flex min-h-[70vh] w-full max-w-sm flex-col justify-center">
+        <div className="rounded-2xl bg-white p-6 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.6)]">
         <div className="text-sm font-semibold text-ink">{picked}</div>
         <div className="mt-4 h-1 overflow-hidden rounded-full bg-line">
           <div className="h-full rounded-full bg-ink transition-all ease-out" style={{ width: `${(Math.min(step + 1, steps.length) / steps.length) * 100}%`, transitionDuration: `${STEP_MS}ms` }} />
@@ -54,13 +55,14 @@ export default function StartPage({ dataset, snapshot, onDone }: Props) {
             </li>
           ))}
         </ul>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="mx-auto flex min-h-[70vh] w-full max-w-2xl flex-col justify-center">
-      <div className="text-[11px] font-medium uppercase tracking-wide text-faint">Track</div>
+      <div className="text-[11px] font-medium uppercase tracking-wide text-white/60">Track</div>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         {[...snapshot.indexes].sort((a) => (a.name === dataset.indexName ? -1 : 1)).map((ix) => {
           const on = picked === ix.name;
@@ -82,7 +84,7 @@ export default function StartPage({ dataset, snapshot, onDone }: Props) {
         })}
       </div>
       <button onClick={() => ready && setStep(0)} disabled={!ready}
-        className="mt-5 h-11 rounded-lg bg-ink text-sm font-semibold text-white transition-opacity hover:opacity-85 disabled:bg-line disabled:text-faint disabled:hover:opacity-100">
+        className="mt-5 h-11 rounded-lg bg-white text-sm font-semibold text-ink transition-opacity hover:opacity-85 disabled:bg-white/10 disabled:text-white/40 disabled:hover:opacity-100">
         {ready ? "Run candidate analysis" : "Not available yet"}
       </button>
     </div>
