@@ -7,6 +7,8 @@ import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import IndexBuilder from "./IndexBuilder";
+import RuleLab from "./RuleLab";
+import { defaultSettings } from "../../engine/sensitivity";
 import { Card } from "./ui";
 
 interface Props {
@@ -14,17 +16,19 @@ interface Props {
   snapshot: IndexSnapshot;
 }
 
-type Tab = "companies" | "map" | "index";
+type Tab = "companies" | "map" | "index" | "test";
 const TABS: { id: Tab; label: string }[] = [
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
   { id: "index", label: "Index" },
+  { id: "test", label: "Test the conclusion" },
 ];
 
 /** The whole app. The address hash holds the view (none = start page, #companies, #map, #index) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
+  const [settings, setSettings] = useState(defaultSettings);
   const [hovered, setHovered] = useState<string | null>(null);
 
   useEffect(() => {
@@ -41,7 +45,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "";
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = company ? "companies" : hash === "map" || hash === "index" ? hash : "companies";
+  const tab: Tab = company ? "companies" : hash === "map" || hash === "index" || hash === "test" ? hash : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -52,20 +56,20 @@ export default function Workbench({ dataset, snapshot }: Props) {
       )}
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/35 backdrop-blur-xl">
-        <div className="mx-auto flex h-14 w-full max-w-[1240px] items-center gap-6 px-5 md:px-8">
+        <div className="mx-auto flex min-h-14 flex-wrap w-full max-w-[1240px] items-center gap-x-6 gap-y-2 px-5 py-2 md:px-8">
           <button onClick={() => go("")} className="flex items-center gap-2 text-sm font-semibold tracking-tight text-white">
             <span className="grid h-6 w-6 place-items-center rounded-md bg-white text-[11px] font-bold text-ink">X</span>
             Acquirer X-ray
           </button>
-          <nav className={`flex items-center gap-1 ${start ? "invisible" : ""}`}>
+          <nav aria-label="Main navigation" className={`flex max-w-full overflow-x-auto items-center gap-1 ${start ? "invisible" : ""}`}>
             {TABS.map((t) => (
-              <button key={t.id} onClick={() => go(t.id)}
-                className={`rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
+              <button key={t.id} aria-current={tab === t.id && !start ? "page" : undefined} onClick={() => go(t.id)}
+                className={`shrink-0 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
                 {t.label}
               </button>
             ))}
           </nav>
-          {!start && <span className="ml-auto hidden truncate text-xs text-white/50 sm:block">{dataset.indexName}</span>}
+          {!start && <span className="ml-auto hidden truncate text-xs text-white/50 lg:block">{dataset.indexName}</span>}
         </div>
       </header>
 
@@ -78,6 +82,8 @@ export default function Workbench({ dataset, snapshot }: Props) {
           <Card title="Acquisition spend vs FCF per share growth">
             <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
           </Card>
+        ) : tab === "test" ? (
+          <RuleLab dataset={dataset} settings={settings} onSettings={setSettings} onOpen={(t) => go(`c/${t}`)} />
         ) : tab === "index" ? (
           <IndexBuilder dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} />
         ) : (
