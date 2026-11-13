@@ -26,15 +26,22 @@ export default function RuleLab({ dataset, onOpen }: {
           <span>Decision: {company.verdictSource === "human" ? "analyst override" : company.verdictSource === "model" ? "published model" : "published decision"}</span>
           {model && <span>{supported.length}/{model.checks.length} checks meet the standard</span>}
         </div>
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div><h3 className="text-sm font-semibold text-ink">Supporting evidence</h3>
-            <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{supported.map((check) => <li key={check.id}><span className="font-medium text-teal">✓ </span>{check.rule}.</li>)}</ul>
-            {supported.length === 0 && <p className="mt-2 text-xs text-muted">No passing checks are available in the published model.</p>}
-          </div>
-          <div><h3 className="text-sm font-semibold text-ink">What still needs attention</h3>
-            {concerns.length ? <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{concerns.map((check) => <li key={check.id}><span className="font-medium text-warn">{check.pass === null ? "Missing evidence" : "Does not meet rule"}: </span>{check.rule}.</li>)}</ul> : <p className="mt-2 text-xs leading-relaxed text-muted">{model ? "No failed or missing checks in this screen. Valuation and deal-level due diligence remain separate questions." : "Published model unavailable; no supporting conclusion can be drawn here."}</p>}
-            {company.verdictSource === "human" && company.reason && <p className="mt-2 text-xs text-muted">Analyst rationale: {company.reason}</p>}
-          </div>
+        <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-3">
+          {["fcfPerShareCagr", "cashReturn", "netDebtToEbitda"].map((id) => {
+            const metric = company.metrics[id];
+            const def = dataset.metricDefs.find((m) => m.id === id);
+            const check = model?.checks.find((c) => c.metricId === id);
+            return <div key={id} className="rounded-lg bg-soft p-3">
+              <div className="text-[11px] text-muted">{def?.short ?? def?.label ?? id}</div>
+              <div className="mt-1 text-2xl font-semibold tabular-nums tracking-tight text-ink">{formatValue(metric?.value, def?.unit ?? "pct")}</div>
+              <div className={`mt-1 text-[11px] ${check?.pass === true ? "text-teal" : "text-warn"}`}>{check ? status(check.pass) : "Not evaluated"}{check?.target ? ` · ${check.target}` : ""}</div>
+            </div>;
+          })}
+        </div>
+        <div className="mt-4 rounded-lg border border-line px-4 py-3">
+          <h3 className="text-xs font-semibold text-ink">{concerns.length ? "Keep in view" : "Screening conclusion"}</h3>
+          {concerns.length ? <ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{concerns.map((check) => <li key={check.id}><span className="font-medium text-warn">{check.pass === null ? "Missing evidence" : "Unmet rule"}: </span>{check.rule}.</li>)}</ul> : <p className="mt-1 text-xs leading-relaxed text-muted">{model ? "Every published check passes. Valuation and individual deals still need review." : "No published model is available for this company."}</p>}
+          {company.verdictSource === "human" && company.reason && <p className="mt-2 text-xs text-muted">Analyst rationale: {company.reason}</p>}
         </div>
         <details className="mt-4 border-t border-line pt-3">
           <summary className="cursor-pointer text-xs font-medium text-teal">Inspect figures, fixed rules and sources</summary>
@@ -62,31 +69,69 @@ export default function RuleLab({ dataset, onOpen }: {
     );
   };
 
+  const tested = dataset.companies.filter((c) => c.model);
+  const rules = tested[0]?.model?.checks ?? [];
+  const gates = rules.filter((c) => c.kind === "gate");
+  const scored = rules.filter((c) => c.kind === "score");
+
   return (
-    <div className="space-y-5">
-      <div className="max-w-3xl text-white">
-        <p className="text-xs uppercase tracking-widest text-white/50">The case behind our selections</p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight">Tested thesis</h1>
-        <p className="mt-3 text-lg leading-relaxed">Select Canadian acquirers that turn growth into cash flow per share, with disciplined debt and adequate cash returns on invested capital.</p>
-        <p className="mt-2 text-sm leading-relaxed text-white/60">Getting bigger alone is not enough. We apply the same declared standards to every candidate and trace each result to the underlying figures.</p>
-      </div>
-      <Card title="What the evidence supports">
-        <div className="grid gap-5 sm:grid-cols-3">
-          <div><p className="text-xs text-muted">Canadian candidates evaluated</p><p className="mt-1 text-2xl font-semibold text-ink">{candidates.length}</p></div>
-          <div><p className="text-xs text-muted">Published additions</p><p className="mt-1 text-2xl font-semibold text-teal">{additions.map((c) => c.ticker).join(" + ") || "None"}</p></div>
-          <div><p className="text-xs text-muted">Watch or reject</p><p className="mt-1 text-2xl font-semibold text-ink">{others.length}</p></div>
+    <div className="space-y-6">
+      <section className="overflow-hidden rounded-2xl border border-white/15 bg-black/45 p-6 text-white sm:p-8">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="text-[11px] font-medium uppercase tracking-[0.18em] text-white/60">Tested thesis · Serial acquirers</p>
+          <span className="rounded-full border border-white/20 px-3 py-1 text-[11px] text-white/70">Fixed rules · Published evidence</span>
         </div>
-        <p className="mt-4 border-t border-line pt-4 text-sm leading-relaxed text-muted">The sections below explain the existing index decisions using the published model. Fixed rules make the case consistent: acquisition activity establishes theme fit, debt is a required gate, and per-share growth, cash return, share count and acquisition spending determine the score.</p>
+        <div className="mt-6 grid gap-8 lg:grid-cols-[1.6fr_1fr]">
+          <div>
+            <h1 className="max-w-xl text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Growth should reach<br />every share.</h1>
+            <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/75">Select Canadian acquirers that turn growth into cash flow per share, with disciplined debt and adequate cash returns on invested capital.</p>
+          </div>
+          <div className="flex flex-col justify-center rounded-xl border border-white/15 bg-white/5 p-5">
+            <p className="text-xs text-white/60">The published selections</p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight">{additions.map((c) => c.ticker).join(" + ") || "None"}</p>
+            <p className="mt-3 text-xs leading-relaxed text-white/60">{candidates.length} Canadian candidates evaluated. {additions.length} additions. The evidence and exceptions are below.</p>
+          </div>
+        </div>
+      </section>
+
+      <Card title="01 / How the thesis was tested" right={<span className="text-[11px] text-muted">Financial screen · Not a return backtest</span>}>
+        <div className="grid gap-5 md:grid-cols-3">
+          {[
+            { step: "01", title: "Measure the businesses", text: `Read the published financial metrics for ${tested.length} companies, including ${candidates.length} Canadian candidates. Each metric retains its reporting period and source references.` },
+            { step: "02", title: "Apply the same standards", text: `Apply ${gates.length} required gates and ${scored.length} scored checks. Acquisition activity and leverage establish eligibility; per-share growth and capital discipline determine the score.` },
+            { step: "03", title: "Explain the decision", text: "Compare the published results with the index decisions. Show passing checks, exceptions and missing evidence. Keep analyst overrides separate from the model." },
+          ].map((item) => <div key={item.step} className="rounded-xl bg-soft p-4"><span className="text-xs font-mono text-faint">{item.step}</span><h3 className="mt-3 text-sm font-semibold text-ink">{item.title}</h3><p className="mt-2 text-xs leading-relaxed text-muted">{item.text}</p></div>)}
+        </div>
+        <details className="mt-4 border-t border-line pt-4">
+          <summary className="cursor-pointer text-xs font-medium text-teal">See the exact rules and pass criteria</summary>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {[{ title: "Must-pass gates", checks: gates }, { title: "Scored checks", checks: scored }].map((group) => <div key={group.title} className="rounded-lg border border-line p-4"><h3 className="text-xs font-semibold text-ink">{group.title}</h3><ul className="mt-2 space-y-2 text-xs leading-relaxed text-muted">{group.checks.map((check) => <li key={check.id}>{check.rule}.</li>)}</ul></div>)}
+          </div>
+          <p className="mt-3 text-xs leading-relaxed text-muted">{dataset.rules?.result ?? "Published results use the declared gates and scored checks. Missing data stays unknown."}</p>
+        </details>
       </Card>
-      <div><h2 className="text-lg font-semibold text-white">Why these additions</h2><p className="mt-1 text-sm text-white/60">The supporting evidence and remaining caveats, together.</p></div>
-      {additions.map(evidence)}
-      {!additions.length && <Card><p className="text-sm text-muted">The published dataset currently recommends no Canadian additions.</p></Card>}
-      <div><h2 className="text-lg font-semibold text-white">Why we did not select the others</h2><p className="mt-1 text-sm text-white/60">The same standards explain the watchlist and rejections.</p></div>
-      {others.map(evidence)}
-      <Card title="How to read this conclusion">
-        <p className="text-sm leading-relaxed text-muted">{dataset.rules?.result ?? "Published results use the declared acquirer gates and scored checks. Missing data stays unknown."}</p>
-        <p className="mt-3 text-xs leading-relaxed text-muted">This evidence supports fit with our selection framework; it does not prove that acquisitions caused the growth or that these stocks will outperform. Cash return is a company-wide measure. Share issuance and acquisition spending are screening signals, not proof of deal financing or value destruction. Source quality, valuation and individual deals still require research.</p>
+
+      <div className="flex flex-wrap items-end justify-between gap-2"><div><p className="text-[11px] uppercase tracking-widest text-white/50">02 / The result</p><h2 className="mt-2 text-xl font-semibold text-white">The case for our additions</h2></div><p className="text-xs text-white/60">Key figures first. Full evidence one click away.</p></div>
+      <div className="grid items-start gap-5 lg:grid-cols-2">{additions.map(evidence)}</div>
+      {!additions.length && <Card><p className="text-sm text-muted">No Canadian additions are currently recommended.</p></Card>}
+
+      <Card title="03 / Why the others were not selected">
+        <p className="mb-4 text-xs leading-relaxed text-muted">The same screen also explains the watchlist and rejections. Expand any company to inspect its evidence.</p>
+        <div className="space-y-3">{others.map((company) => {
+          const concerns = company.model?.checks.filter((c) => c.pass !== true) ?? [];
+          return <details key={company.ticker} className="rounded-lg border border-line">
+            <summary className="cursor-pointer px-4 py-3 text-sm text-ink"><span className="ml-1 font-semibold">{company.ticker}</span><span className="ml-2 text-muted">{company.name}</span><span className={`ml-3 inline-block rounded px-2 py-1 text-[11px] ${verdictStyle[company.verdict].badge}`}>{verdictStyle[company.verdict].label}</span>
+              <span className="mt-2 block text-xs leading-relaxed text-muted">{concerns.length ? concerns.map((c) => `${c.pass === null ? "Missing" : "Unmet"}: ${c.label}`).join(" · ") : company.reason ?? "See the published decision and checks."}</span>
+            </summary>
+            <div className="border-t border-line p-3">{evidence(company)}</div>
+          </details>;
+        })}</div>
       </Card>
+
+      <div className="grid gap-5 rounded-xl border border-white/15 bg-black/40 p-5 sm:grid-cols-2">
+        <div><h2 className="text-xs font-semibold text-white">What this establishes</h2><p className="mt-2 text-xs leading-relaxed text-white/65">A traceable case for the published selections under one consistent framework. Figures, rules and results can be inspected for every candidate.</p></div>
+        <div><h2 className="text-xs font-semibold text-white">What still needs research</h2><p className="mt-2 text-xs leading-relaxed text-white/65">Valuation, individual deal quality and future returns. This screen does not prove acquisitions caused the growth or predict outperformance. Share issuance and acquisition spending remain screening proxies.</p></div>
+      </div>
     </div>
   );
 }
