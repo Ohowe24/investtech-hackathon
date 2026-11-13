@@ -4,7 +4,7 @@ import type { Explanation } from "@/components/ui";
 /** Explanation for a metric, from its definition in the engine config. */
 export function metricInfo(dataset: Dataset, metricId: string, title?: string): Explanation {
   const d = dataset.metricDefs.find((m) => m.id === metricId);
-  return { title: title ?? d?.label ?? metricId, what: d?.description, how: d?.formula, why: d?.why };
+  return { title: title ?? d?.label ?? metricId, what: d?.description, how: d?.formula, why: d?.why, facts: d?.facts };
 }
 
 /** Yearly figures in the deal chart. Plain definitions, no numbers. */

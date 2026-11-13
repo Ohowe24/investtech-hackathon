@@ -54,6 +54,8 @@ export interface Explanation {
   what?: string;
   how?: string;
   why?: string;
+  /** figures from the data, one per line */
+  facts?: string[];
   pass?: string;
   weight?: string;
   note?: string;
@@ -64,10 +66,10 @@ export interface Explanation {
  * The popover is portalled and fixed-positioned so scroll containers never clip it.
  */
 export function Explain({ info, children, className = "" }: { info: Explanation; children: ReactNode; className?: string }) {
-  const [pos, setPos] = useState<{ top: number; left: number } | null>(null);
+  const [pos, setPos] = useState<{ top?: number; bottom?: number; left: number; maxHeight: number } | null>(null);
   const btn = useRef<HTMLButtonElement>(null);
   const pop = useRef<HTMLDivElement>(null);
-  const WIDTH = 288;
+  const WIDTH = 340;
 
   useEffect(() => {
     if (!pos) return;
@@ -79,12 +81,14 @@ export function Explain({ info, children, className = "" }: { info: Explanation;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
-    window.addEventListener("scroll", close, true);
+    // Scrolling the page closes it; scrolling inside the popover does not.
+    const onScroll = (e: Event) => !pop.current?.contains(e.target as Node) && close();
+    window.addEventListener("scroll", onScroll, true);
     window.addEventListener("resize", close);
     return () => {
       document.removeEventListener("mousedown", onDown);
       document.removeEventListener("keydown", onKey);
-      window.removeEventListener("scroll", close, true);
+      window.removeEventListener("scroll", onScroll, true);
       window.removeEventListener("resize", close);
     };
   }, [pos]);
@@ -94,7 +98,10 @@ export function Explain({ info, children, className = "" }: { info: Explanation;
     if (pos) return setPos(null);
     const r = btn.current!.getBoundingClientRect();
     const left = Math.min(Math.max(8, r.left + r.width / 2 - WIDTH / 2), window.innerWidth - WIDTH - 8);
-    setPos({ top: r.bottom + 6, left });
+    // Open below, or above when there is more room there.
+    const below = window.innerHeight - r.bottom - 14;
+    const above = r.top - 14;
+    setPos(below >= 380 || below >= above ? { top: r.bottom + 6, left, maxHeight: below } : { bottom: window.innerHeight - r.top + 6, left, maxHeight: above });
   };
 
   const rows: [string, string | undefined][] = [
@@ -113,13 +120,18 @@ export function Explain({ info, children, className = "" }: { info: Explanation;
         {children}
       </button>
       {pos && createPortal(
-        <div ref={pop} role="dialog" onClick={(e) => e.stopPropagation()} style={{ top: pos.top, left: pos.left, width: WIDTH }}
-          className="fixed z-50 rounded-lg bg-ink p-3.5 text-left text-xs leading-relaxed text-white shadow-xl">
+        <div ref={pop} role="dialog" onClick={(e) => e.stopPropagation()} style={{ top: pos.top, bottom: pos.bottom, left: pos.left, width: WIDTH, maxHeight: pos.maxHeight }}
+          className="fixed z-50 overflow-y-auto rounded-lg bg-ink p-3.5 text-left text-xs leading-relaxed text-white shadow-xl">
           <div className="text-[13px] font-semibold">{info.title}</div>
           {rows.filter(([, v]) => v).map(([k, v]) => (
             <div key={k || "note"} className="mt-2">
               {k && <div className="text-[10px] font-medium uppercase tracking-wide text-white/50">{k}</div>}
               <div className={k ? "text-white/90" : "text-white/60"}>{v}</div>
+              {k === "Why it matters" && info.facts && (
+                <ul className="mt-2 space-y-1.5 border-l border-white/20 pl-2.5 text-white/75">
+                  {info.facts.map((f) => <li key={f}>{f}</li>)}
+                </ul>
+              )}
             </div>
           ))}
         </div>,
