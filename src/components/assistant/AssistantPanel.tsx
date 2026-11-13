@@ -63,7 +63,7 @@ export default function AssistantPanel({ dataset, snapshot, open, context, focus
   const latest = useRef({ open, onUnread, context });
   const list = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
-  const box = useRef<HTMLTextAreaElement>(null);
+  const box = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     latest.current = { open, onUnread, context };
@@ -152,7 +152,11 @@ export default function AssistantPanel({ dataset, snapshot, open, context, focus
   }, [msgs]);
 
   useEffect(() => {
-    if (open && focusKey > 0) box.current?.focus();
+    if (!open) return;
+    // A hidden list cannot scroll, so catch up on anything that arrived while closed.
+    const el = list.current;
+    if (el) { el.scrollTop = el.scrollHeight; stick.current = true; }
+    if (focusKey > 0) box.current?.focus();
   }, [open, focusKey]);
 
   const here = context.ticker ? dataset.companies.find((c) => c.ticker === context.ticker) : undefined;
@@ -210,11 +214,10 @@ export default function AssistantPanel({ dataset, snapshot, open, context, focus
       </div>
 
       <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="border-t border-white/10 p-3">
-        <div className="flex items-end gap-2 rounded-xl border border-white/15 bg-white/[0.05] px-3 py-2 transition-colors focus-within:border-[#3ddc6c]/60">
-          <textarea ref={box} value={input} rows={1} placeholder={placeholder} aria-label="Ask the guide"
+        <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-white/[0.05] px-3 py-2 transition-colors focus-within:border-[#3ddc6c]/60">
+          <input ref={box} value={input} placeholder={placeholder} aria-label="Ask the guide" maxLength={500} enterKeyHint="send"
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); ask(input); } }}
-            className="max-h-28 min-h-[22px] flex-1 resize-none bg-transparent text-[13px] leading-snug text-white outline-none placeholder:text-white/35" />
+            className="min-w-0 flex-1 truncate bg-transparent py-1 text-[13px] leading-snug text-white outline-none placeholder:text-white/35" />
           <button type="submit" disabled={!input.trim() || busy} aria-label="Send"
             className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-[#3ddc6c] text-[13px] font-bold text-black transition-opacity disabled:opacity-30">
             ↑
@@ -376,17 +379,18 @@ function Suggestions({ prompts, onAsk, disabled }: { prompts: string[]; onAsk: (
 /** Source chips: one per filing family. Hover for every filing and any word-for-word quote. */
 function Sources({ ids, dataset, snapshot }: { ids: string[]; dataset: Dataset; snapshot: IndexSnapshot }) {
   const [all, setAll] = useState(false);
-  const groups = new Map<string, { label: string; lines: string[]; quote: boolean }>();
+  const groups = new Map<string, { label: string; lines: string[]; count: number; quote: boolean }>();
   for (const id of ids) {
     if (id === INDEX_SOURCE) {
-      groups.set("index", { label: "Organizers' live index", lines: [snapshot.source, `Holdings as of ${new Date(snapshot.updatedAt).toLocaleString("en-CA")}`], quote: false });
+      groups.set("index", { label: "Organizers' live index", lines: [snapshot.source, `Holdings as of ${new Date(snapshot.updatedAt).toLocaleString("en-CA")}`], count: 1, quote: false });
       continue;
     }
     const s = dataset.sources.find((x) => x.id === id);
     if (!s) continue;
     const label = s.label.replace(/,?\s*FY\d{4}$/, "");
-    const g = groups.get(label) ?? { label, lines: [], quote: false };
+    const g = groups.get(label) ?? { label, lines: [], count: 0, quote: false };
     g.lines.push(s.quote ? `${s.label}\n“${s.quote}”` : s.label);
+    g.count += 1;
     g.quote ||= !!s.quote;
     groups.set(label, g);
   }
@@ -400,7 +404,7 @@ function Sources({ ids, dataset, snapshot }: { ids: string[]; dataset: Dataset; 
         <span key={g.label} title={g.lines.join("\n\n")}
           className="max-w-full cursor-help truncate rounded border border-white/10 bg-white/[0.04] px-1.5 py-0.5 font-mono text-[10px] text-white/60 hover:border-white/30 hover:text-white/90">
           {g.quote && <span className="mr-1 text-[#3ddc6c]">❝</span>}
-          {g.label}{g.lines.length > 1 ? ` ×${g.lines.length}` : ""}
+          {g.label}{g.count > 1 ? ` ×${g.count}` : ""}
         </span>
       ))}
       {list.length > 4 && (

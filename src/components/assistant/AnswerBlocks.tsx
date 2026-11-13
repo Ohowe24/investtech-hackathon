@@ -213,13 +213,13 @@ function MetricCard({ c, def, dataset, onAction }: { c: Company; def: MetricDef 
           ))}
         </div>
       )}
-      {withData.length > 0 && <MiniRank def={def} list={withData} me={c.ticker} dataset={dataset} onAction={onAction} />}
+      {withData.length > 0 && <MiniRank def={def} list={withData} me={c.ticker} onAction={onAction} />}
       {mv?.note && <p className="mt-2 text-[11px] leading-snug text-white/50">{mv.note}</p>}
     </Shell>
   );
 }
 
-function MiniRank({ def, list, me, dataset, onAction }: { def: MetricDef; list: Company[]; me?: string } & Pick<CardProps, "dataset" | "onAction">) {
+function MiniRank({ def, list, me, onAction }: { def: MetricDef; list: Company[]; me?: string } & Pick<CardProps, "onAction">) {
   return (
     <div className="mt-2.5">
       <div className="flex items-end gap-px" role="img" aria-label={`Every company on ${def.label}`}>

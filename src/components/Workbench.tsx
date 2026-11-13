@@ -42,7 +42,8 @@ export default function Workbench({ dataset, snapshot }: Props) {
   // Bumped after each run so every view replays its entrance.
   const [epoch, setEpoch] = useState(0);
   // The Guide: open or not, a dot when it noticed something while closed, and what it asked the page to do.
-  const [guideOpen, setGuideOpen] = useState(false);
+  // Nothing renders until the address is read, so reading the browser here cannot cause a hydration mismatch.
+  const [guideOpen, setGuideOpen] = useState(readGuideOpen);
   const [unread, setUnread] = useState(false);
   const [focusKey, setFocusKey] = useState(0);
   const [flash, setFlash] = useState<string | null>(null);
@@ -55,16 +56,10 @@ export default function Workbench({ dataset, snapshot }: Props) {
     return () => window.removeEventListener("hashchange", read);
   }, []);
 
-  // Open by default on wide screens, unless it was closed last time.
-  useEffect(() => {
-    let saved: string | null = null;
-    try { saved = window.localStorage.getItem("guide-open"); } catch {}
-    setGuideOpen(saved ? saved === "1" : window.matchMedia("(min-width: 1024px)").matches);
-  }, []);
-  const toggleGuide = useCallback((next?: boolean) => {
+  const toggleGuide = useCallback((next?: boolean, remember = true) => {
     setGuideOpen((o) => {
       const v = next ?? !o;
-      try { window.localStorage.setItem("guide-open", v ? "1" : "0"); } catch {}
+      if (remember) try { window.localStorage.setItem("guide-open", v ? "1" : "0"); } catch {}
       if (v) { setUnread(false); setFocusKey((k) => k + 1); }
       return v;
     });
@@ -116,7 +111,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
       setFlash("table");
     }
     // On a phone the panel covers the page: get out of the way.
-    if (!window.matchMedia("(min-width: 1024px)").matches) toggleGuide(false);
+    if (!window.matchMedia("(min-width: 1024px)").matches) toggleGuide(false, false);
   };
   const startRun = (to: string | null) => {
     if (prefersReducedMotion()) {
@@ -225,6 +220,14 @@ export default function Workbench({ dataset, snapshot }: Props) {
       {run && <RunSequence dataset={dataset} runNo={runs} onDone={endRun} />}
     </div>
   );
+}
+
+/** Open by default on wide screens, unless it was closed last time. */
+function readGuideOpen(): boolean {
+  if (typeof window === "undefined") return false;
+  let saved: string | null = null;
+  try { saved = window.localStorage.getItem("guide-open"); } catch {}
+  return saved ? saved === "1" : window.matchMedia("(min-width: 1024px)").matches;
 }
 
 /** A pulsing LIVE marker with the local time, ticking. Hover for when the organizers' holdings were last pulled. */

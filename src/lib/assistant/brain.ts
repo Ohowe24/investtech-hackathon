@@ -407,7 +407,7 @@ function whatIf(w: W, c: Company, weight: number | null, ctx: GuideContext, aske
   }
 
   const isPick = picks.find((p) => p.ticker === c.ticker);
-  let wt = weight ?? isPick?.weightPct ?? null;
+  const wt = weight ?? isPick?.weightPct ?? null;
   if (wt == null) {
     o.step(`Read ${c.ticker}'s model result`);
     o.say(
