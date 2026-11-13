@@ -27,9 +27,46 @@
 }
 
 body {
-  background: var(--background);
+  background: #020202;
   color: var(--foreground);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The page backdrop: OWN Financial's moving field (src/components/FieldBackdrop.tsx).
+   Until the shader draws, or without WebGL, OWN's own CSS version of the field shows,
+   under static film grain. */
+.field-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 80% at 104% -6%, #e9e9e9 0%, #b9b9b9 16%, #6f6f6f 34%, #6f6f6f00 62%),
+    radial-gradient(46% 62% at 96% 108%, #d8d8d8 0%, #8f8f8f 22%, #8f8f8f00 58%),
+    linear-gradient(112deg, #020202 0%, #070707 38%, #1c1c1c 56%, #4c4c4c 78%, #9a9a9a 100%);
+}
+.field-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.34;
+  transition: opacity 1.2s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 .5  0 0 0 0 .5  0 0 0 0 .5  0 0 0 .9 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.field-backdrop.is-live::after {
+  opacity: 0;
+}
+.field-canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+}
+.field-canvas.is-on {
+  opacity: 1;
 }
 
 .display {
