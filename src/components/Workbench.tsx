@@ -38,34 +38,34 @@ export default function Workbench({ dataset, snapshot }: Props) {
     window.scrollTo({ top: 0 });
   };
 
-  if (hash == null) return <div className="min-h-screen bg-canvas" />; // before the address is read
+  if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "";
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
   const tab: Tab = company ? "companies" : hash === "map" || hash === "index" ? hash : "companies";
 
   return (
-    <div className="min-h-screen w-full bg-canvas">
+    <div className="min-h-screen w-full">
       {dataset.isFake && (
         <div className="bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">
           FAKE SAMPLE DATA: not real companies or numbers
         </div>
       )}
 
-      <header className="sticky top-0 z-40 border-b border-line bg-white/85 backdrop-blur">
+      <header className="sticky top-0 z-40 border-b border-white/10 bg-black/35 backdrop-blur-xl">
         <div className="mx-auto flex h-14 w-full max-w-[1240px] items-center gap-6 px-5 md:px-8">
-          <button onClick={() => go("")} className="flex items-center gap-2 text-sm font-semibold tracking-tight text-ink">
-            <span className="grid h-6 w-6 place-items-center rounded-md bg-ink text-[11px] font-bold text-signal">X</span>
+          <button onClick={() => go("")} className="flex items-center gap-2 text-sm font-semibold tracking-tight text-white">
+            <span className="grid h-6 w-6 place-items-center rounded-md bg-white text-[11px] font-bold text-ink">X</span>
             Acquirer X-ray
           </button>
           <nav className={`flex items-center gap-1 ${start ? "invisible" : ""}`}>
             {TABS.map((t) => (
               <button key={t.id} onClick={() => go(t.id)}
-                className={`rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-soft text-ink" : "text-muted hover:text-ink"}`}>
+                className={`rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
                 {t.label}
               </button>
             ))}
           </nav>
-          {!start && <span className="ml-auto hidden truncate text-xs text-faint sm:block">{dataset.indexName}</span>}
+          {!start && <span className="ml-auto hidden truncate text-xs text-white/50 sm:block">{dataset.indexName}</span>}
         </div>
       </header>
 
@@ -85,7 +85,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
         )}
       </main>
 
-      <footer className="px-5 pb-8 text-center text-[11px] text-faint">
+      <footer className="px-5 pb-8 text-center text-[11px] text-white/50">
         Not investment advice · Onesheet API and SEDAR filings · {new Date(dataset.generatedAt).toLocaleDateString("en-CA")}
       </footer>
     </div>
