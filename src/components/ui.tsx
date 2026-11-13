@@ -53,7 +53,9 @@ export interface Explanation {
   title: string;
   what?: string;
   how?: string;
+  why?: string;
   pass?: string;
+  weight?: string;
   note?: string;
 }
 
@@ -96,9 +98,11 @@ export function Explain({ info, children, className = "" }: { info: Explanation;
   };
 
   const rows: [string, string | undefined][] = [
-    ["What it shows", info.what],
-    ["How it's calculated", info.how],
+    ["What", info.what],
+    ["How", info.how],
+    ["Why it matters", info.why],
     ["Pass if", info.pass],
+    ["Weight in score", info.weight],
     ["", info.note],
   ];
 

@@ -279,7 +279,7 @@ const dataset: Dataset = {
   rules: {
     result:
       `Passes: both must-pass checks pass, and at least ${config.scoring.passShare * 100}% of the other checks with data pass (${config.scoring.minAvailable} or more with data). ` +
-      `Fails: a must-pass check fails, or fewer than ${config.scoring.mixedShare * 100}% pass. Mixed: anything else. Missing data is never counted as a fail.`,
+      `Fails: a must-pass check fails, or fewer than ${config.scoring.mixedShare * 100}% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.`,
     weight:
       `${config.sleevePct}% of the index is split equally among the companies we add, at most ${config.maxWeightPct}% each. ` +
       config.relatedGroups.map((g) => `${g.join(" and ")} share one slot (one controls the other).`).join(" "),

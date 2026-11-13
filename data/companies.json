@@ -1,6 +1,6 @@
 {
   "isFake": false,
-  "generatedAt": "2026-11-13T00:52:16.283Z",
+  "generatedAt": "2026-11-13T01:03:02.677Z",
   "indexName": "Serial acquirers & consolidators",
   "currency": "USD",
   "question": "Which Canadian companies should be added to the serial acquirers index?",
@@ -10,8 +10,9 @@
       "short": "Acquisition spend",
       "label": "Acquisitions ÷ operating cash flow",
       "unit": "pct",
-      "description": "Share of the cash the business generated that went into buying companies.",
-      "formula": "Cash paid for acquisitions minus cash from selling businesses, all years added up, ÷ operating cash flow, all years added up. A net seller shows 0%."
+      "description": "Share of operating cash spent buying companies.",
+      "formula": "Acquisitions (net of disposals) ÷ operating cash flow, all years summed. Net seller = 0%.",
+      "why": "Shows whether acquisitions really drive the company, and whether it pays for them from its own cash."
     },
     {
       "id": "fcfPerShareCagr",
@@ -19,8 +20,9 @@
       "label": "Free cash flow per share, growth per year",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Whether each share earned more cash over time.",
-      "formula": "Free cash flow = operating cash flow − capital spending. Divide by diluted shares. Average yearly growth from the first year to the last."
+      "description": "Growth in cash earned per share.",
+      "formula": "(Operating cash flow − capital spending) ÷ diluted shares. Yearly growth rate, first year to last.",
+      "why": "The best single sign that deals made each share worth more, not just the company bigger."
     },
     {
       "id": "revenueCagr",
@@ -28,8 +30,9 @@
       "label": "Revenue growth per year",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "How much bigger the company got.",
-      "formula": "Average yearly growth in revenue from the first year to the last."
+      "description": "Growth in sales.",
+      "formula": "Yearly growth rate of revenue, first year to last.",
+      "why": "Size alone. Compare it with FCF per share to see whether growth reached owners."
     },
     {
       "id": "shareCountChange",
@@ -37,8 +40,9 @@
       "label": "Share count change",
       "unit": "pct",
       "higherIsBetter": false,
-      "description": "Whether owners were diluted by new shares.",
-      "formula": "Diluted shares in the last year ÷ diluted shares in the first year − 1. Positive means new shares were issued."
+      "description": "Change in the number of shares.",
+      "formula": "Last year's diluted shares ÷ first year's − 1. Positive = new shares issued.",
+      "why": "Paying for deals with new shares is the best-documented way acquirers destroy value."
     },
     {
       "id": "cashReturn",
@@ -46,8 +50,9 @@
       "label": "Return on capital (free cash flow)",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Cash earned on all the money invested in the company, including what it paid for acquisitions.",
-      "formula": "Last year's free cash flow ÷ average of (debt + equity) at the start and end of that year."
+      "description": "Cash earned on all money invested.",
+      "formula": "Latest free cash flow ÷ average (debt + equity) over that year.",
+      "why": "The money that paid for acquisitions stays in the count, so overpaying shows up."
     },
     {
       "id": "netDebtToEbitda",
@@ -55,8 +60,9 @@
       "label": "Net debt ÷ EBITDA",
       "unit": "multiple",
       "higherIsBetter": false,
-      "description": "How many years of operating profit it would take to pay off the debt.",
-      "formula": "(Debt − cash) at the last year-end ÷ average EBITDA of the last 3 years. EBITDA = profit before interest, tax, depreciation and amortization. Negative means more cash than debt."
+      "description": "Years of profit needed to repay debt.",
+      "formula": "(Debt − cash) ÷ 3-year average EBITDA (profit before interest, tax, depreciation, amortization). Negative = net cash.",
+      "why": "Debt-funded buying is what sinks acquirers in a downturn. The 3-year average stops one good year from flattering it."
     },
     {
       "id": "organicGrowth",
@@ -64,12 +70,13 @@
       "label": "Organic growth (company-reported)",
       "unit": "pct",
       "higherIsBetter": true,
-      "description": "Revenue growth not counting acquisitions.",
-      "formula": "Taken as reported by the company, latest year. Not scored, because only some companies report it."
+      "description": "Growth without acquisitions.",
+      "formula": "As reported by the company, latest year.",
+      "why": "Shows whether acquired businesses keep growing on their own after the deal."
     }
   ],
   "rules": {
-    "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Missing data is never counted as a fail.",
+    "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.",
     "weight": "15% of the index is split equally among the companies we add, at most 8.2% each. CSU and TOI share one slot (one controls the other)."
   },
   "map": {

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Dataset, IndexSnapshot } from "@contract/types";
+import StartPage from "./StartPage";
 import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
@@ -20,9 +21,9 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "index", label: "Index" },
 ];
 
-/** The whole app. The address hash holds the view (#map, #index) or the open company (#c/CSU), so Back works. */
+/** The whole app. The address hash holds the view (none = start page, #companies, #map, #index) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot }: Props) {
-  const [hash, setHash] = useState("");
+  const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
   const [hovered, setHovered] = useState<string | null>(null);
 
@@ -37,6 +38,8 @@ export default function Workbench({ dataset, snapshot }: Props) {
     window.scrollTo({ top: 0 });
   };
 
+  if (hash == null) return <div className="min-h-screen bg-canvas" />; // before the address is read
+  const start = hash === "";
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
   const tab: Tab = company ? "companies" : hash === "map" || hash === "index" ? hash : "companies";
 
@@ -54,21 +57,23 @@ export default function Workbench({ dataset, snapshot }: Props) {
             <span className="grid h-6 w-6 place-items-center rounded-md bg-ink text-[11px] font-bold text-signal">X</span>
             Acquirer X-ray
           </button>
-          <nav className="flex items-center gap-1">
+          <nav className={`flex items-center gap-1 ${start ? "invisible" : ""}`}>
             {TABS.map((t) => (
-              <button key={t.id} onClick={() => go(t.id === "companies" ? "" : t.id)}
+              <button key={t.id} onClick={() => go(t.id)}
                 className={`rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-soft text-ink" : "text-muted hover:text-ink"}`}>
                 {t.label}
               </button>
             ))}
           </nav>
-          <span className="ml-auto hidden truncate text-xs text-faint sm:block">{dataset.indexName}</span>
+          {!start && <span className="ml-auto hidden truncate text-xs text-faint sm:block">{dataset.indexName}</span>}
         </div>
       </header>
 
       <main className="mx-auto w-full max-w-[1240px] px-5 py-6 md:px-8 md:py-8">
-        {company ? (
-          <CompanyDashboard key={company.ticker} dataset={dataset} company={company} onOpen={(t) => go(`c/${t}`)} onBack={() => go("")} />
+        {start ? (
+          <StartPage dataset={dataset} snapshot={snapshot} onDone={() => go("companies")} />
+        ) : company ? (
+          <CompanyDashboard key={company.ticker} dataset={dataset} company={company} onOpen={(t) => go(`c/${t}`)} onBack={() => go("companies")} />
         ) : tab === "map" ? (
           <Card title="Acquisition spend vs FCF per share growth">
             <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
