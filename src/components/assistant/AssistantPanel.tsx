@@ -46,7 +46,7 @@ const VIEW_NAMES: Record<View, string> = {
   companies: "Companies",
   map: "Map",
   index: "Index",
-  test: "Tested thesis",
+  xray: "X-ray",
 };
 
 const STARTERS = ["How does the model work?", "Which companies pass the model?", "Who sits top-right?", "What can you do?"];

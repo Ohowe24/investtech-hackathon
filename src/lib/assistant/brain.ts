@@ -7,6 +7,7 @@ import type { Company, Dataset, Deal, IndexDef, IndexSnapshot, MetricDef } from 
 import { formatValue, pct, recStyle, verdictStyle } from "@/lib/format";
 import { ordinal, ranking, scoredMetrics } from "@/lib/rank";
 import { completeIndex, sharePct, type Addition, type IndexState } from "@/lib/indexMath";
+import { proveEngine } from "../../../engine/proof";
 import type { Action, Block, GuideContext, Reply, View } from "./types";
 
 /** Source id for the organizers' live index (data/indexes.json); it is not in Dataset.sources. */
@@ -324,7 +325,7 @@ function viewSuggestions(w: W, view: View): string[] {
     companies: ["Which companies pass the model?", watch && whyQuestion(watch), growth && `Top 5 on ${growth.short ?? growth.label}`, "How does the model work?"],
     map: ["Who sits top-right?", add && `Where is ${add.ticker} on the map?`, xDef && `What is ${(xDef.short ?? xDef.label).toLowerCase()}?`, "Explain the map"],
     index: [whatIf, "Which holdings fail the model?", "How is the weight set?", "What's in the index?"],
-    test: [reject && whyQuestion(reject), watch && whyQuestion(watch), "How does the model work?", "Which companies pass the model?"],
+    xray: [reject && whyQuestion(reject), add && whyQuestion(add), "How does the model work?", "Which companies pass the model?"],
   };
   return lists[view].filter((x): x is string => !!x);
 }
@@ -651,6 +652,7 @@ function why(w: W, c: Company, ctx: GuideContext, asked: string): Reply {
   o.block({ kind: "checks", ticker: c.ticker });
   o.sources(checkSources(c));
   o.act({ kind: "highlight", target: "checks", ticker: c.ticker, label: "Show me" });
+  o.act({ kind: "view", view: "xray", focus: c.ticker, label: `X-ray ${c.ticker}` });
   o.suggest([...companySuggestions(w, c).filter((s) => s !== whyQuestion(c)), "How does the model work?"], asked);
   return o.done();
 }
@@ -913,6 +915,7 @@ export function notice(ds: Dataset, snap: IndexSnapshot, ctx: GuideContext): Rep
     }
     o.sources(metricSources(c));
     o.act({ kind: "highlight", target: "summary", ticker: c.ticker, label: "Show me" });
+    o.act({ kind: "view", view: "xray", focus: c.ticker, label: `X-ray ${c.ticker}` });
     o.suggest(companySuggestions(w, c));
     return o.done();
   }
@@ -964,10 +967,17 @@ export function notice(ds: Dataset, snap: IndexSnapshot, ctx: GuideContext): Rep
       o.act({ kind: "highlight", target: "recommendation", view: "recommendation", label: "Show me" });
       break;
     }
-    case "test": {
-      const cands = ds.companies.filter((c) => !c.inIndex && c.hqCountry === "CA");
-      o.say(`This tab lays out the evidence behind each of the ${cands.length} Canadian decisions: what met the rule and what fell short.`);
-      o.act({ kind: "highlight", target: "test", view: "test", label: "Show me" });
+    case "xray": {
+      const p = proveEngine(ds);
+      const parts: [string, { matched: number; total: number }][] = [["metric values", p.metrics], ["checks", p.checks], ["results", p.results], ["weights", p.weights]];
+      const off = parts.filter(([, x]) => x.matched !== x.total);
+      o.say(
+        `X-ray re-runs the engine's own code on the figures it published, for all ${p.companies} companies, and compares each answer with what the engine stored.`,
+        off.length
+          ? `${off.map(([n, x]) => `${x.total - x.matched} of ${x.total} ${n}`).join(", ")} do not match. Those show in red.`
+          : `All ${parts.map(([n, x]) => `${x.total} ${n}`).join(", ")} reproduce exactly.`,
+      );
+      o.act({ kind: "highlight", target: "xray", view: "xray", label: "Show me" });
       break;
     }
     default:

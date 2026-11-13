@@ -299,3 +299,13 @@ body {
   .guide-draw { animation: none !important; stroke-dashoffset: 0; }
   .guide-flash { animation: none !important; outline-color: #3ddc6c; }
 }
+
+/* ───────────────────────── X-ray page ─────────────────────────
+   src/components/XRay.tsx. Motion only; every figure is re-run by engine/proof.ts. */
+@keyframes xray-scan { from { transform: translateY(-100%); } to { transform: translateY(100%); } }
+.xray-scan { background: linear-gradient(180deg, transparent, rgba(61, 220, 108, 0.06) 70%, rgba(61, 220, 108, 0.28) 98%, transparent); animation: xray-scan 0.7s linear infinite; }
+.xray-flow { animation: flow 1.2s linear infinite; }
+.xray-dot > span:first-child { animation: pop 0.6s cubic-bezier(0.3, 1.4, 0.5, 1) 0.5s both; }
+@media (prefers-reduced-motion: reduce) {
+  .xray-scan, .xray-flow, .xray-dot > span:first-child { animation: none !important; }
+}

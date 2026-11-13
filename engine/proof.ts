@@ -90,7 +90,8 @@ export function reproduce(ds: Dataset, c: Company, metricId: string): Reproducti
   const last = h[h.length - 1];
   const stored = c.metrics[metricId]?.value ?? null;
   const base = { metricId, stored, years: [] as number[], inputs: [] as Series[], steps: [] as Step[] };
-  const done = (r: Omit<Reproduction, "metricId" | "stored" | "match">): Reproduction => ({ ...base, ...r, match: same(r.value, stored) });
+  type Draft = Pick<Reproduction, "method" | "fn" | "value"> & Partial<Pick<Reproduction, "years" | "inputs" | "steps" | "quote">>;
+  const done = (r: Draft): Reproduction => ({ ...base, ...r, match: same(r.value, stored) });
   const fcfps = (r: YearRow | undefined) => (r ? perShare(freeCashFlow(r.operatingCashFlow, r.capex ?? null), r.dilutedShares) : null);
   const span = first && last ? last.fiscalYear - first.fiscalYear : 0;
   const ends = first && last ? [first.fiscalYear, last.fiscalYear] : [];

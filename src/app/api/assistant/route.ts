@@ -10,7 +10,7 @@ import type { AskRequest, Reply, StreamEvent, View } from "@/lib/assistant/types
 
 const dataset = datasetJson as unknown as Dataset;
 const snapshot = snapshotJson as unknown as IndexSnapshot;
-const VIEWS: View[] = ["start", "recommendation", "companies", "map", "index", "test"];
+const VIEWS: View[] = ["start", "recommendation", "companies", "map", "index", "xray"];
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

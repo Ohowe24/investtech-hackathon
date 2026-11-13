@@ -7,7 +7,7 @@ import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import IndexBuilder from "./IndexBuilder";
-import RuleLab from "./RuleLab";
+import XRay from "./XRay";
 import Recommendation from "./Recommendation";
 import { Card } from "./ui";
 import RunSequence from "./live/RunSequence";
@@ -23,16 +23,16 @@ interface Props {
   snapshot: IndexSnapshot;
 }
 
-type Tab = "recommendation" | "companies" | "map" | "index" | "test";
+type Tab = "recommendation" | "companies" | "map" | "index" | "xray";
 const TABS: { id: Tab; label: string }[] = [
   { id: "recommendation", label: "Recommendation" },
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
   { id: "index", label: "Index" },
-  { id: "test", label: "Tested thesis" },
+  { id: "xray", label: "X-ray" },
 ];
 
-/** The whole app. The address hash holds the view (none = start page, #recommendation, #companies, #map, #index, #test) or the open company (#c/CSU), so Back works. */
+/** The whole app. The address hash holds the view (none = start page, #recommendation, #companies, #map, #index, #xray or #xray/CSU) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
@@ -99,8 +99,8 @@ export default function Workbench({ dataset, snapshot }: Props) {
     if (a.kind === "open") {
       go(`c/${a.ticker}`);
     } else if (a.kind === "view") {
-      go(a.view === "start" ? "" : a.view);
-      if (a.focus) setHovered(a.focus);
+      go(a.view === "start" ? "" : a.view === "xray" && a.focus ? `xray/${a.focus}` : a.view);
+      if (a.focus && a.view === "map") setHovered(a.focus);
       if (a.view === "map") setFlash("map");
     } else if (a.kind === "highlight") {
       const dest = a.ticker ? `c/${a.ticker}` : a.view && a.view !== "start" ? a.view : null;
@@ -134,7 +134,9 @@ export default function Workbench({ dataset, snapshot }: Props) {
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "";
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = company ? "companies" : hash === "map" || hash === "index" || hash === "test" || hash === "recommendation" ? hash : "companies";
+  const isXray = hash === "xray" || hash === "test" || hash.startsWith("xray/");
+  const xrayTicker = hash.startsWith("xray/") ? decodeURIComponent(hash.slice(5)) : null;
+  const tab: Tab = company ? "companies" : isXray ? "xray" : hash === "map" || hash === "index" || hash === "recommendation" ? hash : "companies";
   const guideContext: GuideContext = start ? { view: "start" } : company ? { view: "companies", ticker: company.ticker } : { view: tab };
   const docked = guideOpen && !start;
 
@@ -193,8 +195,11 @@ export default function Workbench({ dataset, snapshot }: Props) {
               <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
             </Card>
           </div>
-        ) : tab === "test" ? (
-          <div data-guide="test"><RuleLab dataset={dataset} onOpen={(t) => go(`c/${t}`)} /></div>
+        ) : tab === "xray" ? (
+          <div data-guide="xray">
+            <XRay dataset={dataset} snapshot={snapshot} ticker={xrayTicker}
+              onPick={(t) => { window.location.hash = `xray/${t}`; }} onOpen={(t) => go(`c/${t}`)} />
+          </div>
         ) : tab === "index" ? (
           <div data-guide="index"><IndexBuilder dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} /></div>
         ) : (

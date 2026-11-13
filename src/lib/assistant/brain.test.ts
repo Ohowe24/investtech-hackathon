@@ -87,7 +87,7 @@ const CONTEXTS: GuideContext[] = [
   { view: "companies" },
   { view: "map" },
   { view: "index" },
-  { view: "test" },
+  { view: "xray" },
   ...tested.map((c) => ({ view: "companies" as const, ticker: c.ticker })),
 ];
 
@@ -332,7 +332,7 @@ describe("notices", () => {
   });
 
   it("every view but the start page has a note with a Show me action", () => {
-    for (const view of ["recommendation", "companies", "map", "index", "test"] as const) {
+    for (const view of ["recommendation", "companies", "map", "index", "xray"] as const) {
       expect(notice(ds, snap, { view })!.actions[0].label).toBe("Show me");
     }
     expect(notice(ds, snap, { view: "start" })).toBeNull();

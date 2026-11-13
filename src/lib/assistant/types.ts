@@ -3,7 +3,7 @@
 // To swap in a real model later, keep these shapes and replace only the route.
 
 /** The app's places. "companies" with a ticker in GuideContext means a company page. */
-export type View = "start" | "recommendation" | "companies" | "map" | "index" | "test";
+export type View = "start" | "recommendation" | "companies" | "map" | "index" | "xray";
 
 /** Where the person is in the app when they ask. */
 export interface GuideContext {
@@ -15,7 +15,7 @@ export interface GuideContext {
 /** Something the guide can do in the app. */
 export type Action =
   | { kind: "open"; ticker: string; label: string }
-  /** focus: a ticker to highlight on the map */
+  /** focus: a ticker to highlight on the map, or to open in the X-ray */
   | { kind: "view"; view: View; label: string; focus?: string }
   /** target: a data-guide value on the page; ticker: open this company first; view: go to this view first */
   | { kind: "highlight"; target: string; ticker?: string; view?: View; label: string }
