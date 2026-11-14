@@ -31,7 +31,7 @@ This file says what each metric means and why the thresholds are where they are.
 
 **Currencies:** every metric is a ratio or growth rate inside one company, so USD, EUR and CAD reporters compare without conversion.
 
-## The test (thresholds in `engine/config.ts`)
+## The test (thresholds in `engine/industries/acquirers.ts`)
 
 Two gates must pass. Five checks are scored.
 
@@ -94,7 +94,7 @@ Each fiscal year in `history` also carries, all `null` when an input is missing:
 
 The `#test` tab presents the existing investment thesis: select Canadian acquirers that turn growth
 into cash flow per share, with disciplined debt and adequate cash returns on invested capital.
-This wording synthesizes the project brief and the declared metric rationale in `engine/config.ts`.
+This wording synthesizes the project brief and the declared metric rationale in `engine/industries/acquirers.ts`.
 The page reads published company decisions and model checks directly from the dataset. It shows
 supporting checks, failed or missing checks, metric periods and source links for additions and other candidates.
 Human decisions remain distinct from model results. No thresholds, scores, company data or portfolio

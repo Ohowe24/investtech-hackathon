@@ -1,5 +1,6 @@
-// ENGINE: spreadsheets in -> data/companies.json out.  Run:  npm run engine
+// ENGINE: spreadsheets in -> data/companies.json out.  Run:  npm run engine [-- --industry <id>]
 //
+// The industry profile (engine/industries/) supplies the index, metrics, checks and map. Default: acquirers.
 // Reads engine/input/ if it has companies.csv, otherwise engine/input-sample/ (FAKE).
 // Writes data/companies.json, which is the only file the website reads.
 // Numbers are computed here; verdicts and reasons are human decisions taken from companies.csv.
@@ -7,9 +8,14 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { CheckResult, Company, Deal, Dataset, MetricValue, ModelResult, Source, Verdict, YearRow } from "../contract/types";
-import { config } from "./config";
 import { num, parseCsv } from "./csv";
-import { acquisitionIntensity, meanStrict, cagr, cashReturnOnCapital, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, ratioOfPositive, pctChange, perShare, quadrant, sumStrict, tally } from "./metrics";
+import { getIndustry } from "./industries";
+import type { FinRow } from "./industries/types";
+import { acquisitionIntensity, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, ratioOfPositive, pctChange, perShare, quadrant, sumStrict, tally } from "./metrics";
+import { cashReturnFor } from "./statements";
+
+const industryArg = process.argv.indexOf("--industry");
+const config = getIndustry(industryArg >= 0 ? process.argv[industryArg + 1] : undefined);
 
 const root = process.cwd();
 const realDir = join(root, "engine", "input");
@@ -22,31 +28,16 @@ const companiesCsv = read("companies.csv");
 const financialsCsv = read("financials.csv");
 const sourcesCsv = read("sources.csv");
 
-const organicCsv = existsSync(join(dir, "organic.csv")) ? read("organic.csv") : [];
+const extraCsv: Record<string, Record<string, string>[]> = Object.fromEntries(
+  config.extraInputs.map((f) => [f, existsSync(join(dir, f)) ? read(f) : []]),
+);
 const dealsByTicker: Record<string, Deal[]> = existsSync(join(dir, "deals.json")) ? JSON.parse(readFileSync(join(dir, "deals.json"), "utf8")) : {};
 
 const sources: Source[] = sourcesCsv.map((s) => ({ id: s.id, label: s.label, url: s.url || undefined, ...(s.quote ? { quote: s.quote } : {}) }));
 const sourceIds = new Set(sources.map((s) => s.id));
 const warnings: string[] = [];
 
-interface Row {
-  year: number;
-  revenue: number | null;
-  ocf: number | null;
-  capex: number | null;
-  acquisitions: number | null;
-  shares: number | null;
-  debt: number | null;
-  cash: number | null;
-  organic: number | null;
-  equity: number | null;
-  ebitda: number | null;
-  goodwill: number | null;
-  currency: string;
-  sourceId: string;
-}
-
-const byTicker = new Map<string, Row[]>();
+const byTicker = new Map<string, FinRow[]>();
 for (const r of financialsCsv) {
   const year = num(r.fiscal_year);
   if (year == null) {
@@ -77,14 +68,6 @@ for (const r of financialsCsv) {
 const VERDICTS: Verdict[] = ["add", "reject", "watch", "existing"];
 
 const rowsFor = (ticker: string) => (byTicker.get(ticker) ?? []).sort((a, b) => a.year - b.year);
-
-/** Cash return for one year: needs that year's FCF and the balance sheets at both ends of it. */
-function cashReturnFor(rows: Row[], i: number): number | null {
-  const r = rows[i];
-  const prev = rows[i - 1];
-  if (!r || !prev || r.year - prev.year !== 1) return null;
-  return cashReturnOnCapital(freeCashFlow(r.ocf, r.capex), prev.debt, prev.equity, r.debt, r.equity);
-}
 
 function historyFor(ticker: string): YearRow[] {
   const rows = rowsFor(ticker);
@@ -142,79 +125,12 @@ function totalsFor(ticker: string): Company["totals"] {
 }
 
 function metricsFor(ticker: string): Record<string, MetricValue> {
-  const rows = rowsFor(ticker);
-  if (rows.length < 2) {
-    warnings.push(`${ticker}: needs at least 2 fiscal years in financials.csv (has ${rows.length})`);
-  }
-  const first = rows[0];
-  const last = rows[rows.length - 1];
-  const years = first && last ? last.year - first.year : 0;
-  const period = first && last ? `FY${first.year}–FY${last.year}` : undefined;
-  const allSources = [...new Set(rows.map((r) => r.sourceId).filter(Boolean))];
-  const endSources = [...new Set([first?.sourceId, last?.sourceId].filter(Boolean) as string[])];
-
-  const mv = (value: number | null, ids: string[], note?: string, p = period): MetricValue => ({
-    value,
-    period: p,
-    sourceIds: ids,
-    ...(value == null ? { note: note ?? "Missing or not computable from the data provided" } : note ? { note } : {}),
+  const out = config.computeMetrics(rowsFor(ticker), {
+    ticker,
+    lookup: (file) => extraCsv[file]?.find((r) => r.ticker === ticker),
   });
-
-  const fcfFirst = first ? freeCashFlow(first.ocf, first.capex) : null;
-  const fcfLast = last ? freeCashFlow(last.ocf, last.capex) : null;
-  const fcfpsFirst = first ? perShare(fcfFirst, first.shares) : null;
-  const fcfpsLast = last ? perShare(fcfLast, last.shares) : null;
-
-  const acqSum = sumStrict(rows.map((r) => r.acquisitions));
-  const ocfSum = sumStrict(rows.map((r) => r.ocf));
-
-  return {
-    acqIntensity: mv(
-      acquisitionIntensity(acqSum, ocfSum),
-      allSources,
-      acqSum == null
-        ? "Acquisition spending missing for at least one year"
-        : ocfSum == null || ocfSum <= 0
-          ? "Operating cash flow missing or not positive"
-          : acqSum <= 0
-            ? "Net seller over the period: divestiture proceeds exceeded acquisition spending, so net acquisition spending is zero"
-            : undefined,
-    ),
-    fcfPerShareCagr: mv(
-      cagr(fcfpsFirst, fcfpsLast, years),
-      endSources,
-      fcfpsFirst != null && fcfpsFirst <= 0 ? "Starting FCF per share was zero or negative, so growth is undefined" : undefined,
-    ),
-    revenueCagr: mv(cagr(first?.revenue, last?.revenue, years), endSources),
-    shareCountChange: mv(pctChange(first?.shares, last?.shares), endSources),
-    cashReturn: mv(
-      cashReturnFor(rows, rows.length - 1),
-      [...new Set([rows[rows.length - 2]?.sourceId, last?.sourceId].filter(Boolean) as string[])],
-      rows.length < 2 ? "Needs two consecutive years" : undefined,
-      last ? `FY${last.year}` : undefined,
-    ),
-    netDebtToEbitda: (() => {
-      // Latest net debt against average EBITDA of the last three years, so one good year
-      // at the top of a cycle cannot make the debt look small.
-      const lastThree = rows.slice(-3);
-      const avgEbitda = lastThree.length === 3 ? meanStrict(lastThree.map((r) => r.ebitda)) : null;
-      return mv(
-        last ? netDebtToEbitda(last.debt, last.cash, avgEbitda) : null,
-        [...new Set(lastThree.map((r) => r.sourceId).filter(Boolean))],
-        lastThree.length < 3
-          ? "Needs three years of EBITDA"
-          : avgEbitda != null && avgEbitda <= 0
-            ? "Average EBITDA not positive, so the ratio is meaningless"
-            : undefined,
-        last ? `FY${last.year} debt, FY${lastThree[0].year}–FY${last.year} EBITDA` : undefined,
-      );
-    })(),
-    organicGrowth: (() => {
-      const o = organicCsv.find((r) => r.ticker === ticker);
-      const v = o ? num(o.organic_growth_pct) : null;
-      return mv(v, o?.source_id ? [o.source_id] : [], v == null ? "Not reported in the data provided" : undefined, o?.period || (last ? `FY${last.year}` : undefined));
-    })(),
-  };
+  warnings.push(...out.warnings);
+  return out.metrics;
 }
 
 // ---- The model: apply the declared checks, rank, recommend, weight ----
@@ -240,7 +156,7 @@ const drafts = companiesCsv.map((c) => {
   return { c, metrics, checks, t };
 });
 
-// Rank: recommendation first, then share of scored checks passed, then how many had data, then FCF/share growth.
+// Rank: recommendation first, then share of scored checks passed, then how many had data, then the profile's tie-break metric.
 const recOrder = { pass: 0, mixed: 1, fail: 2 } as const;
 const share = (d: (typeof drafts)[number]) => (d.t.available > 0 ? d.t.passed / d.t.available : 0);
 const ranked = [...drafts].sort(
@@ -248,7 +164,7 @@ const ranked = [...drafts].sort(
     recOrder[a.t.recommendation] - recOrder[b.t.recommendation] ||
     share(b) - share(a) ||
     b.t.available - a.t.available ||
-    (b.metrics.fcfPerShareCagr?.value ?? -Infinity) - (a.metrics.fcfPerShareCagr?.value ?? -Infinity),
+    (b.metrics[config.rankTiebreak]?.value ?? -Infinity) - (a.metrics[config.rankTiebreak]?.value ?? -Infinity),
 );
 const rankOf = new Map(ranked.map((d, i) => [d.c.ticker, i + 1]));
 
@@ -313,6 +229,7 @@ const companies: Company[] = drafts.map((d) => {
 
 const dataset: Dataset = {
   isFake,
+  industryId: config.id,
   generatedAt: new Date().toISOString(),
   indexName: config.indexName,
   currency: config.currency,
@@ -333,14 +250,15 @@ const dataset: Dataset = {
 
 writeFileSync(join(root, "data", "companies.json"), JSON.stringify(dataset, null, 2) + "\n");
 
-const pct = (v: number | null | undefined) => (v == null ? "  —   " : `${(v * 100).toFixed(1).padStart(5)}%`);
-console.log(`\nBuilt data/companies.json from ${isFake ? "engine/input-sample (FAKE)" : "engine/input"}\n`);
-console.log("rank ticker  acq.int   fcf/sh/yr  cashRet  dilution  ND/EBITDA  organic  checks  model   verdict  weight");
-const x = (v: number | null | undefined) => (v == null ? "   —  " : `${v.toFixed(1).padStart(5)}×`);
+const fmt = (v: number | null | undefined, unit: string) =>
+  (v == null ? "—" : unit === "pct" ? `${(v * 100).toFixed(1)}%` : unit === "multiple" ? `${v.toFixed(1)}×` : v.toFixed(1)).padStart(9);
+console.log(`
+Built data/companies.json (${config.id}) from ${isFake ? "engine/input-sample (FAKE)" : "engine/input"}
+`);
+console.log(`rank ticker ${config.metricDefs.map((m) => (m.short ?? m.id).slice(0, 9).padStart(9)).join(" ")}  checks  model   verdict  weight`);
 for (const c of [...companies].sort((a, b) => a.model!.rank - b.model!.rank)) {
-  const m = c.metrics;
   console.log(
-    `${String(c.model!.rank).padStart(3)}  ${c.ticker.padEnd(6)} ${pct(m.acqIntensity?.value)}   ${pct(m.fcfPerShareCagr?.value)}   ${pct(m.cashReturn?.value)}  ${pct(m.shareCountChange?.value)}   ${x(m.netDebtToEbitda?.value)}   ${pct(m.organicGrowth?.value)}   ${c.model!.passed}/${c.model!.available}    ${c.model!.recommendation.padEnd(6)}  ${c.verdict.padEnd(8)} ${c.proposedWeightPct ?? ""}`,
+    `${String(c.model!.rank).padStart(3)}  ${c.ticker.padEnd(6)} ${config.metricDefs.map((m) => fmt(c.metrics[m.id]?.value, m.unit)).join(" ")}   ${c.model!.passed}/${c.model!.available}    ${c.model!.recommendation.padEnd(6)}  ${c.verdict.padEnd(8)} ${c.proposedWeightPct ?? ""}`,
   );
 }
 if (warnings.length) {

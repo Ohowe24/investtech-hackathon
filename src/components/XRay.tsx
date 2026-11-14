@@ -7,7 +7,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, Unit } from "@contract/types";
 import { formatValue, pct, recStyle, verdictStyle } from "@/lib/format";
-import { config } from "../../engine/config";
+import { getIndustry } from "../../engine/industries";
 import { proveCompany, proveEngine, type CheckProof, type CompanyProof, type InputUnit, type Reproduction } from "../../engine/proof";
 import { Decode, prefersReducedMotion } from "./live/motion";
 
@@ -274,13 +274,14 @@ function DecisionPath({ dataset, c, proof, resultRef, reproduced, total, onOpen 
   const gatesOk = gates.filter((k) => k.check.pass === true).length;
   const rec = proof.result.rerun;
   const v = proof.verdict;
+  const { scoring } = getIndustry(dataset.industryId);
   const share = proof.result.available ? proof.result.passed / proof.result.available : 0;
-  const scoredTone = share >= config.scoring.passShare ? PASS : share < config.scoring.mixedShare ? FAIL : HOLD;
+  const scoredTone = share >= scoring.passShare ? PASS : share < scoring.mixedShare ? FAIL : HOLD;
   const nodes: { key: string; title: string; main: ReactNode; sub: ReactNode; tone: string; ok: boolean; ref?: React.RefObject<HTMLDivElement | null> }[] = [
     { key: "in", title: "Filings", main: `${years.length} years`, sub: years.length ? `FY${years[0]}–FY${years[years.length - 1]} · ${filings.size} sources` : "no history", tone: "#fff", ok: true },
     { key: "m", title: "Metrics", main: `${reproduced}/${total}`, sub: "re-run from yearly figures", tone: reproduced === total ? PASS : FAIL, ok: reproduced === total },
     { key: "g", title: "Must-pass", main: `${gatesOk}/${gates.length}`, sub: gatesOk === gates.length ? "both pass" : gates.filter((k) => k.check.pass === false).map((k) => k.check.label).join("; "), tone: gatesOk === gates.length ? PASS : FAIL, ok: gatesOk === gates.length },
-    { key: "s", title: "Scored", main: `${proof.result.passed}/${proof.result.available}`, sub: `pass needs ${config.scoring.passShare * 100}% with ${config.scoring.minAvailable}+ known`, tone: scoredTone, ok: true },
+    { key: "s", title: "Scored", main: `${proof.result.passed}/${proof.result.available}`, sub: `pass needs ${scoring.passShare * 100}% with ${scoring.minAvailable}+ known`, tone: scoredTone, ok: true },
     { key: "r", title: "Result", main: recStyle[rec].label, sub: proof.result.match ? "re-tallied ✓" : "differs from stored ✕", tone: recTone(rec), ok: proof.result.match, ref: resultRef },
     {
       key: "v", title: "Verdict",

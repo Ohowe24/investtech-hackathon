@@ -1,6 +1,7 @@
 {
   "isFake": false,
-  "generatedAt": "2026-11-13T01:30:49.638Z",
+  "industryId": "acquirers",
+  "generatedAt": "2026-11-14T12:51:18.391Z",
   "indexName": "Serial acquirers & consolidators",
   "currency": "USD",
   "question": "Which Canadian companies should be added to the serial acquirers index?",

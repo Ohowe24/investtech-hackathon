@@ -200,6 +200,8 @@ export interface MapConfig {
 export interface Dataset {
   /** true while built from sample data. The site shows a FAKE banner. */
   isFake: boolean;
+  /** which industry profile built this file (engine/industries/), e.g. "acquirers" */
+  industryId: string;
   generatedAt: string;
   /** must match an index name in data/indexes.json */
   indexName: string;

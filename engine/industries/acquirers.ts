@@ -1,9 +1,14 @@
-// ENGINE SETTINGS (Max's lane)
+// SERIAL ACQUIRERS profile (Max's lane)
 // Every threshold here is a declared rule. The reason for each one is in methodology.md.
 
-import type { MapConfig, MetricDef } from "../contract/types";
+import type { MetricDef, MetricValue } from "../../contract/types";
+import { num } from "../csv";
+import { acquisitionIntensity, cagr, freeCashFlow, meanStrict, netDebtToEbitda, pctChange, perShare, sumStrict } from "../metrics";
+import { cashReturnFor } from "../statements";
+import type { CheckDef, FinRow, IndustryProfile, MetricContext } from "./types";
 
-export const config = {
+const settings = {
+  id: "acquirers",
   /** must match an index name in data/indexes.json */
   indexName: "Serial acquirers & consolidators",
   currency: "USD",
@@ -33,7 +38,7 @@ export const config = {
       rule: "Diluted share count rose no more than 5% over the period" },
     { id: "selfFunded", kind: "score", label: "Acquisitions ≤ 100% of cash flow", metricId: "acqIntensity", op: "<=", threshold: 1,
       rule: "Cash spent on acquisitions did not exceed operating cash flow" },
-  ] as { id: string; kind: "gate" | "score"; label: string; metricId: string; op: ">=" | "<="; threshold: number; rule: string }[],
+  ] satisfies CheckDef[],
 
   metricDefs: [
     {
@@ -150,5 +155,94 @@ export const config = {
       topLeft: "Light acquirer · strong per-share growth",
       bottomLeft: "Light acquirer · weak per-share growth",
     },
-  } satisfies MapConfig,
+  },
+};
+
+function computeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<string, MetricValue>; warnings: string[] } {
+  const warnings: string[] = [];
+  if (rows.length < 2) {
+    warnings.push(`${ctx.ticker}: needs at least 2 fiscal years in financials.csv (has ${rows.length})`);
+  }
+  const first = rows[0];
+  const last = rows[rows.length - 1];
+  const years = first && last ? last.year - first.year : 0;
+  const period = first && last ? `FY${first.year}–FY${last.year}` : undefined;
+  const allSources = [...new Set(rows.map((r) => r.sourceId).filter(Boolean))];
+  const endSources = [...new Set([first?.sourceId, last?.sourceId].filter(Boolean) as string[])];
+
+  const mv = (value: number | null, ids: string[], note?: string, p = period): MetricValue => ({
+    value,
+    period: p,
+    sourceIds: ids,
+    ...(value == null ? { note: note ?? "Missing or not computable from the data provided" } : note ? { note } : {}),
+  });
+
+  const fcfFirst = first ? freeCashFlow(first.ocf, first.capex) : null;
+  const fcfLast = last ? freeCashFlow(last.ocf, last.capex) : null;
+  const fcfpsFirst = first ? perShare(fcfFirst, first.shares) : null;
+  const fcfpsLast = last ? perShare(fcfLast, last.shares) : null;
+
+  const acqSum = sumStrict(rows.map((r) => r.acquisitions));
+  const ocfSum = sumStrict(rows.map((r) => r.ocf));
+
+  const metrics: Record<string, MetricValue> = {
+    acqIntensity: mv(
+      acquisitionIntensity(acqSum, ocfSum),
+      allSources,
+      acqSum == null
+        ? "Acquisition spending missing for at least one year"
+        : ocfSum == null || ocfSum <= 0
+          ? "Operating cash flow missing or not positive"
+          : acqSum <= 0
+            ? "Net seller over the period: divestiture proceeds exceeded acquisition spending, so net acquisition spending is zero"
+            : undefined,
+    ),
+    fcfPerShareCagr: mv(
+      cagr(fcfpsFirst, fcfpsLast, years),
+      endSources,
+      fcfpsFirst != null && fcfpsFirst <= 0 ? "Starting FCF per share was zero or negative, so growth is undefined" : undefined,
+    ),
+    revenueCagr: mv(cagr(first?.revenue, last?.revenue, years), endSources),
+    shareCountChange: mv(pctChange(first?.shares, last?.shares), endSources),
+    cashReturn: mv(
+      cashReturnFor(rows, rows.length - 1),
+      [...new Set([rows[rows.length - 2]?.sourceId, last?.sourceId].filter(Boolean) as string[])],
+      rows.length < 2 ? "Needs two consecutive years" : undefined,
+      last ? `FY${last.year}` : undefined,
+    ),
+    netDebtToEbitda: (() => {
+      // Latest net debt against average EBITDA of the last three years, so one good year
+      // at the top of a cycle cannot make the debt look small.
+      const lastThree = rows.slice(-3);
+      const avgEbitda = lastThree.length === 3 ? meanStrict(lastThree.map((r) => r.ebitda)) : null;
+      return mv(
+        last ? netDebtToEbitda(last.debt, last.cash, avgEbitda) : null,
+        [...new Set(lastThree.map((r) => r.sourceId).filter(Boolean))],
+        lastThree.length < 3
+          ? "Needs three years of EBITDA"
+          : avgEbitda != null && avgEbitda <= 0
+            ? "Average EBITDA not positive, so the ratio is meaningless"
+            : undefined,
+        last ? `FY${last.year} debt, FY${lastThree[0].year}–FY${last.year} EBITDA` : undefined,
+      );
+    })(),
+    organicGrowth: (() => {
+      const o = ctx.lookup("organic.csv");
+      const v = o ? num(o.organic_growth_pct) : null;
+      return mv(v, o?.source_id ? [o.source_id] : [], v == null ? "Not reported in the data provided" : undefined, o?.period || (last ? `FY${last.year}` : undefined));
+    })(),
+  };
+  return { metrics, warnings };
+}
+
+export const acquirers: IndustryProfile = {
+  ...settings,
+  rankTiebreak: "fcfPerShareCagr",
+  ruleControls: [
+    { id: "debtLimit", label: "Maximum net debt / EBITDA", min: 1, max: 5, step: 0.1, unit: "multiple", why: "How much leverage will you tolerate while a company keeps acquiring?" },
+    { id: "ownersGain", label: "Minimum FCF per share growth", min: 0, max: 0.15, step: 0.01, unit: "pct", why: "How much annual cash growth should reach each share?" },
+    { id: "cashReturn", label: "Minimum cash return on capital", min: 0, max: 0.2, step: 0.01, unit: "pct", why: "How much cash should the company earn on its invested debt and equity?" },
+  ],
+  extraInputs: ["organic.csv"],
+  computeMetrics,
 };
