@@ -66,6 +66,11 @@ export async function POST(request: Request) {
     ? notice(dataset, snapshot, context)
     : answer(dataset, snapshot, typeof body.question === "string" ? body.question : "", context);
 
+  // Industries without yearly statements (REITs) have no X-ray page: never offer a button that leads nowhere.
+  if (reply && dataset.hasStatements === false) {
+    reply.actions = reply.actions.filter((x) => !("view" in x && x.view === "xray"));
+  }
+
   const encoder = new TextEncoder();
   const iterator = events(reply ?? { steps: [], text: "", blocks: [], sourceIds: [], actions: [], suggestions: [] }, body.mode === "notice");
   const stream = new ReadableStream({

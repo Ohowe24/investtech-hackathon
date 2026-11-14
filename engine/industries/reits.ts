@@ -246,6 +246,14 @@ export const reits: IndustryProfile = {
     BXP: "BXP", CCI: "Crown Castle", PLD: "Prologis", PSA: "Public Storage", REXR: "Rexford Industrial", LRE: "Lead Real Estate",
   },
   hasStatements: false,
+  reportedSeries: [
+    { id: "ffoPerUnit", label: "FFO per unit", unit: "count", kind: "flow", filter: F.ffoPerUnit, note: "Per unit, in the REIT's reporting currency" },
+    { id: "affoPerUnit", label: "AFFO per unit", unit: "count", kind: "flow", filter: F.affoPerUnit, note: "Per unit, in the REIT's reporting currency" },
+    { id: "affoPayout", label: "AFFO payout ratio", unit: "pct", kind: "flow", filter: F.affoPayout, metricId: "affoPayout" },
+    { id: "samePropertyNoi", label: "Same-property NOI growth", unit: "pct", kind: "flow", filter: F.sameProperty, metricId: "samePropertyNoi", note: "Each quarter against the same quarter a year earlier" },
+    { id: "debtRatio", label: "Debt ÷ gross book value", unit: "pct", kind: "level", filter: F.debtRatio, metricId: "debtRatio" },
+    { id: "occupancy", label: "Occupancy", unit: "pct", kind: "level", filter: F.occupancy, metricId: "occupancy", note: "As the REIT defines it" },
+  ],
   rankTiebreak: "ffoPerUnitGrowth",
   ruleControls: [
     { id: "debtLimit", label: "Maximum debt / gross book value", min: 0.3, max: 0.7, step: 0.01, unit: "pct", why: "How much of the portfolio may be funded with debt?" },

@@ -5,6 +5,7 @@ import { formatMetric, formatValue, pct, recStyle, verdictStyle } from "@/lib/fo
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from "@/lib/rank";
 import DealTimeline from "./DealTimeline";
+import ReportedFigures from "./ReportedFigures";
 import { Card, Explain } from "./ui";
 import { C, ChartCard, SplitBar, TrendChart } from "./charts";
 import { Decode, DecodeInView } from "./live/motion";
@@ -90,6 +91,14 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
       </div>
 
       {company.history?.length ? <div data-guide="history" className="space-y-5"><DeepDive company={company} /></div> : null}
+
+      {company.reported?.length ? <ReportedFigures dataset={dataset} company={company} /> : null}
+
+      {!company.history?.length && !company.reported?.length && (
+        <p className="rounded-xl border border-dashed border-white/20 px-5 py-4 text-sm text-white/60">
+          {company.dataNote ?? "No figures over time in the data provided for this company."}
+        </p>
+      )}
 
       {company.history?.length ? (
         <div data-guide="deals">

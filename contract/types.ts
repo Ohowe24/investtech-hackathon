@@ -83,6 +83,23 @@ export interface Company {
   reportingCurrency?: string;
   /** set when the engine has no data at all for this company (e.g. a holding typed by the user) */
   dataNote?: string;
+  /** company-reported figures over time (industries judged on KPIs, e.g. REITs), one series per figure */
+  reported?: ReportedSeries[];
+}
+
+/** One company-reported figure over time, as filed. Every point carries its own source. */
+export interface ReportedSeries {
+  id: string;
+  label: string;
+  unit: Unit;
+  /** "Quarterly" for flows (payout, growth), "Point in time" for balance-sheet figures, "Annual" when no quarters are reported */
+  basis: "Quarterly" | "Point in time" | "Annual";
+  /** MetricDef.id this figure feeds, so the chart can draw that metric's pass lines */
+  metricId?: string;
+  /** a caveat that applies to the whole series */
+  note?: string;
+  /** oldest first */
+  points: { label: string; date: string; value: number; sourceId: string }[];
 }
 
 /** A Canadian candidate from the industry's universe that could not be tested, and why. */

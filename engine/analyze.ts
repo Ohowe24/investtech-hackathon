@@ -11,7 +11,8 @@
 // A company with no data is never guessed at: holdings keep their row with empty metrics and a note,
 // candidates without data are listed in `unmeasured`.
 
-import type { CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, Verdict, YearRow } from "../contract/types";
+import type { CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, ReportedSeries, Verdict, YearRow } from "../contract/types";
+import { factSeries, periodLabel } from "./facts";
 import type { IndustryProfile } from "./industries/types";
 import { acquisitionIntensity, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, pctChange, perShare, quadrant, ratioOfPositive, sumStrict, tally } from "./metrics";
 import { cashReturnFor } from "./statements";
@@ -139,6 +140,19 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     return parts.join(" ") || "Passed every check.";
   };
 
+  const reportedFor = (t: string): ReportedSeries[] =>
+    (profile.reportedSeries ?? [])
+      .map((r) => {
+        const { basis, points } = factSeries(factsFor(t), r.filter, r.kind);
+        return {
+          id: r.id, label: r.label, unit: r.unit, basis,
+          ...(r.metricId ? { metricId: r.metricId } : {}),
+          ...(r.note ? { note: r.note } : {}),
+          points: points.map((x) => ({ label: periodLabel(x).replace(/^at /, ""), date: x.reportDate, value: x.value, sourceId: x.sourceId })),
+        };
+      })
+      .filter((r) => r.points.length > 0);
+
   const companies: Company[] = drafts.map((d) => {
     const s: StoredCompany | undefined = store.companies[d.ticker];
     const u = universe.get(d.ticker);
@@ -165,6 +179,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
       totals: totalsFor(rows),
       ...(s?.deals ? { deals: s.deals } : {}),
       ...(!s ? { dataNote: NO_DATA } : {}),
+      ...(reportedFor(d.ticker).length ? { reported: reportedFor(d.ticker) } : {}),
       reportingCurrency: rows[rows.length - 1]?.currency || undefined,
     };
   });
@@ -174,6 +189,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
   for (const c of companies) {
     for (const m of Object.values(c.metrics)) m.sourceIds.forEach((id) => used.add(id));
     for (const h of c.history ?? []) h.sourceIds.forEach((id) => used.add(id));
+    for (const r of c.reported ?? []) r.points.forEach((p) => used.add(p.sourceId));
   }
   const gates = profile.checks.filter((k) => k.kind === "gate").length;
 

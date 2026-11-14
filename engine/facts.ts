@@ -46,6 +46,26 @@ export function periodLabel(x: Pick<Fact, "periodType" | "fiscalYear" | "fiscalQ
   }
 }
 
+/**
+ * A figure over time, as filed: quarters for a flow (falling back to full years if fewer than two quarters),
+ * balance-sheet dates for a level. One point per period (the metric listed first wins), oldest first, at most `max`.
+ */
+export function factSeries(facts: Fact[], f: FactFilter, kind: "flow" | "level", max = 8): { basis: "Quarterly" | "Point in time" | "Annual"; points: Fact[] } {
+  const found = matching(facts, f);
+  const pick = (type: PeriodType) => {
+    const byPeriod = new Map<string, Fact>();
+    for (const x of found.filter((y) => y.periodType === type).sort((a, b) => f.metrics.indexOf(a.metric) - f.metrics.indexOf(b.metric))) {
+      if (!byPeriod.has(x.reportDate)) byPeriod.set(x.reportDate, x);
+    }
+    return [...byPeriod.values()].sort((a, b) => a.reportDate.localeCompare(b.reportDate)).slice(-max);
+  };
+  if (kind === "level") return { basis: "Point in time", points: pick("PointInTime") };
+  const q = pick("Quarterly");
+  if (q.length >= 2) return { basis: "Quarterly", points: q };
+  const a = pick("Annual");
+  return a.length > q.length ? { basis: "Annual", points: a } : { basis: "Quarterly", points: q };
+}
+
 /** Orders facts: latest fiscal year first; within a year, the longest period; then the latest date; then the metric listed first. */
 function byRecencyThenLength(f: FactFilter) {
   return (a: Fact, b: Fact) =>

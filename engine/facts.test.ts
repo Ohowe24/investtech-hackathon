@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { latestFact, matching, samePeriodRatio, yearOverYear } from "./facts";
+import { factSeries, latestFact, matching, samePeriodRatio, yearOverYear } from "./facts";
 import type { Fact, PeriodType } from "./industries/types";
 
 const f = (metric: string, periodType: PeriodType, fiscalYear: number, fiscalQuarter: number | null, value: number, quote = metric): Fact => ({
@@ -56,5 +56,24 @@ describe("samePeriodRatio", () => {
   });
   it("is null with no shared period", () => {
     expect(samePeriodRatio([f("dist", "Annual", 2025, 4, 1)], { metrics: ["dist"] }, { metrics: ["affo"] })).toBeNull();
+  });
+});
+
+describe("factSeries", () => {
+  it("gives quarters for a flow, one point per period, oldest first, the metric listed first winning", () => {
+    const facts = [f("b", "Quarterly", 2026, 1, 9), f("a", "Quarterly", 2026, 1, 1), f("a", "Quarterly", 2025, 4, 2), f("a", "Annual", 2025, 4, 3)];
+    const s = factSeries(facts, { metrics: ["a", "b"] }, "flow");
+    expect(s.basis).toBe("Quarterly");
+    expect(s.points.map((x) => x.value)).toEqual([2, 1]);
+  });
+  it("falls back to full years when fewer than two quarters", () => {
+    const s = factSeries([f("a", "Quarterly", 2026, 1, 1), f("a", "Annual", 2024, 4, 2), f("a", "Annual", 2025, 4, 3)], { metrics: ["a"] }, "flow");
+    expect(s.basis).toBe("Annual");
+    expect(s.points.map((x) => x.value)).toEqual([2, 3]);
+  });
+  it("gives balance-sheet dates for a level, capped at the latest eight", () => {
+    const facts = Array.from({ length: 10 }, (_, i) => f("d", "PointInTime", 2020 + i, null, i));
+    const s = factSeries(facts, { metrics: ["d"] }, "level");
+    expect(s.points.map((x) => x.value)).toEqual([2, 3, 4, 5, 6, 7, 8, 9]);
   });
 });

@@ -223,7 +223,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                     </td>
                     {showVerdict && (
                       <td className="py-3 pr-5 text-right">
-                        <span className={`rounded-full px-2.5 py-1 text-xs font-medium ${verdictStyle[c.verdict].badge}`}>
+                        <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${verdictStyle[c.verdict].badge}`}>
                           {verdictStyle[c.verdict].label}{c.proposedWeightPct != null ? ` ${pct(c.proposedWeightPct, 2)}` : ""}
                         </span>
                       </td>
