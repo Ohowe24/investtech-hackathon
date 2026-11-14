@@ -2,7 +2,8 @@
 //
 // Reads   engine/raw/statements/*.json  (Onesheet API annual statements, all 20 companies)
 //         engine/raw/datapack/*.json    (Onesheet company profiles for the 5 Canadian candidates)
-// Writes  engine/input/financials.csv, sources.csv, organic.csv, deals.json
+//         engine/raw/datapack/*-un.json (Onesheet company profiles for the 5 Canadian REITs)
+// Writes  engine/input/financials.csv, facts.csv, sources.csv, organic.csv, deals.json
 //         engine/input/companies.csv    ONLY if it does not exist yet (it holds human decisions)
 //
 // No number is typed here. Every value is copied from a raw file; missing stays empty.
@@ -136,7 +137,49 @@ for (const ticker of tickers) {
     .sort((a, b) => (b.date ?? `${b.fiscalYear ?? 0}`).localeCompare(a.date ?? `${a.fiscalYear ?? 0}`));
 }
 
+// ---- REITs: company-reported figures (FFO, AFFO, payout, leverage, occupancy...) from the data pack ----
+// Copied value for value into facts.csv, each with its own filing quote. Which ones the REIT profile
+// uses, and how, is decided in engine/industries/reits.ts, never here.
+const REIT_PACKS: Record<string, string> = { "CAR.UN": "car-un", "GRT.UN": "grt-un", "KMP.UN": "kmp-un", "NXR.UN": "nxr-un", "REI.UN": "rei-un" };
+const REIT_METRICS = [
+  "revenue", "operating_cash_flow", "noi", "same_store_noi", "same_store_noi_change_pct", "noi_change_pct",
+  "ffo", "ffo_per_share", "affo", "affo_per_share", "affo_ratio", "affo_payout_ratio", "ffo_payout_ratio",
+  "adjusted_ffo_payout_ratio", "distributions_per_unit", "debt", "debt_ratio", "total_debt_to_gross_book_value_ratio",
+  "adjusted_debt", "adjusted_ebitda", "cash", "occupancy", "occupancy_pct", "committed_occupancy_pct",
+  "diluted_nav_per_unit", "distribution_per_unit", "total_indebtedness_ratio", "apartment_occupancy", "industrial_occupancy_pct",
+  "committed_occupancy", "canada_occupancy", "adjusted_spot_debt_to_adjusted_ebitda_ratio", "adjusted_adjusted_debt_to_adjusted_ebitda_ratio",
+];
+const PERIOD_TAG: Record<string, string> = { Annual: "FY", Quarterly: "Q", SemiAnnual: "6M", NineMonths: "9M", PointInTime: "AT" };
+const factRows: unknown[][] = [];
+for (const [ticker, pack] of Object.entries(REIT_PACKS)) {
+  const packFile = join(rawDir, "datapack", `${pack}.json`);
+  if (!existsSync(packFile)) {
+    warnings.push(`${ticker}: data pack file missing (${pack}.json)`);
+    continue;
+  }
+  const doc = JSON.parse(readFileSync(packFile, "utf8")).document;
+  const periods: Record<string, unknown>[] = Array.isArray(doc.data) ? doc.data : Object.values(doc.data);
+  for (const p of periods) {
+    // Periods that end after the build date are forecasts or placeholders: never used.
+    if (String(p.reportDate) > "2026-11-12") continue;
+    const type = String(p.periodType);
+    const tag = PERIOD_TAG[type];
+    if (!tag) continue;
+    const label = type === "PointInTime" ? `at ${p.reportDate}` : type === "Annual" ? `FY${p.fiscalYear}` : type === "Quarterly" ? `Q${p.fiscalQuarter} ${p.fiscalYear}` : `${tag} ${p.fiscalYear}`;
+    const values = p.metricValues as Record<string, { value: unknown; sources?: { formType: string; filedOn: string; quote: string }[] }>;
+    for (const metric of REIT_METRICS) {
+      const mv = values[metric];
+      if (!mv || n(mv.value) == null) continue;
+      const src = mv.sources?.[0];
+      const sourceId = `sedar-${ticker}-${metric}-${String(p.periodId).split("_").slice(1).join("-")}`;
+      sourceRows.push([sourceId, `${ticker} ${metric.replace(/_/g, " ")}, ${label}${src ? ` · SEDAR ${src.formType}, filed ${src.filedOn}` : " · Onesheet company profile"}`, "", src?.quote ?? ""]);
+      factRows.push([ticker, metric, type, p.fiscalYear, p.fiscalQuarter ?? "", p.reportDate, mv.value, sourceId]);
+    }
+  }
+}
+
 mkdirSync(outDir, { recursive: true });
+writeFileSync(join(outDir, "facts.csv"), csv(["ticker", "metric", "period_type", "fiscal_year", "fiscal_quarter", "report_date", "value", "source_id"], factRows));
 writeFileSync(join(outDir, "financials.csv"), csv(
   ["ticker", "fiscal_year", "currency", "revenue", "operating_cash_flow", "capex", "acquisitions", "diluted_shares", "total_debt", "cash", "total_equity", "ebitda", "goodwill", "source_id"],
   finRows,
@@ -156,5 +199,5 @@ if (!existsSync(companiesFile)) {
   console.log("Created engine/input/companies.csv (verdicts empty = model decides)");
 } else console.log("Kept existing engine/input/companies.csv (human decisions are never overwritten)");
 
-console.log(`financials: ${finRows.length} rows · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
+console.log(`financials: ${finRows.length} rows · facts: ${factRows.length} · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
 for (const w of warnings) console.log("  - " + w);

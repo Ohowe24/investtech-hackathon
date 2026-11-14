@@ -81,6 +81,20 @@ export interface Company {
   };
   /** reporting currency of the money values in history, e.g. "USD" */
   reportingCurrency?: string;
+  /** set when the engine has no data at all for this company (e.g. a holding typed by the user) */
+  dataNote?: string;
+}
+
+/** A Canadian candidate from the industry's universe that could not be tested, and why. */
+export interface UnmeasuredCandidate {
+  ticker: string;
+  name: string;
+  listedOn?: string;
+  subSector?: string;
+  /** why it is in the industry's universe */
+  why: string;
+  /** why it was not tested */
+  note: string;
 }
 
 /** One declared rule applied to one company. */
@@ -202,6 +216,10 @@ export interface Dataset {
   isFake: boolean;
   /** which industry profile built this file (engine/industries/), e.g. "acquirers" */
   industryId: string;
+  /** display name of that industry, e.g. "Serial acquirers" */
+  industryName?: string;
+  /** where the index holdings came from: the organizers' live index, or typed in by the user */
+  holdingsSource?: "organizers" | "user";
   generatedAt: string;
   /** must match an index name in data/indexes.json */
   indexName: string;
@@ -217,7 +235,13 @@ export interface Dataset {
     weight: string;
   };
   map: MapConfig;
+  /** title of the map view, e.g. "Acquisition spend vs FCF per share growth" */
+  mapTitle?: string;
+  /** false when the industry is judged on company-reported KPIs rather than yearly statements (no X-ray, no deal timeline) */
+  hasStatements?: boolean;
   companies: Company[];
+  /** Canadian candidates in the industry's universe that had no data to test */
+  unmeasured?: UnmeasuredCandidate[];
   sources: Source[];
 }
 
@@ -228,12 +252,13 @@ export interface IndexPosition {
   country: string;
   countryCode: string;
   subSector: string;
-  signal: string;
-  signalDir: "up" | "down";
-  shares: number;
-  marketValue: number;
   weightPct: number;
-  pnlPct: number;
+  /** the fields below come from the organizers' feed; absent for a position the user typed in */
+  signal?: string;
+  signalDir?: "up" | "down";
+  shares?: number;
+  marketValue?: number;
+  pnlPct?: number;
 }
 
 export interface IndexDef {
@@ -249,6 +274,7 @@ export interface IndexDef {
 
 export interface IndexSnapshot {
   updatedAt: string;
+  /** where the holdings came from, e.g. the organizers' feed URL, or "Entered by you" */
   source: string;
   indexes: IndexDef[];
 }

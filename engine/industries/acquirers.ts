@@ -5,10 +5,12 @@ import type { MetricDef, MetricValue } from "../../contract/types";
 import { num } from "../csv";
 import { acquisitionIntensity, cagr, freeCashFlow, meanStrict, netDebtToEbitda, pctChange, perShare, sumStrict } from "../metrics";
 import { cashReturnFor } from "../statements";
-import type { CheckDef, FinRow, IndustryProfile, MetricContext } from "./types";
+import type { CheckDef, FinRow, IndustryProfile, MetricContext, UniverseEntry } from "./types";
 
 const settings = {
   id: "acquirers",
+  name: "Serial acquirers",
+  tagline: "Companies that grow by buying other companies. Do the deals make each share worth more, or only make the company bigger?",
   /** must match an index name in data/indexes.json */
   indexName: "Serial acquirers & consolidators",
   currency: "USD",
@@ -144,6 +146,7 @@ const settings = {
     },
   ] satisfies MetricDef[],
 
+  mapTitle: "Acquisition spend vs FCF per share growth",
   map: {
     x: "acqIntensity",
     y: "fcfPerShareCagr",
@@ -235,8 +238,41 @@ function computeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<s
   return { metrics, warnings };
 }
 
+/** Canadian serial acquirers the tool tests. Sources: reports/REIT evaluation variables.md, appendix B (TerraVest left out: blog sources only). */
+const universe: UniverseEntry[] = [
+  { ticker: "CSU", name: "Constellation Software", listedOn: "TSX", subSector: "Software serial acquirers", why: "Archetypal acquire-and-hold programme", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "TOI", name: "Topicus.com", listedOn: "TSXV", subSector: "Software serial acquirers", why: "CSU spin-off running the same programme", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "LMN", name: "Lumine Group", listedOn: "TSXV", subSector: "Communications and media software", why: "Says it aims to reinvest all free cash flow in acquisitions", sourceUrl: "https://www.luminegroup.com/?p=5801" },
+  { ticker: "WSP", name: "WSP Global", listedOn: "TSX", subSector: "Engineering", why: "Platform acquirer: POWER, Ricardo, TRC (US$3.3B)", sourceUrl: "https://www.financierworldwide.com/fw-news/2025/12/18/wsp-global-strikes-33bn-trc-deal" },
+  { ticker: "STN", name: "Stantec", listedOn: "TSX", subSector: "Engineering and design", why: "150th acquisition since its 1994 IPO, closed Aug 2025", sourceUrl: "https://www.stantec.com/en/news-media/2025/stantec-successfully-completes-150th-acquisition" },
+  { ticker: "TFII", name: "TFI International", listedOn: "TSX", subSector: "Trucking & logistics", why: "Named in the Globe's list of serial acquirers", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "GFL", name: "GFL Environmental", listedOn: "TSX", subSector: "Waste management", why: "\"Over 100 acquisitions\" since 2007 per its 2019 F-1; more than 200 by about 2023", sourceUrl: "https://www.sec.gov/Archives/edgar/data/1780232/000104746919004816/a2239324zf-1a.htm" },
+  { ticker: "WCN", name: "Waste Connections", listedOn: "TSX", subSector: "Waste management", why: "19 acquisitions in 2025, about $330M annualized revenue", sourceUrl: "https://investors.wasteconnections.com/news/news-details/2026/Waste-Connections-Reports-Fourth-Quarter-2025-Results-and-Provides-2026-Outlook/default.aspx" },
+  { ticker: "FSV", name: "FirstService", listedOn: "TSX", subSector: "Property services", why: "2025 growth attributed mainly to tuck-under acquisitions", sourceUrl: "https://www.firstservice.com/wp-content/uploads/2026/03/FirstService-Annual-Report-2025-FINAL-V1.pdf" },
+  { ticker: "CIGI", name: "Colliers International", listedOn: "TSX", subSector: "Real estate services and engineering", why: "Seven acquisitions from Q2 2025; engineering built by acquisition", sourceUrl: "https://corporate.colliers.com/news/news-details/2025/Colliers-adds-leading-telecommunications-engineering-firm/default.aspx" },
+  { ticker: "BYD", name: "Boyd Group Services", listedOn: "TSX", subSector: "Auto collision repair", why: "Consolidator of collision centres", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "CCL.B", name: "CCL Industries", listedOn: "TSX", subSector: "Specialty packaging and labels", why: "Named in the Globe's list (as CCL-A)", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "RCH", name: "Richelieu Hardware", listedOn: "TSX", subSector: "Hardware distribution", why: "In Aktagon's Canadian serial-acquirer screen", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "ATD", name: "Alimentation Couche-Tard", listedOn: "TSX", subSector: "Convenience retail", why: "Named in the Globe's list", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "DND", name: "Dye & Durham", listedOn: "TSX", subSector: "Legal software", why: "In Aktagon's screen (ROIC -9.5%); now in a strategic review and selling assets", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "DSG", name: "Descartes Systems", listedOn: "TSX", subSector: "Logistics software", why: "In both lists", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "ENGH", name: "Enghouse Systems", listedOn: "TSX", subSector: "Contact-centre and telecom software", why: "In both lists", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "GIB.A", name: "CGI", listedOn: "TSX", subSector: "IT services", why: "In both lists", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "PBH", name: "Premium Brands", listedOn: "TSX", subSector: "Specialty food", why: "In both lists", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "EIF", name: "Exchange Income", listedOn: "TSX", subSector: "Aviation and manufacturing", why: "In Aktagon's screen", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "MTY", name: "MTY Food Group", listedOn: "TSX", subSector: "Restaurant franchising", why: "In Aktagon's screen", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "ARE", name: "Aecon Group", listedOn: "TSX", subSector: "Construction", why: "Not confirmed. Occasional bolt-ons; no source names it a serial acquirer (see the serial-acquirer report)" },
+];
+
 export const acquirers: IndustryProfile = {
   ...settings,
+  universe,
+  holdingNames: {
+    BSP: "Bending Spoons", AME: "AMETEK", WCN: "Waste Connections", BRO: "Brown & Brown", IEX: "IDEX",
+    ETN: "Eaton", ROP: "Roper Technologies", TDY: "Teledyne Technologies", TDG: "TransDigm Group", ACM: "AECOM",
+    HEI: "HEICO", J: "Jacobs Solutions", POOL: "Pool Corporation", WSO: "Watsco", DHR: "Danaher",
+  },
+  hasStatements: true,
   rankTiebreak: "fcfPerShareCagr",
   ruleControls: [
     { id: "debtLimit", label: "Maximum net debt / EBITDA", min: 1, max: 5, step: 0.1, unit: "multiple", why: "How much leverage will you tolerate while a company keeps acquiring?" },

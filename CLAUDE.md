@@ -9,7 +9,7 @@ Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md
 | Folder | What it is |
 |---|---|
 | `engine/` | Spreadsheets in → `data/companies.json` out. All finance math. One profile per industry in `engine/industries/`. |
-| `src/` | The website. Reads `data/companies.json` and `data/indexes.json`. |
+| `src/` | The website. `/` is the onboarding (industry → holdings → run); `/analyze` runs `engine/analyze.ts` on the server against `data/store.json` and `data/indexes.json`. |
 | `contract/types.ts` | Shape of `data/companies.json`, shared by the engine and the website. When it changes, update both sides. |
 | `data/companies.json` | Engine output. Regenerate it with `npm run engine`; hand edits are overwritten on the next run. |
 
@@ -26,7 +26,7 @@ Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md
 npm run dev            # website at http://localhost:3000
 npm run fetch-statements  # download annual statements for all 20 companies into engine/raw/ (needs .env.local)
 npm run inputs         # engine/raw/ -> engine/input/*.csv + deals.json (never overwrites companies.csv)
-npm run engine         # rebuild data/companies.json (uses engine/input/ if present, else FAKE sample); add -- --industry <id> to pick a profile
+npm run engine         # rebuild data/store.json + data/companies.json (uses engine/input/ if present, else FAKE sample); add -- --industry <id> to pick a profile
 npm test               # formula + index-math tests
 npm run build          # production build; must pass before pushing
 npm run refresh-index  # pull the organizers' latest live holdings into data/indexes.json
