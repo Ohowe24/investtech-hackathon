@@ -48,7 +48,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
       </div>
 
-      <section className="spot scan-once rounded-xl border border-line bg-white">
+      <section data-guide="summary" className="spot scan-once rounded-xl border border-line bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-5">
           <div className="flex items-center gap-4">
             <span className="logo-scan grid h-12 w-16 place-items-center rounded-lg bg-ink font-mono text-sm font-semibold text-white">{company.ticker}</span>
@@ -85,16 +85,18 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         )}
       </section>
 
-      <div className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
+      <div data-guide="checks" className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
         {[...scored, ...context].map((d, i) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} i={i} />)}
       </div>
 
-      {company.history?.length ? <DeepDive company={company} /> : null}
+      {company.history?.length ? <div data-guide="history" className="space-y-5"><DeepDive company={company} /></div> : null}
 
       {company.history?.length ? (
-        <Card title="Acquisitions by year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
-          <DealTimeline dataset={dataset} company={company} />
-        </Card>
+        <div data-guide="deals">
+          <Card title="Acquisitions by year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
+            <DealTimeline dataset={dataset} company={company} />
+          </Card>
+        </div>
       ) : null}
 
       {company.history?.length ? <FinancialTable company={company} /> : null}
@@ -143,7 +145,7 @@ function MetricTile({ dataset, company, def, onOpen, i }: { dataset: Dataset; co
   const lowFirst = def.higherIsBetter === false;
 
   return (
-    <section className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
+    <section data-guide={`metric:${def.id}`} className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
       <Explain info={scoredMetricInfo(dataset, def.id)} className="truncate text-left text-[11px] font-medium text-muted">{def.short ?? def.label}</Explain>
       <div className={`mt-1.5 font-mono text-lg font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state]}`}>
         {mv?.value == null ? "—" : <Decode text={formatMetric(mv, def.unit)} delay={300 + i * 70} duration={700} />}
