@@ -121,6 +121,17 @@ export interface IndustryProfile {
   universe: UniverseEntry[];
   /** display names for well-known non-Canadian holdings, so a typed ticker shows a name. Labels only. */
   holdingNames: Record<string, string>;
+  /** company-reported figures to show over time on the company page (KPI-based industries). Copied, never computed. */
+  reportedSeries?: {
+    id: string;
+    label: string;
+    unit: "pct" | "multiple" | "count";
+    /** "flow" = per-period figure (use quarters); "level" = balance-sheet figure (use point-in-time dates) */
+    kind: "flow" | "level";
+    filter: import("../facts").FactFilter;
+    metricId?: string;
+    note?: string;
+  }[];
   /** the industry's formulas. Must use only pure functions from engine/metrics.ts. */
   computeMetrics: (rows: FinRow[], ctx: MetricContext) => { metrics: Record<string, MetricValue>; warnings: string[] };
 }

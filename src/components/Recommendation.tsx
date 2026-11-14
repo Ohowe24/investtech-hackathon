@@ -38,7 +38,7 @@ export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
           <span className="live-dot" /> Recommendation · {dataset.indexName}
         </div>
         <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-          <Decode text={`Add ${picks.map((c) => c.name).join(" and ")}`} letters duration={1100} delay={200} />
+          <Decode text={`Add ${listNames(picks.map((c) => c.name))}`} letters duration={1100} delay={200} />
         </h1>
         <p className="mt-1 text-sm text-muted">
           {index.totalValue > 0 && <><Decode text={money(amountFor(totalPct, index.totalValue))} delay={700} className="font-semibold text-ink" /> in total,{" "}</>}
@@ -46,7 +46,7 @@ export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
         </p>
       </Card>
 
-      <div className="grid gap-5 md:grid-cols-2">
+      <div className={`grid gap-5 md:grid-cols-2 ${picks.length >= 3 ? "xl:grid-cols-3" : ""}`}>
         {picks.map((c) => (
           <Pick key={c.ticker} company={c} dataset={dataset} amount={money(amountFor(c.proposedWeightPct!, index.totalValue))} onOpen={onOpen} />
         ))}
@@ -88,9 +88,10 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
   const m = c.model;
   const failed = m?.checks.filter((k) => k.pass === false) ?? [];
   const def = (id: string) => dataset.metricDefs.find((d) => d.id === id);
-  // The first three scored metrics of the industry, in check order.
+  // Three scored metrics, in check order, preferring the ones this company has a value for.
   const scoredIds = [...new Set((m?.checks ?? []).filter((k) => k.kind === "score").map((k) => k.metricId))];
-  const stats = scoredIds.slice(0, 3).map((id) => ({ id, label: def(id)?.short ?? def(id)?.label ?? id, def: def(id) })).filter((s) => s.def);
+  const ordered = [...scoredIds.filter((id) => c.metrics[id]?.value != null), ...scoredIds.filter((id) => c.metrics[id]?.value == null)];
+  const stats = ordered.slice(0, 3).map((id) => ({ id, label: def(id)?.short ?? def(id)?.label ?? id, def: def(id) })).filter((s) => s.def);
 
   return (
     <Card className="a-glow">
@@ -118,7 +119,9 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
       <div className="mt-4 grid grid-cols-3 gap-2 border-t border-line pt-3">
         {stats.map(({ id, label, def: d }, i) => (
           <div key={id}>
-            <Decode text={formatMetric(c.metrics[id], d!.unit)} delay={900 + i * 120} className="block text-base font-semibold tabular-nums text-ink" />
+            {c.metrics[id]?.value == null
+              ? <span className="block text-base font-semibold text-faint" title={c.metrics[id]?.note}>—</span>
+              : <Decode text={formatMetric(c.metrics[id], d!.unit)} delay={900 + i * 120} className="block text-base font-semibold tabular-nums text-ink" />}
             <div className="text-[11px] text-muted">{label}</div>
           </div>
         ))}
@@ -159,4 +162,9 @@ function WeightBar({ state }: { state: IndexState }) {
       </div>
     </div>
   );
+}
+
+/** "A", "A and B", "A, B and C". */
+function listNames(names: string[]): string {
+  return names.length <= 2 ? names.join(" and ") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 }
