@@ -1,7 +1,10 @@
 {
   "isFake": false,
-  "generatedAt": "2026-11-13T01:30:49.638Z",
+  "industryId": "acquirers",
+  "industryName": "Serial acquirers",
+  "generatedAt": "2026-11-14T14:14:19.388Z",
   "indexName": "Serial acquirers & consolidators",
+  "holdingsSource": "organizers",
   "currency": "USD",
   "question": "Which Canadian companies should be added to the serial acquirers index?",
   "metricDefs": [
@@ -123,6 +126,8 @@
       "bottomLeft": "Light acquirer · weak per-share growth"
     }
   },
+  "mapTitle": "Acquisition spend vs FCF per share growth",
+  "hasStatements": true,
   "companies": [
     {
       "ticker": "CSU",
@@ -7658,6 +7663,136 @@
         "goodwillAdded": 1967000000
       },
       "reportingCurrency": "USD"
+    }
+  ],
+  "unmeasured": [
+    {
+      "ticker": "LMN",
+      "name": "Lumine Group",
+      "listedOn": "TSXV",
+      "subSector": "Communications and media software",
+      "why": "Says it aims to reinvest all free cash flow in acquisitions",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "STN",
+      "name": "Stantec",
+      "listedOn": "TSX",
+      "subSector": "Engineering and design",
+      "why": "150th acquisition since its 1994 IPO, closed Aug 2025",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "GFL",
+      "name": "GFL Environmental",
+      "listedOn": "TSX",
+      "subSector": "Waste management",
+      "why": "\"Over 100 acquisitions\" since 2007 per its 2019 F-1; more than 200 by about 2023",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "FSV",
+      "name": "FirstService",
+      "listedOn": "TSX",
+      "subSector": "Property services",
+      "why": "2025 growth attributed mainly to tuck-under acquisitions",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "CIGI",
+      "name": "Colliers International",
+      "listedOn": "TSX",
+      "subSector": "Real estate services and engineering",
+      "why": "Seven acquisitions from Q2 2025; engineering built by acquisition",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "BYD",
+      "name": "Boyd Group Services",
+      "listedOn": "TSX",
+      "subSector": "Auto collision repair",
+      "why": "Consolidator of collision centres",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "CCL.B",
+      "name": "CCL Industries",
+      "listedOn": "TSX",
+      "subSector": "Specialty packaging and labels",
+      "why": "Named in the Globe's list (as CCL-A)",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "RCH",
+      "name": "Richelieu Hardware",
+      "listedOn": "TSX",
+      "subSector": "Hardware distribution",
+      "why": "In Aktagon's Canadian serial-acquirer screen",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "ATD",
+      "name": "Alimentation Couche-Tard",
+      "listedOn": "TSX",
+      "subSector": "Convenience retail",
+      "why": "Named in the Globe's list",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "DND",
+      "name": "Dye & Durham",
+      "listedOn": "TSX",
+      "subSector": "Legal software",
+      "why": "In Aktagon's screen (ROIC -9.5%); now in a strategic review and selling assets",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "DSG",
+      "name": "Descartes Systems",
+      "listedOn": "TSX",
+      "subSector": "Logistics software",
+      "why": "In both lists",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "ENGH",
+      "name": "Enghouse Systems",
+      "listedOn": "TSX",
+      "subSector": "Contact-centre and telecom software",
+      "why": "In both lists",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "GIB.A",
+      "name": "CGI",
+      "listedOn": "TSX",
+      "subSector": "IT services",
+      "why": "In both lists",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "PBH",
+      "name": "Premium Brands",
+      "listedOn": "TSX",
+      "subSector": "Specialty food",
+      "why": "In both lists",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "EIF",
+      "name": "Exchange Income",
+      "listedOn": "TSX",
+      "subSector": "Aviation and manufacturing",
+      "why": "In Aktagon's screen",
+      "note": "No Onesheet data for this company in the cache"
+    },
+    {
+      "ticker": "MTY",
+      "name": "MTY Food Group",
+      "listedOn": "TSX",
+      "subSector": "Restaurant franchising",
+      "why": "In Aktagon's screen",
+      "note": "No Onesheet data for this company in the cache"
     }
   ],
   "sources": [

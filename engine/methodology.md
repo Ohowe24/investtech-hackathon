@@ -10,10 +10,23 @@ This file says what each metric means and why the thresholds are where they are.
 | Annual statements FY2021–FY2025, all 20 companies (5 candidates + 15 holdings) | Onesheet API `/financials/statements` | `engine/raw/statements/` → `engine/input/financials.csv` |
 | Reported organic growth (CSU, TOI, WSP only) | Onesheet data pack, with the SEDAR quote | `engine/input/organic.csv` |
 | Deals (acquisitions, divestitures) for the 5 candidates | Onesheet data pack events, with SEDAR quotes | `engine/input/deals.json` |
+| REIT figures (FFO, AFFO, payout, debt ratio, occupancy…) for CAR.UN, GRT.UN, KMP.UN, NXR.UN, REI.UN | Onesheet data pack, each value with its SEDAR quote | `engine/input/facts.csv` |
+
+`npm run engine` writes `data/store.json` (every company's figures) and `data/companies.json` (the default view).
 
 `npm run inputs` copies values from the raw files. Nothing is typed by hand. Missing stays empty and becomes `null`.
 
-## Metrics
+## From onboarding to ranking (any holdings)
+
+1. The user picks an industry (a profile in `engine/industries/`) and types the index's holdings, with optional weights.
+2. `/analyze` runs `analyze()` (`engine/analyze.ts`) on the server, the same function `npm run engine` uses.
+3. **Candidates** = the profile's Canadian universe minus anything already held. A held Canadian company is ranked with the holdings, never as a candidate.
+4. Every company is tested on the profile's checks. A company the engine has no data for is **never guessed at**: a holding keeps its row with empty metrics and a note; a candidate is listed under "not tested".
+5. Candidates and holdings are ranked separately, each 1 to N, by the same order: has data, result, share of scored checks passed, checks with data, the profile's tie-break metric.
+6. **Weights of the index:** typed weights are kept as typed. If every weight is typed, cash is what is left of 100%. Otherwise cash is the number entered (default: the organizers' cash) and the holdings without a weight share the rest equally. When the list matches the organizers' index exactly, their live weights and cash are used.
+7. **"Your index median"** on the ranking is the median of the holdings that have a value (`median()` in `metrics.ts`). A reference line, not a check.
+
+## Metrics (serial acquirers)
 
 | id | Formula | Edge cases |
 |---|---|---|
@@ -31,7 +44,7 @@ This file says what each metric means and why the thresholds are where they are.
 
 **Currencies:** every metric is a ratio or growth rate inside one company, so USD, EUR and CAD reporters compare without conversion.
 
-## The test (thresholds in `engine/config.ts`)
+## The test (thresholds in `engine/industries/acquirers.ts`)
 
 Two gates must pass. Five checks are scored.
 
@@ -59,6 +72,31 @@ Two gates must pass. Five checks are scored.
 **Weights:** equal split of a 15% sleeve across the additions, capped at 8.2% each (the index's own top-tier weight). Constellation and Topicus share one slot because Constellation controls Topicus. Cash not needed stays as cash.
 
 **Rank:** recommendation, then share of scored checks passed, then number of checks with data, then FCF per share growth.
+
+## REITs (thresholds in `engine/industries/reits.ts`, research in `reports/REIT evaluation variables.md`)
+
+REITs are judged on **company-reported** figures, not recomputed statements: FFO and AFFO are non-GAAP measures each REIT defines (REALPAC / Nareit). The engine only picks and compares them.
+
+**How a reported figure is picked (`engine/facts.ts`):**
+- A field counts only if its **filing quote names the figure** (and does not name a lookalike). The same field id holds different figures at different REITs: CAPREIT's `affo_ratio` is its ACFO payout, Granite's is capex per square foot, RioCan's recent `debt_ratio` is its floating-rate share. Those are excluded by the quote filters.
+- Values outside a plausible range are skipped (e.g. Granite's `occupancy` field holds a unit count).
+- Flow figures (payout, same-property NOI): the latest fiscal year reported, the longest period within it. A stale full year never beats a fresh nine months.
+- Balance-sheet figures (debt ratio, debt ÷ EBITDA, occupancy): the latest date.
+- Growth (FFO per unit): like for like only, one year apart (FY vs FY, 9M vs 9M, Q3 vs Q3), full years first.
+
+| Metric | Formula | Check |
+|---|---|---|
+| `affoPayout` | REIT's own AFFO payout ratio; if none, distributions per unit ÷ AFFO per unit for the same period | **Must:** ≤ 100%. Score: ≤ 90% |
+| `debtRatio` | Debt ÷ gross book value (or total assets, or the covenant "total indebtedness" ratio), as reported | **Must:** ≤ 60% (strictest declaration-of-trust cap found: RioCan) |
+| `debtToEbitda` | Debt ÷ adjusted EBITDA, as reported. Not computed: debt and EBITDA are dated differently in the data | Score: ≤ 9× (RioCan's target 8–9×; DBRS ratings) |
+| `samePropertyNoi` | Company-wide same-property NOI growth, as reported. Segment-only figures are not used | Score: ≥ 2% (Bank of Canada inflation target) |
+| `ffoPerUnitGrowth` | Latest FFO per unit ÷ same period a year earlier − 1 | Score: ≥ 0% |
+| `occupancy` | As reported, latest date. Definitions differ by REIT | Score: ≥ 93.8% (Nareit, US REITs, Q2 2026) |
+| `affoPerUnitGrowth` | Like `ffoPerUnitGrowth`, on AFFO per unit | Not scored |
+
+Result: same tally as acquirers, needing 3 scored checks with data to pass. Weights: 15% of the index split equally, at most 3.42% each (the REIT index's most common weight).
+
+**REIT limits:** only the 5 data-pack REITs have data; the other Canadian REITs and every REIT-index holding show as "no data" until the Onesheet API is back. Granite reports no debt ratio, so it cannot pass the debt gate. RioCan's latest debt ratio in the data is from December 2024.
 
 ## The map
 
@@ -94,7 +132,7 @@ Each fiscal year in `history` also carries, all `null` when an input is missing:
 
 The `#test` tab presents the existing investment thesis: select Canadian acquirers that turn growth
 into cash flow per share, with disciplined debt and adequate cash returns on invested capital.
-This wording synthesizes the project brief and the declared metric rationale in `engine/config.ts`.
+This wording synthesizes the project brief and the declared metric rationale in `engine/industries/acquirers.ts`.
 The page reads published company decisions and model checks directly from the dataset. It shows
 supporting checks, failed or missing checks, metric periods and source links for additions and other candidates.
 Human decisions remain distinct from model results. No thresholds, scores, company data or portfolio

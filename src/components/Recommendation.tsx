@@ -15,18 +15,21 @@ interface Props {
 /** The answer on one page: which companies we add, how much goes into each, why that size, and what the index looks like after. */
 export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
   const index = snapshot.indexes.find((i) => i.name === dataset.indexName) ?? snapshot.indexes[0];
-  const picks = dataset.companies.filter((c) => c.verdict === "add" && !c.inIndex && c.proposedWeightPct != null);
+  const picks = dataset.companies.filter((c) => c.verdict === "add" && !c.inIndex && c.proposedWeightPct != null).sort((a, b) => (a.model?.rank ?? 0) - (b.model?.rank ?? 0));
   if (!index || picks.length === 0) return <Card title="Recommendation"><p className="text-sm text-muted">No companies to add yet.</p></Card>;
 
+  // Dollar amounts only when the index has a value (an index typed in without one has none).
   const money = (v: number) =>
-    Intl.NumberFormat("en-US", { style: "currency", currency: index.currency, maximumFractionDigits: 0 }).format(v);
+    index.totalValue > 0 ? Intl.NumberFormat("en-US", { style: "currency", currency: index.currency, maximumFractionDigits: 0 }).format(v) : "";
   const additions = picks.map((c) => ({ ticker: c.ticker, name: c.name, weightPct: c.proposedWeightPct!, countryCode: c.hqCountry, subSector: c.subSector }));
   const overrides = Object.fromEntries(dataset.companies.map((c) => [c.ticker, c.hqCountry]));
   const { before, after } = completeIndex(index, additions, overrides);
   const totalPct = additions.reduce((s, a) => s + a.weightPct, 0);
   const fromCash = index.cashPct >= totalPct;
   const names = picks.map((c) => c.ticker).join(" and ");
-  const related = ["CSU", "TOI"].every((t) => picks.some((c) => c.ticker === t));
+  // Picks the profile treats as related (one controls the other) share one weight slot; the rule names them.
+  const slotLine = dataset.rules?.weight?.match(/[^.]*share one slot[^.]*\./)?.[0];
+  const related = !!slotLine && picks.length > 1 && picks.every((c) => slotLine.includes(c.ticker));
 
   return (
     <div className="enter space-y-5">
@@ -38,7 +41,7 @@ export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
           <Decode text={`Add ${picks.map((c) => c.name).join(" and ")}`} letters duration={1100} delay={200} />
         </h1>
         <p className="mt-1 text-sm text-muted">
-          <Decode text={money(amountFor(totalPct, index.totalValue))} delay={700} className="font-semibold text-ink" /> in total,{" "}
+          {index.totalValue > 0 && <><Decode text={money(amountFor(totalPct, index.totalValue))} delay={700} className="font-semibold text-ink" /> in total,{" "}</>}
           <Decode text={pct(totalPct)} delay={800} className="font-semibold text-ink" /> of the index{fromCash ? ", paid from cash. Nothing is sold." : "."}
         </p>
       </Card>
@@ -54,12 +57,11 @@ export default function Recommendation({ dataset, snapshot, onOpen }: Props) {
           <ul className="space-y-2.5 text-sm text-ink">
             {related && (
               <li>
-                <span className="font-semibold">One bet, not two.</span> Constellation controls Topicus, so {names} share one slot.
+                <span className="font-semibold">One bet, not two.</span> {slotLine ?? `${names} share one slot.`}
               </li>
             )}
             <li>
-              <span className="font-semibold">Capped at {pct(totalPct)}.</span> The same size as the index&apos;s top-tier holdings, so no single bet
-              outweighs them.
+              <span className="font-semibold">{pct(totalPct)} in all, by a declared rule.</span> {dataset.rules?.weight?.match(/^.*?\.(?=\s|$)/)?.[0]}
             </li>
             {related && (
               <li>
@@ -86,11 +88,9 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
   const m = c.model;
   const failed = m?.checks.filter((k) => k.pass === false) ?? [];
   const def = (id: string) => dataset.metricDefs.find((d) => d.id === id);
-  const stats = [
-    { id: "fcfPerShareCagr", label: "FCF per share, growth a year" },
-    { id: "cashReturn", label: "Return on capital" },
-    { id: "netDebtToEbitda", label: "Net debt ÷ EBITDA" },
-  ].map((s) => ({ ...s, def: def(s.id) })).filter((s) => s.def);
+  // The first three scored metrics of the industry, in check order.
+  const scoredIds = [...new Set((m?.checks ?? []).filter((k) => k.kind === "score").map((k) => k.metricId))];
+  const stats = scoredIds.slice(0, 3).map((id) => ({ id, label: def(id)?.short ?? def(id)?.label ?? id, def: def(id) })).filter((s) => s.def);
 
   return (
     <Card className="a-glow">
@@ -110,7 +110,7 @@ function Pick({ company: c, dataset, amount, onOpen }: { company: Company; datas
 
       {m && (
         <p className="mt-3 text-sm text-ink">
-          Passes {m.passed} of {m.available} scored checks and both must-pass checks. Ranked #{m.rank} of {dataset.companies.length}.
+          Passes {m.passed} of {m.available} scored checks and every must-pass check. Ranked #{m.rank} of {dataset.companies.length}.
           {failed.length > 0 && <span className="text-muted"> Misses: {failed.map((k) => `${k.label} (${formatMetric(c.metrics[k.metricId], def(k.metricId)?.unit ?? "pct")})`).join(", ")}.</span>}
         </p>
       )}

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { Dataset, IndexSnapshot } from "@contract/types";
-import StartPage from "./StartPage";
+import Link from "next/link";
+import Ranking from "./Ranking";
 import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
@@ -17,14 +18,20 @@ import { prefersReducedMotion, useNow } from "./live/motion";
 import AssistantPanel from "./assistant/AssistantPanel";
 import { Sparkle } from "./assistant/icons";
 import type { Action, GuideContext } from "@/lib/assistant/types";
+import { toSearch, type AnalysisQuery } from "@/lib/query";
 
 interface Props {
   dataset: Dataset;
   snapshot: IndexSnapshot;
+  /** the onboarding's answer that produced this dataset */
+  query: AnalysisQuery;
+  /** how the index weights were set, in one sentence */
+  weightRule?: string;
 }
 
-type Tab = "recommendation" | "companies" | "map" | "index" | "xray";
+type Tab = "ranking" | "recommendation" | "companies" | "map" | "index" | "xray";
 const TABS: { id: Tab; label: string }[] = [
+  { id: "ranking", label: "Ranking" },
   { id: "recommendation", label: "Recommendation" },
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
@@ -32,8 +39,8 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "xray", label: "X-ray" },
 ];
 
-/** The whole app. The address hash holds the view (none = start page, #recommendation, #companies, #map, #index, #xray or #xray/CSU) or the open company (#c/CSU), so Back works. */
-export default function Workbench({ dataset, snapshot }: Props) {
+/** The results. The address hash holds the view (none = ranking, #recommendation, #companies, #map, #index, #xray or #xray/CSU) or the open company (#c/CSU), so Back works. */
+export default function Workbench({ dataset, snapshot, query, weightRule }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
   const [hovered, setHovered] = useState<string | null>(null);
@@ -53,6 +60,13 @@ export default function Workbench({ dataset, snapshot }: Props) {
   useEffect(() => {
     const read = () => setHash(window.location.hash.replace(/^#/, ""));
     read();
+    // Just submitted from the onboarding: play the engine run once.
+    const autoplay = () => {
+      let fresh = false;
+      try { fresh = window.sessionStorage.getItem("engine-run") === "1"; window.sessionStorage.removeItem("engine-run"); } catch {}
+      if (fresh && !prefersReducedMotion()) { setRuns(1); setRun({ to: null }); }
+    };
+    autoplay();
     window.addEventListener("hashchange", read);
     return () => window.removeEventListener("hashchange", read);
   }, []);
@@ -132,13 +146,15 @@ export default function Workbench({ dataset, snapshot }: Props) {
   };
 
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
-  const start = hash === "";
+  const start = hash === "" || hash === "ranking";
+  const tabs = TABS.filter((t) => t.id !== "xray" || dataset.hasStatements !== false);
+  const editHref = `/?${toSearch(query)}`;
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const isXray = hash === "xray" || hash === "test" || hash.startsWith("xray/");
+  const isXray = (hash === "xray" || hash === "test" || hash.startsWith("xray/")) && dataset.hasStatements !== false;
   const xrayTicker = hash.startsWith("xray/") ? decodeURIComponent(hash.slice(5)) : null;
-  const tab: Tab = company ? "companies" : isXray ? "xray" : hash === "map" || hash === "index" || hash === "recommendation" ? hash : "companies";
-  const guideContext: GuideContext = start ? { view: "start" } : company ? { view: "companies", ticker: company.ticker } : { view: tab };
-  const docked = guideOpen && !start;
+  const tab: Tab = start ? "ranking" : company ? "companies" : isXray ? "xray" : hash === "map" || hash === "index" || hash === "recommendation" ? hash : "companies";
+  const guideContext: GuideContext = start ? { view: "start" } : company ? { view: "companies", ticker: company.ticker } : { view: tab === "ranking" ? "start" : tab };
+  const docked = guideOpen;
 
   return (
     <div className={`min-h-screen w-full transition-[padding] duration-300 ${docked ? "lg:pr-[392px]" : ""}`}>
@@ -150,48 +166,50 @@ export default function Workbench({ dataset, snapshot }: Props) {
 
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/35 backdrop-blur-xl">
         <div className="mx-auto flex min-h-14 flex-wrap w-full max-w-[1240px] items-center gap-x-6 gap-y-2 px-5 py-2 md:px-8">
-          <button onClick={() => go("")} className="flex items-center gap-2 text-sm font-semibold tracking-tight text-white">
+          <Link href="/" className="flex items-center gap-2 text-sm font-semibold tracking-tight text-white" title="Start a new analysis">
             <span className="logo-scan grid h-6 w-6 place-items-center rounded-md bg-white text-[11px] font-bold text-ink">X</span>
-            Acquirer X-ray
-          </button>
-          <nav aria-label="Main navigation" className={`flex max-w-full overflow-x-auto items-center gap-1 ${start ? "invisible" : ""}`}>
-            {TABS.map((t) => (
-              <button key={t.id} aria-current={tab === t.id && !start ? "page" : undefined} onClick={() => go(t.id)}
+            Index X-ray
+          </Link>
+          <Link href={editHref} title="Change the industry or the holdings"
+            className="hidden items-center gap-1.5 rounded-md border border-white/15 px-2 py-1 text-[12px] text-white/75 transition-colors hover:border-white/40 hover:text-white md:flex">
+            {dataset.industryName ?? dataset.industryId} · {dataset.companies.filter((c) => c.inIndex).length} holdings <span className="text-white/40">✎</span>
+          </Link>
+          <nav aria-label="Main navigation" className="flex max-w-full overflow-x-auto items-center gap-1">
+            {tabs.map((t) => (
+              <button key={t.id} aria-current={tab === t.id ? "page" : undefined} onClick={() => go(t.id === "ranking" ? "" : t.id)}
                 className={`shrink-0 rounded-md px-3 py-1.5 text-[13px] font-medium transition-colors ${tab === t.id ? "bg-white/15 text-white" : "text-white/60 hover:text-white"}`}>
                 {t.label}
               </button>
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <LiveClock updatedAt={snapshot.updatedAt} />
-            {!start && (
-              <button onClick={() => toggleGuide()} aria-pressed={guideOpen} title="Open the Guide (⌘K)"
-                className={`relative flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] font-medium transition-colors ${guideOpen ? "border-white/25 bg-white/15 text-white" : "border-white/15 text-white/80 hover:border-white/40 hover:text-white"}`}>
-                <Sparkle className="h-3 w-3 text-signal" /> Guide
-                <kbd className="hidden rounded border border-white/15 px-1 font-mono text-[10px] leading-4 text-white/45 xl:inline">⌘K</kbd>
-                {unread && !guideOpen && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-signal shadow-[0_0_8px_rgba(61,220,108,0.9)]" aria-label="New note from the Guide" />}
-              </button>
-            )}
-            {!start && (
-              <button onClick={() => startRun(null)} title="Replay the engine run"
-                className="group flex items-center gap-1.5 rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/80 transition-colors hover:border-signal/60 hover:text-white">
-                <span className="inline-block transition-transform duration-500 group-hover:rotate-180">⟳</span> Re-run
-              </button>
-            )}
+            <LiveClock updatedAt={snapshot.updatedAt} source={snapshot.source} />
+            <button onClick={() => toggleGuide()} aria-pressed={guideOpen} title="Open the Guide (⌘K)"
+              className={`relative flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[12px] font-medium transition-colors ${guideOpen ? "border-white/25 bg-white/15 text-white" : "border-white/15 text-white/80 hover:border-white/40 hover:text-white"}`}>
+              <Sparkle className="h-3 w-3 text-signal" /> Guide
+              <kbd className="hidden rounded border border-white/15 px-1 font-mono text-[10px] leading-4 text-white/45 xl:inline">⌘K</kbd>
+              {unread && !guideOpen && <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-signal shadow-[0_0_8px_rgba(61,220,108,0.9)]" aria-label="New note from the Guide" />}
+            </button>
+            <button onClick={() => startRun(null)} title="Replay the engine run"
+              className="group flex items-center gap-1.5 rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/80 transition-colors hover:border-signal/60 hover:text-white">
+              <span className="inline-block transition-transform duration-500 group-hover:rotate-180">⟳</span> Re-run
+            </button>
           </div>
         </div>
       </header>
 
       <main key={`${hash}|${epoch}`} className="enter mx-auto w-full max-w-[1240px] px-5 py-6 md:px-8 md:py-8">
         {start ? (
-          <StartPage dataset={dataset} snapshot={snapshot} onDone={() => startRun("recommendation")} />
+          <div data-guide="ranking">
+            <Ranking dataset={dataset} snapshot={snapshot} editHref={editHref} weightRule={weightRule} onOpen={(t) => go(`c/${t}`)} onGo={go} />
+          </div>
         ) : company ? (
           <CompanyDashboard key={company.ticker} dataset={dataset} company={company} onOpen={(t) => go(`c/${t}`)} onBack={() => go("companies")} />
         ) : tab === "recommendation" ? (
           <div data-guide="recommendation"><Recommendation dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} /></div>
         ) : tab === "map" ? (
           <div data-guide="map">
-            <Card title="Acquisition spend vs FCF per share growth">
+            <Card title={dataset.mapTitle ?? "Map"}>
               <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
             </Card>
           </div>
@@ -217,7 +235,7 @@ export default function Workbench({ dataset, snapshot }: Props) {
         <button type="button" aria-label="Close the guide" onClick={() => toggleGuide(false)} className="fixed inset-0 z-40 bg-black/55 backdrop-blur-[2px] lg:hidden" />
         <aside aria-label="Guide"
           className="guide-panel fixed inset-x-0 bottom-0 z-50 h-[86dvh] overflow-hidden rounded-t-2xl bg-white shadow-[0_-24px_60px_rgba(0,0,0,0.5)] lg:bottom-3 lg:left-auto lg:right-3 lg:top-3 lg:h-auto lg:w-[380px] lg:rounded-xl lg:shadow-[0_30px_80px_-24px_rgba(0,0,0,0.8),0_0_0_1px_rgba(255,255,255,0.06)]">
-          <AssistantPanel dataset={dataset} snapshot={snapshot} open={docked} context={guideContext} focusKey={focusKey}
+          <AssistantPanel dataset={dataset} snapshot={snapshot} query={query} open={docked} context={guideContext} focusKey={focusKey}
             onClose={() => toggleGuide(false)} onUnread={() => setUnread(true)} onAction={onGuideAction} />
         </aside>
       </div>
@@ -237,10 +255,10 @@ function readGuideOpen(): boolean {
 }
 
 /** A pulsing LIVE marker with the local time, ticking. Hover for when the organizers' holdings were last pulled. */
-function LiveClock({ updatedAt }: { updatedAt: string }) {
+function LiveClock({ updatedAt, source }: { updatedAt: string; source: string }) {
   const now = useNow(1000);
   return (
-    <span title={`Organizers' holdings as of ${new Date(updatedAt).toLocaleString("en-CA")}`}
+    <span title={`Holdings: ${source}, as of ${new Date(updatedAt).toLocaleString("en-CA")}`}
       className="hidden items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1 font-mono text-[11px] text-white/70 sm:flex">
       <span className="live-dot" />
       <span className="font-semibold tracking-[0.14em] text-signal">LIVE</span>

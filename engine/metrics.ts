@@ -176,3 +176,11 @@ export function evaluateScreen(
     ...tally(results.filter((c) => c.kind === "gate").map((c) => c.pass), results.filter((c) => c.kind === "score").map((c) => c.pass), rules),
   };
 }
+
+/** Median of the values present (nulls skipped). Null if none. Used for "your index median" comparisons. */
+export function median(values: N[]): number | null {
+  const v = values.filter((x): x is number => x != null && Number.isFinite(x)).sort((a, b) => a - b);
+  if (v.length === 0) return null;
+  const mid = Math.floor(v.length / 2);
+  return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
+}

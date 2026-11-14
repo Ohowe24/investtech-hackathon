@@ -41,8 +41,8 @@ function buildRun(dataset: Dataset) {
   const start = new Map<string, number>();
 
   const built = new Date(dataset.generatedAt).toISOString().replace("T", " ").slice(0, 16) + " UTC";
-  log.push({ at: 0, tone: "head", tag: "boot", text: "Acquirer X-ray engine" });
-  log.push({ at: 140, tone: "dim", tag: "load", text: `data/companies.json · built ${built}` });
+  log.push({ at: 0, tone: "head", tag: "boot", text: `${dataset.industryName ?? "Index"} engine` });
+  log.push({ at: 140, tone: "dim", tag: "load", text: `${dataset.holdingsSource === "user" ? "your holdings" : "organizers' holdings"} · run ${built}` });
   log.push({ at: 280, tone: "dim", tag: "load", text: `${tested.length} companies · ${dataset.sources.length} filings · ${dataset.metricDefs.length} metrics` });
   log.push({ at: 420, tone: "dim", tag: "index", text: dataset.indexName });
   rules.forEach((k, i) =>

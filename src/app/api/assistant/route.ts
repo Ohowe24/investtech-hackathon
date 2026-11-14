@@ -6,10 +6,12 @@ import datasetJson from "@data/companies.json";
 import snapshotJson from "@data/indexes.json";
 import type { Dataset, IndexSnapshot } from "@contract/types";
 import { answer, notice } from "@/lib/assistant/brain";
+import { fromSearch, toSearch, type AnalysisQuery } from "@/lib/query";
+import { runAnalysis } from "@/lib/server/analysis";
 import type { AskRequest, Reply, StreamEvent, View } from "@/lib/assistant/types";
 
-const dataset = datasetJson as unknown as Dataset;
-const snapshot = snapshotJson as unknown as IndexSnapshot;
+const defaultDataset = datasetJson as unknown as Dataset;
+const defaultSnapshot = snapshotJson as unknown as IndexSnapshot;
 const VIEWS: View[] = ["start", "recommendation", "companies", "map", "index", "xray"];
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -51,6 +53,14 @@ export async function POST(request: Request) {
   const view = VIEWS.includes(body?.context?.view) ? body.context.view : "companies";
   const ticker = typeof body?.context?.ticker === "string" ? body.context.ticker : undefined;
   const context = { view, ticker };
+
+  // Answer about the holdings the page shows. The query is re-read through the same parser as the address,
+  // so nothing in the body reaches the engine unchecked.
+  const q = (body as AskRequest & { query?: AnalysisQuery }).query;
+  const parsed = q && typeof q === "object" ? fromSearch(Object.fromEntries(new URLSearchParams(toSearch(q)))) : null;
+  const run = parsed ? runAnalysis(parsed) : null;
+  const dataset = run?.ok ? run.dataset : defaultDataset;
+  const snapshot = run?.ok ? run.snapshot : defaultSnapshot;
 
   const reply = body.mode === "notice"
     ? notice(dataset, snapshot, context)

@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Acquirer X-ray",
+  title: "Index X-ray",
   description: "InvestTech Hackathon · Trimestre Q4, Montréal",
 };
 

@@ -5,6 +5,7 @@
 // Styled as one of the site's own white cards: ink text, hairline borders, teal for meaning.
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { AnalysisQuery } from "@/lib/query";
 import type { Dataset, IndexSnapshot } from "@contract/types";
 import { INDEX_SOURCE } from "@/lib/assistant/brain";
 import type { Action, AskRequest, Block, GuideContext, StreamEvent, View } from "@/lib/assistant/types";
@@ -30,6 +31,8 @@ type Msg = { id: string; role: "user"; text: string } | GuideMsg;
 interface Props {
   dataset: Dataset;
   snapshot: IndexSnapshot;
+  /** the analysis this page shows; sent along so the server answers about the same holdings */
+  query?: AnalysisQuery;
   open: boolean;
   context: GuideContext;
   /** bump to move the cursor into the question box */
@@ -41,7 +44,7 @@ interface Props {
 }
 
 const VIEW_NAMES: Record<View, string> = {
-  start: "Start",
+  start: "Ranking",
   recommendation: "Recommendation",
   companies: "Companies",
   map: "Map",
@@ -57,7 +60,7 @@ const emptyGuide = (id: string, kind: GuideMsg["kind"], place?: string): GuideMs
   id, role: "guide", kind, place, steps: [], text: "", blocks: [], sourceIds: [], actions: [], suggestions: [], streaming: true,
 });
 
-export default function AssistantPanel({ dataset, snapshot, open, context, focusKey, onClose, onUnread, onAction }: Props) {
+export default function AssistantPanel({ dataset, snapshot, query, open, context, focusKey, onClose, onUnread, onAction }: Props) {
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
@@ -100,7 +103,7 @@ export default function AssistantPanel({ dataset, snapshot, open, context, focus
   const run = useCallback(async (req: AskRequest, id: string) => {
     const firstText = { v: false };
     try {
-      const res = await fetch("/api/assistant", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req) });
+      const res = await fetch("/api/assistant", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...req, query }) });
       if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
       const reader = res.body.getReader();
       const decoder = new TextDecoder();
@@ -120,7 +123,7 @@ export default function AssistantPanel({ dataset, snapshot, open, context, focus
     } catch {
       patch(id, (m) => (req.mode === "notice" ? null : { ...m, streaming: false, error: "I couldn't reach my local API (/api/assistant). Is the dev server running?" }));
     }
-  }, [apply, patch]);
+  }, [apply, patch, query]);
 
   const ask = (q: string) => {
     const text = q.trim();

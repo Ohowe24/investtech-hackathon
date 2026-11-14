@@ -5,7 +5,8 @@
 // compared with the value the engine stored. Nothing is estimated: a gap is reported, never hidden.
 
 import type { CheckResult, Company, Dataset, ModelResult, Verdict, YearRow } from "../contract/types";
-import { config } from "./config";
+import { getIndustry } from "./industries";
+import type { IndustryProfile } from "./industries/types";
 import {
   acquisitionIntensity, cagr, cashReturnOnCapital, equalWeights, freeCashFlow, meanStrict, netDebt, netDebtToEbitda, passes, pctChange, perShare, sumStrict, tally,
 } from "./metrics";
@@ -50,7 +51,7 @@ export interface CheckProof {
   /** passes() re-run on the stored value and the declared threshold */
   rerun: boolean | null;
   match: boolean;
-  /** the dataset's threshold equals the one declared in engine/config.ts */
+  /** the dataset's threshold equals the one declared in its industry profile (engine/industries/) */
   ruleMatch: boolean;
   /** distance from the pass line in the metric's unit: positive clears it, negative misses it */
   headroom: number | null;
@@ -208,27 +209,28 @@ export function headroom(value: number | null, op: ">=" | "<=", threshold: numbe
 }
 
 /** The result the engine's tally() gives for a set of check results. */
-export function tallyChecks(checks: Pick<CheckResult, "kind" | "pass">[]) {
+export function tallyChecks(checks: Pick<CheckResult, "kind" | "pass">[], profile: IndustryProfile = getIndustry()) {
   return tally(
     checks.filter((k) => k.kind === "gate").map((k) => k.pass),
     checks.filter((k) => k.kind === "score").map((k) => k.pass),
-    config.scoring,
+    profile.scoring,
   );
 }
 
 /** For each check: what the result would become if that one check came out the other way. */
-export function flipResults(checks: Pick<CheckResult, "kind" | "pass">[]): (Rec | null)[] {
-  const now = tallyChecks(checks).recommendation;
+export function flipResults(checks: Pick<CheckResult, "kind" | "pass">[], profile: IndustryProfile = getIndustry()): (Rec | null)[] {
+  const now = tallyChecks(checks, profile).recommendation;
   return checks.map((k, i) => {
     if (k.pass === null) return null;
     const flipped = checks.map((x, j) => (j === i ? { ...x, pass: !k.pass } : x));
-    const r = tallyChecks(flipped).recommendation;
+    const r = tallyChecks(flipped, profile).recommendation;
     return r === now ? null : r;
   });
 }
 
 /** Weights the engine's weight rule gives the companies it adds (related companies share one slot). */
 export function rerunWeights(ds: Dataset): Record<string, number> {
+  const config = getIndustry(ds.industryId);
   const adds = ds.companies.filter((c) => !c.inIndex && c.verdict === "add").map((c) => c.ticker);
   const groups: string[][] = [];
   for (const t of adds) {
@@ -244,9 +246,10 @@ const fromModel = (r: Rec): Verdict => (r === "pass" ? "add" : r === "mixed" ? "
 
 /** Everything the X-ray page shows for one company. `indexCountry` is the organizers' label, if it holds the company. */
 export function proveCompany(ds: Dataset, c: Company, indexCountry?: string): CompanyProof {
+  const config = getIndustry(ds.industryId);
   const reproductions = ds.metricDefs.map((d) => reproduce(ds, c, d.id));
   const stored = c.model?.checks ?? [];
-  const flips = flipResults(stored);
+  const flips = flipResults(stored, config);
   const checks: CheckProof[] = stored.map((k, i) => {
     const value = c.metrics[k.metricId]?.value ?? null;
     const declared = config.checks.find((d) => d.id === k.id);
@@ -261,7 +264,7 @@ export function proveCompany(ds: Dataset, c: Company, indexCountry?: string): Co
       flipsTo: flips[i],
     };
   });
-  const t = tallyChecks(stored);
+  const t = tallyChecks(stored, config);
   const storedRec = c.model?.recommendation ?? t.recommendation;
   const modelVerdict = fromModel(t.recommendation);
   const weights = rerunWeights(ds);
@@ -311,6 +314,7 @@ export interface EngineProof {
 
 /** The whole dataset re-run: how many of the engine's stored answers the proof reproduces. */
 export function proveEngine(ds: Dataset): EngineProof {
+  const config = getIndustry(ds.industryId);
   const proofs = ds.companies.filter((c) => c.model).map((c) => proveCompany(ds, c));
   const count = <T,>(xs: T[], ok: (x: T) => boolean) => ({ matched: xs.filter(ok).length, total: xs.length });
   const reps = proofs.flatMap((p) => p.reproductions.filter((r) => r.method !== "none"));

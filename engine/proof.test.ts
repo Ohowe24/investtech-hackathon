@@ -2,8 +2,10 @@ import { describe, expect, it } from "vitest";
 import datasetJson from "../data/companies.json";
 import snapshotJson from "../data/indexes.json";
 import type { CheckResult, Dataset, IndexSnapshot } from "../contract/types";
-import { config } from "./config";
+import { getIndustry } from "./industries";
 import { flipResults, headroom, proveCompany, proveEngine, reproduce, rerunWeights, tallyChecks } from "./proof";
+
+const config = getIndustry("acquirers");
 
 const ds = datasetJson as unknown as Dataset;
 const snap = snapshotJson as unknown as IndexSnapshot;
