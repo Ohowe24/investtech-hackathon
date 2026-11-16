@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { netDebt, ratioOfPositive,
+import { cashPayoutRatio, distributionsInYear, netDebt, ratioOfPositive,
   acquisitionIntensity,
   meanStrict,
   cashReturnOnCapital,
@@ -187,5 +187,34 @@ describe("ratioOfPositive", () => {
     expect(ratioOfPositive(10, 0)).toBeNull();
     expect(ratioOfPositive(10, -5)).toBeNull();
     expect(ratioOfPositive(null, 5)).toBeNull();
+  });
+});
+
+describe("distributionsInYear", () => {
+  const d = [
+    { date: "2024-12-31", amount: 1 },
+    { date: "2025-01-31", amount: 0.5 },
+    { date: "2025-06-30", amount: 0.5 },
+    { date: "2025-12-31", amount: 0.25 },
+    { date: "2026-01-31", amount: 9 },
+  ];
+  it("sums the year after the prior year-end, up to and including the year-end", () => {
+    expect(distributionsInYear(d, "2025-12-31")).toBeCloseTo(1.25);
+  });
+  it("works for a mid-year fiscal year-end", () => {
+    expect(distributionsInYear(d, "2025-06-30")).toBeCloseTo(2);
+  });
+  it("is null when nothing falls in the window", () => {
+    expect(distributionsInYear(d, "2023-12-31")).toBeNull();
+  });
+});
+
+describe("cashPayoutRatio", () => {
+  it("is distributions per unit over operating cash flow per unit", () => {
+    expect(cashPayoutRatio(0.72, 120, 100)).toBeCloseTo(0.6);
+  });
+  it("is null when operating cash flow is not positive", () => {
+    expect(cashPayoutRatio(0.72, -5, 100)).toBeNull();
+    expect(cashPayoutRatio(0.72, 120, null)).toBeNull();
   });
 });

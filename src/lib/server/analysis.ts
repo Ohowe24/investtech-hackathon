@@ -23,7 +23,7 @@ export const storeIsFake = (): boolean => store.isFake;
 function measurable(profile: IndustryProfile, ticker: string): boolean {
   const s = store.companies[ticker];
   if (!s) return false;
-  const { metrics } = profile.computeMetrics(s.financials, { ticker, lookup: (f) => s.extras[f], facts: s.facts });
+  const { metrics } = profile.computeMetrics(s.financials, { ticker, lookup: (f) => s.extras[f], facts: s.facts, distributions: s.distributions ?? [] });
   return profile.checks.some((k) => passes(metrics[k.metricId]?.value, k.op, k.threshold) !== null);
 }
 

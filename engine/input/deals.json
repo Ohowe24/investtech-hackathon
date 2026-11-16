@@ -1418,5 +1418,1932 @@
         }
       ]
     }
+  ],
+  "CAR.UN": [
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-09-30",
+      "periodLabel": "Q3 2026",
+      "fiscalYear": 2026,
+      "summary": "CAPREIT disposed of a residential property with 90 suites located in Montréal, QC for a gross sale price of $21.8 million in Q3 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "CAPREIT disposed of a residential property with 90 suites located in Montréal, QC. The gross sale price was $21.8 million (excluding transaction costs and customary adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-05-01",
+      "fiscalYear": 2026,
+      "counterparty": "ERES Unitholders",
+      "summary": "CAPREIT completed the acquisition of all outstanding ERES Units not already owned by CAPREIT for cash consideration of $1.19 per unit, closing on May 1, 2026 for total consideration of $98,662 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-07",
+          "quote": "In March 2026, CAPREIT entered into an agreement to acquire all of the issued and outstanding units of ERES not already owned by CAPREIT."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-07",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98,662. CAPREIT funded the ERES Transaction with cash on hand and availability from the revolving acquisition and operating facility"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-07",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98.7 million. CAPREIT funded the ERES Transaction with cash on hand and availability from the Acquisition and Operating Facility."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-06",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98,662. CAPREIT funded the ERES Transaction with cash on hand and availability from the revolving acquisition and operating facility"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-06",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98.7 million (excluding transaction costs). CAPREIT funded the ERES Transaction with cash on hand and availability from the Acquisition and Operating Facility."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98,662. CAPREIT funded the ERES Transaction with cash on hand and availability from the revolving acquisition and operating facility"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "The ERES Transaction closed on May 1, 2026 for $98.7 million (excluding transaction costs). CAPREIT funded the ERES Transaction with cash on hand and availability from the Acquisition and Operating Facility."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-04-01",
+      "periodLabel": "Q2 2026",
+      "fiscalYear": 2026,
+      "summary": "CAPREIT disposed of a Dutch property through ERES in April 2026, triggering a current income tax expense of $5,516 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "a subsidiary of ERES has entered into an agreement to sell entities owning 1,446 residential suites in the Netherlands for gross proceeds, net of estimated adjustments, of approximately $522,000"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "a subsidiary of ERES has entered into an agreement to sell entities owning 1,446 residential suites in the Netherlands for gross proceeds, net of estimated adjustments, of approximately $522.0 million"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "ERES also entered into several agreements to sell its German commercial property and one of its residential properties in the Netherlands for total gross proceeds of approximately $45.4 million. The sales are expected to close in the third quarter of 2025."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "ERES has launched a sale process for all or a portion of the balance of the ERES portfolio."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "a subsidiary of ERES has entered into an agreement to sell entities owning 1,446 residential suites in the Netherlands for gross proceeds, net of estimated adjustments, of approximately $522.0 million. Subject to the satisfaction of closing conditions, the announced disposition is expected to close on September 15, 2025."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "CAPREIT disposed of 1,559 residential suites from multiple residential properties and single residential suites located in the Netherlands, as well as two commercial properties in Belgium and Germany. The gross sale price was $645.9 million"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "CAPREIT's divestment from its land lease interest in a non-core 471-suite property in North Vancouver, British Columbia, which was sold to Nch'kay Development Corporation...was disposed of on September 10, 2025 for $54.2 million."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "We also divested $783 million (on a consolidated basis) from ancillary interests in Europe, held through 65% ownership of European Residential REIT (ERES), from which CAPREIT received a special cash distribution of approximately $223 million."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-12",
+          "quote": "On September 10, 2025, CAPREIT disposed of a property with a land leasehold interest. As a result, CAPREIT derecognized the associated right-of-use asset and lease liability."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-12",
+          "quote": "ERES has announced that it has entered into agreements to sell four properties consisting of 410 residential suites in the Netherlands for approximately $141.4 million (excluding transaction costs and other customary adjustments)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "As at December 31, 2025, CAPREIT classified certain properties in the Netherlands as assets held for sale totalling $141,392."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "In April 2026, CAPREIT disposed of a Dutch property for which a deferred income tax liability had not been previously recognized. Current income tax expense of $5,516 relating to the disposition of that asset was recorded upon disposition."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q2 2026",
+      "fiscalYear": 2026,
+      "summary": "CAPREIT acquired one property in Vancouver, British Columbia with 51 suites and completed an operating lease buyout in Mississauga, Ontario for a total gross purchase price of $37.1 million in Q2 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-06",
+          "quote": "CAPREIT acquired one property in Vancouver, British Columbia with 51 suites and completed an operating lease buyout in Mississauga, Ontario for a total gross purchase price of $37.1 million (excluding transaction costs and customary adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "CAPREIT disposed of a residential property in Charlottetown, PEI during Q1 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "CAPREIT disposed of 839 residential suites which were comprised of three non-core residential properties located in Canada. The gross sale price was $136.7 million (excluding transaction costs and customary adjustments)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "CAPREIT has closed on the sale of $411 million in non-core, under-performing assets in Canada."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-12",
+          "quote": "for the year ended December 31, 2025, CAPREIT disposed of 4,600 suites and sites for a total gross sale price of $1.2 billion, consisting of $411.3 million in Canada and $783.5 million in Europe"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-07",
+          "quote": "disposed of a residential property located in Charlottetown, PEI, and three residential properties and a single unit in the Netherlands. The gross sale price was $101.4 million, consisting of $28.0 million in Canada"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "CAPREIT disposed of three residential properties and a single unit in the Netherlands during Q1 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "Represents disposition of seven residential properties. (5) Represents disposition of an office property."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-12",
+          "quote": "four single residential suites located in the Netherlands. The gross sale price was $2.7 million, consisting of $0.4 million in Canada and $2.3 million in Europe (excluding transaction costs and customary adjustments)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-07",
+          "quote": "three residential properties and a single unit in the Netherlands. The gross sale price was $101.4 million, consisting of $28.0 million in Canada and $73.4 million in Europe (excluding transaction costs and customary adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-09-05",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of commercial properties located in Germany on September 5, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "NOI from the commercial properties located in Germany and Belgium, which were disposed of on September 5, 2025 and July 31, 2025, respectively."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-06-30",
+      "periodLabel": "H1 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT acquired four properties with 420 suites in Canada for a total gross purchase price of $152.1 million in the first half of 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "For the six months ended June 30, 2025, CAPREIT acquired four properties with 420 suites in Canada for a total gross purchase price of $152.1 million (excluding transaction costs and other adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-06-30",
+      "periodLabel": "H1 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of 2,196 suites and sites for a total gross sale price of $411.0 million in the first half of 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "For the six months ended June 30, 2025, CAPREIT disposed of 2,196 suites and sites for a total gross sale price of $411.0 million, consisting of $274.3 million in Canada and $136.7 million in Europe (excluding transaction costs and other adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-06-30",
+      "periodLabel": "Q2 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of 357 sites in the last remaining MHC property in Moncton, New Brunswick in Q2 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-08-07",
+          "quote": "CAPREIT disposed of 357 sites in the last remaining MHC property located in Moncton, New Brunswick; a non-core residential property with 56 suites located in Summerside, Prince Edward Island and two single residential suites located in the Netherlands. The gross sale price was $23.1 million"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-04-15",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of an additional 357 MHC sites in Moncton, New Brunswick on April 15, 2025 for a total gross sale price of $12.5 million, representing the last MHC property previously owned by CAPREIT.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "On April 15, 2025, CAPREIT disposed of an additional 357 MHC sites in Moncton, New Brunswick for a total gross sale price of $12.5 million (excluding transaction costs and other adjustments). This disposition represents the last MHC property that was previously owned by CAPREIT"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-04-11",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT acquired an additional 102 suites in Montréal, Québec on April 11, 2025 for a total gross purchase price of $39.7 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "On April 11, 2025, CAPREIT acquired an additional 102 suites in Montréal, Québec for a total gross purchase price of $39.7 million (excluding transaction costs and other adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-03-31",
+      "periodLabel": "Q1 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of 1,190 suites across four non-core Canadian portfolios, an MHC property, an office property, and 10 residential properties in the Netherlands for gross sale price of $388.0 million in Q1 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "CAPREIT disposed of 1,190 suites, which were comprised of four non-core portfolios located in Canada; an MHC property with 176 sites located in Medicine Hat, Alberta; an office property located in Montréal, Québec; and 10 residential properties in the Netherlands with 415 suites. The gross sale price was $388.0 million"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT acquired 15 properties with 1,891 suites in Canada for a total gross purchase price of $658.6 million for the full year 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "For the nine months ended September 30, 2025, CAPREIT acquired eight properties with 922 suites in Canada for a total gross purchase price of $309.9 million (excluding transaction costs and customary adjustments)."
+        },
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-12",
+          "quote": "For the year ended December 31, 2025, CAPREIT acquired 15 properties with 1,891 suites in Canada for a total gross purchase price of $658.6 million (excluding transaction costs and customary adjustments)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1-Q3 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of 4,594 suites and sites for a total fair value of $1,191,416 thousand during the nine months ended September 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "for the nine months ended September 30, 2025, CAPREIT disposed of 4,594 suites and sites for a total gross sale price of $1,193.6 million, consisting of $410.9 million in Canada and $782.7 million in Europe"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-06",
+          "quote": "CAPREIT disposed of land adjacent to an existing residential building in Toronto, Ontario, and one residential property with 201 suites and three single residential suites located in the Netherlands. The gross sale price was $72.5 million, consisting of $1.0 million in Canada and $71.5 million in Europe"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-06",
+          "quote": "for the six months ended June 30, 2026, CAPREIT disposed of 522 suites for a total gross sale price of $173.9 million, consisting of $29.0 million in Canada and $144.9 million in Europe (excluding transaction costs and customary adjustments)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "For the nine months ended September 30, 2025, CAPREIT disposed of 4,594 suites and sites for a total fair value of $1,191,416."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "We disposed of one property in Canada for $22 million in gross proceeds"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q3 2025",
+      "fiscalYear": 2025,
+      "summary": "CAPREIT disposed of its remaining MHC properties during the nine months ended September 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-05-08",
+          "quote": "Relates to the remaining MHC property that was classified as assets held for sale as at March 31, 2025."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "Relates to the remaining MHC properties that were classified as assets held for sale as at December 31, 2024."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "summary": "CAPREIT reinvested $366 million into the acquisition of nine strategically aligned, high-quality properties in Canada's urban neighbourhoods.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2025-11-06",
+          "quote": "we reinvested $366 million into the acquisition of nine strategically aligned, high-quality properties located in the heart of several of Canada's most desirable urban neighbourhoods."
+        }
+      ]
+    }
+  ],
+  "GRT.UN": [
+    {
+      "type": "divestiture",
+      "status": "expected",
+      "date": "Q4 2026",
+      "periodLabel": "Q4 2026",
+      "fiscalYear": null,
+      "summary": "Granite expects to complete the disposition of assets held for sale of approximately $81 million by early Q4 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "The FFO per unit forecast assumes that the disposition of assets held for sale of approximately $81 million will be completed by early Q4 2026."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-07-20",
+      "fiscalYear": 2026,
+      "summary": "On July 20, 2026, Granite completed the disposition of an income-producing property in Canada for a gross sale price of $16.5 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-05",
+          "quote": "On July 20, 2026, Granite completed the disposition of an income-producing property in Canada that was classified as held for sale as at June 30, 2026, for a gross sale price of $16.5 million"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-03-11",
+      "fiscalYear": 2026,
+      "summary": "Granite disposed of the Palmetto, Georgia investment property on March 11, 2026, with the related bonds assigned to the buyer.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-06",
+          "quote": "In conjunction with the disposal of the investment property on March 11, 2026 (note 4), the related bonds were assigned to the buyer. As a result, the Trust is no longer the bondholder and the obligor of the bonds."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-05",
+          "quote": "In conjunction with the disposal of the investment property on March 11, 2026 (note 4), the related bonds were assigned to the buyer. As a result, the Trust is no longer the bondholder and the obligor of the bonds."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "In conjunction with the disposal of the investment property on March 11, 2026 (note 4), the related bonds were assigned to the buyer."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q2 2026",
+      "fiscalYear": 2026,
+      "summary": "Granite disposed of two income-producing properties located in the Netherlands and United States during the six months ended June 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-05",
+          "quote": "During the six month period ended June 30, 2026, Granite disposed of two income-producing properties located in the Netherlands and United States."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-19",
+      "fiscalYear": 2025,
+      "summary": "Granite disposed of three properties in the United States on December 19, 2025, recognizing a loss on sale of $2.0 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "loss on sale of investment properties for the three month period and for the year ended December 31, 2025 was $2.0 million and primarily related to broker commissions and legal and advisory costs associated with the dispositions of three properties in the United States on December 19, 2025"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "2025",
+      "fiscalYear": 2025,
+      "summary": "Granite acquired eight income-producing properties in the United States and the United Kingdom for $341.8 million during the year ended December 31, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-25",
+          "quote": "the acquisitions of eight income-producing properties in the United States and the United Kingdom for $341.8 million, excluding associated transaction costs"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "summary": "During the year ended December 31, 2025, Granite disposed of three income-producing properties located in the United States.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-25",
+          "quote": "During the year ended December 31, 2025, Granite disposed of three income-producing properties located in the United States."
+        }
+      ]
+    }
+  ],
+  "KMP.UN": [
+    {
+      "type": "divestiture",
+      "status": "expected",
+      "date": "H2 2026",
+      "periodLabel": "H2 2026",
+      "fiscalYear": null,
+      "summary": "Killam expects to sell MHC portfolio assets in the second half of 2026 as part of its capital recycling program.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-06",
+          "quote": "Disposition activity is focused on the MHC portfolio, with sales expected to occur in the second half of 2026."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "expected",
+      "date": "2026-10-09",
+      "fiscalYear": 2026,
+      "summary": "Killam entered into a purchase and sale agreement to sell 3,021 MHC sites for gross proceeds of $93.8 million, with the sale expected to close in early 2027.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-04",
+          "quote": "On October 9, 2026, Killam entered into a purchase and sale agreement to sell 3,021 MHC sites for gross proceeds of $93.8 million. The sale is expected to close in early 2027."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-01-26",
+      "fiscalYear": 2026,
+      "summary": "Killam completed the acquisition of a 109-unit property located in Halifax, NS on January 26, 2026, for a purchase price of $29.6 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "On January 26, 2026, Killam completed the acquisition of a 109-unit property located in Halifax, NS, for a purchase price of $29.6 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-08",
+      "fiscalYear": 2025,
+      "summary": "Killam sold 36 Westridge Crescent apartments in Charlottetown, PEI on December 8, 2025 for $630 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "36 Westridge Crescent Charlottetown, PEI 08-Dec-25 100 % Apartment 8 630 630"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-09-08",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Woodward Gardens apartments in Saint John, NB on September 8, 2025 for $17,000 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Woodward Gardens Saint John, NB 08-Sep-25 100 % Apartment 99 17,000 10,270"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-08-07",
+      "fiscalYear": 2025,
+      "summary": "Killam sold a portfolio of 11 properties in Charlottetown and Summerside, PEI for $81.9 million, generating net cash proceeds of $41.6 million on August 7, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "On August 7, 2025, Killam sold a portfolio of 11 properties located in Charlottetown and Summerside, PEI, for $81.9 million, generating net cash proceeds of $41.6 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-08-07",
+      "fiscalYear": 2025,
+      "summary": "Killam sold a portfolio of 11 properties in Charlottetown and Summerside, PEI on August 7, 2025 for $81,940 thousand generating net cash proceeds of $41,580 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "On August 7, 2025, Killam sold a portfolio of 11 properties located in Charlottetown and Summerside, PEI, for $81.9 million, generating net cash proceeds of $41.6 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired a 50% interest in Gloucester City Centre Block 3 & 7 (land for development) in Ottawa, ON for $2,680 thousand on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Gloucester City Centre Block 3 & 7 Ottawa, ON 30-Jul-25 50 % Land for development N/A 2,680 -"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired the remaining 50% ownership interest in Frontier in Ottawa, ON for $48,100 thousand on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Killam acquired the remaining 50% ownership interest in these three apartment properties located in Ottawa, ON, previously held through a joint operation."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired the remaining 50% ownership interest in Gloucester City Centre, previously held through a joint operation, on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "On July 30, 2025, Killam acquired the remaining 50% ownership interest in Gloucester City Centre, previously held through a joint operation."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired the remaining 50% ownership interest in Latitude in Ottawa, ON for $47,700 thousand on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Killam acquired the remaining 50% ownership interest in these three apartment properties located in Ottawa, ON, previously held through a joint operation."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired the remaining 50% ownership interest in Luma in Ottawa, ON for $40,200 thousand on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "The purchase of the remaining 50% interest in Luma included an additional 4,960 SF of ancillary commercial space."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "Killam sold its 50% interest in Gloucester City Centre Block 2 (land for development) in Ottawa, ON on July 30, 2025 for $2,680 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Gloucester City Centre Block 2 Ottawa, ON 30-Jul-25 50 % Land for development N/A 2,680 2,680"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-22",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired Ashley Apartments in Fredericton, NB at 100% interest for $28,700 thousand on July 22, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Ashley Apartments Fredericton, NB 22-Jul-25 100 % Apartment 114 $28,700 $15,810"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-03",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Burns Avenue apartments in Charlottetown, PEI on July 3, 2025 for $9,000 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Burns Avenue Charlottetown, PEI 03-Jul-25 100 % Apartment 60 9,000 9,000"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-26",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Brighton House apartments in Charlottetown, PEI on May 26, 2025 for $7,300 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Brighton House Charlottetown, PEI 26-May-25 100 % Apartment 47 7,300 4,660"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-26",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Charlotte Court apartments in Charlottetown, PEI on May 26, 2025 for $3,900 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Charlotte Court Charlottetown, PEI 26-May-25 100 % Apartment 49 3,900 2,850"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-26",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Spring Park Apartments in Charlottetown, PEI on May 26, 2025 for $4,680 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Spring Park Apartments Charlottetown, PEI 26-May-25 100 % Apartment 32 4,680 1,720"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-05",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Ridgeview Terrace Apartments in Grand Falls, NL on May 5, 2025 for $5,070 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Ridgeview Terrace Apartments Grand Falls, NL 05-May-25 100 % Apartment 59 5,070 2,850"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-02",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Lakeview Court MHC in Gander, NL on May 2, 2025 for $2,930 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Lakeview Court Gander, NL 02-May-25 100 % MHC 86 2,930 1,830"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-02",
+      "fiscalYear": 2025,
+      "summary": "Killam sold Sunset Parkway MHC in Corner Brook, NL on May 2, 2025 for $1,870 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Sunset Parkway Corner Brook, NL 02-May-25 100 % MHC 84 1,870 1,100"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-05-01",
+      "fiscalYear": 2025,
+      "summary": "Killam sold its two MHC properties located in Newfoundland and Labrador in May 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Killam sold its two MHC properties located in Newfoundland and Labrador (NL) in May 2025."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-01-07",
+      "fiscalYear": 2025,
+      "summary": "Killam sold its 50% interest in 425 5 St SW (land for development) in Calgary, AB on January 7, 2025 for $2,640 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "425 5 St SW Calgary, AB 07-Jan-25 50 % Land for development N/A $2,640 $-"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "2025",
+      "fiscalYear": 2025,
+      "summary": "Killam acquired $168.8 million in assets during 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "During 2025, Killam acquired $168.8 million in assets."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-11-08",
+      "fiscalYear": 2024,
+      "summary": "Killam acquired the remaining 50% interest in Sherwood Crossing townhouses, a 16-unit apartment in Charlottetown, PEI on November 8, 2024 for $3,660 thousand, bringing ownership to 100%.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "Sherwood Crossing townhouses Charlottetown, PEI 08-Nov-24 100 % Apartment 16 3,660"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-06-17",
+      "fiscalYear": 2024,
+      "summary": "Killam acquired a 70% interest in 105 Elmira Rd North (land for development) in Guelph, ON on June 17, 2024 for $2,800 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "105 Elmira Rd North Guelph, ON 17-Jun-24 70 % Land for development N/A 2,800"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-02-20",
+      "fiscalYear": 2024,
+      "summary": "Killam acquired the remaining 60% interest in 425 5 St SW (land for development) in Calgary, AB on February 20, 2024 for $3,000 thousand, bringing ownership to 100%.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "425 5 St SW Calgary, AB 20-Feb-24 100 % Land for development N/A 3,000"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2024-01-31",
+      "fiscalYear": 2024,
+      "summary": "Killam acquired 5 & 35 Harlington Cres, a 50-unit apartment in Halifax, NS on January 31, 2024 for $11,000 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-11",
+          "quote": "5 & 35 Harlington Cres Halifax, NS 31-Jan-24 100 % Apartment 50 $11,000"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "summary": "Killam completed the disposition of 746 MHC sites in Ontario for gross proceeds of $50.9 million subsequent to Q2-2026 quarter-end.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Killam completed $148.3 million of property dispositions in 2025, focusing on non-core assets and properties with lower long-term growth potential."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-05",
+          "quote": "Subsequent to quarter-end, Killam completed the disposition of 746 MHC sites in Ontario for gross proceeds of $50.9 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-04",
+          "quote": "Killam also signed a purchase and sale agreement to sell an additional 3,021 MHC sites for gross proceeds of $93.8 million, expected to close in early 2027."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "summary": "Killam sold 16 apartment properties (722 units) located in Charlottetown and Summerside, Prince Edward Island in 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-02-11",
+          "quote": "Killam sold 16 apartment properties (722 units) located in Charlottetown and Summerside, Prince Edward Island (PEI), in 2025."
+        }
+      ]
+    }
+  ],
+  "NXR.UN": [
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-10-01",
+      "fiscalYear": 2026,
+      "summary": "On October 1, 2026, Nexus Industrial REIT completed the sale of excess land located in Blackfalds, Alberta for $2.5 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On October 1, 2026, the REIT completed the sale of excess land located in Blackfalds, Alberta for a price of $2,532."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-05",
+          "quote": "On October 1, 2026, the REIT completed the sale of excess land located in Blackfalds, Alberta for a price of $2.5 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-08-11",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT sold an industrial property in Red Deer, AB for $11.3 million on August 11, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-05",
+          "quote": "On August 11, 2026, the REIT sold an industrial property located in Red Deer, AB for a price of $11.3 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-06-22",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT sold its 80% interest in development land in Hamilton, ON for $14,125 on June 22, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On June 22, 2026, the REIT completed the sale of its 80% interest in development land located in Hamilton, ON for a price of $14,125."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-06-22",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT sold its 80% interest in development land in Hamilton, ON for $14.1 million on June 22, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On June 22, 2026, the REIT completed the sale of its 80% interest in development land located in Hamilton, ON for a price of $14,125."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-10",
+          "quote": "On June 22, 2026, the REIT completed the sale of its 80% interest in development land located in Hamilton, ON for a price of $14.1 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-05",
+          "quote": "On June 22, 2026, the REIT completed the sale of its 80% interest in development land located in Hamilton, ON for a price of $14.1 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-06-22",
+      "fiscalYear": 2026,
+      "summary": "The REIT sold its interest in 1540 South Service Road on June 22, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On June 22, 2026, the REIT sold its interest in 1540 South Service Road and ceased paying related acquisition fees, management fees and development fees to RFA in respect of the property."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On June 22, 2026, the REIT sold its interest in 1540 South Service Road and ceased paying related acquisition fees, management fees and development fees to RFA in respect of the property."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-02-20",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT closed on the sale of a property at 41 Royal Vista Drive, Calgary, Alberta for gross proceeds of $8.5 million on February 20, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "On February 20, 2026, the REIT closed on the sale of a property located at 41 Royal Vista Drive, Calgary, Alberta for gross proceeds of $8.5 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-02-20",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT sold an industrial property in Calgary, AB for $8,500 on February 20, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8,500."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-02-20",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT sold an industrial property in Calgary, AB for $8.5 million on February 20, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8,500."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-11",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8.5 million."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8,500."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-10",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8.5 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-05",
+          "quote": "On February 20, 2026, the REIT sold an industrial property located in Calgary, AB for a price of $8.5 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1 2026 to Q3 2026",
+      "fiscalYear": 2026,
+      "summary": "Nexus Industrial REIT closed on dispositions of two income-producing properties in Calgary and Red Deer, AB, and development lands in Hamilton, ON.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-05",
+          "quote": "the REIT closed on the dispositions of two income producing properties located in Calgary, AB and Red Deer, AB, and a development lands located in Hamilton, ON."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-11-20",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT acquired two industrial properties totaling 282,721 sq. ft. in Montreal and Longueuil, QC for $40.1 million on November 20, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "On November 20, 2025, the REIT acquired two industrial properties totaling 282,721 sq. ft. located in Montreal and Longueuil, QC for a purchase price of $40.1 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-11-01",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT acquired two industrial properties in Montreal and Longueuil, QC in November 2025 totalling 282,721 sq ft for $40.1 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "the acquisition of two industrial properties in Montreal and Longueuil, QC in November 2025 totalling 282,721 sq. ft., that are expected to contribute $2.6 million in annual stabilized NOI, representing a yield of 6.6% on the purchase price of $40.1 million"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-10-06",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold a land parcel adjacent to a retail property in Anjou, QC for $8,523 on October 6, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On October 6, 2025, the REIT sold a land parcel adjacent to an existing retail property located in Anjou, QC for a price of $8,523."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On October 6, 2025, the REIT sold a land parcel adjacent to an existing retail property located in Anjou, QC for a price of $8,523."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-09-16",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold an industrial property in Saint-Laurent, QC for $9,200 on September 16, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On September 16, 2025, the REIT sold an industrial property located in Saint-Laurent, QC for a price of $9,200."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On September 16, 2025, the REIT sold an industrial property located in Saint-Laurent, QC for a price of $9,200."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On September 16, 2025, the REIT sold an industrial property located in Saint-Laurent, QC for a price of $9,200."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-06-03",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold an industrial property in Edmonton, AB for $4,175 on June 3, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On June 3, 2025, the REIT sold an industrial property located in Edmonton, AB for a price of $4,175."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On June 3, 2025, the REIT sold an industrial property located in Edmonton, AB for a price of $4,175."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On June 3, 2025, the REIT sold an industrial property located in Edmonton, AB for a price of $4,175."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-04-14",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT acquired a land parcel adjacent to its existing property in Kelowna, BC on April 14, 2025 for a purchase price of $18,800 thousand.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On April 14, 2025, the REIT acquired a land parcel adjacent to one of its existing properties in Kelowna, BC for a purchase price of $18,800 and transaction costs of $5."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-04-14",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT acquired a land parcel in Kelowna, BC for $18,800 on April 14, 2025, intended for future Class A industrial development.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On April 14, 2025, the REIT acquired a land parcel adjacent to one of its existing properties in Kelowna, BC for a purchase price of $18,800 and transaction costs of $5."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-04-14",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold an industrial property in Fort St. John, BC for $7,000 on April 14, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On April 14, 2025, the REIT sold an industrial property located in Fort St. John, BC for a price of $7,000 and a selling cost of $35."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On April 14, 2025, the REIT sold an industrial property located in Fort St. John, BC for a price of $7,000 and a selling cost of $35."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On April 14, 2025, the REIT sold an industrial property located in Fort St. John, BC for a price of $7,000 and a selling cost of $35."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On April 14, 2025, the REIT sold an industrial property located in Fort St. John, BC for a price of $7,000 and a selling cost of $35."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-03-27",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT completed the sale of its 50% share of 15 retail properties in Quebec for $47,000 (at 50% ownership interest) on March 27, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On March 27, 2025, the REIT completed the sale of its share of 15 retail properties in which it held a 50% ownership interest. These properties, previously classified as assets held for sale, were located across Quebec and sold for a price of $47,000 (at the REIT's 50% ownership interest)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On March 27, 2025, the REIT completed the sale of its share of 15 retail properties in which it held a 50% ownership interest. These properties, previously classified as assets held for sale, were located across Quebec and sold for a price of $47,000 (at the REIT's 50% ownership interest)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On March 27, 2025, the REIT completed the sale of its share of 15 retail properties in which it held a 50% ownership interest. These properties, previously classified as assets held for sale, were located across Quebec and sold for a price of $47,000 (at the REIT's 50% ownership interest)."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On March 27, 2025, the REIT completed the sale of its share of 15 retail properties in which it held a 50% ownership interest. These properties, previously classified as assets held for sale, were located across Quebec and sold for a price of $47,000 (at the REIT's 50% ownership interest)."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-02-21",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold an office property in Laval, QC for $3,900 on February 21, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On February 21, 2025, the REIT sold an office property located in Laval, QC for a price of $3,900."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-11",
+          "quote": "On February 21, 2025, the REIT sold an office property located in Laval, QC for a price of $3,900."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-10",
+          "quote": "On February 21, 2025, the REIT sold an office property located in Laval, QC for a price of $3,900."
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-11-05",
+          "quote": "On February 21, 2025, the REIT sold an office property located in Laval, QC for a price of $3,900."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q4 2025",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT acquired two income-producing properties in Montreal, QC in Q4 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-11",
+          "quote": "In Q4 2025, the increase in total number of investment properties was due to the acquisition of two income producing properties located in Montreal, QC."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q4 2025",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT opportunistically acquired two industrial properties in Montreal, QC for $40.1 million in Q4 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "Opportunistically acquired two industrial properties in Montreal, QC, for $40.1 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q4 2025",
+      "fiscalYear": 2025,
+      "summary": "Nexus Industrial REIT sold a land parcel adjacent to an existing retail property in Anjou, QC for $8.5 million in Q4 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-mdna, filed 2026-03-05",
+          "quote": "Sold a land parcel adjacent to an existing retail property in Anjou, QC for $8.5 million."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-12-20",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold four industrial properties in Regina and Saskatoon, SK for $27,780 on December 20, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On December 20, 2024, the REIT sold four industrial properties located in Regina and Saskatoon, SK for a total selling price of $27,780."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-12-13",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold an office property in Dorval, QC for $10,900 on December 13, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On December 13, 2024, the REIT sold an office property located in Dorval, QC for a selling price of $10,900."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-12-03",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold an office property in Saint John, NB for $2,800 on December 3, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On December 3, 2024, the REIT sold an office property located in Saint John, NB for a selling price of $2,800."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-10-08",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold one office property and one industrial property (50% interest) in Montreal, QC for $13,500 total ($6,750 at 50% interest) on October 8, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On October 8, 2024, the REIT completed the sale of one office property and one industrial property in which it held a 50% interest. These properties, previously classified as assets held for sale, were located in Montreal, QC and sold for a price of $13,500 ($6,750 at the REIT's 50% ownership interest)"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-09-26",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold excess land associated with an income property in Fort St. John, BC for $2,350 thousand on September 26, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On September 26, 2024, the REIT sold excess land associated with an income property located in Fort St. John, BC for a selling price of $2,350."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2024-06-21",
+      "fiscalYear": 2024,
+      "summary": "Nexus Industrial REIT sold an office property in Blainville, QC for $5,057 thousand on June 21, 2024.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-05",
+          "quote": "On June 21, 2024, the REIT sold an office property located in Blainville, QC for a selling price of $5,057."
+        }
+      ]
+    }
+  ],
+  "REI.UN": [
+    {
+      "type": "divestiture",
+      "status": "expected",
+      "date": "Q2 2026",
+      "periodLabel": "Q2 2026",
+      "fiscalYear": null,
+      "summary": "RioCan entered into a firm agreement to sell its interest in FourFifty The Well in Toronto, Ontario, expected to close in Q2 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "the Trust also entered into two firm agreements to sell its interests in Bellevue Phase One and Two in Montreal, Quebec and FourFifty The Well in Toronto, Ontario. Both transactions are expected to close in the second quarter of 2026"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "expected",
+      "date": "Q2 2026",
+      "periodLabel": "Q2 2026",
+      "fiscalYear": null,
+      "summary": "RioCan entered into firm agreements to sell its interests in Bellevue Phase One and Two in Montreal, Quebec, expected to close in Q2 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "the Trust also entered into two firm agreements to sell its interests in Bellevue Phase One and Two in Montreal, Quebec and FourFifty The Well in Toronto, Ontario. Both transactions are expected to close in the second quarter of 2026"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "date": "Q1 2027",
+      "periodLabel": "Q1 2027",
+      "fiscalYear": null,
+      "summary": "RioCan agreed to purchase a partner's 37.5% interest in East Hills, a retail income producing property in Calgary, for total consideration of $54.8 million, expected to close in Q1 2027.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "the Trust has agreed to purchase a partner's 37.5% interest in East Hills, a retail income producing property in Calgary, for total consideration of $54.8 million. The transaction is expected to close in Q1 2027, subject to customary closing conditions."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "expected",
+      "date": "H1 2026",
+      "periodLabel": "H1 2026",
+      "fiscalYear": null,
+      "summary": "RioCan expects to acquire a 100% interest in Bellevue Phase Three, subject to certain conditions, currently planned for the first half of 2026, for an estimated acquisition price of $28.4 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Le Fonds s'est engagé à faire l'acquisition d'une participation de 100 % dans la phase 3 de Bellevue, sous réserve du respect de certaines conditions, ce qui est actuellement prévu pour le premier semestre de 2026, pour un prix d'acquisition estimatif de 28,4 millions $."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-05-20",
+      "fiscalYear": 2026,
+      "summary": "On May 20, 2026, RC (Queensway) LP completed the sale of its 100% interest in a retail unit for total proceeds of $6.7 million.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "On May 20, 2026, RC (Queensway) LP completed the sale of its 100% interest in a retail unit for total proceeds of $6.7 million or $1.3 million at RioCan's interest."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2026-05-12",
+      "fiscalYear": 2026,
+      "summary": "On May 12, 2026, RioCan sold its remaining 25.0% interest in class B Units of RC Yorkville LP for proceeds of $2.2 million, resulting in a loss of $2.9 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On September 4, 2025, RC Yorkville LP completed the sale of its 50% interest in the rental replacement units associated with the 11YV project for total proceeds of $14.0 million or $3.5 million at RioCan's interest."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "RC Yorkville LP a conclu la vente de sa participation de 50 % dans les unités locatives de remplacement associées au projet 11YV pour un produit total de 14,0 millions $, ou 3,5 millions $ selon la quote-part de RioCan."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "On May 12, 2026, RioCan sold its remaining 25.0% interest in class B Units of RC Yorkville LP for proceeds of $2.2 million, which resulted in a loss of $2.9 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "On May 12, 2026, RioCan sold its remaining 25.0% interest in class B Units of RC Yorkville LP for proceeds of $2.2 million, which resulted in a loss of $2.9 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2026-01-05",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "RC-HBC LP",
+      "summary": "RioCan acquired RC-HBC LP's 50% interest in Georgian Mall and Oakville Place, with fair value gains on investment property more than offsetting the Q1 2026 fair value loss.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On January 5, 2026, RioCan purchased RC-HBC LP's 50% interest in Georgian Mall in Barrie, Ontario and Oakville Place in Oakville, Ontario for $78.5 million and $61.9 million, respectively, net of available cash on hand, plus allocated receivership and transaction costs."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On October 24, 2025, RioCan acquired from the third party lender the mortgage receivable secured by RC-HBC LP's leasehold interest in Yorkdale for $76.9 million to settle a guarantee obligation"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Le 5 janvier 2026, RioCan a conclu l'acquisition de la participation de 50 % de RC-HBC LP dans les immeubles codétenus à locataires multiples Georgian Mall et Oakville Place, au coût de 78,5 millions $ et 61,9 millions $, respectivement"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-04",
+          "quote": "On January 5, 2026, RioCan purchased RC-HBC LP's 50% interest in Georgian Mall in Barrie, Ontario and Oakville Place in Oakville, Ontario for $81.1 million and $64.2 million, respectively, net of available cash on hand"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-05-04",
+          "quote": "in connection with the Trust's acquisition of RC-HBC LP's 50% interest in two coowned assets, the Trust repaid one mortgage in full (including RioCan's 50% interest in the mortgage) for $85.9 million, while the remaining 50% interest in the other fixed-rate mortgage was assumed for $53.0 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "fair value gains on the acquisition of RC-HBC LP's 50% interest of Georgian Mall and Oakville Place"
+        },
+        {
+          "label": "SEDAR interim-financial-statements, filed 2026-08-04",
+          "quote": "in connection with the Trust's acquisition of RC-HBC LP's 50% interest in two coowned assets, the Trust repaid one mortgage in full (including RioCan's 50% interest in the mortgage) for $85.9 million, while the remaining 50% interest in the other fixed-rate mortgage was assumed for $53.0 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "in connection with the Trust's acquisition of RC-HBC LP's 50% interest in two coowned assets, the Trust repaid one mortgage in full (including RioCan's 50% interest in the mortgage) for $85.9 million, while the remaining 50% interest in the other fixed-rate mortgage was assumed for $53.0 million."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "The fair value loss in Q1 2026, was more than offset by the fair value gains in the Trust on investment property from the acquisition of the RC-HBC LP's 50% interest in Georgian Mall and Oakville Place."
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "in connection with the Trust's acquisition of RC-HBC LP's 50% interest in two co-owned assets, the Trust repaid one mortgage in full (including RioCan's 50% interest in the mortgage) for $85.9 million, while the remaining 50% interest in the other fixed-rate mortgage was assumed for $53.0 million."
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "RioCan acquired the remaining 50% interest in Georgian Mall in Q1 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "Consideration for Georgian Mall includes settling the $26.0 million mezzanine loan balance outstanding through a credit bid and the assumption of existing debt of $53.0 million"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "Consideration for Georgian Mall includes settling the $26.0 million mezzanine loan balance outstanding through a credit bid and the assumption of existing debt of $53.0 million"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "acquisition of remaining 50% interest in Georgian Mall and Oakville Place in Q1 2026"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "RioCan acquired the remaining 50% interest in Oakville Place in Q1 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "Oakville Place includes $20.0 million in cash proceeds and the assumption of existing debt of $43.0 million"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "Oakville Place includes $20.0 million in cash proceeds and the assumption of existing debt of $43.0 million"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "acquisition of remaining 50% interest in Georgian Mall and Oakville Place in Q1 2026"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "periodLabel": "Q3 2026",
+      "fiscalYear": 2026,
+      "summary": "RioCan completed multiple acquisitions in the nine months ended September 30, 2026, including Georgian Mall and Oakville Place, with transaction costs of $4.9 million in aggregate.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "Acquisitions for the nine months ended September 30, 2026 are as follows"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1-Q3 2026",
+      "fiscalYear": 2026,
+      "summary": "During the nine months ended September 30, 2026, RC-HBC LP sold four sole-tenanted properties.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "During the nine months ended September 30, 2026, RC-HBC LP sold four sole-tenanted properties."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q1 2026",
+      "fiscalYear": 2026,
+      "summary": "RioCan completed the sale of its interest in The Underwood Apartments in Calgary, Alberta for proceeds of $46.5 million in Q1 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-05-04",
+          "quote": "the Trust completed the sale of its interest in The Underwood Apartments in Calgary, Alberta for proceeds of $46.5 million"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "periodLabel": "Q3 2026",
+      "fiscalYear": 2026,
+      "summary": "RioCan completed the sale of its interests in five RioCan Living income-producing properties for aggregate gross proceeds of $376.2 million at a weighted average cap rate of 3.84% during the nine months ended September 30, 2026.",
+      "quotes": [
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "subsequent to quarter end, up to August 4, 2026, the Trust entered into two conditional agreements to sell its interest in two RioCan Living income producing properties for estimated gross proceeds of $205.7 million"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-08-04",
+          "quote": "the Trust completed the sale of its interests in four RioCan Living income producing properties: The Underwood Apartments in Calgary, Alberta, FourFifty The Well in Toronto, Ontario and Bellevue Phase One and Two in Montreal, Quebec"
+        },
+        {
+          "label": "SEDAR interim-mdna, filed 2026-11-02",
+          "quote": "the Trust completed the sale of its interests in five RioCan Living income producing properties: The Underwood Apartments in Calgary, Alberta, FourFifty The Well and Pivot in Toronto, Ontario and Bellevue Phase One and Two in Montreal, Quebec. Aggregate gross sales proceeds were $376.2 million at a weighted average capitalization rate of 3.84%"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-31",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of Galeries Laurentides office building in St-Jérôme, QC on December 31, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Galeries Laurentides - office building, St. Jerome, QC December 31 100.0 % $ 5,700 $ -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Galeries Laurentides - immeuble de bureaux, St-Jérôme, QC | 31 décembre | 100,0 % | 5 700 | $ - $"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-22",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of Coliseum Ottawa in Ottawa, ON on December 22, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Coliseum Ottawa, Ottawa, ON December 22 100.0 % 30,000 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Coliseum Ottawa, Ottawa, ON | 22 décembre | 100,0 % | 30 000 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-18",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of 2453-2457 Yonge Street, Toronto, ON on December 18, 2025, with a vendor take-back mortgage of $3.3 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "2453-2457 Yonge Street, Toronto, ON (i) December 18 100.0 % 6,800 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "2453-2457 Yonge Street, Toronto, ON i) | 18 décembre | 100,0 % | 6 800 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-12-15",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 90% of Phases 1, 2 and 3 de Market in Laval, QC on December 15, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Market Phase One & Phase Two and Three, Laval, QC December 15 90.0 % 157,070 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Phases 1, 2 et 3 de Market, Laval, QC | 15 décembre | 90,0 % | 157 070 | -"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-10-29",
+      "fiscalYear": 2025,
+      "summary": "RioCan acquired the remaining 87.5% interest in the retail component of the 11YV project for a total acquisition price of $27.3 million on October 29, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On October 29, 2025, RioCan completed the acquisition of the remaining 87.5% interest in the retail portion of the 11YV project, pursuant to a forward purchase agreement for total purchase price of $27.3 million."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "RioCan a conclu l'acquisition de la participation restante de 87,5 % de la composante commerce de détail du projet 11YV aux termes d'un accord d'achat à terme pour un prix d'acquisition total de 27,3 millions $."
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-10-03",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of Fairlawn Plaza in Ottawa, ON on October 3, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Fairlawn Plaza, Ottawa, ON October 3 100.0 % 4,400 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Fairlawn Plaza, Ottawa, ON | 3 octobre | 100,0 % | 4 400 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-10-03",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of Timberlea Landing office building in Fort McMurray, AB on October 3, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Timberlea Landing - office building, Fort McMurray, AB October 3 100.0 % 2,350 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Timberlea Landing - immeuble de bureaux, Fort McMurray, AB | 3 octobre | 100,0 % | 2 350 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-09-29",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Litho. residential and commercial building in Toronto, ON on September 29, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Litho. - residential & commercial, Toronto, ON September 29 50.0 % $ 76,200 $ -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Litho. - immeuble résidentiel et commercial, Toronto, ON | 29 septembre | 50,0 % | 76 200 | $ - $"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-08-06",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Brio residential and commercial building in Calgary, AB on August 6, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Brio - residential & commercial, Calgary, AB August 6 50.0 % 37,350 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Brio - immeuble résidentiel et commercial, Calgary, AB | 6 août | 50,0 % | 37 350 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-31",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of Windfields - Block 8 development land in Oshawa, ON on July 31, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Windfields - Block 8, Oshawa, ON July 31 100.0 % - 3,572"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Windfields - Îlot 8, Oshawa, ON | 31 juillet | 100,0 % | - | 3 572"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "RioCan acquired a 50% interest in Gloucester excess land density Block 2, Ottawa, ON on July 30, 2025 for $2.743 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Gloucester - excess land density Block 2, Ottawa, ON July 30 50.0 % $ - $ 2,743 $ - $ $ 2,743 $"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Frontier residential building in Ottawa, ON on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Frontier - residential, Ottawa, ON July 30 50.0 % 48,100 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Frontier - immeuble résidentiel, Ottawa, ON | 30 juillet | 50,0 % | 48 100 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Gloucester excess land density, blocks 3 and 7, in Ottawa, ON on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Gloucester - excess land density Blocks 3 & 7, Ottawa, ON July 30 50.0 % - 2,677"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Gloucester - densité de terrain excédentaire, îlots 3 et 7, Ottawa, ON | 30 juillet | 50,0 % | - | 2 677"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Latitude residential building in Ottawa, ON on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Latitude - residential, Ottawa, ON July 30 50.0 % 47,700 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Latitude - immeuble résidentiel, Ottawa, ON | 30 juillet | 50,0 % | 47 700 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-30",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Luma residential and commercial building in Ottawa, ON on July 30, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Luma - residential & commercial, Ottawa, ON July 30 50.0 % 40,200 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Luma - immeuble résidentiel et commercial, Ottawa, ON | 30 juillet | 50,0 % | 40 200 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-07-28",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Gloucester retail building, block 8, in Ottawa, ON on July 28, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Gloucester - retail Block 8, Ottawa, ON July 28 50.0 % 1,400 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Gloucester - immeuble de détail, îlot 8, Ottawa, ON | 28 juillet | 50,0 % | 1 400 | -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-04-22",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 50% of Méga Centre Notre-Dame land parcels, north shore, Laval, QC on April 22, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Mega Centre Notre-Dame - North Parcel Lands, Laval, QC April 22 50.0 % $ 36,250 $ -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Méga Centre Notre-Dame - parcelles de terrain, rive nord, Laval, QC | 22 avril | 50,0 % | 36 250 | $ - $"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-04-01",
+      "fiscalYear": 2025,
+      "summary": "RioCan acquired a 90% interest in Market Phase Two and Three, Laval, QC on April 1, 2025 for $125.315 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Market Phase Two and Three, Laval, QC April 1 90.0 % $ 125,315 $ - $ - $ 125,315 $ - $ -"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-03-17",
+      "fiscalYear": 2025,
+      "summary": "RioCan exercised a purchase option in a land lease to acquire a parcel of land at Galeries Laurentides, Saint-Jérôme, QC on March 17, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "Land lease at Galeries Laurentides, Saint-Jérôme, QC (iii) March 17 100.0 % $ 393 $ - $ -"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-02-28",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of 1946 Robertson Road, Ottawa, ON on February 28, 2025, with a vendor take-back mortgage of $0.9 million.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "1946 Robertson Road, Ottawa, ON (ii) February 28 100.0 % $ 1,700 $ -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "1946 Robertson Road, Ottawa, ON ii) | 28 février | 100,0 % | 1 700 | $ - $"
+        }
+      ]
+    },
+    {
+      "type": "divestiture",
+      "status": "done",
+      "date": "2025-02-20",
+      "fiscalYear": 2025,
+      "summary": "RioCan sold 100% of North Edmonton Cineplex in Edmonton, AB on February 20, 2025.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "North Edmonton Cineplex, Edmonton, AB February 20 100.0 % 15,000 -"
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "North Edmonton Cineplex, Edmonton, AB | 20 février | 100,0 % | 15 000 | -"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-02-03",
+      "fiscalYear": 2025,
+      "summary": "RioCan acquired a 50% interest in 4th Street Lofts, Calgary, AB on February 3, 2025, assuming a $34.1 million construction loan.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "4th Street Lofts, Calgary, AB (iv) February 3 50.0 % - 53,851 37,757"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "date": "2025-01-01",
+      "fiscalYear": 2025,
+      "counterparty": "partner",
+      "summary": "RioCan acquired its partner's 75% share of Class B units in RC (Leaside) LP on January 1, 2025, for $59.3 million, bringing its ownership to 100%.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-02-17",
+          "quote": "On January 1, 2025, RioCan acquired its partner's 75% interest of Class B units in RC (Leaside) LP for the purchase price of $59.3 million including transaction costs and assumed $0.3 million of net working capital deficit."
+        },
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "Le 1 er janvier 2025, RioCan a acquis de son partenaire sa part de 75 % dans les parts de catégorie B du RC (Leaside) LP pour un prix d'acquisition de 59,3 millions $, compte tenu des coûts de transaction"
+        }
+      ]
+    },
+    {
+      "type": "acquisition",
+      "status": "done",
+      "summary": "RioCan closed the acquisition of the remaining 87.5% interest in the retail component of the 11YV project, bringing its total ownership to 100%.",
+      "quotes": [
+        {
+          "label": "SEDAR annual-financial-statements, filed 2026-03-23",
+          "quote": "RioCan a clôturé l'acquisition de la participation restante de 87,5 % de la composante commerce de détail du projet 11YV aux termes d'un accord d'achat à terme. Par suite de cette transaction, le Fonds détient dorénavant la totalité de la composante commerce de détail du projet 11YV."
+        }
+      ]
+    }
   ]
 }

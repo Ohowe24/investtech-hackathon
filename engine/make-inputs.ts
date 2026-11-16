@@ -1,9 +1,11 @@
 // RAW -> CLEAN INPUTS.  Run:  npm run inputs   (after: node engine/fetch-statements.mjs)
 //
-// Reads   engine/raw/statements/*.json  (Onesheet API annual statements, all 20 companies)
+// Reads   engine/raw/statements/*.json  (Onesheet API annual statements: the 20 acquirer-index companies and 35 REITs)
+//         engine/raw/dividends/*.json   (Onesheet API distributions per unit, REITs)
+//         engine/raw/kpis/*.json        (Onesheet API reported KPIs, REITs without a full company profile)
 //         engine/raw/datapack/*.json    (Onesheet company profiles for the 5 Canadian candidates)
 //         engine/raw/datapack/*-un.json (Onesheet company profiles for the 5 Canadian REITs)
-// Writes  engine/input/financials.csv, facts.csv, sources.csv, organic.csv, deals.json
+// Writes  engine/input/financials.csv, facts.csv, distributions.csv, sources.csv, organic.csv, deals.json
 //         engine/input/companies.csv    ONLY if it does not exist yet (it holds human decisions)
 //
 // No number is typed here. Every value is copied from a raw file; missing stays empty.
@@ -11,6 +13,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Deal } from "../contract/types";
+import { reits } from "./industries/reits";
 
 const root = process.cwd();
 const rawDir = join(root, "engine", "raw");
@@ -53,7 +56,12 @@ const loadStmt = (ticker: string, st: string): Stmt => {
 
 const holdings: { ticker: string; countryCode: string; subSector: string }[] =
   indexes.indexes.find((i: { name: string }) => i.name === INDEX_NAME)?.positions ?? [];
-const tickers = [...Object.keys(CANDIDATES), ...holdings.map((h) => h.ticker)];
+// REITs: the profile's Canadian universe and the organizers' REIT index. Statements only; their KPIs come further down.
+const reitHoldings: { ticker: string }[] = indexes.indexes.find((i: { name: string }) => i.name === reits.indexName)?.positions ?? [];
+const REIT_TICKERS = [...reits.universe.map((u) => u.ticker), ...reitHoldings.map((h) => h.ticker)];
+/** The API's symbol: TSX units are "KMP-UN.TO"; US listings are the plain ticker. */
+const reitSymbol = (t: string) => (t.endsWith(".UN") ? `${t.replace(/\.UN$/, "")}-UN.TO` : t);
+const tickers = [...Object.keys(CANDIDATES), ...holdings.map((h) => h.ticker), ...REIT_TICKERS];
 
 const finRows: unknown[][] = [];
 const sourceRows: unknown[][] = [];
@@ -62,7 +70,7 @@ const deals: Record<string, Deal[]> = {};
 const warnings: string[] = [];
 
 for (const ticker of tickers) {
-  const symbol = CANDIDATES[ticker]?.symbol ?? ticker;
+  const symbol = CANDIDATES[ticker]?.symbol ?? (REIT_TICKERS.includes(ticker) ? reitSymbol(ticker) : ticker);
   const income = loadStmt(ticker, "income");
   const balance = loadStmt(ticker, "balance");
   const cash = loadStmt(ticker, "cash");
@@ -78,7 +86,7 @@ for (const ticker of tickers) {
       ticker, y, inc?.reportedCurrency ?? bal?.reportedCurrency ?? cf?.reportedCurrency ?? "",
       n(inc?.revenue), n(cf?.operatingCashFlow), flip(cf?.capitalExpenditure), flip(cf?.acquisitionsNet),
       n(inc?.weightedAverageShsOutDil), n(bal?.totalDebt), n(bal?.cashAndCashEquivalents),
-      n(bal?.totalEquity), n(inc?.ebitda), n(bal?.goodwill), sourceId,
+      n(bal?.totalEquity), n(inc?.ebitda), n(bal?.goodwill), n(bal?.totalAssets), String(inc?.date ?? ""), sourceId,
     ]);
   }
 
@@ -114,10 +122,14 @@ for (const ticker of tickers) {
     break;
   }
 
-  // Deals: acquisitions and divestitures exactly as the profile lists them.
+  deals[ticker] = dealsFrom(doc);
+}
+
+/** Deals: acquisitions and divestitures exactly as a company profile lists them. */
+function dealsFrom(doc: { events?: unknown[] }): Deal[] {
   type Ev = { type: string; status: string; date?: { occurredOn?: string; expectedBy?: string; periodLabel?: string }; summary: string;
     attributes?: { counterparty?: string }; sources?: { source: string; formType: string; filedOn: string; quote: string }[] };
-  deals[ticker] = (doc.events as Ev[])
+  return ((doc.events ?? []) as Ev[])
     .filter((e) => e.type === "acquisition" || e.type === "divestiture")
     .map((e): Deal => {
       const date = e.date?.occurredOn ?? e.date?.expectedBy ?? undefined;
@@ -158,6 +170,8 @@ for (const [ticker, pack] of Object.entries(REIT_PACKS)) {
     continue;
   }
   const doc = JSON.parse(readFileSync(packFile, "utf8")).document;
+  const reitDeals = dealsFrom(doc);
+  if (reitDeals.length) deals[ticker] = reitDeals;
   const periods: Record<string, unknown>[] = Array.isArray(doc.data) ? doc.data : Object.values(doc.data);
   for (const p of periods) {
     // Periods that end after the build date are forecasts or placeholders: never used.
@@ -178,10 +192,59 @@ for (const [ticker, pack] of Object.entries(REIT_PACKS)) {
   }
 }
 
+// ---- REITs without a data-pack profile: occupancy from the API's reported KPIs ----
+// Only company-wide occupancy fields (segment or regional ones are skipped). Stored as "kpi_<field>"; percentages
+// become decimals, the same convention as facts.csv. Which ones are used is decided in reits.ts.
+const KPI_OCCUPANCY = [
+  "occupancy_percentage", "period_end_occupancy_rate", "average_occupancy", "occupancy_of_properties_owned",
+  "total_average_physical_occupancy", "combined_shopping_center_portfolio_property_occupancy", "average_same_store_occupancy",
+];
+const KPI_PERIODS: Record<string, string> = { Annual: "Annual", Quarterly: "Quarterly" };
+for (const ticker of REIT_TICKERS) {
+  if (REIT_PACKS[ticker]) continue;
+  const file = join(rawDir, "kpis", `${ticker}.json`);
+  if (!existsSync(file)) continue;
+  const j = JSON.parse(readFileSync(file, "utf8"));
+  if (!j.success) continue;
+  const defs = new Map((j.data.metrics as { metricId: string; metricName: string; metricFormat: string }[]).map((m) => [m.metricId, m]));
+  for (const p of j.data.data as { periodType: string; reportDate: string; calendarYear: number; calendarQuarter: number; metricsValues: Record<string, unknown> }[]) {
+    const type = KPI_PERIODS[p.periodType];
+    if (!type || p.reportDate > "2026-11-12") continue;
+    for (const id of KPI_OCCUPANCY) {
+      const v = n(p.metricsValues?.[id]);
+      const def = defs.get(id);
+      if (v == null || !def) continue;
+      const label = type === "Annual" ? `FY${p.calendarYear}` : `Q${p.calendarQuarter} ${p.calendarYear}`;
+      const sourceId = `os-kpi-${ticker}-${id}-${p.reportDate}-${type}`;
+      sourceRows.push([sourceId, `Onesheet API · ${reitSymbol(ticker)} reported KPI "${def.metricName}", ${label}`, "", ""]);
+      factRows.push([ticker, `kpi_${id}`, type, p.calendarYear, type === "Quarterly" ? p.calendarQuarter : "", p.reportDate, def.metricFormat === "%" ? +(v / 100).toPrecision(12) : v, sourceId]);
+    }
+  }
+}
+
+// ---- REITs: distributions per unit, as the market data lists them ----
+// The statements' dividendsPaid field is empty for REITs, so the payout fallback in reits.ts uses these.
+// Currency is the listing's: TSX units pay in CAD, US listings in USD.
+const distRows: unknown[][] = [];
+for (const ticker of REIT_TICKERS) {
+  const file = join(rawDir, "dividends", `${ticker}.json`);
+  if (!existsSync(file)) continue;
+  const j = JSON.parse(readFileSync(file, "utf8"));
+  const list = (j.data?.dividends ?? []) as { date: string; dividend: unknown }[];
+  if (!list.length) continue;
+  const sourceId = `os-div-${ticker}`;
+  sourceRows.push([sourceId, `Onesheet API · ${reitSymbol(ticker)} distribution history`, "", ""]);
+  for (const d of list) {
+    if (!d.date || d.date > "2026-11-12" || n(d.dividend) == null) continue;
+    distRows.push([ticker, d.date, d.dividend, ticker.endsWith(".UN") ? "CAD" : "USD", sourceId]);
+  }
+}
+
 mkdirSync(outDir, { recursive: true });
+writeFileSync(join(outDir, "distributions.csv"), csv(["ticker", "date", "amount", "currency", "source_id"], distRows));
 writeFileSync(join(outDir, "facts.csv"), csv(["ticker", "metric", "period_type", "fiscal_year", "fiscal_quarter", "report_date", "value", "source_id"], factRows));
 writeFileSync(join(outDir, "financials.csv"), csv(
-  ["ticker", "fiscal_year", "currency", "revenue", "operating_cash_flow", "capex", "acquisitions", "diluted_shares", "total_debt", "cash", "total_equity", "ebitda", "goodwill", "source_id"],
+  ["ticker", "fiscal_year", "currency", "revenue", "operating_cash_flow", "capex", "acquisitions", "diluted_shares", "total_debt", "cash", "total_equity", "ebitda", "goodwill", "total_assets", "period_end", "source_id"],
   finRows,
 ));
 writeFileSync(join(outDir, "sources.csv"), csv(["id", "label", "url", "quote"], sourceRows));
@@ -199,5 +262,5 @@ if (!existsSync(companiesFile)) {
   console.log("Created engine/input/companies.csv (verdicts empty = model decides)");
 } else console.log("Kept existing engine/input/companies.csv (human decisions are never overwritten)");
 
-console.log(`financials: ${finRows.length} rows · facts: ${factRows.length} · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
+console.log(`financials: ${finRows.length} rows · facts: ${factRows.length} · distributions: ${distRows.length} · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
 for (const w of warnings) console.log("  - " + w);

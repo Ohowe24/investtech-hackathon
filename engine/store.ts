@@ -6,7 +6,7 @@
 
 import type { Deal, Source, Verdict } from "../contract/types";
 import { num, parseCsv } from "./csv";
-import type { Fact, FinRow, PeriodType } from "./industries/types";
+import type { Distribution, Fact, FinRow, PeriodType } from "./industries/types";
 
 export interface StoredCompany {
   ticker: string;
@@ -19,6 +19,8 @@ export interface StoredCompany {
   financials: FinRow[];
   /** company-reported figures (KPIs), oldest first */
   facts: Fact[];
+  /** distributions per unit, oldest first */
+  distributions: Distribution[];
   /** rows from extra per-ticker input files, e.g. { "organic.csv": {...} } */
   extras: Record<string, Record<string, string>>;
   deals?: Deal[];
@@ -61,7 +63,7 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
   const decisions: Record<string, Decision> = {};
 
   const company = (ticker: string): StoredCompany =>
-    (companies[ticker] ??= { ticker, name: ticker, hqCountry: "", financials: [], facts: [], extras: {} });
+    (companies[ticker] ??= { ticker, name: ticker, hqCountry: "", financials: [], facts: [], distributions: [], extras: {} });
 
   for (const c of csv("companies.csv")) {
     const s = company(c.ticker);
@@ -96,6 +98,8 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
       equity: num(r.total_equity),
       ebitda: num(r.ebitda),
       goodwill: num(r.goodwill),
+      assets: num(r.total_assets),
+      ...(r.period_end ? { periodEnd: r.period_end } : {}),
       currency: r.currency ?? "",
       sourceId: r.source_id,
     });
@@ -122,6 +126,16 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     });
   }
 
+  for (const r of csv("distributions.csv")) {
+    const amount = num(r.amount);
+    if (amount == null || !r.date) {
+      warnings.push(`distributions.csv: unreadable row for ${r.ticker}, skipped`);
+      continue;
+    }
+    if (r.source_id && !sourceIds.has(r.source_id)) warnings.push(`${r.ticker} distribution ${r.date}: unknown source_id "${r.source_id}"`);
+    company(r.ticker).distributions.push({ date: r.date, amount, currency: r.currency ?? "", sourceId: r.source_id });
+  }
+
   for (const file of ["organic.csv"]) {
     for (const r of csv(file)) company(r.ticker).extras[file] = r;
   }
@@ -134,6 +148,7 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
 
   for (const c of Object.values(companies)) {
     c.financials.sort((a, b) => a.year - b.year);
+    c.distributions.sort((a, b) => a.date.localeCompare(b.date));
     c.facts.sort((a, b) => a.reportDate.localeCompare(b.reportDate) || a.metric.localeCompare(b.metric));
   }
   return { isFake, companies, sources, decisions, warnings };

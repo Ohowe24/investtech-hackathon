@@ -1,10 +1,12 @@
 // REITs profile
-// Judged on company-reported figures (FFO, AFFO, payout, leverage, occupancy) from SEDAR filings, via the
-// Onesheet company profiles in the data pack. Every threshold is a declared rule; the research behind each one
-// is in reports/REIT evaluation variables.md, and the formulas are in methodology.md.
+// Ranked only on figures Onesheet has for every REIT: annual statements (debt, assets, operating cash flow, revenue,
+// units) and distributions per unit. Company-reported KPIs (FFO, AFFO, occupancy...) from the data pack are shown
+// on the company page as context, never ranked. Every threshold is a declared rule; research behind each one is in
+// reports/REIT evaluation variables.md, and the formulas are in methodology.md.
 
 import type { MetricDef, MetricValue } from "../../contract/types";
-import { latestFact, periodLabel, samePeriodRatio, yearOverYear, type FactFilter } from "../facts";
+import type { FactFilter } from "../facts";
+import { cagr, cashPayoutRatio, distributionsInYear, perShare, ratioOfPositive } from "../metrics";
 import type { CheckDef, FinRow, IndustryProfile, MetricContext, UniverseEntry } from "./types";
 
 // Which reported fields hold which figure. The quote filters make sure a field is only used when its filing
@@ -29,6 +31,14 @@ const F = {
     metrics: ["occupancy_pct", "occupancy", "apartment_occupancy", "industrial_occupancy_pct", "committed_occupancy", "canada_occupancy"],
     quote: /occupan/i, min: 0.3, max: 1,
   },
+  /** company-wide occupancy from the Onesheet API's reported KPIs (REITs without a data-pack profile); see make-inputs.ts */
+  occupancyKpi: {
+    metrics: [
+      "kpi_occupancy_percentage", "kpi_period_end_occupancy_rate", "kpi_occupancy_of_properties_owned", "kpi_average_occupancy",
+      "kpi_total_average_physical_occupancy", "kpi_combined_shopping_center_portfolio_property_occupancy", "kpi_average_same_store_occupancy",
+    ],
+    min: 0.3, max: 1,
+  },
 } satisfies Record<string, FactFilter>;
 
 const settings = {
@@ -43,173 +53,173 @@ const settings = {
   /** the REIT index's most common weight: five holdings sit at 3.42% */
   maxWeightPct: 3.42,
   relatedGroups: [] as string[][],
-  scoring: { passShare: 0.75, mixedShare: 0.5, minAvailable: 3 },
+  /** strict on purpose: a REIT is added only if it passes every scored check, with data on all four */
+  scoring: { passShare: 1, mixedShare: 0.5, minAvailable: 4 },
 
-  /** Research and sources for every line: reports/REIT evaluation variables.md */
+  /**
+   * Every check uses only figures Onesheet gives for every REIT: annual statements and distributions per unit.
+   * Company-reported KPIs (FFO, AFFO, occupancy...) exist for a handful of REITs only, so they are shown on the
+   * company page but never ranked. Research behind each line: reports/REIT evaluation variables.md.
+   */
   checks: [
-    { id: "payoutCovered", kind: "gate", label: "AFFO payout ≤ 100%", metricId: "affoPayout", op: "<=", threshold: 1,
-      rule: "Distributions are covered by recurring cash flow: AFFO payout is at most 100%" },
-    { id: "debtLimit", kind: "gate", label: "Debt ≤ 60% of assets", metricId: "debtRatio", op: "<=", threshold: 0.6,
-      rule: "Debt is at most 60% of gross book value or total assets" },
-    { id: "payoutCushion", kind: "score", label: "AFFO payout ≤ 90%", metricId: "affoPayout", op: "<=", threshold: 0.9,
-      rule: "The payout leaves at least 10% of AFFO in the business" },
-    { id: "debtToEbitda", kind: "score", label: "Debt ≤ 9× EBITDA", metricId: "debtToEbitda", op: "<=", threshold: 9,
-      rule: "Debt is at most 9 times adjusted EBITDA (company-reported)" },
-    { id: "organicNoi", kind: "score", label: "Same-property NOI ≥ 2%", metricId: "samePropertyNoi", op: ">=", threshold: 0.02,
-      rule: "Same-property NOI grew at least 2%, in line with the inflation target" },
-    { id: "ffoGrowth", kind: "score", label: "FFO per unit not falling", metricId: "ffoPerUnitGrowth", op: ">=", threshold: 0,
-      rule: "FFO per unit did not fall year over year (like-for-like periods)" },
-    { id: "occupancy", kind: "score", label: "Occupancy ≥ 93.8%", metricId: "occupancy", op: ">=", threshold: 0.938,
-      rule: "Occupancy is at or above the US REIT industry level (93.8%)" },
+    { id: "payoutCovered", kind: "gate", label: "Cash payout ≤ 100%", metricId: "cashPayout", op: "<=", threshold: 1,
+      rule: "Distributions are covered by operating cash flow: distributions per unit are at most 100% of operating cash flow per unit" },
+    { id: "debtLimit", kind: "gate", label: "Debt ≤ 60% of assets", metricId: "debtToAssets", op: "<=", threshold: 0.6,
+      rule: "Total debt is at most 60% of total assets (RioCan's declaration-of-trust cap, the strictest found)" },
+    { id: "payoutCushion", kind: "score", label: "Cash payout ≤ 90%", metricId: "cashPayout", op: "<=", threshold: 0.9,
+      rule: "The payout leaves at least 10% of operating cash flow in the business" },
+    { id: "cashFlowGrowth", kind: "score", label: "Cash flow per unit ≥ 2%/yr", metricId: "cashFlowPerUnitGrowth", op: ">=", threshold: 0.02,
+      rule: "Operating cash flow per unit grew at least 2% a year over the last three fiscal years, in line with the inflation target" },
+    { id: "distributionGrowth", kind: "score", label: "Distributions per unit ≥ 2%/yr", metricId: "distributionGrowth", op: ">=", threshold: 0.02,
+      rule: "Distributions per unit grew at least 2% a year over the last three fiscal years, keeping their value against inflation" },
+    { id: "revenueGrowth", kind: "score", label: "Revenue per unit ≥ 2%/yr", metricId: "revenuePerUnitGrowth", op: ">=", threshold: 0.02,
+      rule: "Revenue per unit grew at least 2% a year over three fiscal years, in line with the inflation target" },
   ] satisfies CheckDef[],
 
   metricDefs: [
     {
-      id: "affoPayout",
-      short: "AFFO payout",
-      label: "AFFO payout ratio",
+      id: "cashPayout",
+      short: "Cash payout",
+      label: "Distributions ÷ operating cash flow, per unit",
       unit: "pct",
       higherIsBetter: false,
-      description: "Share of recurring cash flow paid out as distributions.",
-      formula: "The REIT's own AFFO payout ratio, from its latest fiscal year (the longest period reported in it). If it reports none, distributions per unit ÷ AFFO per unit for the same period.",
-      why: "Above 100%, the distribution is paid with something other than recurring cash: new debt, new units or asset sales. Below 90% leaves a margin.",
+      description: "Share of the cash the properties generate that is paid out to unitholders.",
+      formula: "Distributions per unit recorded in the latest fiscal year ÷ (operating cash flow ÷ diluted units) for that year. Only when the distributions and the statements are in the same currency.",
+      why: "Above 100%, the distribution is paid with something other than the cash the business makes: new debt, new units or asset sales. Below 90% leaves a margin.",
       facts: [
-        "REALPAC defines AFFO as \"a recurring economic earnings measure\" (REALPAC FFO & AFFO white paper, January 2022).",
         "CAPREIT's credit facility caps its FFO payout at 100%; Nexus guides to a payout \"below 100%\".",
-        "The 90% margin is a common income-investor rule of thumb, not a studied threshold.",
+        "Operating cash flow is before maintenance capex, so this reads lower than the AFFO payout a REIT reports (Killam: 61% here, 68% reported).",
+        "Some Canadian REITs report interest paid outside operating cash flow, which flatters this ratio.",
       ],
     },
     {
-      id: "debtRatio",
-      short: "Debt ratio",
-      label: "Debt ÷ gross book value",
+      id: "debtToAssets",
+      short: "Debt ÷ assets",
+      label: "Total debt ÷ total assets",
       unit: "pct",
       higherIsBetter: false,
-      description: "Share of the property portfolio funded with debt.",
-      formula: "Total debt ÷ gross book value (or total assets, or the REIT's covenant 'total indebtedness' ratio), as reported, at the latest balance-sheet date.",
+      description: "Share of the balance sheet funded with debt.",
+      formula: "Total debt ÷ total assets, latest annual balance sheet.",
       why: "Leverage decides whether a REIT survives a fall in property values or a jump in rates. 60% is the strictest declaration-of-trust cap found.",
       facts: [
         "RioCan's limit is 60% of aggregate assets (2026 AIF); CAPREIT's covenant is 62.5% (trust deed 70%); Killam's is 70%.",
         "REITs that went into 2007–09 with more debt lost more value (Sun, Titman & Twite, 2015).",
+        "Canadian REITs carry properties at fair value, US REITs at depreciated cost, so the same debt reads lower in Canada.",
       ],
     },
     {
-      id: "debtToEbitda",
-      short: "Debt ÷ EBITDA",
-      label: "Debt ÷ adjusted EBITDA (company-reported)",
-      unit: "multiple",
-      higherIsBetter: false,
-      description: "Years of operating profit needed to repay debt.",
-      formula: "As the REIT reports it, latest date. Not computed here: debt and EBITDA in the data are dated differently.",
-      why: "How rating agencies look at REIT leverage: debt against the income that services it.",
-      facts: [
-        "RioCan targets 8.0–9.0×. DBRS rates RioCan BBB at 9.4× and Granite BBB(high) at 7.1×.",
-        "No published rating grid was found, so the 9× line rests on these individual ratings.",
-      ],
-    },
-    {
-      id: "samePropertyNoi",
-      short: "Same-property NOI",
-      label: "Same-property NOI growth (company-reported)",
+      id: "cashFlowPerUnitGrowth",
+      short: "Cash flow / unit",
+      label: "Operating cash flow per unit, growth a year over three years",
       unit: "pct",
       higherIsBetter: true,
-      description: "Growth in net operating income from properties owned in both periods.",
-      formula: "As reported by the REIT, company-wide figure only. Latest fiscal year, the longest period reported in it.",
-      why: "The REIT's organic growth: what the existing buildings earn, without help from acquisitions. 2% keeps pace with the Bank of Canada's inflation target.",
-      facts: [
-        "Nareit, Q2 2026: US REIT same-store NOI grew 4.1%, against 3.5% inflation.",
-      ],
+      description: "How fast the cash each unit earns is growing.",
+      formula: "(Operating cash flow ÷ diluted units, latest fiscal year) ÷ (same, three fiscal years earlier), to the power 1/3, − 1.",
+      why: "The cash version of FFO per unit. It falls when acquisitions or developments are funded with more new units than they earn. 2% a year is the Bank of Canada's inflation target: below it, cash per unit shrinks in real terms.",
     },
     {
-      id: "ffoPerUnitGrowth",
-      short: "FFO per unit",
-      label: "FFO per unit, growth over one year",
+      id: "distributionGrowth",
+      short: "Distribution growth",
+      label: "Distributions per unit, growth a year over three years",
       unit: "pct",
       higherIsBetter: true,
-      description: "Growth in funds from operations per unit.",
-      formula: "Latest FFO per unit ÷ the same period a year earlier − 1. Full years first, then nine months, six months, a quarter.",
-      why: "The REIT version of earnings per share. It falls when acquisitions or developments are funded with more new units than they earn.",
-      facts: [
-        "FFO is defined by Nareit (US) and REALPAC (Canada) so REITs can be compared.",
-        "Academic support for FFO over net income is mixed (Fields, Rangan & Thiagarajan, 1998).",
-      ],
+      description: "Whether the payout to unitholders is rising, flat or being cut.",
+      formula: "(Distributions per unit recorded in the latest fiscal year) ÷ (same, three fiscal years earlier), to the power 1/3, − 1.",
+      why: "A cut is the clearest sign a REIT could not afford its payout. Below 2% a year (the inflation target), the income a unitholder receives loses purchasing power.",
     },
     {
-      id: "occupancy",
-      short: "Occupancy",
-      label: "Occupancy (company-reported)",
+      id: "revenuePerUnitGrowth",
+      short: "Revenue / unit",
+      label: "Revenue per unit, growth a year over three years",
       unit: "pct",
       higherIsBetter: true,
-      description: "Share of space or suites that is leased.",
-      formula: "As reported, latest date. Definitions differ (in-place or committed, by area or by suite, whole or same-property portfolio).",
-      why: "Empty space earns nothing; falling occupancy is an early warning.",
-      facts: ["Nareit, Q2 2026: US REITs across all sectors were 93.8% occupied."],
-    },
-    {
-      id: "affoPerUnitGrowth",
-      short: "AFFO per unit",
-      label: "AFFO per unit, growth over one year",
-      unit: "pct",
-      higherIsBetter: true,
-      description: "Growth in recurring cash flow per unit, after maintenance spending. Not scored: shown for context.",
-      formula: "Latest AFFO per unit ÷ the same period a year earlier − 1, like for like.",
-      why: "AFFO subtracts the spending needed to keep buildings rentable, so it is closer to the cash that can be paid out.",
+      description: "Rent and other revenue behind each unit, and how fast it grows.",
+      formula: "(Revenue ÷ diluted units, latest fiscal year) ÷ (same, three fiscal years earlier), to the power 1/3, − 1.",
+      why: "Rents per unit should at least keep pace with inflation. 2% is the Bank of Canada's inflation target.",
     },
   ] satisfies MetricDef[],
 
-  mapTitle: "AFFO payout vs FFO per unit growth",
+  mapTitle: "Cash payout vs cash flow per unit growth",
   map: {
-    x: "affoPayout",
-    y: "ffoPerUnitGrowth",
+    x: "cashPayout",
+    y: "cashFlowPerUnitGrowth",
     xThreshold: 0.9, // same line as the "payout cushion" check
-    yThreshold: 0, // same line as the "FFO per unit not falling" check
+    yThreshold: 0.02, // same line as the "cash flow per unit ≥ 2%/yr" check
     zones: {
-      topLeft: "Covered payout · growing per unit",
-      topRight: "Stretched payout · growing per unit",
-      bottomLeft: "Covered payout · shrinking per unit",
-      bottomRight: "Stretched payout · shrinking per unit",
+      topLeft: "Covered payout · beating inflation per unit",
+      topRight: "Stretched payout · beating inflation per unit",
+      bottomLeft: "Covered payout · lagging inflation per unit",
+      bottomRight: "Stretched payout · lagging inflation per unit",
     },
   },
 };
 
-function computeMetrics(_rows: FinRow[], ctx: MetricContext): { metrics: Record<string, MetricValue>; warnings: string[] } {
+/** Reporting currencies whose statements are used for per-unit figures. The two other currencies in this
+ * universe (ARS, JPY) come with unit-count breaks and zero placeholders in the statements. */
+const COMPARABLE_CURRENCIES = ["CAD", "USD"];
+const GROWTH_YEARS = 3;
+
+function computeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<string, MetricValue>; warnings: string[] } {
   const warnings: string[] = [];
-  const facts = ctx.facts;
-  if (facts.length === 0) warnings.push(`${ctx.ticker}: no company-reported figures in facts.csv`);
+  const none = (note: string): MetricValue => ({ value: null, sourceIds: [], note });
+  const last = rows[rows.length - 1];
+  if (!last) {
+    warnings.push(`${ctx.ticker}: no statements`);
+    const empty = none("No annual statements for this company");
+    return { metrics: { cashPayout: empty, debtToAssets: empty, cashFlowPerUnitGrowth: empty, distributionGrowth: empty, revenuePerUnitGrowth: empty }, warnings };
+  }
+  const base = rows.find((r) => r.year === last.year - GROWTH_YEARS);
+  const comparable = COMPARABLE_CURRENCIES.includes(last.currency);
+  const notComparable = `Statements are in ${last.currency || "an unknown currency"}; per-unit figures are only used for CAD and USD reporters`;
+  const yearsBack = `FY${last.year - GROWTH_YEARS} → FY${last.year}`;
 
-  const latest = (f: FactFilter, missing: string, pointInTime = false): MetricValue => {
-    const x = latestFact(facts, f, pointInTime);
-    return x
-      ? { value: x.value, period: periodLabel(x), sourceIds: [x.sourceId], note: "Company-reported" }
-      : { value: null, sourceIds: [], note: missing };
-  };
-  const growth = (f: FactFilter, what: string): MetricValue => {
-    const g = yearOverYear(facts, f);
-    if (!g) return { value: null, sourceIds: [], note: `No two like-for-like periods of ${what} a year apart` };
-    return {
-      value: g.value,
-      period: `${periodLabel(g.from)} → ${periodLabel(g.to)}`,
-      sourceIds: [g.from.sourceId, g.to.sourceId],
-      ...(g.value == null ? { note: `${what} was not positive in the earlier period` } : {}),
-    };
+  const debtToAssets = (): MetricValue => {
+    const value = ratioOfPositive(last.debt, last.assets);
+    return value == null
+      ? none(`No total debt and total assets in the FY${last.year} balance sheet`)
+      : { value, period: last.periodEnd ? `at ${last.periodEnd}` : `FY${last.year}`, sourceIds: [last.sourceId] };
   };
 
-  const payout = (): MetricValue => {
-    const reported = latestFact(facts, F.affoPayout);
-    if (reported) return { value: reported.value, period: periodLabel(reported), sourceIds: [reported.sourceId], note: "Company-reported" };
-    const r = samePeriodRatio(facts, F.distributions, F.affoPerUnit);
-    if (r) return { value: r.value, period: periodLabel(r.part), sourceIds: [r.part.sourceId, r.whole.sourceId], note: "Distributions per unit ÷ AFFO per unit (no reported AFFO payout ratio)" };
-    return { value: null, sourceIds: [], note: "No AFFO payout ratio reported, and no period with both distributions and AFFO per unit" };
+  const dpuSource = ctx.distributions[0]?.sourceId;
+  const dpu = (r: FinRow) => (r.periodEnd ? distributionsInYear(ctx.distributions, r.periodEnd) : null);
+
+  const cashPayout = (): MetricValue => {
+    if (!comparable) return none(notComparable);
+    if (!ctx.distributions.length) return none("No distribution history");
+    if (ctx.distributions.some((d) => d.currency !== last.currency)) {
+      return none(`Distributions are paid in ${ctx.distributions[0].currency} and statements are in ${last.currency}, so they are not compared`);
+    }
+    const value = cashPayoutRatio(dpu(last), last.ocf, last.shares);
+    return value == null
+      ? none(`No distributions, or no positive operating cash flow per unit, in FY${last.year}`)
+      : { value, period: `FY${last.year}`, sourceIds: [last.sourceId, ...(dpuSource ? [dpuSource] : [])] };
+  };
+
+  const perUnitGrowth = (pick: (r: FinRow) => number | null, what: string): MetricValue => {
+    if (!comparable) return none(notComparable);
+    if (!base) return none(`No FY${last.year - GROWTH_YEARS} statements to compare ${what} with`);
+    if (base.currency !== last.currency) return none(`FY${base.year} and FY${last.year} statements are in different currencies`);
+    const value = cagr(perShare(pick(base), base.shares), perShare(pick(last), last.shares), GROWTH_YEARS);
+    return value == null
+      ? none(`${what} was not positive in FY${base.year} or FY${last.year}`)
+      : { value, period: yearsBack, sourceIds: [base.sourceId, last.sourceId] };
+  };
+
+  const distributionGrowth = (): MetricValue => {
+    if (!ctx.distributions.length) return none("No distribution history");
+    if (!base) return none(`No FY${last.year - GROWTH_YEARS} fiscal year to compare distributions with`);
+    const value = cagr(dpu(base), dpu(last), GROWTH_YEARS);
+    return value == null
+      ? none(`No distributions recorded in FY${base.year} or FY${last.year}`)
+      : { value, period: yearsBack, sourceIds: dpuSource ? [dpuSource] : [] };
   };
 
   const metrics: Record<string, MetricValue> = {
-    affoPayout: payout(),
-    debtRatio: latest(F.debtRatio, "No debt to gross book value (or total assets) ratio reported in the data provided", true),
-    debtToEbitda: latest(F.debtToEbitda, "No debt to EBITDA ratio reported in the data provided", true),
-    samePropertyNoi: latest(F.sameProperty, "No company-wide same-property NOI growth reported in the data provided"),
-    ffoPerUnitGrowth: growth(F.ffoPerUnit, "FFO per unit"),
-    occupancy: latest(F.occupancy, "No occupancy rate reported in the data provided", true),
-    affoPerUnitGrowth: growth(F.affoPerUnit, "AFFO per unit"),
+    cashPayout: cashPayout(),
+    debtToAssets: debtToAssets(),
+    cashFlowPerUnitGrowth: perUnitGrowth((r) => r.ocf, "Operating cash flow per unit"),
+    distributionGrowth: distributionGrowth(),
+    revenuePerUnitGrowth: perUnitGrowth((r) => r.revenue, "Revenue per unit"),
   };
   return { metrics, warnings };
 }
@@ -249,18 +259,21 @@ export const reits: IndustryProfile = {
   reportedSeries: [
     { id: "ffoPerUnit", label: "FFO per unit", unit: "count", kind: "flow", filter: F.ffoPerUnit, note: "Per unit, in the REIT's reporting currency" },
     { id: "affoPerUnit", label: "AFFO per unit", unit: "count", kind: "flow", filter: F.affoPerUnit, note: "Per unit, in the REIT's reporting currency" },
-    { id: "affoPayout", label: "AFFO payout ratio", unit: "pct", kind: "flow", filter: F.affoPayout, metricId: "affoPayout" },
-    { id: "samePropertyNoi", label: "Same-property NOI growth", unit: "pct", kind: "flow", filter: F.sameProperty, metricId: "samePropertyNoi", note: "Each quarter against the same quarter a year earlier" },
-    { id: "debtRatio", label: "Debt ÷ gross book value", unit: "pct", kind: "level", filter: F.debtRatio, metricId: "debtRatio" },
-    { id: "occupancy", label: "Occupancy", unit: "pct", kind: "level", filter: F.occupancy, metricId: "occupancy", note: "As the REIT defines it" },
+    { id: "affoPayout", label: "AFFO payout ratio", unit: "pct", kind: "flow", filter: F.affoPayout },
+    { id: "samePropertyNoi", label: "Same-property NOI growth", unit: "pct", kind: "flow", filter: F.sameProperty, note: "Each quarter against the same quarter a year earlier" },
+    { id: "debtRatio", label: "Debt ÷ gross book value", unit: "pct", kind: "level", filter: F.debtRatio },
+    { id: "occupancy", label: "Occupancy", unit: "pct", kind: "level", filter: F.occupancy, note: "As the REIT defines it" },
+    { id: "occupancyKpi", label: "Occupancy", unit: "pct", kind: "flow", filter: F.occupancyKpi, note: "Company-wide, as reported (Onesheet API KPIs)" },
   ],
-  rankTiebreak: "ffoPerUnitGrowth",
+  rankTiebreak: "cashFlowPerUnitGrowth",
   ruleControls: [
-    { id: "debtLimit", label: "Maximum debt / gross book value", min: 0.3, max: 0.7, step: 0.01, unit: "pct", why: "How much of the portfolio may be funded with debt?" },
-    { id: "payoutCushion", label: "Maximum AFFO payout", min: 0.6, max: 1.1, step: 0.01, unit: "pct", why: "How much of recurring cash flow may be paid out?" },
-    { id: "organicNoi", label: "Minimum same-property NOI growth", min: 0, max: 0.06, step: 0.005, unit: "pct", why: "How much should existing buildings grow on their own?" },
-    { id: "debtToEbitda", label: "Maximum debt / EBITDA", min: 5, max: 12, step: 0.5, unit: "multiple", why: "How many years of profit may the debt represent?" },
+    { id: "debtLimit", label: "Maximum debt / total assets", min: 0.3, max: 0.7, step: 0.01, unit: "pct", why: "How much of the balance sheet may be funded with debt?" },
+    { id: "payoutCushion", label: "Maximum cash payout", min: 0.6, max: 1.1, step: 0.01, unit: "pct", why: "How much of operating cash flow may be paid out?" },
+    { id: "revenueGrowth", label: "Minimum revenue per unit growth", min: 0, max: 0.06, step: 0.005, unit: "pct", why: "How fast should rent per unit grow each year?" },
+    { id: "cashFlowGrowth", label: "Minimum cash flow per unit growth", min: -0.05, max: 0.08, step: 0.005, unit: "pct", why: "How fast must cash per unit grow each year?" },
+    { id: "distributionGrowth", label: "Minimum distribution growth", min: -0.05, max: 0.08, step: 0.005, unit: "pct", why: "How fast must the payout per unit grow each year?" },
   ],
+
   extraInputs: [],
   computeMetrics,
 };

@@ -7,9 +7,11 @@ This file says what each metric means and why the thresholds are where they are.
 
 | Data | Source | File |
 |---|---|---|
-| Annual statements FY2021–FY2025, all 20 companies (5 candidates + 15 holdings) | Onesheet API `/financials/statements` | `engine/raw/statements/` → `engine/input/financials.csv` |
+| Annual statements (5 years), all 20 acquirer-index companies and all 35 REITs (19 Canadian candidates + 16 REIT-index holdings) | Onesheet API `/financials/statements` | `engine/raw/statements/` → `engine/input/financials.csv` |
+| Distributions per unit, all 35 REITs | Onesheet API `/stocks/dividends` | `engine/raw/dividends/` → `engine/input/distributions.csv` |
+| Company-wide occupancy for REITs outside the data pack (EGP, INVH, KIM, MAA, PLD, PSA, REXR) | Onesheet API `/kpis/segments-and-kpis` | `engine/raw/kpis/` → `engine/input/facts.csv` (`kpi_*` metrics) |
 | Reported organic growth (CSU, TOI, WSP only) | Onesheet data pack, with the SEDAR quote | `engine/input/organic.csv` |
-| Deals (acquisitions, divestitures) for the 5 candidates | Onesheet data pack events, with SEDAR quotes | `engine/input/deals.json` |
+| Deals (acquisitions, divestitures) for the 5 acquirer candidates and the 5 data-pack REITs | Onesheet data pack events, with SEDAR quotes | `engine/input/deals.json` |
 | REIT figures (FFO, AFFO, payout, debt ratio, occupancy…) for CAR.UN, GRT.UN, KMP.UN, NXR.UN, REI.UN | Onesheet data pack, each value with its SEDAR quote | `engine/input/facts.csv` |
 
 `npm run engine` writes `data/store.json` (every company's figures) and `data/companies.json` (the default view).
@@ -75,28 +77,23 @@ Two gates must pass. Five checks are scored.
 
 ## REITs (thresholds in `engine/industries/reits.ts`, research in `reports/REIT evaluation variables.md`)
 
-REITs are judged on **company-reported** figures, not recomputed statements: FFO and AFFO are non-GAAP measures each REIT defines (REALPAC / Nareit). The engine only picks and compares them.
+REITs are ranked **only on figures Onesheet has for every REIT**: annual statements (total debt, total assets, operating cash flow, revenue, diluted units) and distributions per unit. Company-reported KPIs (FFO, AFFO, same-property NOI, occupancy) exist for the 5 data-pack REITs and a few US REITs only, so ranking on them left most of the table empty. They are still shown on the company page as "Reported figures over time", never ranked.
 
-**How a reported figure is picked (`engine/facts.ts`):**
-- A field counts only if its **filing quote names the figure** (and does not name a lookalike). The same field id holds different figures at different REITs: CAPREIT's `affo_ratio` is its ACFO payout, Granite's is capex per square foot, RioCan's recent `debt_ratio` is its floating-rate share. Those are excluded by the quote filters.
-- Values outside a plausible range are skipped (e.g. Granite's `occupancy` field holds a unit count).
-- Flow figures (payout, same-property NOI): the latest fiscal year reported, the longest period within it. A stale full year never beats a fresh nine months.
-- Balance-sheet figures (debt ratio, debt ÷ EBITDA, occupancy): the latest date.
-- Growth (FFO per unit): like for like only, one year apart (FY vs FY, 9M vs 9M, Q3 vs Q3), full years first.
+Statement fields left out on purpose: EBITDA, operating income and net income (Canadian REITs report under IFRS, where property revaluations flow through them: Morguard's operating income goes negative in 2023, Allied's debt ÷ operating EBITDA jumps from 15× to 26×), interest expense (empty for Killam in four of five years), and dividends paid (empty for every REIT; distributions come from the distribution history instead).
 
 | Metric | Formula | Check |
 |---|---|---|
-| `affoPayout` | REIT's own AFFO payout ratio; if none, distributions per unit ÷ AFFO per unit for the same period | **Must:** ≤ 100%. Score: ≤ 90% |
-| `debtRatio` | Debt ÷ gross book value (or total assets, or the covenant "total indebtedness" ratio), as reported | **Must:** ≤ 60% (strictest declaration-of-trust cap found: RioCan) |
-| `debtToEbitda` | Debt ÷ adjusted EBITDA, as reported. Not computed: debt and EBITDA are dated differently in the data | Score: ≤ 9× (RioCan's target 8–9×; DBRS ratings) |
-| `samePropertyNoi` | Company-wide same-property NOI growth, as reported. Segment-only figures are not used | Score: ≥ 2% (Bank of Canada inflation target) |
-| `ffoPerUnitGrowth` | Latest FFO per unit ÷ same period a year earlier − 1 | Score: ≥ 0% |
-| `occupancy` | As reported, latest date. Definitions differ by REIT | Score: ≥ 93.8% (Nareit, US REITs, Q2 2026) |
-| `affoPerUnitGrowth` | Like `ffoPerUnitGrowth`, on AFFO per unit | Not scored |
+| `cashPayout` | Distributions per unit recorded in the latest fiscal year (`distributionsInYear`) ÷ operating cash flow per unit (`cashPayoutRatio`). Same currency only | **Must:** ≤ 100%. Score: ≤ 90% |
+| `debtToAssets` | Total debt ÷ total assets, latest annual balance sheet | **Must:** ≤ 60% (RioCan's declaration-of-trust cap, the strictest found) |
+| `cashFlowPerUnitGrowth` | Operating cash flow per unit, latest fiscal year vs three years earlier, yearly rate (`cagr`) | Score: ≥ 2% (Bank of Canada inflation target) |
+| `distributionGrowth` | Distributions per unit, latest fiscal year vs three years earlier, yearly rate | Score: ≥ 2% (keeps pace with inflation) |
+| `revenuePerUnitGrowth` | Revenue per unit, latest fiscal year vs three years earlier, yearly rate | Score: ≥ 2% (Bank of Canada inflation target) |
 
-Result: same tally as acquirers, needing 3 scored checks with data to pass. Weights: 15% of the index split equally, at most 3.42% each (the REIT index's most common weight).
+Result: stricter than acquirers on purpose. A REIT **passes** only if both must-pass checks pass and **every** scored check passes, with data on all four. One or two scored misses make it mixed (watch); a must-pass miss, or fewer than half the scored checks passing, makes it fail. In short: covered payout, moderate debt, and cash flow, distributions and rent per unit all growing faster than inflation. Ties are broken on cash flow per unit growth. Weights: 15% of the index split equally among the REITs added, at most 3.42% each (the REIT index's most common weight).
 
-**REIT limits:** only the 5 data-pack REITs have data; the other Canadian REITs and every REIT-index holding show as "no data" until the Onesheet API is back. Granite reports no debt ratio, so it cannot pass the debt gate. RioCan's latest debt ratio in the data is from December 2024.
+**How these differ from what REITs report:** operating cash flow is before maintenance capex, so the cash payout reads lower than a reported AFFO payout (Killam: 61% here, 68% reported; CAPREIT 43% vs 70%, since some Canadian REITs report interest paid outside operating cash flow). Canadian REITs carry properties at fair value and US REITs at depreciated cost, so debt ÷ assets reads lower in Canada for the same debt. Nexus's operating cash flow is low relative to its reported AFFO, so its cash payout is 142% against a reported 98%.
+
+**REIT limits:** per-unit figures are used only for CAD and USD reporters: IRSA (ARS) and Lead Real Estate (JPY) have unit-count breaks and zero placeholders in their statements, so they are judged on debt ÷ assets (and IRSA on distribution growth) only. Slate Grocery's distributions are listed in CAD and its statements are in USD, so it has no cash payout.
 
 ## The map
 

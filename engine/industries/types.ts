@@ -17,6 +17,20 @@ export interface FinRow {
   equity: number | null;
   ebitda: number | null;
   goodwill: number | null;
+  /** total assets at fiscal year end (balance sheet) */
+  assets: number | null;
+  /** ISO date the fiscal year ends, when the input gives it */
+  periodEnd?: string;
+  currency: string;
+  sourceId: string;
+}
+
+/** One distribution (dividend) per unit, as the market data lists it, from engine/input/distributions.csv. */
+export interface Distribution {
+  /** ISO date the distribution is recorded against */
+  date: string;
+  amount: number;
+  /** currency the amount is paid in */
   currency: string;
   sourceId: string;
 }
@@ -70,6 +84,8 @@ export interface MetricContext {
   lookup: (file: string) => Record<string, string> | undefined;
   /** company-reported figures from engine/input/facts.csv, oldest first */
   facts: Fact[];
+  /** distributions per unit from engine/input/distributions.csv, oldest first */
+  distributions: Distribution[];
 }
 
 /** A Canadian company the tool tests as a candidate for this industry's index. Names and listings are labels, not data. */

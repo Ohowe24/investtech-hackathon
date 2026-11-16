@@ -112,6 +112,22 @@ export function ratioOfPositive(part: N, base: N): number | null {
   return part / base;
 }
 
+/**
+ * Sum of distributions per unit recorded in the year that ends on `periodEnd` (after the same date a year earlier,
+ * up to and including it). Null if none fall in that window. Dates are ISO strings.
+ */
+export function distributionsInYear(distributions: { date: string; amount: number }[], periodEnd: string): number | null {
+  const end = periodEnd.slice(0, 10);
+  const start = `${Number(end.slice(0, 4)) - 1}${end.slice(4)}`;
+  const inYear = distributions.filter((d) => d.date > start && d.date <= end);
+  return inYear.length ? sumStrict(inYear.map((d) => d.amount)) : null;
+}
+
+/** Distributions per unit ÷ operating cash flow per unit. Null if cash flow per unit is not positive. */
+export function cashPayoutRatio(distributionsPerUnit: N, operatingCashFlow: N, units: N): number | null {
+  return ratioOfPositive(distributionsPerUnit, perShare(operatingCashFlow, units));
+}
+
 /** One threshold test. Null value -> null (unknown), never a fail. */
 export function passes(value: N, op: ">=" | "<=", threshold: number): boolean | null {
   if (!isNum(value)) return null;
