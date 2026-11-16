@@ -176,7 +176,8 @@ export function equalWeights(groups: string[][], sleevePct: number, capPct: numb
   const live = groups.filter((g) => g.length > 0);
   if (live.length === 0 || sleevePct <= 0) return out;
   const perGroup = Math.min(capPct, sleevePct / live.length);
-  for (const g of live) for (const t of g) out[t] = Math.round((perGroup / g.length) * 100) / 100;
+  // Rounded down to 0.01%, so the additions never add up to more than the sleeve (9 × 1.67% would be 15.03%).
+  for (const g of live) for (const t of g) out[t] = Math.floor((perGroup / g.length) * 100 + 1e-9) / 100;
   return out;
 }
 

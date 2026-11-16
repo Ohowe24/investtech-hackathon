@@ -8,6 +8,8 @@ import { Decode } from "../live/motion";
 
 interface Props {
   catalog: IndustryOption[];
+  /** every company the engine has statements for: holding suggestions for "choose your own" industries */
+  market: TickerInfo[];
 }
 
 type Step = 1 | 2 | 3;
@@ -18,7 +20,7 @@ const STEPS: { n: Step; label: string }[] = [
 ];
 
 /** Three steps: pick the index's industry, enter what it holds, run the engine. The answer goes into the address of /analyze. */
-export default function Onboarding({ catalog }: Props) {
+export default function Onboarding({ catalog, market }: Props) {
   const router = useRouter();
   const [step, setStep] = useState<Step>(1);
   const [industryId, setIndustryId] = useState<string | null>(null);
@@ -107,7 +109,7 @@ export default function Onboarding({ catalog }: Props) {
       <div className="mt-6">
         {step === 1 && <IndustryStep catalog={catalog} picked={industryId} onPick={pickIndustry} />}
         {step === 2 && industry && (
-          <HoldingsStep industry={industry} holdings={holdings} setHoldings={setHoldings}
+          <HoldingsStep industry={industry} market={market} holdings={holdings} setHoldings={setHoldings}
             cashText={cashText} setCashText={setCashText} valueText={valueText} setValueText={setValueText}
             resolved={resolved} canNext={canRun} onBack={() => setStep(1)} onNext={() => setStep(3)} />
         )}
@@ -123,11 +125,13 @@ export default function Onboarding({ catalog }: Props) {
 // ---------------------------------------------------------------- Step 1
 
 function IndustryStep({ catalog, picked, onPick }: { catalog: IndustryOption[]; picked: string | null; onPick: (id: string) => void }) {
+  const fixed = catalog.filter((c) => !c.custom);
+  const custom = catalog.filter((c) => c.custom);
   return (
     <section aria-labelledby="industry-h">
       <h2 id="industry-h" className="text-[13px] font-medium uppercase tracking-wide text-white/60">Which industry is your index?</h2>
       <div className="stagger mt-3 grid gap-3 sm:grid-cols-2" style={{ ["--d" as string]: "120ms" }}>
-        {catalog.map((ind, i) => {
+        {fixed.map((ind, i) => {
           const on = picked === ind.id;
           const withData = ind.universe.filter((u) => u.hasData).length;
           return (
@@ -153,11 +157,74 @@ function IndustryStep({ catalog, picked, onPick }: { catalog: IndustryOption[]; 
             </button>
           );
         })}
+        {custom.length > 0 && <ChooseYourOwn options={custom} picked={picked} onPick={onPick} index={fixed.length} />}
       </div>
       <p className="mt-4 text-xs text-white/45">
-        Dark tags must pass; the others are scored. More industries come once each one&apos;s checks are researched as carefully as these.
+        Dark tags must pass; the others are scored. The two researched industries use checks built for them; any other industry is
+        judged against its own peers.
       </p>
     </section>
+  );
+}
+
+/** Any industry in the Canadian market map: pick it from a list, and the engine finds its Canadian companies itself. */
+function ChooseYourOwn({ options, picked, onPick, index }: { options: IndustryOption[]; picked: string | null; onPick: (id: string) => void; index: number }) {
+  const current = options.find((o) => o.id === picked) ?? null;
+  const [choice, setChoice] = useState(current?.id ?? "");
+  const shown = options.find((o) => o.id === choice) ?? null;
+  const sectors = useMemo(() => {
+    const m = new Map<string, IndustryOption[]>();
+    for (const o of options) m.set(o.custom!.sector, [...(m.get(o.custom!.sector) ?? []), o]);
+    return [...m.entries()];
+  }, [options]);
+  const companies = options.reduce((n, o) => n + o.custom!.count, 0);
+  return (
+    <div style={{ ["--i" as string]: index }}
+      className={`spot flex flex-col rounded-xl border bg-white p-5 text-left sm:col-span-2 ${current ? "border-ink shadow-[0_0_0_1px_#000]" : "border-line"}`}>
+      <div className="flex items-start justify-between gap-3">
+        <span className="text-lg font-semibold tracking-tight text-ink">Choose your own</span>
+        <span className="mt-1 rounded bg-tealsoft px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-teal">Finds candidates</span>
+      </div>
+      <p className="mt-2 text-[13px] leading-relaxed text-muted">
+        Any of {options.length} industries across {companies} Canadian companies. The engine finds the Canadian companies in it, measures each on
+        its statements, and ranks them against each other and your holdings: every check is &ldquo;better than the median company tested&rdquo;.
+      </p>
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+        <label htmlFor="custom-industry" className="sr-only">Industry</label>
+        <select id="custom-industry" value={choice} onChange={(e) => setChoice(e.target.value)}
+          className="h-11 min-w-0 flex-1 rounded-lg border border-line bg-canvas px-3 text-sm text-ink outline-none focus:border-ink focus:bg-white">
+          <option value="">Pick an industry…</option>
+          {sectors.map(([sector, list]) => (
+            <optgroup key={sector} label={sector}>
+              {list.map((o) => (
+                <option key={o.id} value={o.id}>{o.name} · {o.custom!.count} Canadian</option>
+              ))}
+            </optgroup>
+          ))}
+        </select>
+        <button type="button" disabled={!choice} onClick={() => onPick(choice)}
+          className="h-11 shrink-0 rounded-lg bg-ink px-4 text-sm font-semibold text-white transition-opacity disabled:opacity-30">
+          Use this industry →
+        </button>
+      </div>
+      {shown && (
+        <div className="mt-4 border-t border-line pt-3">
+          <div className="flex flex-wrap gap-1.5">
+            {shown.checks.map((k) => (
+              <span key={k.id} className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${k.kind === "gate" ? "bg-ink text-white" : "bg-soft text-ink"}`} title={k.rule}>
+                {k.label}
+              </span>
+            ))}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {shown.universe.slice(0, 18).map((u) => (
+              <span key={u.ticker} title={u.name} className="rounded-md bg-tealsoft px-2 py-0.5 font-mono text-[11px] font-semibold text-teal">{u.ticker}</span>
+            ))}
+            {shown.universe.length > 18 && <span className="px-1 py-0.5 text-[11px] text-muted">+{shown.universe.length - 18} more</span>}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -165,6 +232,7 @@ function IndustryStep({ catalog, picked, onPick }: { catalog: IndustryOption[]; 
 
 interface HoldingsProps {
   industry: IndustryOption;
+  market: TickerInfo[];
   holdings: HoldingEntry[];
   setHoldings: (h: HoldingEntry[] | ((h: HoldingEntry[]) => HoldingEntry[])) => void;
   cashText: string;
@@ -177,7 +245,7 @@ interface HoldingsProps {
   onNext: () => void;
 }
 
-function HoldingsStep({ industry, holdings, setHoldings, cashText, setCashText, valueText, setValueText, resolved, canNext, onBack, onNext }: HoldingsProps) {
+function HoldingsStep({ industry, market, holdings, setHoldings, cashText, setCashText, valueText, setValueText, resolved, canNext, onBack, onNext }: HoldingsProps) {
   const [text, setText] = useState("");
   const [rejected, setRejected] = useState<string[]>([]);
   const [active, setActive] = useState(0);
@@ -185,11 +253,12 @@ function HoldingsStep({ industry, holdings, setHoldings, cashText, setCashText, 
 
   const lookup = useMemo(() => {
     const m = new Map<string, TickerInfo>();
+    if (industry.custom) for (const t of market) m.set(t.ticker, t);
     for (const t of industry.known) m.set(t.ticker, t);
     for (const h of industry.organizers?.holdings ?? []) m.set(h.ticker, h);
     for (const u of industry.universe) m.set(u.ticker, u);
     return m;
-  }, [industry]);
+  }, [industry, market]);
   const candidateSet = useMemo(() => new Set(industry.universe.map((u) => u.ticker)), [industry]);
 
   const held = new Set(holdings.map((h) => h.ticker));
@@ -366,7 +435,13 @@ function HoldingsStep({ industry, holdings, setHoldings, cashText, setCashText, 
               {heldCandidates.map((h) => h.ticker).join(", ")} {heldCandidates.length === 1 ? "is" : "are"} Canadian {heldCandidates.length === 1 ? "and already held" : "and already held"}: ranked with your holdings, not as {heldCandidates.length === 1 ? "a candidate" : "candidates"}.
             </p>
           )}
-          {noData.length > 0 && (
+          {noData.length > 0 && industry.custom && (
+            <p className="text-faint">
+              Not cached yet: {noData.map((h) => h.ticker).join(", ")}. The engine looks {noData.length === 1 ? "it" : "them"} up on Onesheet when you run;
+              anything it cannot find stays in the index, shown as &ldquo;no data&rdquo;.
+            </p>
+          )}
+          {noData.length > 0 && !industry.custom && (
             <p className="text-faint">
               No Onesheet data cached for {noData.length === holdings.length ? "any of these holdings" : noData.map((h) => h.ticker).join(", ")}: {noData.length === 1 ? "it stays" : "they stay"} in the index and the before/after, shown as &ldquo;no data&rdquo; in the ranking.
             </p>
@@ -446,6 +521,12 @@ function ReviewStep({ industry, holdings, rule, cashPct, submitting, onBack, onR
               </span>
             ))}
           </div>
+          {industry.custom && (
+            <p className="mt-3 text-xs text-muted">
+              Found automatically: Canadian companies Onesheet classes as &ldquo;{industry.name}&rdquo;. The peer lines above are the medians of these
+              candidates; when you run, they are recomputed with your holdings included.
+            </p>
+          )}
           <p className="mt-3 text-xs text-muted">
             Each is ranked against your holdings. Ones that pass share {industry.sleevePct}% of the index, at most {industry.maxWeightPct}% each. {rule}
           </p>

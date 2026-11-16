@@ -8,6 +8,7 @@ This file says what each metric means and why the thresholds are where they are.
 | Data | Source | File |
 |---|---|---|
 | Annual statements (5 years), all 20 acquirer-index companies and all 35 REITs (19 Canadian candidates + 16 REIT-index holdings) | Onesheet API `/financials/statements` | `engine/raw/statements/` → `engine/input/financials.csv` |
+| Canadian market map: every company in the TSX composite (ZCN) and small-cap (XCS) index ETFs, with its profile (name, sector, industry, country, market cap), plus statements for every Canadian one | Onesheet API `/stocks/etf`, `/stocks/fundamentals/{symbol}/profile`, `/financials/statements` (`npm run discover`) | `engine/raw/market/` → `engine/input/market.csv`, `financials.csv` |
 | Distributions per unit, all 35 REITs | Onesheet API `/stocks/dividends` | `engine/raw/dividends/` → `engine/input/distributions.csv` |
 | Company-wide occupancy for REITs outside the data pack (EGP, INVH, KIM, MAA, PLD, PSA, REXR) | Onesheet API `/kpis/segments-and-kpis` | `engine/raw/kpis/` → `engine/input/facts.csv` (`kpi_*` metrics) |
 | Reported organic growth (CSU, TOI, WSP only) | Onesheet data pack, with the SEDAR quote | `engine/input/organic.csv` |
@@ -136,3 +137,28 @@ Human decisions remain distinct from model results. No thresholds, scores, compa
 weights are changed. The former adjustable sliders are removed from the presentation; the pure
 sensitivity utilities and their tests remain available for development research.
 “Tested” means evaluated against the declared screen, not independently validated or proven to outperform.
+
+## Choose your own industry (`engine/industries/custom.ts`)
+
+For any industry in the Canadian market map, the engine finds the candidates itself and judges every company against its peers, so no industry-specific threshold is typed.
+
+**Candidates:** every company in the market map whose Onesheet profile names the chosen industry and Canada as its country, and that has annual statements. The dropdown offers an industry when it has at least 3 such companies. Holdings the cache does not have are fetched live from Onesheet when the analysis runs (`src/lib/server/live.ts`, same conversion as `npm run inputs`); any it cannot find stay in the index as "no data".
+
+**Peer lines:** each scored check's threshold is the **median of every company tested in that run** (the candidates plus your holdings with statements; `median` in `metrics.ts`), used only when at least 3 companies have the figure. So adding holdings moves the lines.
+
+| Metric | Formula | Check |
+|---|---|---|
+| `cashFromOperations` | Operating cash flow ÷ revenue, last three fiscal years summed | **Must:** > 0% (the business makes cash, in any industry) |
+| `revenuePerShareGrowth` | Revenue per diluted share, latest FY vs three years earlier, yearly rate | Score: ≥ peer median |
+| `cashFlowPerShareGrowth` | Operating cash flow per diluted share, same | Score: ≥ peer median |
+| `fcfMargin` | (Operating cash flow − capex) ÷ revenue, latest FY | Score: ≥ peer median |
+| `cashReturnOnCapital` | Free cash flow ÷ average (debt + equity) over the latest FY | Score: ≥ peer median |
+| `netDebtToEbitda` | (Debt − cash) ÷ EBITDA, latest FY (null if EBITDA ≤ 0) | Score: ≤ peer median |
+| `shareCountGrowth` | Diluted shares, latest FY vs three years earlier, yearly rate | Score: ≤ peer median |
+
+Result: passes if the must-pass check passes and at least 75% of the scored checks with data pass, with data on at least 4 (in practice 5 of 6: better than the median company on nearly everything). Weights: 15% of the index split equally among additions, at most 5% each.
+
+**Not offered:** banks, insurers, mortgage and credit lenders. Debt is their raw material, and EBITDA, capital spending and free cash flow do not describe them.
+
+**Limits:** a relative test always passes the best of the group, even in a weak industry, and it needs several companies to mean anything. EBITDA and margins also say little for IFRS real-estate companies, whose EBITDA includes revaluations: the researched REIT model is the one to use for REITs. Onesheet's industry labels decide who counts as a peer.
+

@@ -7,11 +7,13 @@ import snapshotJson from "@data/indexes.json";
 import type { Dataset, IndexDef, IndexPosition, IndexSnapshot } from "@contract/types";
 import { analyze } from "../../../engine/analyze";
 import { industries, getIndustry } from "../../../engine/industries";
+import { customIndustries, customProfile, isCustomId } from "../../../engine/industries/custom";
 import type { IndustryProfile } from "../../../engine/industries/types";
 import { passes } from "../../../engine/metrics";
 import type { Store } from "../../../engine/store";
 import type { IndustryOption, TickerInfo } from "../catalog";
 import { resolveWeights, type AnalysisQuery } from "../query";
+import { withLiveHoldings } from "./live";
 
 const store = storeJson as unknown as Store;
 const snapshot = snapshotJson as unknown as IndexSnapshot;
@@ -35,7 +37,45 @@ function nameOf(profile: IndustryProfile, ticker: string): string {
 
 const organizersIndex = (profile: IndustryProfile): IndexDef | undefined => snapshot.indexes.find((i) => i.name === profile.indexName);
 
+let customCatalog: IndustryOption[] | null = null;
+
+/** "Choose your own" industries: one option per industry in the Canadian market map. Built once per server process. */
+function customOptions(): IndustryOption[] {
+  if (customCatalog) return customCatalog;
+  customCatalog = customIndustries(store).flatMap((c) => {
+    const profile = customProfile(c.id, store, []);
+    if (!profile) return [];
+    return [{
+      id: profile.id,
+      name: profile.name,
+      tagline: profile.tagline,
+      question: profile.question,
+      checks: profile.checks.map((k) => ({ id: k.id, label: k.label, kind: k.kind, rule: k.rule })),
+      universe: profile.universe.map((u) => ({ ticker: u.ticker, name: u.name, hasData: true, subSector: u.subSector, listedOn: u.listedOn, why: u.why })),
+      organizers: null,
+      defaultCashPct: profile.sleevePct,
+      known: [],
+      sleevePct: profile.sleevePct,
+      maxWeightPct: profile.maxWeightPct,
+      custom: { sector: c.sector, count: c.count },
+    }];
+  });
+  return customCatalog;
+}
+
+/** Every company the engine has statements for, for holding suggestions in "choose your own" industries. */
+export function marketKnown(): TickerInfo[] {
+  return Object.values(store.companies)
+    .filter((c) => c.financials.length > 0)
+    .map((c) => ({ ticker: c.ticker, name: c.name, hasData: true }))
+    .sort((a, b) => a.ticker.localeCompare(b.ticker));
+}
+
 export function industryCatalog(): IndustryOption[] {
+  return [...fixedOptions(), ...customOptions()];
+}
+
+function fixedOptions(): IndustryOption[] {
   return Object.values(industries).map((profile) => {
     const ix = organizersIndex(profile);
     const info = (t: string): TickerInfo => ({ ticker: t, name: nameOf(profile, t), hasData: measurable(profile, t) });
@@ -76,12 +116,23 @@ export type AnalysisResult =
   | { ok: false; error: string };
 
 /** Runs the engine on the holdings in the query. The organizers' index is used as is when the query matches it exactly. */
-export function runAnalysis(q: AnalysisQuery): AnalysisResult {
-  if (!industries[q.industry]) return { ok: false, error: `Unknown industry "${q.industry}".` };
-  const profile = getIndustry(q.industry);
-  const ix = organizersIndex(profile);
+export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
   const holdings = q.holdings.slice(0, 60);
   if (holdings.length === 0) return { ok: false, error: "No holdings were entered." };
+  let profile: IndustryProfile;
+  let runStore = store;
+  if (isCustomId(q.industry)) {
+    // Holdings the cache does not have are fetched from Onesheet now; the peer medians include them.
+    runStore = (await withLiveHoldings(store, holdings.map((h) => h.ticker))).store;
+    const p = customProfile(q.industry, runStore, holdings.map((h) => h.ticker));
+    if (!p) return { ok: false, error: `Unknown industry "${q.industry}".` };
+    // Names the researched industries already know for well-known holdings. Labels only.
+    profile = { ...p, holdingNames: Object.assign({}, ...Object.values(industries).map((x) => x.holdingNames)) };
+  } else {
+    if (!industries[q.industry]) return { ok: false, error: `Unknown industry "${q.industry}".` };
+    profile = getIndustry(q.industry);
+  }
+  const ix = organizersIndex(profile);
 
   const sameAsOrganizers =
     !!ix &&
@@ -103,7 +154,7 @@ export function runAnalysis(q: AnalysisQuery): AnalysisResult {
     const totalValue = q.value ?? ix?.totalValue;
     const positions: IndexPosition[] = holdings.map((h) => {
       const known = ix?.positions.find((p) => p.ticker === h.ticker);
-      const s = store.companies[h.ticker];
+      const s = runStore.companies[h.ticker];
       const inUniverse = profile.universe.some((u) => u.ticker === h.ticker);
       const countryCode = s?.hqCountry || (inUniverse ? "CA" : known?.countryCode) || "??";
       return {
@@ -126,7 +177,7 @@ export function runAnalysis(q: AnalysisQuery): AnalysisResult {
     };
   }
 
-  const { dataset } = analyze(profile, store, {
+  const { dataset } = analyze(profile, runStore, {
     holdings: index.positions.map((p) => p.ticker),
     holdingsSource: sameAsOrganizers ? "organizers" : "user",
     positions: index.positions,

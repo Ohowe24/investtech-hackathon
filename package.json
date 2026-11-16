@@ -12,7 +12,8 @@
     "refresh-index": "node scripts/refresh-index.mjs",
     "onesheet": "node engine/onesheet-try.mjs",
     "inputs": "tsx engine/make-inputs.ts",
-    "fetch-statements": "node engine/fetch-statements.mjs"
+    "fetch-statements": "node engine/fetch-statements.mjs",
+    "discover": "node engine/discover.mjs"
   },
   "dependencies": {
     "next": "16.4.6",

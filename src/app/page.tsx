@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Onboarding from "@/components/onboarding/Onboarding";
-import { industryCatalog, storeIsFake } from "@/lib/server/analysis";
+import { industryCatalog, marketKnown, storeIsFake } from "@/lib/server/analysis";
 
 // Step one of the tool: pick an industry, enter the index's holdings, run. The answer opens /analyze.
 // The catalog (industries, their checks, the Canadian candidates and which have data) is built on the server
 // from data/store.json and data/indexes.json.
 export default function Home() {
   const catalog = industryCatalog();
+  const market = marketKnown();
   return (
     <div className="min-h-screen w-full">
       {storeIsFake() && (
@@ -22,7 +23,7 @@ export default function Home() {
         </div>
       </header>
       <main className="enter">
-        <Onboarding catalog={catalog} />
+        <Onboarding catalog={catalog} market={market} />
       </main>
       <footer className="px-5 pb-8 text-center text-[11px] text-white/50">Not investment advice · Onesheet API and SEDAR filings</footer>
     </div>

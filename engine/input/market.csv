@@ -1,0 +1,374 @@
+ticker,symbol,name,exchange,sector,industry,country,market_cap,in_etfs,source_id
+AAUC,AAUC.TO,Allied Gold Corporation,TSX,Basic Materials,Gold,CA,4071690000,XCS.TO ZCN.TO,os-profile-AAUC
+AAV,AAV.TO,Advantage Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,2171356000,XCS.TO ZCN.TO,os-profile-AAV
+ABRA,ABRA.TO,AbraSilver Resource Corp.,TSX,Basic Materials,Other Precious Metals,CA,1643442446,XCS.TO ZCN.TO,os-profile-ABRA
+ABX,ABX.TO,Barrick Mining Corporation,TSX,Basic Materials,Gold,CA,86886005200,ZCN.TO,os-profile-ABX
+AC,AC.TO,Air Canada,TSX,Industrials,"Airlines, Airports & Air Services",CA,5762593547,ZCN.TO,os-profile-AC
+ACB,ACB.TO,Aurora Cannabis Inc.,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,429642340,XCS.TO,os-profile-ACB
+ACO.X,ACO-X.TO,ATCO Ltd.,TSX,Utilities,Diversified Utilities,CA,8958801910,ZCN.TO,os-profile-ACO.X
+ACQ,ACQ.TO,AutoCanada Inc.,TSX,Consumer Cyclical,Auto - Dealerships,CA,626298361,XCS.TO,os-profile-ACQ
+AD.UN,AD-UN.TO,Alaris Equity Partners Income Trust,TSX,Financial Services,Asset Management - Income,CA,1102351302,XCS.TO,os-profile-AD.UN
+ADEN,ADEN.TO,ADENTRA Inc,TSX,Industrials,Industrial - Distribution,CA,930057395,XCS.TO,os-profile-ADEN
+AEM,AEM.TO,Agnico Eagle Mines Limited,TSX,Basic Materials,Gold,CA,125835574586,ZCN.TO,os-profile-AEM
+AFN,AFN.TO,Ag Growth International Inc.,TSX,Industrials,Agricultural - Machinery,CA,174644533,XCS.TO,os-profile-AFN
+AG,AG.TO,First Majestic Silver Corp.,TSX,Basic Materials,Silver,CA,9027782340,ZCN.TO,os-profile-AG
+AGF.B,AGF-B.TO,AGF Management Limited,TSX,Financial Services,Asset Management,CA,950013633,XCS.TO,os-profile-AGF.B
+AGI,AGI.TO,Alamos Gold Inc.,TSX,Basic Materials,Gold,CA,16826160961,ZCN.TO,os-profile-AGI
+AI,AI.TO,Atrium Mortgage Investment Corporation,TSX,Financial Services,Financial - Mortgages,CA,549213707,XCS.TO,os-profile-AI
+AIF,AIF.TO,Altus Group Limited,TSX,Real Estate,Real Estate - Services,CA,1743570166,XCS.TO ZCN.TO,os-profile-AIF
+ALA,ALA.TO,AltaGas Ltd.,TSX,Utilities,Regulated Gas,CA,17257304668,ZCN.TO,os-profile-ALA
+ALS,ALS.TO,Altius Minerals Corporation,TSX,Basic Materials,Other Precious Metals,CA,2801995399,XCS.TO ZCN.TO,os-profile-ALS
+AP.UN,AP-UN.TO,Allied Properties Real Estate Investment Trust,TSX,Real Estate,REIT - Office,CA,745941479,XCS.TO ZCN.TO,os-profile-AP.UN
+APM,APM.TO,Andean Precious Metals Corp.,TSX,Basic Materials,Silver,CA,647444074,XCS.TO,os-profile-APM
+APR.UN,APR-UN.TO,Automotive Properties Real Estate Investment Trust,TSX,Real Estate,REIT - Specialty,CA,687646220,XCS.TO,os-profile-APR.UN
+AQN,AQN.TO,Algonquin Power & Utilities Corp.,TSX,Utilities,Diversified Utilities,CA,6286768716,ZCN.TO,os-profile-AQN
+ARA,ARA.TO,Aclara Resources Inc.,TSX,Basic Materials,Other Precious Metals,PE,563058972,XCS.TO,os-profile-ARA
+ARE,ARE.TO,Aecon Group Inc.,TSX,Industrials,Engineering & Construction,CA,3803943004,XCS.TO ZCN.TO,os-profile-ARE
+ARG,ARG.TO,Amerigo Resources Ltd.,TSX,Basic Materials,Copper,CA,1209590800,XCS.TO,os-profile-ARG
+ARIS,ARIS.TO,Aris Mining Corporation,TSX,Basic Materials,Gold,CA,4258032000,ZCN.TO,os-profile-ARIS
+ASM,ASM.TO,Avino Silver & Gold Mines Ltd.,TSX,Basic Materials,Other Precious Metals,CA,988876069,XCS.TO ZCN.TO,os-profile-ASM
+ASTL,ASTL.TO,Algoma Steel Group Inc.,TSX,Basic Materials,Steel,CA,816763148,XCS.TO,os-profile-ASTL
+ATD,ATD.TO,Alimentation Couche-Tard Inc.,TSX,Consumer Cyclical,Specialty Retail,CA,75851282690,ZCN.TO,os-profile-ATD
+ATH,ATH.TO,Athabasca Oil Corporation,TSX,Energy,Oil & Gas Exploration & Production,CA,5576282835,XCS.TO ZCN.TO,os-profile-ATH
+ATRL,ATRL.TO,AtkinsRéalis Group Inc.,TSX,Industrials,Engineering & Construction,CA,14283493098,ZCN.TO,os-profile-ATRL
+ATS,ATS.TO,ATS Corporation,TSX,Industrials,Industrial - Machinery,CA,2504404574,XCS.TO ZCN.TO,os-profile-ATS
+ATZ,ATZ.TO,Aritzia Inc.,TSX,Consumer Cyclical,Apparel - Retail,CA,17052130258,ZCN.TO,os-profile-ATZ
+AW,AW.TO,A & W Food Services of Canada Inc.,TSX,Consumer Cyclical,Restaurants,CA,896930121,XCS.TO,os-profile-AW
+AYA,AYA.TO,Aya Gold & Silver Inc.,TSX,Basic Materials,Silver,CA,4463675640,ZCN.TO,os-profile-AYA
+BAM,BAM.TO,Brookfield Asset Management Ltd.,TSX,Financial Services,Asset Management,US,115844626410,ZCN.TO,os-profile-BAM
+BB,BB.TO,BlackBerry Limited,TSX,Technology,Software - Infrastructure,CA,7437695485,ZCN.TO,os-profile-BB
+BBD.B,BBD-B.TO,Bombardier Inc.,TSX,Industrials,Aerospace & Defense,CA,28068786497,ZCN.TO,os-profile-BBD.B
+BBUC,BBUC.TO,Brookfield Business Corporation,TSX,Industrials,Conglomerates,BM,8349163449,ZCN.TO,os-profile-BBUC
+BCE,BCE.TO,BCE Inc.,TSX,Communication Services,Telecommunications Services,CA,29113455366,ZCN.TO,os-profile-BCE
+BDGI,BDGI.TO,Badger Infrastructure Solutions Ltd.,TSX,Industrials,Engineering & Construction,CA,2578998552,XCS.TO ZCN.TO,os-profile-BDGI
+BDI,BDI.TO,Black Diamond Group Limited,TSX,Industrials,Rental & Leasing Services,CA,1466343502,XCS.TO,os-profile-BDI
+BDT,BDT.TO,Bird Construction Inc.,TSX,Industrials,Engineering & Construction,CA,4186273197,XCS.TO ZCN.TO,os-profile-BDT
+BEI.UN,BEI-UN.TO,Boardwalk Real Estate Investment Trust,TSX,Real Estate,REIT - Residential,CA,2928508388,XCS.TO ZCN.TO,os-profile-BEI.UN
+BEP.UN,BEP-UN.TO,Brookfield Renewable Partners L.P.,TSX,Utilities,Renewable Utilities,CA,12946958320,ZCN.TO,os-profile-BEP.UN
+BHC,BHC.TO,Bausch Health Companies Inc.,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,4536112598,XCS.TO ZCN.TO,os-profile-BHC
+BIP.UN,BIP-UN.TO,Brookfield Infrastructure Partners L.P.,TSX,Utilities,Diversified Utilities,BM,25678282450,ZCN.TO,os-profile-BIP.UN
+BIR,BIR.TO,Birchcliff Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,1955484750,XCS.TO ZCN.TO,os-profile-BIR
+BLDP,BLDP.TO,Ballard Power Systems Inc.,TSX,Industrials,Electrical Equipment & Parts,CA,624941447,XCS.TO,os-profile-BLDP
+BMO,BMO.TO,Bank of Montreal,TSX,Financial Services,Banks - Diversified,CA,170012610248,ZCN.TO,os-profile-BMO
+BN,BN.TO,Brookfield Corporation,TSX,Financial Services,Asset Management,CA,128806676357,ZCN.TO,os-profile-BN
+BNS,BNS.TO,The Bank of Nova Scotia,TSX,Financial Services,Banks - Diversified,CA,158825737300,ZCN.TO,os-profile-BNS
+BPF.UN,BPF-UN.TO,Boston Pizza Royalties Income Fund,TSX,Consumer Cyclical,Restaurants,CA,441530182,XCS.TO,os-profile-BPF.UN
+BSX,BSX.TO,Belo Sun Mining Corp,TSX,Basic Materials,Gold,CA,363410938,XCS.TO,os-profile-BSX
+BTB.UN,BTB-UN.TO,BTB Real Estate Investment Trust,TSX,Real Estate,REIT - Diversified,CA,311810220,XCS.TO,os-profile-BTB.UN
+BTE,BTE.TO,Baytex Energy Corp.,TSX,Energy,Oil & Gas Exploration & Production,CA,4037696000,XCS.TO ZCN.TO,os-profile-BTE
+BTO,BTO.TO,B2Gold Corp.,TSX,Basic Materials,Gold,CA,9049305144,ZCN.TO,os-profile-BTO
+BYD,BYD.TO,Boyd Group Services Inc.,TSX,Consumer Cyclical,Auto - Dealerships,CA,2853231000,XCS.TO ZCN.TO,os-profile-BYD
+CAE,CAE.TO,CAE Inc.,TSX,Industrials,Aerospace & Defense,CA,12972058733,ZCN.TO,os-profile-CAE
+CAR.UN,CAR-UN.TO,Canadian Apartment Properties Real Estate Investment Trust,TSX,Real Estate,REIT - Residential,CA,4689715440,ZCN.TO,os-profile-CAR.UN
+CAS,CAS.TO,Cascades Inc.,TSX,Consumer Cyclical,Packaging & Containers,CA,1612481450,XCS.TO,os-profile-CAS
+CCA,CCA.TO,Cogeco Communications Inc.,TSX,Communication Services,Telecommunications Services,CA,2218392390,XCS.TO ZCN.TO,os-profile-CCA
+CCL.B,CCL-B.TO,CCL Industries Inc.,TSX,Consumer Cyclical,Packaging & Containers,CA,16765371359,ZCN.TO,os-profile-CCL.B
+CCO,CCO.TO,Cameco Corporation,TSX,Energy,Uranium,CA,42020223179,ZCN.TO,os-profile-CCO
+CDR,CDR.TO,Condor Energies Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,276337600,XCS.TO,os-profile-CDR
+CEU,CEU.TO,CES Energy Solutions Corp.,TSX,Energy,Oil & Gas Equipment & Services,CA,4377391320,XCS.TO ZCN.TO,os-profile-CEU
+CF,CF.TO,Canaccord Genuity Group Inc.,TSX,Financial Services,Financial - Capital Markets,CA,1542209400,XCS.TO,os-profile-CF
+CFP,CFP.TO,Canfor Corporation,TSX,Basic Materials,"Paper, Lumber & Forest Products",CA,1666242200,XCS.TO,os-profile-CFP
+CFW,CFW.TO,Calfrac Well Services Ltd.,TSX,Energy,Oil & Gas Equipment & Services,CA,612721600,XCS.TO,os-profile-CFW
+CG,CG.TO,Centerra Gold Inc.,TSX,Basic Materials,Gold,CA,5492532390,ZCN.TO,os-profile-CG
+CGO,CGO.TO,Cogeco Inc.,TSX,Communication Services,Telecommunications Services,CA,452301337,XCS.TO,os-profile-CGO
+CGX,CGX.TO,Cineplex Inc.,TSX,Communication Services,Entertainment,CA,907240810,XCS.TO,os-profile-CGX
+CGY,CGY.TO,Calian Group Ltd.,TSX,Industrials,Specialty Business Services,CA,982085858,XCS.TO,os-profile-CGY
+CHE.UN,CHE-UN.TO,Chemtrade Logistics Income Fund,TSX,Basic Materials,Chemicals - Specialty,CA,1643157815,XCS.TO,os-profile-CHE.UN
+CHP.UN,CHP-UN.TO,Choice Properties Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,5054853981,ZCN.TO,os-profile-CHP.UN
+CHR,CHR.TO,Chorus Aviation Inc.,TSX,Industrials,"Airlines, Airports & Air Services",CA,825174038,XCS.TO,os-profile-CHR
+CIGI,CIGI.TO,Colliers International Group Inc.,TSX,Real Estate,Real Estate - Services,CA,6570709200,ZCN.TO,os-profile-CIGI
+CJ,CJ.TO,Cardinal Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,1974261929,XCS.TO,os-profile-CJ
+CJT,CJT.TO,Cargojet Inc.,TSX,Industrials,"Airlines, Airports & Air Services",CA,1604870983,XCS.TO ZCN.TO,os-profile-CJT
+CLS,CLS.TO,Celestica Inc.,TSX,Technology,"Hardware, Equipment & Parts",CA,43579196372,ZCN.TO,os-profile-CLS
+CM,CM.TO,Canadian Imperial Bank of Commerce,TSX,Financial Services,Banks - Diversified,CA,148795829280,ZCN.TO,os-profile-CM
+CMG,CMG.TO,Computer Modelling Group Ltd.,TSX,Technology,Software - Application,CA,312432000,XCS.TO,os-profile-CMG
+CNL,CNL.TO,Collective Mining Ltd.,TSX,Basic Materials,Gold,US,1448937216,XCS.TO,os-profile-CNL
+CNQ,CNQ.TO,Canadian Natural Resources Limited,TSX,Energy,Oil & Gas Exploration & Production,CA,140790293400,ZCN.TO,os-profile-CNQ
+CNR,CNR.TO,Canadian National Railway Company,TSX,Industrials,Railroads,CA,109703121000,ZCN.TO,os-profile-CNR
+CP,CP.TO,Canadian Pacific Kansas City Ltd.,TSX,Industrials,Railroads,CA,117946440200,ZCN.TO,os-profile-CP
+CPKR,CPKR.TO,Canada Packers Inc.,TSX,Consumer Defensive,Agricultural Farm Products,CA,406339140,XCS.TO,os-profile-CPKR
+CPX,CPX.TO,Capital Power Corporation,TSX,Utilities,Independent Power Producers,CA,10072932336,ZCN.TO,os-profile-CPX
+CRON,CRON.TO,Cronos Group Inc.,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,1722415035,XCS.TO,os-profile-CRON
+CRR.UN,CRR-UN.TO,Crombie Real Estate Investment Trust,TSX,Real Estate,REIT - Diversified,CA,3083091246,XCS.TO ZCN.TO,os-profile-CRR.UN
+CRT.UN,CRT-UN.TO,CT Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,4412124084,XCS.TO ZCN.TO,os-profile-CRT.UN
+CS,CS.TO,Capstone Copper Corp.,TSX,Basic Materials,Copper,CA,7447955589,ZCN.TO,os-profile-CS
+CSH.UN,CSH-UN.TO,Chartwell Retirement Residences,TSX,Real Estate,REIT - Healthcare Facilities,CA,6944910720,ZCN.TO,os-profile-CSH.UN
+CSU,CSU.TO,Constellation Software Inc.,TSX,Technology,Software - Application,CA,73916056640,ZCN.TO,os-profile-CSU
+CSW.A,CSW-A.TO,Corby Spirit and Wine Limited,TSX,Consumer Defensive,Beverages - Wineries & Distilleries,CA,454362942,XCS.TO,os-profile-CSW.A
+CTC.A,CTC-A.TO,"Canadian Tire Corporation, Limited",TSX,Consumer Cyclical,Specialty Retail,CA,11434331112,ZCN.TO,os-profile-CTC.A
+CU,CU.TO,Canadian Utilities Limited,TSX,Utilities,Diversified Utilities,CA,11103356040,ZCN.TO,os-profile-CU
+CURA,CURA.TO,"Curaleaf Holdings, Inc.",TSX,Healthcare,Drug Manufacturers - Specialty & Generic,US,2663587111,XCS.TO ZCN.TO,os-profile-CURA
+CVE,CVE.TO,Cenovus Energy Inc.,TSX,Energy,Oil & Gas Integrated,CA,73323060802,ZCN.TO,os-profile-CVE
+CVO,CVO.TO,Coveo Solutions Inc.,TSX,Technology,Software - Infrastructure,CA,448494318,XCS.TO,os-profile-CVO
+CVVY,CVVY.TO,Cavvy Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,570769276,XCS.TO,os-profile-CVVY
+DBM,DBM.TO,Doman Building Materials Group Ltd.,TSX,Industrials,Industrial - Distribution,CA,869276476,XCS.TO,os-profile-DBM
+DC.A,DC-A.TO,Dundee Corporation,TSX,Financial Services,Asset Management,CA,309196680,XCS.TO,os-profile-DC.A
+DCBO,DCBO.TO,Docebo Inc.,TSX,Technology,Software - Application,CA,1103557101,XCS.TO,os-profile-DCBO
+DFY,DFY.TO,Definity Financial Corporation,TSX,Financial Services,Insurance - Property & Casualty,CA,8882163121,ZCN.TO,os-profile-DFY
+DIR.UN,DIR-UN.TO,Dream Industrial Real Estate Investment Trust,TSX,Real Estate,REIT - Industrial,CA,3576015520,XCS.TO ZCN.TO,os-profile-DIR.UN
+DIV,DIV.TO,Diversified Royalty Corp.,TSX,Industrials,Specialty Business Services,CA,601803605,XCS.TO,os-profile-DIV
+DLCG,DLCG.TO,Dominion Lending Centres Inc.,TSX,Financial Services,Financial - Mortgages,CA,622374750,XCS.TO,os-profile-DLCG
+DML,DML.TO,Denison Mines Corp.,TSX,Energy,Uranium,CA,2508082650,XCS.TO ZCN.TO,os-profile-DML
+DNG,DNG.TO,Dynacor Group Inc.,TSX,Basic Materials,Other Precious Metals,CA,230718246,XCS.TO,os-profile-DNG
+DOL,DOL.TO,Dollarama Inc.,TSX,Consumer Defensive,Discount Stores,CA,58923817561,ZCN.TO,os-profile-DOL
+DOO,DOO.TO,BRP Inc.,TSX,Consumer Cyclical,Auto - Recreational Vehicles,CA,6459024325,ZCN.TO,os-profile-DOO
+DPM,DPM.TO,DPM Metals Inc.,TSX,Basic Materials,Gold,CA,10433189941,ZCN.TO,os-profile-DPM
+DR,DR.TO,Medical Facilities Corporation,TSX,Healthcare,Medical - Care Facilities,CA,277967582,XCS.TO,os-profile-DR
+DRM,DRM.TO,Dream Unlimited Corp.,TSX,Real Estate,Real Estate - Development,CA,797218337,XCS.TO,os-profile-DRM
+DSG,DSG.TO,The Descartes Systems Group Inc.,TSX,Technology,Software - Application,CA,11709036882,ZCN.TO,os-profile-DSG
+DSV,DSV.TO,Discovery Mining Ltd.,TSX,Basic Materials,Silver,CA,7546864590,ZCN.TO,os-profile-DSV
+DTOL,DTOL.TO,D2L Inc.,TSX,Technology,Software - Application,CA,618035120,XCS.TO,os-profile-DTOL
+DXT,DXT.TO,Dexterra Group Inc.,TSX,Industrials,Specialty Business Services,CA,1188672183,XCS.TO,os-profile-DXT
+EDR,EDR.TO,Endeavour Silver Corp.,TSX,Basic Materials,Silver,CA,3068051840,XCS.TO ZCN.TO,os-profile-EDR
+EFN,EFN.TO,Element Fleet Management Corp.,TSX,Industrials,Rental & Leasing Services,CA,7639262645,ZCN.TO,os-profile-EFN
+EFR,EFR.TO,Energy Fuels Inc.,TSX,Energy,Uranium,US,2300030642,ZCN.TO,os-profile-EFR
+EFX,EFX.TO,Enerflex Ltd.,TSX,Energy,Oil & Gas Equipment & Services,CA,3379807801,XCS.TO ZCN.TO,os-profile-EFX
+EIF,EIF.TO,Exchange Income Corporation,TSX,Industrials,"Airlines, Airports & Air Services",CA,7134401515,ZCN.TO,os-profile-EIF
+ELD,ELD.TO,Eldorado Gold Corporation,TSX,Basic Materials,Gold,CA,11549343993,ZCN.TO,os-profile-ELD
+ELO,ELO.TO,Eloro Resources Ltd.,TSX,Basic Materials,Other Precious Metals,CA,148390603,XCS.TO,os-profile-ELO
+ELVA,ELVA.TO,Electrovaya Inc.,TSX,Industrials,Electrical Equipment & Parts,CA,284493724,XCS.TO,os-profile-ELVA
+EMA,EMA.TO,Emera Incorporated,TSX,Utilities,Regulated Electric,CA,22720512000,ZCN.TO,os-profile-EMA
+EMP.A,EMP-A.TO,Empire Company Limited,TSX,Consumer Defensive,Grocery Stores,CA,11625420484,ZCN.TO,os-profile-EMP.A
+ENB,ENB.TO,Enbridge Inc.,TSX,Energy,Oil & Gas Midstream,CA,151441800459,ZCN.TO,os-profile-ENB
+ENGH,ENGH.TO,Enghouse Systems Limited,TSX,Technology,Software - Application,CA,982615205,XCS.TO,os-profile-ENGH
+EPRX,EPRX.TO,Eupraxia Pharmaceuticals Inc.,TSX,Healthcare,Biotechnology,CA,745712681,XCS.TO,os-profile-EPRX
+EQB,EQB.TO,EQB Inc.,TSX,Financial Services,Banks - Regional,CA,5453943349,ZCN.TO,os-profile-EQB
+EQX,EQX.TO,Equinox Gold Corp.,TSX,Basic Materials,Gold,CA,16741376400,ZCN.TO,os-profile-EQX
+ERD,ERD.TO,Erdene Resource Development Corporation,TSX,Basic Materials,Industrial Materials,CA,358735838,XCS.TO,os-profile-ERD
+ERO,ERO.TO,Ero Copper Corp.,TSX,Basic Materials,Copper,CA,4141257540,XCS.TO ZCN.TO,os-profile-ERO
+ESI,ESI.TO,Ensign Energy Services Inc.,TSX,Energy,Oil & Gas Drilling,CA,823946160,XCS.TO,os-profile-ESI
+EXE,EXE.TO,Extendicare Inc.,TSX,Healthcare,Medical - Care Facilities,CA,2889410530,XCS.TO ZCN.TO,os-profile-EXE
+FC,FC.TO,Firm Capital Mortgage Investment Corporation,TSX,Financial Services,Financial - Mortgages,CA,391646881,XCS.TO,os-profile-FC
+FCR.UN,FCR-UN.TO,First Capital Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,4950400780,ZCN.TO,os-profile-FCR.UN
+FDY,FDY.TO,Faraday Copper Corp.,TSX,Basic Materials,Copper,CA,1077224285,XCS.TO,os-profile-FDY
+FEC,FEC.TO,Frontera Energy Corporation,TSX,Energy,Oil & Gas Exploration & Production,CA,532535227,XCS.TO,os-profile-FEC
+FFH,FFH.TO,Fairfax Financial Holdings Limited,TSX,Financial Services,Insurance - Property & Casualty,CA,57188253396,ZCN.TO,os-profile-FFH
+FM,FM.TO,First Quantum Minerals Ltd.,TSX,Basic Materials,Copper,CA,25376575602,ZCN.TO,os-profile-FM
+FNV,FNV.TO,Franco-Nevada Corporation,TSX,Basic Materials,Gold,CA,67421034969,ZCN.TO,os-profile-FNV
+FRU,FRU.TO,Freehold Royalties Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,2828315762,XCS.TO ZCN.TO,os-profile-FRU
+FSV,FSV.TO,FirstService Corporation,TSX,Real Estate,Real Estate - Services,CA,9337313147,ZCN.TO,os-profile-FSV
+FSZ,FSZ.TO,Fiera Capital Corporation,TSX,Financial Services,Asset Management,CA,246071563,XCS.TO,os-profile-FSZ
+FTG,FTG.TO,Firan Technology Group Corporation,TSX,Industrials,Aerospace & Defense,CA,793213519,XCS.TO,os-profile-FTG
+FTS,FTS.TO,Fortis Inc.,TSX,Utilities,Regulated Electric,CA,44178270000,ZCN.TO,os-profile-FTS
+FTT,FTT.TO,Finning International Inc.,TSX,Industrials,Industrial - Distribution,CA,11448442930,ZCN.TO,os-profile-FTT
+FVI,FVI.TO,Fortuna Mining Corp.,TSX,Basic Materials,Gold,CA,3752739757,XCS.TO ZCN.TO,os-profile-FVI
+FVL,FVL.TO,Freegold Ventures Limited,TSX,Basic Materials,Other Precious Metals,CA,427499315,XCS.TO,os-profile-FVL
+GAU,GAU.TO,Galiano Gold Inc.,TSX,Basic Materials,Gold,CA,835952260,XCS.TO,os-profile-GAU
+GEI,GEI.TO,Gibson Energy Inc.,TSX,Energy,Oil & Gas Midstream,CA,5611226000,ZCN.TO,os-profile-GEI
+GFL,GFL.TO,GFL Environmental Inc.,TSX,Industrials,Waste Management,CA,21429859253,ZCN.TO,os-profile-GFL
+GFR,GFR.TO,Greenfire Resources Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,2647289418,XCS.TO,os-profile-GFR
+GGD,GGD.TO,GoGold Resources Inc.,TSX,Basic Materials,Other Precious Metals,CA,1309218202,XCS.TO,os-profile-GGD
+GIB.A,GIB-A.TO,CGI Inc.,TSX,Technology,Information Technology Services,CA,21174970104,ZCN.TO,os-profile-GIB.A
+GIL,GIL.TO,Gildan Activewear Inc.,TSX,Consumer Cyclical,Apparel - Manufacturers,CA,9087911153,ZCN.TO,os-profile-GIL
+GMIN,GMIN.TO,G Mining Ventures Corp.,TSX,Basic Materials,Gold,CA,13337445120,ZCN.TO,os-profile-GMIN
+GOLD,GOLD.TO,GoldMining Inc.,TSX,Basic Materials,Gold,CA,217638840,XCS.TO,os-profile-GOLD
+GOOS,GOOS.TO,Canada Goose Holdings Inc.,TSX,Consumer Cyclical,Apparel - Manufacturers,CA,1124692959,XCS.TO,os-profile-GOOS
+GRA,GRA.TO,NanoXplore Inc.,TSX,Basic Materials,Chemicals - Specialty,CA,267693329,XCS.TO,os-profile-GRA
+GRT.UN,GRT-UN.TO,Granite Real Estate Investment Trust,TSX,Real Estate,REIT - Industrial,CA,5458424313,ZCN.TO,os-profile-GRT.UN
+GSY,GSY.TO,goeasy Ltd.,TSX,Financial Services,Financial - Credit Services,CA,630785430,XCS.TO,os-profile-GSY
+GTE,GTE.TO,Gran Tierra Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,470047208,XCS.TO,os-profile-GTE
+GUD,GUD.TO,Knight Therapeutics Inc.,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,1179761538,XCS.TO,os-profile-GUD
+GWO,GWO.TO,Great-West Lifeco Inc.,TSX,Financial Services,Insurance - Life,CA,83536686000,ZCN.TO,os-profile-GWO
+H,H.TO,Hydro One Limited,TSX,Utilities,Regulated Electric,CA,34679547840,ZCN.TO,os-profile-H
+HBM,HBM.TO,Hudbay Minerals Inc.,TSX,Basic Materials,Copper,CA,12756011608,ZCN.TO,os-profile-HBM
+HLF,HLF.TO,High Liner Foods Incorporated,TSX,Consumer Defensive,Packaged Foods,CA,753611859,XCS.TO,os-profile-HLF
+HPS.A,HPS-A.TO,Hammond Power Solutions Inc.,TSX,Industrials,Electrical Equipment & Parts,CA,2390151391,XCS.TO ZCN.TO,os-profile-HPS.A
+HR.UN,HR-UN.TO,H&R Real Estate Investment Trust,TSX,Real Estate,REIT - Diversified,CA,2604027530,XCS.TO ZCN.TO,os-profile-HR.UN
+HSLV,HSLV.TO,Highlander Silver Corp.,TSX,Basic Materials,Silver,CA,1044072990,XCS.TO,os-profile-HSLV
+HWX,HWX.TO,Headwater Exploration Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,2773505395,XCS.TO ZCN.TO,os-profile-HWX
+IAG,IAG.TO,iA Financial Corporation Inc.,TSX,Financial Services,Insurance - Diversified,CA,18896431780,ZCN.TO,os-profile-IAG
+IAU,IAU.TO,i-80 Gold Corp,TSX,Basic Materials,Gold,US,1510716206,XCS.TO ZCN.TO,os-profile-IAU
+IFC,IFC.TO,Intact Financial Corporation,TSX,Financial Services,Insurance - Property & Casualty,CA,48513291185,ZCN.TO,os-profile-IFC
+IFP,IFP.TO,Interfor Corporation,TSX,Basic Materials,"Paper, Lumber & Forest Products",CA,852339027,XCS.TO,os-profile-IFP
+IGM,IGM.TO,IGM Financial Inc.,TSX,Financial Services,Asset Management,CA,20521932421,ZCN.TO,os-profile-IGM
+III,III.TO,Imperial Metals Corporation,TSX,Basic Materials,Copper,CA,981764433,XCS.TO,os-profile-III
+IMG,IMG.TO,Iamgold Corporation,TSX,Basic Materials,Gold,CA,14103700000,ZCN.TO,os-profile-IMG
+IMO,IMO.TO,Imperial Oil Limited,TSX,Energy,Oil & Gas Integrated,CA,84414624351,ZCN.TO,os-profile-IMO
+IPCO,IPCO.TO,International Petroleum Corporation,TSX,Energy,Oil & Gas Exploration & Production,CA,4282439808,XCS.TO ZCN.TO,os-profile-IPCO
+IPO,IPO.TO,InPlay Oil Corp,TSX,Energy,Oil & Gas Exploration & Production,CA,476126093,XCS.TO,os-profile-IPO
+ISO,ISO.TO,IsoEnergy Ltd.,TSX,Energy,Uranium,CA,644948616,XCS.TO,os-profile-ISO
+ITH,ITH.TO,International Tower Hill Mines Ltd.,TSX,Basic Materials,Gold,CA,460481118,XCS.TO,os-profile-ITH
+IVN,IVN.TO,Ivanhoe Mines Ltd.,TSX,Basic Materials,Industrial Materials,CA,10334702537,ZCN.TO,os-profile-IVN
+JAG,JAG.TO,Jaguar Mining Inc.,TSX,Basic Materials,Gold,CA,328523965,XCS.TO,os-profile-JAG
+JOY,JOY.TO,Journey Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,312099625,XCS.TO,os-profile-JOY
+JWEL,JWEL.TO,Jamieson Wellness Inc.,TSX,Consumer Defensive,Packaged Foods,CA,1895304312,XCS.TO ZCN.TO,os-profile-JWEL
+K,K.TO,Kinross Gold Corporation,TSX,Basic Materials,Gold,CA,34422327991,ZCN.TO,os-profile-K
+KBL,KBL.TO,K-Bro Linen Inc.,TSX,Industrials,Specialty Business Services,CA,543575741,XCS.TO,os-profile-KBL
+KEI,KEI.TO,Kolibri Global Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,US,248784345,XCS.TO,os-profile-KEI
+KEL,KEL.TO,Kelt Exploration Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,2549680000,XCS.TO ZCN.TO,os-profile-KEL
+KEY,KEY.TO,Keyera Corp.,TSX,Energy,Oil & Gas Midstream,CA,15196445822,ZCN.TO,os-profile-KEY
+KITS,KITS.TO,Kits Eyecare Ltd.,TSX,Consumer Cyclical,Specialty Retail,CA,644417516,XCS.TO,os-profile-KITS
+KMP.UN,KMP-UN.TO,Killam Apartment REIT,TSX,Real Estate,REIT - Residential,CA,2072888048,XCS.TO ZCN.TO,os-profile-KMP.UN
+KNT,KNT.TO,K92 Mining Inc.,TSX,Basic Materials,Gold,CA,6076433030,ZCN.TO,os-profile-KNT
+KXS,KXS.TO,Kinaxis Inc.,TSX,Technology,Software - Application,CA,6333992305,XCS.TO ZCN.TO,os-profile-KXS
+L,L.TO,Loblaw Companies Limited,TSX,Consumer Defensive,Grocery Stores,CA,81573892449,ZCN.TO,os-profile-L
+LAC,LAC.TO,Lithium Americas Corp.,TSX,Basic Materials,Industrial Materials,CA,444324474,XCS.TO ZCN.TO,os-profile-LAC
+LAR,LAR.TO,Lithium Argentina AG,TSX,Basic Materials,Industrial Materials,CH,830030972,XCS.TO,os-profile-LAR
+LAS.A,LAS-A.TO,Lassonde Industries Inc.,TSX,Consumer Defensive,Beverages - Non-Alcoholic,CA,1546694128,XCS.TO,os-profile-LAS.A
+LGD,LGD.TO,Liberty Gold Corp.,TSX,Basic Materials,Gold,CA,954661325,XCS.TO,os-profile-LGD
+LIF,LIF.TO,Labrador Iron Ore Royalty Corporation,TSX,Basic Materials,Steel,CA,1336960000,XCS.TO ZCN.TO,os-profile-LIF
+LNF,LNF.TO,Leon's Furniture Limited,TSX,Consumer Cyclical,Specialty Retail,CA,1905889368,XCS.TO,os-profile-LNF
+LNR,LNR.TO,Linamar Corporation,TSX,Consumer Cyclical,Auto - Parts,CA,5014366966,ZCN.TO,os-profile-LNR
+LSPD,LSPD.TO,Lightspeed Commerce Inc.,TSX,Technology,Software - Application,CA,1963934765,XCS.TO ZCN.TO,os-profile-LSPD
+LUG,LUG.TO,Lundin Gold Inc.,TSX,Basic Materials,Gold,CA,22181479620,ZCN.TO,os-profile-LUG
+LUN,LUN.TO,Lundin Mining Corporation,TSX,Basic Materials,Copper,CA,23602001850,ZCN.TO,os-profile-LUN
+MAL,MAL.TO,Magellan Aerospace Corporation,TSX,Industrials,Aerospace & Defense,CA,1916716178,XCS.TO,os-profile-MAL
+MARI,MARI.TO,Marimaca Copper Corp.,TSX,Basic Materials,Copper,CA,837674257,XCS.TO,os-profile-MARI
+MATR,MATR.TO,Mattr Corp.,TSX,Energy,Oil & Gas Equipment & Services,CA,1112202038,XCS.TO,os-profile-MATR
+MAU,MAU.TO,Montage Gold Corp.,TSX,Basic Materials,Gold,CA,5982076490,ZCN.TO,os-profile-MAU
+MDA,MDA.TO,MDA Space Ltd,TSX,Industrials,Aerospace & Defense,CA,6538885799,ZCN.TO,os-profile-MDA
+MDI,MDI.TO,Major Drilling Group International Inc.,TSX,Basic Materials,Industrial Materials,CA,1185025083,XCS.TO,os-profile-MDI
+MEQ,MEQ.TO,Mainstreet Equity Corp.,TSX,Real Estate,Real Estate - Services,CA,1682814301,XCS.TO,os-profile-MEQ
+MER,MER.TO,Meren Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,1257574471,XCS.TO,os-profile-MER
+MFC,MFC.TO,Manulife Financial Corporation,TSX,Financial Services,Insurance - Life,CA,103280539200,ZCN.TO,os-profile-MFC
+MFI,MFI.TO,Maple Leaf Foods Inc.,TSX,Consumer Defensive,Packaged Foods,CA,3479129010,XCS.TO ZCN.TO,os-profile-MFI
+MG,MG.TO,Magna International Inc.,TSX,Consumer Cyclical,Auto - Parts,CA,22617599585,ZCN.TO,os-profile-MG
+MKP,MKP.TO,MCAN Mortgage Corporation,TSX,Financial Services,Financial - Mortgages,CA,896302311,XCS.TO,os-profile-MKP
+MRC,MRC.TO,Morguard Corporation,TSX,Real Estate,Real Estate - Diversified,CA,1195335730,XCS.TO,os-profile-MRC
+MRE,MRE.TO,Martinrea International Inc.,TSX,Consumer Cyclical,Auto - Parts,CA,780918243,XCS.TO,os-profile-MRE
+MRG.UN,MRG-UN.TO,Morguard North American Residential Real Estate Investment Trust,TSX,Real Estate,REIT - Residential,CA,520508253,XCS.TO,os-profile-MRG.UN
+MRU,MRU.TO,Metro Inc.,TSX,Consumer Defensive,Grocery Stores,CA,21097178900,ZCN.TO,os-profile-MRU
+MTL,MTL.TO,Mullen Group Ltd.,TSX,Industrials,Trucking,CA,2945956496,XCS.TO ZCN.TO,os-profile-MTL
+MTY,MTY.TO,MTY Food Group Inc.,TSX,Consumer Cyclical,Restaurants,CA,828456163,XCS.TO,os-profile-MTY
+MX,MX.TO,Methanex Corporation,TSX,Basic Materials,Chemicals,CA,7415364609,ZCN.TO,os-profile-MX
+NA,NA.TO,National Bank of Canada,TSX,Financial Services,Banks - Diversified,CA,82853847918,ZCN.TO,os-profile-NA
+NDM,NDM.TO,Northern Dynasty Minerals Ltd.,TSX,Basic Materials,Industrial Materials,CA,449697336,XCS.TO,os-profile-NDM
+NEO,NEO.TO,Neo Performance Materials Inc.,TSX,Basic Materials,Chemicals - Specialty,CA,1115210064,XCS.TO,os-profile-NEO
+NFI,NFI.TO,NFI Group Inc.,TSX,Consumer Cyclical,Auto - Manufacturers,CA,2911428834,XCS.TO ZCN.TO,os-profile-NFI
+NG,NG.TO,NovaGold Resources Inc.,TSX,Basic Materials,Gold,CA,3556603518,ZCN.TO,os-profile-NG
+NGEX,NGEX.TO,NGEx Minerals Ltd.,TSX,Basic Materials,Industrial Materials,CA,4304646783,ZCN.TO,os-profile-NGEX
+NOA,NOA.TO,North American Construction Group Ltd.,TSX,Energy,Oil & Gas Equipment & Services,CA,346865987,XCS.TO,os-profile-NOA
+NOU,NOU.TO,Nouveau Monde Graphite Inc,TSX,Basic Materials,Industrial Materials,CA,370301625,XCS.TO,os-profile-NOU
+NPI,NPI.TO,Northland Power Inc.,TSX,Utilities,Renewable Utilities,CA,6328348400,ZCN.TO,os-profile-NPI
+NTR,NTR.TO,Nutrien Ltd.,TSX,Basic Materials,Agricultural Inputs,CA,47465254410,ZCN.TO,os-profile-NTR
+NUAG,NUAG.TO,New Pacific Metals Corp.,TSX,Basic Materials,Silver,CA,1254534750,XCS.TO,os-profile-NUAG
+NWC,NWC.TO,The North West Company Inc.,TSX,Consumer Defensive,Grocery Stores,CA,2823120048,XCS.TO ZCN.TO,os-profile-NWC
+NXE,NXE.TO,NexGen Energy Ltd.,TSX,Energy,Uranium,CA,7147593960,ZCN.TO,os-profile-NXE
+NXR.UN,NXR-UN.TO,Nexus Industrial REIT,TSX,Real Estate,REIT - Industrial,CA,606116640,XCS.TO,os-profile-NXR.UN
+OBE,OBE.TO,Obsidian Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,890864325,XCS.TO,os-profile-OBE
+OGC,OGC.TO,OceanaGold Corporation,TSX,Basic Materials,Gold,CA,8276339551,ZCN.TO,os-profile-OGC
+OGI,OGI.TO,Organigram Global Inc.,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,146646240,XCS.TO,os-profile-OGI
+OM,OM.TO,Osisko Metals Incorporated,TSX,Basic Materials,Other Precious Metals,CA,1136814513,XCS.TO,os-profile-OM
+ONEX,ONEX.TO,Onex Corporation,TSX,Financial Services,Asset Management,CA,8519936435,ZCN.TO,os-profile-ONEX
+OR,OR.TO,OR Royalties Inc.,TSX,Basic Materials,Gold,CA,9003007879,ZCN.TO,os-profile-OR
+ORE,ORE.TO,Orezone Gold Corporation,TSX,Basic Materials,Gold,CA,1616809236,XCS.TO,os-profile-ORE
+OTEX,OTEX.TO,Open Text Corporation,TSX,Technology,Software - Application,CA,8631432047,ZCN.TO,os-profile-OTEX
+PAAS,PAAS.TO,Pan American Silver Corp.,TSX,Basic Materials,Gold,CA,21267568760,ZCN.TO,os-profile-PAAS
+PBH,PBH.TO,Premium Brands Holdings Corporation,TSX,Consumer Defensive,Packaged Foods,CA,4129325109,ZCN.TO,os-profile-PBH
+PBL,PBL.TO,Pollard Banknote Limited,TSX,Consumer Cyclical,"Gambling, Resorts & Casinos",CA,403519767,XCS.TO,os-profile-PBL
+PD,PD.TO,Precision Drilling Corporation,TSX,Energy,Oil & Gas Drilling,CA,1678547874,XCS.TO,os-profile-PD
+PET,PET.TO,Pet Valu Holdings Ltd.,TSX,Consumer Cyclical,Specialty Retail,CA,1550682348,XCS.TO,os-profile-PET
+PEY,PEY.TO,Peyto Exploration & Development Corp.,TSX,Energy,Oil & Gas Exploration & Production,CA,5361814970,ZCN.TO,os-profile-PEY
+PHX,PHX.TO,PHX Energy Services Corp.,TSX,Energy,Oil & Gas Drilling,CA,488888780,XCS.TO,os-profile-PHX
+PIF,PIF.TO,Polaris Renewable Energy Inc.,TSX,Utilities,Renewable Utilities,CA,279996819,XCS.TO,os-profile-PIF
+PLZ.UN,PLZ-UN.TO,Plaza Retail REIT,TSX,Real Estate,REIT - Retail,CA,595427910,XCS.TO,os-profile-PLZ.UN
+PMET,PMET.TO,PMET Resources Inc.,TSX,Basic Materials,Other Precious Metals,CA,525288413,XCS.TO,os-profile-PMET
+PMZ.UN,PMZ-UN.TO,Primaris Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,3023065051,XCS.TO ZCN.TO,os-profile-PMZ.UN
+POU,POU.TO,Paramount Resources Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,4692732000,XCS.TO ZCN.TO,os-profile-POU
+POW,POW.TO,Power Corporation of Canada,TSX,Financial Services,Insurance - Diversified,CA,58204973738,ZCN.TO,os-profile-POW
+PPL,PPL.TO,Pembina Pipeline Corporation,TSX,Energy,Oil & Gas Midstream,CA,41371822700,ZCN.TO,os-profile-PPL
+PPTA,PPTA.TO,Perpetua Resources Corp.,TSX,Basic Materials,Other Precious Metals,US,3141155614,XCS.TO ZCN.TO,os-profile-PPTA
+PRL,PRL.TO,Propel Holdings Inc.,TSX,Financial Services,Financial - Credit Services,CA,1090803060,XCS.TO,os-profile-PRL
+PRN,PRN.TO,Profound Medical Corp.,TSX,Healthcare,Medical - Devices,CA,386046471,XCS.TO,os-profile-PRN
+PRV.UN,PRV-UN.TO,Pro Real Estate Investment Trust,TSX,Real Estate,REIT - Industrial,CA,562127055,XCS.TO,os-profile-PRV.UN
+PSI,PSI.TO,Pason Systems Inc.,TSX,Energy,Oil & Gas Equipment & Services,CA,1095504633,XCS.TO,os-profile-PSI
+PSK,PSK.TO,PrairieSky Royalty Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,8265673399,ZCN.TO,os-profile-PSK
+PTM,PTM.TO,Platinum Group Metals Ltd.,TSX,Basic Materials,Other Precious Metals,CA,189269968,XCS.TO,os-profile-PTM
+PXT,PXT.TO,Parex Resources Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,1957269105,XCS.TO ZCN.TO,os-profile-PXT
+PZA,PZA.TO,Pizza Pizza Royalty Corp.,TSX,Consumer Cyclical,Restaurants,CA,287542912,XCS.TO,os-profile-PZA
+QBR.B,QBR-B.TO,Quebecor Inc.,TSX,Communication Services,Telecommunications Services,CA,14950615923,ZCN.TO,os-profile-QBR.B
+QSR,QSR.TO,Restaurant Brands International Inc.,TSX,Consumer Cyclical,Restaurants,US,37451188057,ZCN.TO,os-profile-QSR
+RAY,RAY.TO,Stingray Group Inc.,TSX,Communication Services,Broadcasting,CA,1173544582,XCS.TO,os-profile-RAY
+RBA,RBA.TO,"RB Global, Inc.",TSX,Industrials,Specialty Business Services,US,24669491000,ZCN.TO,os-profile-RBA
+RCH,RCH.TO,Richelieu Hardware Ltd.,TSX,Industrials,Manufacturing - Tools & Accessories,CA,2059464934,XCS.TO ZCN.TO,os-profile-RCH
+RCI.B,RCI-B.TO,Rogers Communications Inc.,TSX,Communication Services,Telecommunications Services,CA,26403510218,ZCN.TO,os-profile-RCI.B
+REAL,REAL.TO,Real Matters Inc.,TSX,Real Estate,Real Estate - Services,CA,244414097,XCS.TO,os-profile-REAL
+REI.UN,REI-UN.TO,RioCan Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,6229357797,ZCN.TO,os-profile-REI.UN
+RFA,RFA.TO,RFA Financial Inc.,TSX,Real Estate,Real Estate - Services,CA,1050189039,XCS.TO,os-profile-RFA
+RGSI,RGSI.TO,Rockpoint Gas Storage Inc.,TSX,Utilities,Regulated Gas,CA,3259194103,XCS.TO,os-profile-RGSI
+RIC,RIC.TO,Richards Group Inc.,TSX,Consumer Cyclical,Packaging & Containers,CA,300273600,XCS.TO,os-profile-RIC
+RIO,RIO.TO,Rio2 Limited,TSX,Basic Materials,Gold,CA,1336656725,XCS.TO,os-profile-RIO
+RSI,RSI.TO,Rogers Sugar Inc.,TSX,Consumer Defensive,Food Confectioners,CA,879239407,XCS.TO,os-profile-RSI
+RUS,RUS.TO,Russel Metals Inc.,TSX,Industrials,Industrial - Distribution,CA,4350262199,XCS.TO ZCN.TO,os-profile-RUS
+RY,RY.TO,Royal Bank of Canada,TSX,Financial Services,Banks - Diversified,CA,397884870000,ZCN.TO,os-profile-RY
+SAP,SAP.TO,Saputo Inc.,TSX,Consumer Defensive,Packaged Foods,CA,18060851860,ZCN.TO,os-profile-SAP
+SCR,SCR.TO,Strathcona Resources Ltd,TSX,Energy,Oil & Gas Exploration & Production,CA,8321997420,ZCN.TO,os-profile-SCR
+SDE,SDE.TO,Spartan Delta Corp,TSX,Energy,Oil & Gas Exploration & Production,CA,2330218440,XCS.TO ZCN.TO,os-profile-SDE
+SEA,SEA.TO,Seabridge Gold Inc.,TSX,Basic Materials,Gold,CA,3891985680,XCS.TO ZCN.TO,os-profile-SEA
+SGD,SGD.TO,Snowline Gold Corp.,TSX,Basic Materials,Gold,CA,2361049953,XCS.TO ZCN.TO,os-profile-SGD
+SGR.UN,SGR-UN.TO,Slate Grocery REIT,TSX,Real Estate,REIT - Retail,CA,1055282580,XCS.TO,os-profile-SGR.UN
+SGY,SGY.TO,Surge Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,1041477150,XCS.TO,os-profile-SGY
+SHOP,SHOP.TO,Shopify Inc.,TSX,Technology,Software - Application,CA,275534417168,ZCN.TO,os-profile-SHOP
+SIA,SIA.TO,Sienna Senior Living Inc.,TSX,Healthcare,Medical - Care Facilities,CA,2245279500,XCS.TO ZCN.TO,os-profile-SIA
+SII,SII.TO,Sprott Inc.,TSX,Financial Services,Asset Management,CA,3812921824,XCS.TO ZCN.TO,os-profile-SII
+SIS,SIS.TO,Savaria Corporation,TSX,Industrials,Industrial - Machinery,CA,2165203208,XCS.TO,os-profile-SIS
+SJ,SJ.TO,Stella-Jones Inc.,TSX,Basic Materials,"Paper, Lumber & Forest Products",CA,3633110808,XCS.TO ZCN.TO,os-profile-SJ
+SKE,SKE.TO,Skeena Resources Limited,TSX,Basic Materials,Industrial Materials,CA,5161535684,ZCN.TO,os-profile-SKE
+SLF,SLF.TO,Sun Life Financial Inc.,TSX,Financial Services,Insurance - Diversified,CA,57540019000,ZCN.TO,os-profile-SLF
+SLS,SLS.TO,Solaris Resources Inc,TSX,Basic Materials,Other Precious Metals,CH,1468559557,XCS.TO,os-profile-SLS
+SOBO,SOBO.TO,South Bow Corporation,TSX,Energy,Oil & Gas Midstream,CA,9828027536,ZCN.TO,os-profile-SOBO
+SOIL,SOIL.TO,Saturn Oil & Gas Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,1494158490,XCS.TO,os-profile-SOIL
+SPB,SPB.TO,Superior Plus Corp.,TSX,Utilities,Regulated Gas,CA,1164205000,XCS.TO ZCN.TO,os-profile-SPB
+SRU.UN,SRU-UN.TO,SmartCentres Real Estate Investment Trust,TSX,Real Estate,REIT - Retail,CA,4069211212,ZCN.TO,os-profile-SRU.UN
+SSRM,SSRM.TO,SSR Mining Inc.,TSX,Basic Materials,Gold,US,7673236992,ZCN.TO,os-profile-SSRM
+STN,STN.TO,Stantec Inc.,TSX,Industrials,Engineering & Construction,CA,13620595767,ZCN.TO,os-profile-STN
+SU,SU.TO,Suncor Energy Inc.,TSX,Energy,Oil & Gas Integrated,CA,112175289166,ZCN.TO,os-profile-SU
+SVI,SVI.TO,StorageVault Canada Inc.,TSX,Real Estate,Real Estate - Services,CA,1523365410,XCS.TO,os-profile-SVI
+SVM,SVM.TO,Silvercorp Metals Inc.,TSX,Basic Materials,Silver,CA,2563781121,XCS.TO ZCN.TO,os-profile-SVM
+SXGC,SXGC.TO,Southern Cross Gold Consolidated Ltd.,TSX,Basic Materials,Gold,AU,2114109000,XCS.TO ZCN.TO,os-profile-SXGC
+T,T.TO,TELUS Corporation,TSX,Communication Services,Telecommunications Services,CA,21401400061,ZCN.TO,os-profile-T
+TA,TA.TO,TransAlta Corporation,TSX,Utilities,Independent Power Producers,CA,5857876000,ZCN.TO,os-profile-TA
+TCL.A,TCL-A.TO,Transcontinental Inc.,TSX,Consumer Cyclical,Packaging & Containers,CA,421701263,XCS.TO,os-profile-TCL.A
+TCS,TCS.TO,Tecsys Inc.,TSX,Technology,Software - Application,CA,533688000,XCS.TO,os-profile-TCS
+TCW,TCW.TO,Trican Well Service Ltd.,TSX,Energy,Oil & Gas Equipment & Services,CA,1248215220,XCS.TO,os-profile-TCW
+TD,TD.TO,The Toronto-Dominion Bank,TSX,Financial Services,Banks - Diversified,CA,285059399691,ZCN.TO,os-profile-TD
+TECK.B,TECK-B.TO,Teck Resources Limited,TSX,Basic Materials,Copper,CA,40541832281,ZCN.TO,os-profile-TECK.B
+TF,TF.TO,Timbercreek Financial Corp.,TSX,Financial Services,Financial - Credit Services,CA,358321419,XCS.TO,os-profile-TF
+TFII,TFII.TO,TFI International Inc.,TSX,Industrials,Trucking,CA,11259907650,ZCN.TO,os-profile-TFII
+TFPM,TFPM.TO,Triple Flag Precious Metals Corp.,TSX,Basic Materials,Other Precious Metals,CA,8807451483,ZCN.TO,os-profile-TFPM
+TIH,TIH.TO,Toromont Industries Ltd.,TSX,Industrials,Industrial - Distribution,CA,16152917950,ZCN.TO,os-profile-TIH
+TKO,TKO.TO,Trekor Metals Limited,TSX,Basic Materials,Copper,CA,3392674892,XCS.TO ZCN.TO,os-profile-TKO
+TLG,TLG.TO,Troilus Mining Corp.,TSX,Basic Materials,Other Precious Metals,CA,766528000,XCS.TO,os-profile-TLG
+TLRY,TLRY.TO,"Tilray Brands, Inc.",TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,495827140,XCS.TO,os-profile-TLRY
+TMQ,TMQ.TO,Trilogy Metals Inc.,TSX,Basic Materials,Industrial Materials,CA,489674700,XCS.TO,os-profile-TMQ
+TNZ,TNZ.TO,Tenaz Energy Corp.,TSX,Energy,Oil & Gas Exploration & Production,CA,1509280350,XCS.TO,os-profile-TNZ
+TOT,TOT.TO,Total Energy Services Inc.,TSX,Energy,Oil & Gas Equipment & Services,CA,1245608000,XCS.TO,os-profile-TOT
+TOU,TOU.TO,Tourmaline Oil Corp.,TSX,Energy,Oil & Gas Exploration & Production,CA,25308483213,ZCN.TO,os-profile-TOU
+TOY,TOY.TO,Spin Master Corp.,TSX,Consumer Cyclical,Leisure,CA,2201120542,XCS.TO,os-profile-TOY
+TPZ,TPZ.TO,Topaz Energy Corp.,TSX,Energy,Oil & Gas Midstream,CA,4516439846,ZCN.TO,os-profile-TPZ
+TRI,TRI.TO,Thomson Reuters Corporation,TSX,Industrials,Specialty Business Services,CA,67857986639,ZCN.TO,os-profile-TRI
+TRP,TRP.TO,TC Energy Corporation,TSX,Energy,Oil & Gas Midstream,CA,95530021184,ZCN.TO,os-profile-TRP
+TRX,TRX.TO,TRX Gold Corporation,TSX,Basic Materials,Gold,CA,373320370,XCS.TO,os-profile-TRX
+TSAT,TSAT.TO,Telesat Corporation,TSX,Communication Services,Telecommunications Services,CA,947568646,XCS.TO,os-profile-TSAT
+TSK,TSK.TO,Talisker Resources Ltd.,TSX,Basic Materials,Gold,CA,149478272,XCS.TO,os-profile-TSK
+TSU,TSU.TO,Trisura Group Ltd.,TSX,Financial Services,Insurance - Specialty,CA,1452450048,XCS.TO ZCN.TO,os-profile-TSU
+TVE,TVE.TO,Tamarack Valley Energy Ltd.,TSX,Energy,Oil & Gas Exploration & Production,CA,5430229080,ZCN.TO,os-profile-TVE
+TVK,TVK.TO,TerraVest Industries Inc.,TSX,Energy,Oil & Gas Equipment & Services,CA,2443978390,XCS.TO ZCN.TO,os-profile-TVK
+TWM,TWM.TO,Tidewater Midstream and Infrastructure Ltd.,TSX,Energy,Oil & Gas Midstream,CA,587875860,XCS.TO,os-profile-TWM
+TXR,TXR.TO,Torex Resources Inc.,TSX,Basic Materials,Gold,CA,6115367104,ZCN.TO,os-profile-TXR
+URE,URE.TO,Ur-Energy Inc.,TSX,Energy,Uranium,US,326967768,XCS.TO,os-profile-URE
+USA,USA.TO,Americas Gold and Silver Corporation,TSX,Basic Materials,Industrial Materials,CA,1105775411,XCS.TO ZCN.TO,os-profile-USA
+VBNK,VBNK.TO,VersaBank,TSX,Financial Services,Banks - Regional,CA,1117161462,XCS.TO,os-profile-VBNK
+VET,VET.TO,Vermilion Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,2350204491,XCS.TO ZCN.TO,os-profile-VET
+VGC,VGC.TO,Valor Gold Corp,TSX,Basic Materials,Other Precious Metals,CA,100650002,XCS.TO,os-profile-VGC
+VGZ,VGZ.TO,Vista Gold Corp.,TSX,Basic Materials,Gold,US,540822555,XCS.TO,os-profile-VGZ
+VHI,VHI.TO,Vitalhub Corp.,TSX,Healthcare,Medical - Healthcare Information Services,CA,419938592,XCS.TO,os-profile-VHI
+VITL.UN,VITL-UN.TO,Vital Infrastructure Property Trust,TSX,Real Estate,REIT - Healthcare Facilities,CA,1163777930,XCS.TO,os-profile-VITL.UN
+VLE,VLE.TO,Valeura Energy Inc.,TSX,Energy,Oil & Gas Exploration & Production,SG,1513018430,XCS.TO,os-profile-VLE
+VMET,VMET.TO,Versamet Royalties Corp.,TSX,Basic Materials,Other Precious Metals,CA,1190594796,XCS.TO,os-profile-VMET
+VNP,VNP.TO,5N Plus Inc.,TSX,Basic Materials,Chemicals - Specialty,CA,2889622024,XCS.TO ZCN.TO,os-profile-VNP
+VZLA,VZLA.TO,Vizsla Silver Corp.,TSX,Basic Materials,Industrial Materials,CA,1508991706,XCS.TO ZCN.TO,os-profile-VZLA
+WCN,WCN.TO,"Waste Connections, Inc.",TSX,Industrials,Waste Management,US,70086804873,ZCN.TO,os-profile-WCN
+WCP,WCP.TO,Whitecap Resources Inc.,TSX,Energy,Oil & Gas Exploration & Production,CA,20709133352,ZCN.TO,os-profile-WCP
+WDO,WDO.TO,Wesdome Gold Mines Ltd.,TSX,Basic Materials,Gold,CA,3735984497,XCS.TO ZCN.TO,os-profile-WDO
+WEED,WEED.TO,Canopy Growth Corporation,TSX,Healthcare,Drug Manufacturers - Specialty & Generic,CA,346202882,XCS.TO,os-profile-WEED
+WELL,WELL.TO,WELL Health Technologies Corp.,TSX,Healthcare,Medical - Care Facilities,CA,952122847,XCS.TO,os-profile-WELL
+WFG,WFG.TO,West Fraser Timber Co. Ltd.,TSX,Basic Materials,"Paper, Lumber & Forest Products",CA,7241128266,ZCN.TO,os-profile-WFG
+WJX,WJX.TO,Wajax Corporation,TSX,Industrials,Industrial - Distribution,CA,823947660,XCS.TO,os-profile-WJX
+WN,WN.TO,George Weston Limited,TSX,Consumer Defensive,Grocery Stores,CA,42554421793,ZCN.TO,os-profile-WN
+WPK,WPK.TO,Winpak Ltd.,TSX,Consumer Cyclical,Packaging & Containers,CA,2688502375,XCS.TO,os-profile-WPK
+WPM,WPM.TO,Wheaton Precious Metals Corp.,TSX,Basic Materials,Gold,CA,83716106711,ZCN.TO,os-profile-WPM
+WRN,WRN.TO,Western Copper and Gold Corporation,TSX,Basic Materials,Industrial Materials,CA,442369590,XCS.TO,os-profile-WRN
+WSP,WSP.TO,WSP Global Inc.,TSX,Industrials,Engineering & Construction,CA,25599811480,ZCN.TO,os-profile-WSP
+WTE,WTE.TO,Westshore Terminals Investment Corporation,TSX,Industrials,Marine Shipping,CA,2728372066,XCS.TO,os-profile-WTE
+X,X.TO,TMX Group Limited,TSX,Financial Services,Financial - Data & Stock Exchanges,CA,17673929678,ZCN.TO,os-profile-X

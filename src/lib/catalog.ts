@@ -32,4 +32,6 @@ export interface IndustryOption {
   /** share of the index filled with additions, and the cap per addition */
   sleevePct: number;
   maxWeightPct: number;
+  /** set for "choose your own" industries: candidates found automatically in the Canadian market map */
+  custom?: { sector: string; count: number };
 }

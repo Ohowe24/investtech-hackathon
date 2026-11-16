@@ -167,6 +167,12 @@ describe("equalWeights", () => {
   it("makes related companies share one slot", () => {
     expect(equalWeights([["A", "B"], ["C"]], 15, 8.2)).toEqual({ A: 3.75, B: 3.75, C: 7.5 });
   });
+  it("never adds up to more than the sleeve", () => {
+    const w = equalWeights(Array.from({ length: 9 }, (_, i) => [`T${i}`]), 15, 8.2);
+    expect(w.T0).toBe(1.66);
+    expect(Object.values(w).reduce((a, b) => a + b, 0)).toBeLessThanOrEqual(15);
+    expect(equalWeights([["A"], ["B"], ["C"]], 15, 3.42)).toEqual({ A: 3.42, B: 3.42, C: 3.42 }); // a capped weight is not rounded down to 3.41
+  });
   it("returns nothing when there is nothing to add", () => {
     expect(equalWeights([], 15, 8.2)).toEqual({});
   });

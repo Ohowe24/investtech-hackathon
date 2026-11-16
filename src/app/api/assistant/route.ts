@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   // so nothing in the body reaches the engine unchecked.
   const q = (body as AskRequest & { query?: AnalysisQuery }).query;
   const parsed = q && typeof q === "object" ? fromSearch(Object.fromEntries(new URLSearchParams(toSearch(q)))) : null;
-  const run = parsed ? runAnalysis(parsed) : null;
+  const run = parsed ? await runAnalysis(parsed) : null;
   const dataset = run?.ok ? run.dataset : defaultDataset;
   const snapshot = run?.ok ? run.snapshot : defaultSnapshot;
 

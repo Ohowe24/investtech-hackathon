@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-16T16:06:47.536Z",
+  "generatedAt": "2026-11-16T17:35:57.551Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -200,7 +200,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "add",
       "verdictSource": "model",
-      "proposedWeightPct": 4.1,
+      "proposedWeightPct": 0.83,
       "reason": "Passed every check.",
       "model": {
         "checks": [
@@ -275,7 +275,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 1
+        "rank": 4
       },
       "history": [
         {
@@ -903,7 +903,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "add",
       "verdictSource": "model",
-      "proposedWeightPct": 4.1,
+      "proposedWeightPct": 0.83,
       "reason": "Failed: Share count up ≤ 5%.",
       "model": {
         "checks": [
@@ -978,7 +978,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 4
+        "rank": 11
       },
       "history": [
         {
@@ -1464,7 +1464,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 7
+        "rank": 15
       },
       "history": [
         {
@@ -2099,6 +2099,317 @@
       "reportingCurrency": "CAD"
     },
     {
+      "ticker": "STN",
+      "name": "Stantec",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Engineering and design",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.6837718155769732,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-STN-FY2021",
+            "os-STN-FY2022",
+            "os-STN-FY2023",
+            "os-STN-FY2024",
+            "os-STN-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.21842206272737807,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-STN-FY2021",
+            "os-STN-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.223356835377434,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-STN-FY2021",
+            "os-STN-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.021953083798015305,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-STN-FY2021",
+            "os-STN-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.13925320846955735,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-STN-FY2024",
+            "os-STN-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 2.8306301321692318,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-STN-FY2023",
+            "os-STN-FY2024",
+            "os-STN-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 2
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 3636100000,
+          "operatingCashFlow": 397000000,
+          "freeCashFlow": 351200000,
+          "acquisitions": 702500000,
+          "dilutedShares": 111616665,
+          "fcfPerShare": 3.1464835470581387,
+          "cashReturn": null,
+          "capex": 45800000,
+          "ebitda": 539700000,
+          "totalDebt": 1921200000,
+          "cash": 193900000,
+          "totalEquity": 2002200000,
+          "goodwill": 2184300000,
+          "netDebt": 1727300000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.14842826104892604,
+          "ocfMargin": 0.1091829157613927,
+          "fcfMargin": 0.09658700255768543,
+          "fcfConversion": 0.6507318880859737,
+          "capexIntensity": 0.012595913203707268,
+          "acqToOcf": 1.769521410579345,
+          "netDebtToEbitda": 3.2004817491198816,
+          "goodwillToEquity": 1.0909499550494457,
+          "revenuePerShare": 32.57667661007431,
+          "sourceIds": [
+            "os-STN-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 4457200000,
+          "operatingCashFlow": 304300000,
+          "freeCashFlow": 235800000,
+          "acquisitions": 50400000,
+          "dilutedShares": 111616665,
+          "fcfPerShare": 2.1125877573926797,
+          "cashReturn": 0.05799026117751217,
+          "capex": 68500000,
+          "ebitda": 716600000,
+          "totalDebt": 1922600000,
+          "cash": 148300000,
+          "totalEquity": 2286400000,
+          "goodwill": 2346400000,
+          "netDebt": 1774300000,
+          "revenueGrowth": 0.22581887186821037,
+          "ebitdaMargin": 0.16077357982589968,
+          "ocfMargin": 0.06827156062101768,
+          "fcfMargin": 0.05290316790810374,
+          "fcfConversion": 0.32905386547585824,
+          "capexIntensity": 0.015368392712913938,
+          "acqToOcf": 0.1656260269470917,
+          "netDebtToEbitda": 2.475997767234161,
+          "goodwillToEquity": 1.0262421273617914,
+          "revenuePerShare": 39.93310497137681,
+          "sourceIds": [
+            "os-STN-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 5066200000,
+          "operatingCashFlow": 520000000,
+          "freeCashFlow": 419400000,
+          "acquisitions": 75600000,
+          "dilutedShares": 111228491,
+          "fcfPerShare": 3.770616648930354,
+          "cashReturn": 0.10032292787944026,
+          "capex": 100600000,
+          "ebitda": 838500000,
+          "totalDebt": 1700900000,
+          "cash": 352900000,
+          "totalEquity": 2451100000,
+          "goodwill": 2073600000,
+          "netDebt": 1348000000,
+          "revenueGrowth": 0.13663286368123484,
+          "ebitdaMargin": 0.16550866527180136,
+          "ocfMargin": 0.10264103272669851,
+          "fcfMargin": 0.0827839406261103,
+          "fcfConversion": 0.5001788908765653,
+          "capexIntensity": 0.01985709210058821,
+          "acqToOcf": 0.1453846153846154,
+          "netDebtToEbitda": 1.6076326774001193,
+          "goodwillToEquity": 0.8459875158092285,
+          "revenuePerShare": 45.54768256273476,
+          "sourceIds": [
+            "os-STN-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 5866600000,
+          "operatingCashFlow": 603100000,
+          "freeCashFlow": 504100000,
+          "acquisitions": 555000000,
+          "dilutedShares": 114066995,
+          "fcfPerShare": 4.419332691283749,
+          "cashReturn": 0.11030755259904375,
+          "capex": 99000000,
+          "ebitda": 973800000,
+          "totalDebt": 2042800000,
+          "cash": 228500000,
+          "totalEquity": 2945100000,
+          "goodwill": 2712500000,
+          "netDebt": 1814300000,
+          "revenueGrowth": 0.1579882357585567,
+          "ebitdaMargin": 0.16599052261957523,
+          "ocfMargin": 0.10280230457164286,
+          "fcfMargin": 0.08592711280810009,
+          "fcfConversion": 0.517662764428014,
+          "capexIntensity": 0.01687519176354277,
+          "acqToOcf": 0.9202453987730062,
+          "netDebtToEbitda": 1.8631135756828918,
+          "goodwillToEquity": 0.9210213575090829,
+          "revenuePerShare": 51.43117866829051,
+          "sourceIds": [
+            "os-STN-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 8144200000,
+          "operatingCashFlow": 862900000,
+          "freeCashFlow": 791000000,
+          "acquisitions": 454000000,
+          "dilutedShares": 114066995,
+          "fcfPerShare": 6.934521243414889,
+          "cashReturn": 0.13925320846955735,
+          "capex": 71900000,
+          "ebitda": 1085500000,
+          "totalDebt": 3132299999,
+          "cash": 398100000,
+          "totalEquity": 3240400000,
+          "goodwill": 3221800000,
+          "netDebt": 2734199999,
+          "revenueGrowth": 0.3882316844509597,
+          "ebitdaMargin": 0.13328503720439086,
+          "ocfMargin": 0.10595270253677463,
+          "fcfMargin": 0.0971243338817809,
+          "fcfConversion": 0.7286964532473514,
+          "capexIntensity": 0.008828368654993738,
+          "acqToOcf": 0.5261328079731139,
+          "netDebtToEbitda": 2.518839243666513,
+          "goodwillToEquity": 0.9942599679051969,
+          "revenuePerShare": 71.3983917959792,
+          "sourceIds": [
+            "os-STN-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 2687300000,
+        "capex": 385800000,
+        "freeCashFlow": 2301500000,
+        "acquisitions": 1837500000,
+        "fcfAfterAcquisitions": 464000000,
+        "revenueAdded": 4508100000,
+        "goodwillAdded": 1037500000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
       "ticker": "TFII",
       "name": "TFI International",
       "hqCountry": "CA",
@@ -2242,7 +2553,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 13
+        "rank": 21
       },
       "history": [
         {
@@ -2517,6 +2828,4046 @@
       "reportingCurrency": "USD"
     },
     {
+      "ticker": "GFL",
+      "name": "GFL Environmental",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Waste management",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-GFL-FY2021",
+            "os-GFL-FY2022",
+            "os-GFL-FY2023",
+            "os-GFL-FY2024",
+            "os-GFL-FY2025"
+          ],
+          "note": "Net seller over the period: divestiture proceeds exceeded acquisition spending, so net acquisition spending is zero"
+        },
+        "fcfPerShareCagr": {
+          "value": 0.09796796986139555,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-GFL-FY2021",
+            "os-GFL-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.06531562332489904,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-GFL-FY2021",
+            "os-GFL-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.04735846752319284,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-GFL-FY2021",
+            "os-GFL-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.02268741193467262,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-GFL-FY2024",
+            "os-GFL-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 4.37763553631766,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-GFL-FY2023",
+            "os-GFL-FY2024",
+            "os-GFL-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Light acquirer · strong per-share growth",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": false
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": false
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": false
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 3,
+        "available": 4,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 25
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 5136600000,
+          "operatingCashFlow": 897900000,
+          "freeCashFlow": 250700000,
+          "acquisitions": 2299700000,
+          "dilutedShares": 361566007,
+          "fcfPerShare": 0.6933727041436172,
+          "cashReturn": null,
+          "capex": 647200000,
+          "ebitda": 1089300000,
+          "totalDebt": 9629400000,
+          "cash": 190400000,
+          "totalEquity": 5776100000,
+          "goodwill": 7501100000,
+          "netDebt": 9439000000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.21206634738932367,
+          "ocfMargin": 0.17480434528676556,
+          "fcfMargin": 0.048806603589923295,
+          "fcfConversion": 0.2301478013403103,
+          "capexIntensity": 0.12599774169684227,
+          "acqToOcf": 2.5611983517095447,
+          "netDebtToEbitda": 8.665197833471037,
+          "goodwillToEquity": 1.2986444140510032,
+          "revenuePerShare": 14.20653463144836,
+          "sourceIds": [
+            "os-GFL-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 6761300000,
+          "operatingCashFlow": 1096300000,
+          "freeCashFlow": 331100000,
+          "acquisitions": 991400000,
+          "dilutedShares": 367170911,
+          "fcfPerShare": 0.9017598891432879,
+          "cashReturn": 0.021272973172667024,
+          "capex": 765200000,
+          "ebitda": 1634800000,
+          "totalDebt": 9679100000,
+          "cash": 82100000,
+          "totalEquity": 6044100000,
+          "goodwill": 8182400000,
+          "netDebt": 9597000000,
+          "revenueGrowth": 0.3162987189970019,
+          "ebitdaMargin": 0.24178782186857556,
+          "ocfMargin": 0.162143374794788,
+          "fcfMargin": 0.048969872657625015,
+          "fcfConversion": 0.20253241986787374,
+          "capexIntensity": 0.11317350213716297,
+          "acqToOcf": 0.9043145124509715,
+          "netDebtToEbitda": 5.870442867629068,
+          "goodwillToEquity": 1.3537830280769676,
+          "revenuePerShare": 18.414585135803417,
+          "sourceIds": [
+            "os-GFL-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 7515500000,
+          "operatingCashFlow": 980400000,
+          "freeCashFlow": -74700000,
+          "acquisitions": -682900000,
+          "dilutedShares": 369656237,
+          "fcfPerShare": -0.20207964190253877,
+          "cashReturn": -0.00461139576517069,
+          "capex": 1055100000,
+          "ebitda": 2327500000,
+          "totalDebt": 9288600000,
+          "cash": 135700000,
+          "totalEquity": 7386200000,
+          "goodwill": 7890500000,
+          "netDebt": 9152900000,
+          "revenueGrowth": 0.11154659606880335,
+          "ebitdaMargin": 0.3096933005122746,
+          "ocfMargin": 0.1304504025014969,
+          "fcfMargin": -0.009939458452531434,
+          "fcfConversion": -0.03209452201933405,
+          "capexIntensity": 0.14038986095402833,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 3.93250268528464,
+          "goodwillToEquity": 1.068275974113888,
+          "revenuePerShare": 20.331051522336413,
+          "sourceIds": [
+            "os-GFL-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 7862000000,
+          "operatingCashFlow": 1540200000,
+          "freeCashFlow": 347200000,
+          "acquisitions": 563500000,
+          "dilutedShares": 380841299,
+          "fcfPerShare": 0.911665832754131,
+          "cashReturn": 0.020159382212480585,
+          "capex": 1193000000,
+          "ebitda": 1221000000,
+          "totalDebt": 10549000000,
+          "cash": 133800000,
+          "totalEquity": 7221700000,
+          "goodwill": 8065800000,
+          "netDebt": 10415200000,
+          "revenueGrowth": 0.046104716918368815,
+          "ebitdaMargin": 0.15530399389468327,
+          "ocfMargin": 0.19590435003815823,
+          "fcfMargin": 0.04416179089290257,
+          "fcfConversion": 0.28435708435708434,
+          "capexIntensity": 0.15174255914525567,
+          "acqToOcf": 0.3658615764186469,
+          "netDebtToEbitda": 8.53005733005733,
+          "goodwillToEquity": 1.1168838362158495,
+          "revenuePerShare": 20.643769519334615,
+          "sourceIds": [
+            "os-GFL-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 6615900000,
+          "operatingCashFlow": 1523000000,
+          "freeCashFlow": 381600000,
+          "acquisitions": -4857700000,
+          "dilutedShares": 378689219,
+          "fcfPerShare": 1.0076864638705227,
+          "cashReturn": 0.02268741193467262,
+          "capex": 1141400000,
+          "ebitda": 2138199999,
+          "totalDebt": 8383700000,
+          "cash": 85600000,
+          "totalEquity": 7485400000,
+          "goodwill": 6894900000,
+          "netDebt": 8298100000,
+          "revenueGrowth": -0.15849656575934878,
+          "ebitdaMargin": 0.323191100077087,
+          "ocfMargin": 0.23020299581311687,
+          "fcfMargin": 0.057679227316011425,
+          "fcfConversion": 0.17846787025463842,
+          "capexIntensity": 0.17252376849710546,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 3.880881116771528,
+          "goodwillToEquity": 0.9211131001683277,
+          "revenuePerShare": 17.470526405453334,
+          "sourceIds": [
+            "os-GFL-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 6037800000,
+        "capex": 4801900000,
+        "freeCashFlow": 1235900000,
+        "acquisitions": -1686000000,
+        "fcfAfterAcquisitions": 2921900000,
+        "revenueAdded": 1479300000,
+        "goodwillAdded": -606200000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "FSV",
+      "name": "FirstService",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Property services",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.8525773850675666,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-FSV-FY2021",
+            "os-FSV-FY2022",
+            "os-FSV-FY2023",
+            "os-FSV-FY2024",
+            "os-FSV-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.30283869262007235,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-FSV-FY2021",
+            "os-FSV-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.14547514614694412,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-FSV-FY2021",
+            "os-FSV-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.030476487381910777,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-FSV-FY2021",
+            "os-FSV-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.10045953001223044,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-FSV-FY2024",
+            "os-FSV-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 2.5872145818660544,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-FSV-FY2023",
+            "os-FSV-FY2024",
+            "os-FSV-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 1
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 3249072000,
+          "operatingCashFlow": 167269000,
+          "freeCashFlow": 109065000,
+          "acquisitions": 147441000,
+          "dilutedShares": 44400819,
+          "fcfPerShare": 2.456373608784108,
+          "cashReturn": null,
+          "capex": 58204000,
+          "ebitda": 324006000,
+          "totalDebt": 823188000,
+          "cash": 165665000,
+          "totalEquity": 1018857000,
+          "goodwill": 843362000,
+          "netDebt": 657523000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.09972262849207404,
+          "ocfMargin": 0.0514820847306554,
+          "fcfMargin": 0.033568046506817946,
+          "fcfConversion": 0.3366141367752449,
+          "capexIntensity": 0.017914038223837452,
+          "acqToOcf": 0.8814604021067861,
+          "netDebtToEbitda": 2.0293543946717034,
+          "goodwillToEquity": 0.8277530605374454,
+          "revenuePerShare": 73.1759474977252,
+          "sourceIds": [
+            "os-FSV-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 3745835000,
+          "operatingCashFlow": 105893000,
+          "freeCashFlow": 28284000,
+          "acquisitions": 51994000,
+          "dilutedShares": 44494007,
+          "fcfPerShare": 0.6356811154365126,
+          "cashReturn": 0.01437521997507055,
+          "capex": 77609000,
+          "ebitda": 329312000,
+          "totalDebt": 952165000,
+          "cash": 136219000,
+          "totalEquity": 1140895000,
+          "goodwill": 886086000,
+          "netDebt": 815946000,
+          "revenueGrowth": 0.15289381090969978,
+          "ebitdaMargin": 0.08791417667889803,
+          "ocfMargin": 0.028269531359496614,
+          "fcfMargin": 0.007550786406769118,
+          "fcfConversion": 0.08588815469828005,
+          "capexIntensity": 0.020718744952727495,
+          "acqToOcf": 0.4910050711567337,
+          "netDebtToEbitda": 2.4777293265960547,
+          "goodwillToEquity": 0.7766586758641242,
+          "revenuePerShare": 84.18740528359247,
+          "sourceIds": [
+            "os-FSV-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 4334548000,
+          "operatingCashFlow": 280360000,
+          "freeCashFlow": 187626000,
+          "acquisitions": 547182000,
+          "dilutedShares": 44794974,
+          "fcfPerShare": 4.188550260125165,
+          "cashReturn": 0.07720990511521736,
+          "capex": 92734000,
+          "ebitda": 378636000,
+          "totalDebt": 1416928000,
+          "cash": 187617000,
+          "totalEquity": 1350165622,
+          "goodwill": 1179825000,
+          "netDebt": 1229311000,
+          "revenueGrowth": 0.15716469091671148,
+          "ebitdaMargin": 0.08735305272891199,
+          "ocfMargin": 0.06468033114410084,
+          "fcfMargin": 0.04328617424469633,
+          "fcfConversion": 0.49553132824137164,
+          "capexIntensity": 0.021394156899404507,
+          "acqToOcf": 1.9517120844628335,
+          "netDebtToEbitda": 3.246682829947496,
+          "goodwillToEquity": 0.8738372395027548,
+          "revenuePerShare": 96.7641593005501,
+          "sourceIds": [
+            "os-FSV-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 5216894000,
+          "operatingCashFlow": 285674000,
+          "freeCashFlow": 172876000,
+          "acquisitions": 212246000,
+          "dilutedShares": 45280000,
+          "fcfPerShare": 3.817932862190813,
+          "cashReturn": 0.057910788912058725,
+          "capex": 112798000,
+          "ebitda": 506020000,
+          "totalDebt": 1566248000,
+          "cash": 227598000,
+          "totalEquity": 1637083000,
+          "goodwill": 1395383000,
+          "netDebt": 1338650000,
+          "revenueGrowth": 0.20356124790866303,
+          "ebitdaMargin": 0.09699641204134107,
+          "ocfMargin": 0.054759402817078515,
+          "fcfMargin": 0.03313772524417786,
+          "fcfConversion": 0.3416386704082843,
+          "capexIntensity": 0.021621677572900656,
+          "acqToOcf": 0.7429657581719022,
+          "netDebtToEbitda": 2.6454487964902573,
+          "goodwillToEquity": 0.852359348915113,
+          "revenuePerShare": 115.21409010600706,
+          "sourceIds": [
+            "os-FSV-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 5593736670,
+          "operatingCashFlow": 453747434,
+          "freeCashFlow": 323806888,
+          "acquisitions": 143471332,
+          "dilutedShares": 45754000,
+          "fcfPerShare": 7.077127420553394,
+          "cashReturn": 0.10045953001223044,
+          "capex": 129940546,
+          "ebitda": 541538420,
+          "totalDebt": 1384382000,
+          "cash": 154425000,
+          "totalEquity": 1858801093,
+          "goodwill": 1501450000,
+          "netDebt": 1229957000,
+          "revenueGrowth": 0.0722350636221476,
+          "ebitdaMargin": 0.09681156835722123,
+          "ocfMargin": 0.08111705301279404,
+          "fcfMargin": 0.0578874028405059,
+          "fcfConversion": 0.5979389015464498,
+          "capexIntensity": 0.023229650172288143,
+          "acqToOcf": 0.31619205145741935,
+          "netDebtToEbitda": 2.271227588986207,
+          "goodwillToEquity": 0.8077518383512162,
+          "revenuePerShare": 122.25677907942475,
+          "sourceIds": [
+            "os-FSV-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 1292943434,
+        "capex": 471285546,
+        "freeCashFlow": 821657888,
+        "acquisitions": 1102334332,
+        "fcfAfterAcquisitions": -280676444,
+        "revenueAdded": 2344664670,
+        "goodwillAdded": 658088000
+      },
+      "reportingCurrency": "USD"
+    },
+    {
+      "ticker": "CIGI",
+      "name": "Colliers International",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Real estate services and engineering",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 1.7085682143051673,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CIGI-FY2021",
+            "os-CIGI-FY2022",
+            "os-CIGI-FY2023",
+            "os-CIGI-FY2024",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": -0.04123697371324664,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CIGI-FY2021",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.0844640315014713,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CIGI-FY2021",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.19019105312208762,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CIGI-FY2021",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.048222756489812106,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-CIGI-FY2024",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 3.4157894956849506,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-CIGI-FY2023",
+            "os-CIGI-FY2024",
+            "os-CIGI-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · weak per-share growth",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Free cash flow per share ≥ 7%/yr, Return on capital ≥ 8%, Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": false
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": false
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": false
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": false
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": false
+          }
+        ],
+        "passed": 0,
+        "available": 4,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 34
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 4089129000,
+          "operatingCashFlow": 288980000,
+          "freeCashFlow": 231029000,
+          "acquisitions": 60832000,
+          "dilutedShares": 42920000,
+          "fcfPerShare": 5.382781919850886,
+          "cashReturn": null,
+          "capex": 57951000,
+          "ebitda": 24866000,
+          "totalDebt": 1296740000,
+          "cash": 396745000,
+          "totalEquity": 1122172000,
+          "goodwill": 1091048000,
+          "netDebt": 899995000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.006081001602052662,
+          "ocfMargin": 0.07067030656161741,
+          "fcfMargin": 0.05649833986650947,
+          "fcfConversion": 9.29095954315129,
+          "capexIntensity": 0.01417196669510793,
+          "acqToOcf": 0.2105059173645235,
+          "netDebtToEbitda": 36.193798761360895,
+          "goodwillToEquity": 0.9722645013420402,
+          "revenuePerShare": 95.27327586206897,
+          "sourceIds": [
+            "os-CIGI-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 4459487000,
+          "operatingCashFlow": 67031000,
+          "freeCashFlow": -650000,
+          "acquisitions": 1007297000,
+          "dilutedShares": 43918000,
+          "fcfPerShare": -0.01480030966801767,
+          "cashReturn": -0.0002133710442034227,
+          "capex": 67681000,
+          "ebitda": 515562000,
+          "totalDebt": 2097404000,
+          "cash": 173661000,
+          "totalEquity": 1576357000,
+          "goodwill": 1988539000,
+          "netDebt": 1923743000,
+          "revenueGrowth": 0.09057136617602435,
+          "ebitdaMargin": 0.11561015874695901,
+          "ocfMargin": 0.015031101110957382,
+          "fcfMargin": -0.00014575667559968221,
+          "fcfConversion": -0.0012607601025676834,
+          "capexIntensity": 0.015176857786557064,
+          "acqToOcf": 15.027330638062987,
+          "netDebtToEbitda": 3.731351418452097,
+          "goodwillToEquity": 1.2614775713876996,
+          "revenuePerShare": 101.54121316999863,
+          "sourceIds": [
+            "os-CIGI-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 4335141000,
+          "operatingCashFlow": 165661000,
+          "freeCashFlow": 81137000,
+          "acquisitions": 64878000,
+          "dilutedShares": 46274000,
+          "fcfPerShare": 1.753403639192635,
+          "cashReturn": 0.020984264064942415,
+          "capex": 84524000,
+          "ebitda": 509390000,
+          "totalDebt": 2136811000,
+          "cash": 181134000,
+          "totalEquity": 1922556000,
+          "goodwill": 2038240000,
+          "netDebt": 1955677000,
+          "revenueGrowth": -0.0278834762832586,
+          "ebitdaMargin": 0.1175025218326232,
+          "ocfMargin": 0.03821352062135926,
+          "fcfMargin": 0.018716115577324936,
+          "fcfConversion": 0.15928267143053457,
+          "capexIntensity": 0.019497405044034324,
+          "acqToOcf": 0.3916311020698897,
+          "netDebtToEbitda": 3.8392528318184493,
+          "goodwillToEquity": 1.060171979385776,
+          "revenuePerShare": 93.68416389333103,
+          "sourceIds": [
+            "os-CIGI-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 4822024000,
+          "operatingCashFlow": 326009000,
+          "freeCashFlow": 260924000,
+          "acquisitions": 537725000,
+          "dilutedShares": 50797000,
+          "fcfPerShare": 5.136602555269012,
+          "cashReturn": 0.06071137931174892,
+          "capex": 65085000,
+          "ebitda": 618494000,
+          "totalDebt": 2057988000,
+          "cash": 176257000,
+          "totalEquity": 2478200000,
+          "goodwill": 2297938000,
+          "netDebt": 1881731000,
+          "revenueGrowth": 0.11231076451723254,
+          "ebitdaMargin": 0.12826439685907826,
+          "ocfMargin": 0.06760833210286801,
+          "fcfMargin": 0.05411088787612837,
+          "fcfConversion": 0.4218698968785469,
+          "capexIntensity": 0.013497444226739643,
+          "acqToOcf": 1.6494176541138434,
+          "netDebtToEbitda": 3.0424401853534553,
+          "goodwillToEquity": 0.9272609151803729,
+          "revenuePerShare": 94.92733822863555,
+          "sourceIds": [
+            "os-CIGI-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 5655765843,
+          "operatingCashFlow": 312422021,
+          "freeCashFlow": 232342303,
+          "acquisitions": 311383147,
+          "dilutedShares": 51083000,
+          "fcfPerShare": 4.548329248477967,
+          "cashReturn": 0.048222756489812106,
+          "capex": 80079718,
+          "ebitda": 654352720,
+          "totalDebt": 2285664000,
+          "cash": 256415511,
+          "totalEquity": 2814357952,
+          "goodwill": 2629228000,
+          "netDebt": 2029248489,
+          "revenueGrowth": 0.17290288123825182,
+          "ebitdaMargin": 0.11569657198766034,
+          "ocfMargin": 0.0552395607726011,
+          "fcfMargin": 0.04108060861245949,
+          "fcfConversion": 0.3550719602724353,
+          "capexIntensity": 0.014158952160141612,
+          "acqToOcf": 0.9966747734469076,
+          "netDebtToEbitda": 3.1011538990775493,
+          "goodwillToEquity": 0.9342194720225837,
+          "revenuePerShare": 110.71718268308439,
+          "sourceIds": [
+            "os-CIGI-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 1160103021,
+        "capex": 355320718,
+        "freeCashFlow": 804782303,
+        "acquisitions": 1982115147,
+        "fcfAfterAcquisitions": -1177332844,
+        "revenueAdded": 1566636843,
+        "goodwillAdded": 1538180000
+      },
+      "reportingCurrency": "USD"
+    },
+    {
+      "ticker": "BYD",
+      "name": "Boyd Group Services",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Auto collision repair",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.7039681683495131,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-BYD-FY2021",
+            "os-BYD-FY2022",
+            "os-BYD-FY2023",
+            "os-BYD-FY2024",
+            "os-BYD-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.14626317102819852,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-BYD-FY2021",
+            "os-BYD-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.1455275645030396,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-BYD-FY2021",
+            "os-BYD-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.047803312507329165,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-BYD-FY2021",
+            "os-BYD-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.10028657334821481,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-BYD-FY2024",
+            "os-BYD-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 1.390890004824674,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-BYD-FY2023",
+            "os-BYD-FY2024",
+            "os-BYD-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 5
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 1857079600,
+          "operatingCashFlow": 183702435,
+          "freeCashFlow": 152752053,
+          "acquisitions": 311030719,
+          "dilutedShares": 21472194,
+          "fcfPerShare": 7.113947135537244,
+          "cashReturn": null,
+          "capex": 30950382,
+          "ebitda": 209255553,
+          "totalDebt": 977216155,
+          "cash": 27483274,
+          "totalEquity": 720386273,
+          "goodwill": 596979289,
+          "netDebt": 949732881,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.11267990505091974,
+          "ocfMargin": 0.09892006513883411,
+          "fcfMargin": 0.08225390715616067,
+          "fcfConversion": 0.7299784918969391,
+          "capexIntensity": 0.01666615798267344,
+          "acqToOcf": 1.6931224618770024,
+          "netDebtToEbitda": 4.5386268960805065,
+          "goodwillToEquity": 0.8286933154818734,
+          "revenuePerShare": 86.48765002775217,
+          "sourceIds": [
+            "os-BYD-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 2454361683,
+          "operatingCashFlow": 241348316,
+          "freeCashFlow": 208971520,
+          "acquisitions": 66908491,
+          "dilutedShares": 21472194,
+          "fcfPerShare": 9.732192248263033,
+          "cashReturn": 0.12156832765449796,
+          "capex": 32376796,
+          "ebitda": 274387078,
+          "totalDebt": 986961324,
+          "cash": 15204558,
+          "totalEquity": 753363281,
+          "goodwill": 607159158,
+          "netDebt": 971756766,
+          "revenueGrowth": 0.3216243843290294,
+          "ebitdaMargin": 0.11179569820557698,
+          "ocfMargin": 0.09833445399334814,
+          "fcfMargin": 0.08514291982613224,
+          "fcfConversion": 0.761593882347477,
+          "capexIntensity": 0.013191534167215892,
+          "acqToOcf": 0.2772279173474739,
+          "netDebtToEbitda": 3.5415544094973743,
+          "goodwillToEquity": 0.8059314454429855,
+          "revenuePerShare": 114.30418721999251,
+          "sourceIds": [
+            "os-BYD-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 2938929364,
+          "operatingCashFlow": 343206977,
+          "freeCashFlow": 284792962,
+          "acquisitions": 182647194,
+          "dilutedShares": 21475864,
+          "fcfPerShare": 13.261071219299955,
+          "cashReturn": 0.15390372009864178,
+          "capex": 58414015,
+          "ebitda": 367826748,
+          "totalDebt": 1134257770,
+          "cash": 22457062,
+          "totalEquity": 826341317,
+          "goodwill": 632466958,
+          "netDebt": 1111800708,
+          "revenueGrowth": 0.1974312442849524,
+          "ebitdaMargin": 0.12515671608363296,
+          "ocfMargin": 0.11677959368607677,
+          "fcfMargin": 0.09690364303699543,
+          "fcfConversion": 0.7742584342996176,
+          "capexIntensity": 0.019875950649081337,
+          "acqToOcf": 0.532177974925026,
+          "netDebtToEbitda": 3.0226206061555914,
+          "goodwillToEquity": 0.7653822276443185,
+          "revenuePerShare": 136.84801524166852,
+          "sourceIds": [
+            "os-BYD-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 3067427572,
+          "operatingCashFlow": 270531659,
+          "freeCashFlow": 196911701,
+          "acquisitions": 182560508,
+          "dilutedShares": 21475994,
+          "fcfPerShare": 9.168921401263196,
+          "cashReturn": 0.09745538832107868,
+          "capex": 73619958,
+          "ebitda": 334715060,
+          "totalDebt": 1250389976,
+          "cash": 19978017,
+          "totalEquity": 830074328,
+          "goodwill": 643252831,
+          "netDebt": 1230411959,
+          "revenueGrowth": 0.04372279564593162,
+          "ebitdaMargin": 0.10911914043393753,
+          "ocfMargin": 0.08819496227700988,
+          "fcfMargin": 0.0641944092820458,
+          "fcfConversion": 0.5882965080806343,
+          "capexIntensity": 0.02400055299496408,
+          "acqToOcf": 0.6748212341388111,
+          "netDebtToEbitda": 3.6759982027698426,
+          "goodwillToEquity": 0.7749340141019275,
+          "revenuePerShare": 142.83052844957956,
+          "sourceIds": [
+            "os-BYD-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 3197810286,
+          "operatingCashFlow": 331571475,
+          "freeCashFlow": 276314820,
+          "acquisitions": 221543514,
+          "dilutedShares": 22498636,
+          "fcfPerShare": 12.28140319262021,
+          "cashReturn": 0.10028657334821481,
+          "capex": 55256655,
+          "ebitda": 348362349,
+          "totalDebt": 1713608802,
+          "cash": 1226378106,
+          "totalEquity": 1716431656,
+          "goodwill": 701181628,
+          "netDebt": 487230696,
+          "revenueGrowth": 0.04250555585734306,
+          "ebitdaMargin": 0.10893777861842802,
+          "ocfMargin": 0.10368703748675102,
+          "fcfMargin": 0.08640750866607226,
+          "fcfConversion": 0.7931822161412743,
+          "capexIntensity": 0.017279528820678763,
+          "acqToOcf": 0.6681621632258927,
+          "netDebtToEbitda": 1.3986319055392522,
+          "goodwillToEquity": 0.40851124223264734,
+          "revenuePerShare": 142.13351804971643,
+          "sourceIds": [
+            "os-BYD-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 1370360862,
+        "capex": 250617806,
+        "freeCashFlow": 1119743056,
+        "acquisitions": 964690426,
+        "fcfAfterAcquisitions": 155052630,
+        "revenueAdded": 1340730686,
+        "goodwillAdded": 104202339
+      },
+      "reportingCurrency": "USD"
+    },
+    {
+      "ticker": "CCL.B",
+      "name": "CCL Industries",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Specialty packaging and labels",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.1764524992792758,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CCL.B-FY2021",
+            "os-CCL.B-FY2022",
+            "os-CCL.B-FY2023",
+            "os-CCL.B-FY2024",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.146209058327746,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CCL.B-FY2021",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.07527449071033199,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CCL.B-FY2021",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.028745163073521263,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-CCL.B-FY2021",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.10939252425277378,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-CCL.B-FY2024",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 0.9449218576071953,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-CCL.B-FY2023",
+            "os-CCL.B-FY2024",
+            "os-CCL.B-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Light acquirer · strong per-share growth",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": false
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 22
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 5732800000,
+          "operatingCashFlow": 838700000,
+          "freeCashFlow": 514900000,
+          "acquisitions": 217500000,
+          "dilutedShares": 180900000,
+          "fcfPerShare": 2.8463239358761747,
+          "cashReturn": null,
+          "capex": 323800000,
+          "ebitda": 1187600000,
+          "totalDebt": 1851300000,
+          "cash": 602100000,
+          "totalEquity": 3747000000,
+          "goodwill": 1975100000,
+          "netDebt": 1249200000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.2071588054702763,
+          "ocfMargin": 0.14629849288305888,
+          "fcfMargin": 0.08981649455763327,
+          "fcfConversion": 0.43356348939036715,
+          "capexIntensity": 0.05648199832542562,
+          "acqToOcf": 0.2593299153451771,
+          "netDebtToEbitda": 1.0518693162681036,
+          "goodwillToEquity": 0.5271150253536162,
+          "revenuePerShare": 31.690436705362078,
+          "sourceIds": [
+            "os-CCL.B-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 6382200000,
+          "operatingCashFlow": 992800000,
+          "freeCashFlow": 545600000,
+          "acquisitions": 259399999,
+          "dilutedShares": 179200000,
+          "fcfPerShare": 3.044642857142857,
+          "cashReturn": 0.08925752333276075,
+          "capex": 447200000,
+          "ebitda": 1249000000,
+          "totalDebt": 2361800000,
+          "cash": 839500000,
+          "totalEquity": 4265200000,
+          "goodwill": 2193500000,
+          "netDebt": 1522300000,
+          "revenueGrowth": 0.11327797934691608,
+          "ebitdaMargin": 0.19570054213280688,
+          "ocfMargin": 0.15555764469931999,
+          "fcfMargin": 0.08548776284039986,
+          "fcfConversion": 0.43682946357085667,
+          "capexIntensity": 0.07006988185892012,
+          "acqToOcf": 0.26128122381144236,
+          "netDebtToEbitda": 1.2188150520416332,
+          "goodwillToEquity": 0.5142783456813279,
+          "revenuePerShare": 35.614955357142854,
+          "sourceIds": [
+            "os-CCL.B-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 6649600000,
+          "operatingCashFlow": 1003300000,
+          "freeCashFlow": 541700000,
+          "acquisitions": 306400000,
+          "dilutedShares": 179900000,
+          "fcfPerShare": 3.011117287381879,
+          "cashReturn": 0.08005852533881146,
+          "capex": 461600000,
+          "ebitda": 1235800000,
+          "totalDebt": 2282400000,
+          "cash": 774200000,
+          "totalEquity": 4623200000,
+          "goodwill": 2293600000,
+          "netDebt": 1508200000,
+          "revenueGrowth": 0.04189777819560647,
+          "ebitdaMargin": 0.18584576515880655,
+          "ocfMargin": 0.15088125601539942,
+          "fcfMargin": 0.08146354667949952,
+          "fcfConversion": 0.43833953714193236,
+          "capexIntensity": 0.0694177093358999,
+          "acqToOcf": 0.3053922057211203,
+          "netDebtToEbitda": 1.2204240168312024,
+          "goodwillToEquity": 0.49610659283613084,
+          "revenuePerShare": 36.9627570872707,
+          "sourceIds": [
+            "os-CCL.B-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 7245000000,
+          "operatingCashFlow": 1063900000,
+          "freeCashFlow": 601900000,
+          "acquisitions": 138300000,
+          "dilutedShares": 179500000,
+          "fcfPerShare": 3.3532033426183845,
+          "cashReturn": 0.08226105139436514,
+          "capex": 462000000,
+          "ebitda": 1624500000,
+          "totalDebt": 2447600000,
+          "cash": 828700000,
+          "totalEquity": 5280700000,
+          "goodwill": 2554100000,
+          "netDebt": 1618900000,
+          "revenueGrowth": 0.0895392204042349,
+          "ebitdaMargin": 0.22422360248447204,
+          "ocfMargin": 0.14684610075914423,
+          "fcfMargin": 0.08307798481711526,
+          "fcfConversion": 0.37051400430901815,
+          "capexIntensity": 0.06376811594202898,
+          "acqToOcf": 0.12999342043425133,
+          "netDebtToEbitda": 0.9965527854724531,
+          "goodwillToEquity": 0.4836669380953283,
+          "revenuePerShare": 40.362116991643454,
+          "sourceIds": [
+            "os-CCL.B-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 7663800000,
+          "operatingCashFlow": 1304400000,
+          "freeCashFlow": 863200000,
+          "acquisitions": -3500000,
+          "dilutedShares": 175700000,
+          "fcfPerShare": 4.912919749573136,
+          "cashReturn": 0.10939252425277378,
+          "capex": 441200000,
+          "ebitda": 1631500000,
+          "totalDebt": 2413000000,
+          "cash": 998200000,
+          "totalEquity": 5640400000,
+          "goodwill": 2591400000,
+          "netDebt": 1414800000,
+          "revenueGrowth": 0.05780538302277427,
+          "ebitdaMargin": 0.21288394791095802,
+          "ocfMargin": 0.1702027714710718,
+          "fcfMargin": 0.11263341945249093,
+          "fcfConversion": 0.5290836653386454,
+          "capexIntensity": 0.05756935201858086,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 0.8671774440698744,
+          "goodwillToEquity": 0.4594355010282959,
+          "revenuePerShare": 43.61866818440524,
+          "sourceIds": [
+            "os-CCL.B-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 5203100000,
+        "capex": 2135800000,
+        "freeCashFlow": 3067300000,
+        "acquisitions": 918099999,
+        "fcfAfterAcquisitions": 2149200001,
+        "revenueAdded": 1931000000,
+        "goodwillAdded": 616300000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "RCH",
+      "name": "Richelieu Hardware",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Hardware distribution",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.2691218425582351,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-RCH-FY2021",
+            "os-RCH-FY2022",
+            "os-RCH-FY2023",
+            "os-RCH-FY2024",
+            "os-RCH-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.21045363408606477,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-RCH-FY2021",
+            "os-RCH-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.08059979112657856,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-RCH-FY2021",
+            "os-RCH-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.019174370417596398,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-RCH-FY2021",
+            "os-RCH-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.15105905677198034,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-RCH-FY2024",
+            "os-RCH-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 1.0750624901270245,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-RCH-FY2023",
+            "os-RCH-FY2024",
+            "os-RCH-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 3
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 1440416000,
+          "operatingCashFlow": 104406000,
+          "freeCashFlow": 87352000,
+          "acquisitions": 49436000,
+          "dilutedShares": 56466000,
+          "fcfPerShare": 1.5469840257854284,
+          "cashReturn": null,
+          "capex": 17054000,
+          "ebitda": 234398000,
+          "totalDebt": 99493000,
+          "cash": 58707000,
+          "totalEquity": 668937000,
+          "goodwill": 110776000,
+          "netDebt": 40786000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.162729378179637,
+          "ocfMargin": 0.07248322706773598,
+          "fcfMargin": 0.060643591851242976,
+          "fcfConversion": 0.3726652957789742,
+          "capexIntensity": 0.011839635216493014,
+          "acqToOcf": 0.47349769170354195,
+          "netDebtToEbitda": 0.17400319115350812,
+          "goodwillToEquity": 0.16560004903301806,
+          "revenuePerShare": 25.509439308610492,
+          "sourceIds": [
+            "os-RCH-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 1802787000,
+          "operatingCashFlow": -36169000,
+          "freeCashFlow": -58747000,
+          "acquisitions": 44255000,
+          "dilutedShares": 56345000,
+          "fcfPerShare": -1.042630224509717,
+          "cashReturn": -0.06342877286858993,
+          "capex": 22578000,
+          "ebitda": 287442000,
+          "totalDebt": 264125000,
+          "cash": 21220000,
+          "totalEquity": 819822000,
+          "goodwill": 127457000,
+          "netDebt": 242905000,
+          "revenueGrowth": 0.2515738508875214,
+          "ebitdaMargin": 0.15944312888877055,
+          "ocfMargin": -0.020062824948260664,
+          "fcfMargin": -0.03258676704458153,
+          "fcfConversion": -0.20437862246992436,
+          "capexIntensity": 0.012523942096320862,
+          "acqToOcf": null,
+          "netDebtToEbitda": 0.845057437674383,
+          "goodwillToEquity": 0.15546911402719127,
+          "revenuePerShare": 31.99550980566155,
+          "sourceIds": [
+            "os-RCH-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 1787754000,
+          "operatingCashFlow": 270657000,
+          "freeCashFlow": 228564000,
+          "acquisitions": 19694000,
+          "dilutedShares": 56216000,
+          "fcfPerShare": 4.065817560836773,
+          "cashReturn": 0.20765406615450588,
+          "capex": 42093000,
+          "ebitda": 230404000,
+          "totalDebt": 209288000,
+          "cash": 46327000,
+          "totalEquity": 908157000,
+          "goodwill": 135089000,
+          "netDebt": 162961000,
+          "revenueGrowth": -0.008338755493577432,
+          "ebitdaMargin": 0.12887902921766642,
+          "ocfMargin": 0.1513949905859531,
+          "fcfMargin": 0.12784980483892078,
+          "fcfConversion": 0.9920140275342442,
+          "capexIntensity": 0.02354518574703231,
+          "acqToOcf": 0.0727636824467869,
+          "netDebtToEbitda": 0.7072837277130606,
+          "goodwillToEquity": 0.14875071160603287,
+          "revenuePerShare": 31.80151558275224,
+          "sourceIds": [
+            "os-RCH-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 1832218000,
+          "operatingCashFlow": 133555000,
+          "freeCashFlow": 103003000,
+          "acquisitions": 20290000,
+          "dilutedShares": 56048366,
+          "fcfPerShare": 1.8377520586416383,
+          "cashReturn": 0.0891397228787311,
+          "capex": 30552000,
+          "ebitda": 201419000,
+          "totalDebt": 264602000,
+          "cash": 41389000,
+          "totalEquity": 928999000,
+          "goodwill": 140396000,
+          "netDebt": 223213000,
+          "revenueGrowth": 0.02487143085681809,
+          "ebitdaMargin": 0.1099317875929611,
+          "ocfMargin": 0.07289252698095969,
+          "fcfMargin": 0.05621765532267448,
+          "fcfConversion": 0.5113867112834439,
+          "capexIntensity": 0.016674871658285205,
+          "acqToOcf": 0.15192242896185093,
+          "netDebtToEbitda": 1.1082023046485188,
+          "goodwillToEquity": 0.15112610454908992,
+          "revenuePerShare": 32.68994496645986,
+          "sourceIds": [
+            "os-RCH-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 1964027000,
+          "operatingCashFlow": 199139000,
+          "freeCashFlow": 183932000,
+          "acquisitions": 47064000,
+          "dilutedShares": 55383300,
+          "fcfPerShare": 3.321073319935793,
+          "cashReturn": 0.15105905677198034,
+          "capex": 15207000,
+          "ebitda": 213879000,
+          "totalDebt": 276913000,
+          "cash": 45523000,
+          "totalEquity": 964719000,
+          "goodwill": 155688000,
+          "netDebt": 231390000,
+          "revenueGrowth": 0.07193958360850083,
+          "ebitdaMargin": 0.10889819742803943,
+          "ocfMargin": 0.10139320895283008,
+          "fcfMargin": 0.09365044370571281,
+          "fcfConversion": 0.8599815783690778,
+          "capexIntensity": 0.007742765247117275,
+          "acqToOcf": 0.2363374326475477,
+          "netDebtToEbitda": 1.0818733957050481,
+          "goodwillToEquity": 0.16138170804140894,
+          "revenuePerShare": 35.46244084408116,
+          "sourceIds": [
+            "os-RCH-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 671588000,
+        "capex": 127484000,
+        "freeCashFlow": 544104000,
+        "acquisitions": 180739000,
+        "fcfAfterAcquisitions": 363365000,
+        "revenueAdded": 523611000,
+        "goodwillAdded": 44912000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "ATD",
+      "name": "Alimentation Couche-Tard",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Convenience retail",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.2640580398408028,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-ATD-FY2022",
+            "os-ATD-FY2023",
+            "os-ATD-FY2024",
+            "os-ATD-FY2025",
+            "os-ATD-FY2026"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.14602365160933006,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-ATD-FY2022",
+            "os-ATD-FY2026"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.050552353509702996,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-ATD-FY2022",
+            "os-ATD-FY2026"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.12308415608838741,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-ATD-FY2022",
+            "os-ATD-FY2026"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.10911722553087248,
+          "period": "FY2026",
+          "sourceIds": [
+            "os-ATD-FY2025",
+            "os-ATD-FY2026"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 2.143945849478271,
+          "period": "FY2026 debt, FY2024–FY2026 EBITDA",
+          "sourceIds": [
+            "os-ATD-FY2024",
+            "os-ATD-FY2025",
+            "os-ATD-FY2026"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2026",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 6
+      },
+      "history": [
+        {
+          "fiscalYear": 2022,
+          "revenue": 62809900000,
+          "operatingCashFlow": 3857184740,
+          "freeCashFlow": 2229695067,
+          "acquisitions": -75972332,
+          "dilutedShares": 1063500000,
+          "fcfPerShare": 2.096563297602257,
+          "cashReturn": null,
+          "capex": 1627489673,
+          "ebitda": 5130600000,
+          "totalDebt": 9400062460,
+          "cash": 2154071029,
+          "totalEquity": 12385111798,
+          "goodwill": 6068382148,
+          "netDebt": 7245991431,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.08168457520231683,
+          "ocfMargin": 0.06141045822394241,
+          "fcfMargin": 0.03549910232304143,
+          "fcfConversion": 0.4345875856624956,
+          "capexIntensity": 0.025911355900900972,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 1.4123087808443457,
+          "goodwillToEquity": 0.48997394993075055,
+          "revenuePerShare": 59.05961448048895,
+          "sourceIds": [
+            "os-ATD-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 71856700000,
+          "operatingCashFlow": 4249010491,
+          "freeCashFlow": 2484897540,
+          "acquisitions": 572911279,
+          "dilutedShares": 1009500000,
+          "fcfPerShare": 2.461513164933135,
+          "cashReturn": 0.1134855505707775,
+          "capex": 1764112951,
+          "ebitda": 5710800000,
+          "totalDebt": 9473600000,
+          "cash": 845910566,
+          "totalEquity": 12533541636,
+          "goodwill": 6625035889,
+          "netDebt": 8627689434,
+          "revenueGrowth": 0.14403461874640788,
+          "ebitdaMargin": 0.07947484368193919,
+          "ocfMargin": 0.059131723151772904,
+          "fcfMargin": 0.034581292210747225,
+          "fcfConversion": 0.4351224942214751,
+          "capexIntensity": 0.02455043094102568,
+          "acqToOcf": 0.13483404670652294,
+          "netDebtToEbitda": 1.5107672189535617,
+          "goodwillToEquity": 0.5285845039977334,
+          "revenuePerShare": 71.18048538880635,
+          "sourceIds": [
+            "os-ATD-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 69263500000,
+          "operatingCashFlow": 4757956795,
+          "freeCashFlow": 2838753557,
+          "acquisitions": 4158323072,
+          "dilutedShares": 968200000,
+          "fcfPerShare": 2.9319908665564967,
+          "cashReturn": 0.11337191496114504,
+          "capex": 1919203238,
+          "ebitda": 5594600000,
+          "totalDebt": 14690900000,
+          "cash": 1325082660,
+          "totalEquity": 13380561305,
+          "goodwill": 9326226408,
+          "netDebt": 13365817340,
+          "revenueGrowth": -0.03608849279190385,
+          "ebitdaMargin": 0.08077270135063923,
+          "ocfMargin": 0.06869356580305644,
+          "fcfMargin": 0.040984841323352124,
+          "fcfConversion": 0.5074095658313373,
+          "capexIntensity": 0.02770872447970432,
+          "acqToOcf": 0.8739724321099053,
+          "netDebtToEbitda": 2.3890568298001646,
+          "goodwillToEquity": 0.6969981449518869,
+          "revenuePerShare": 71.53842181367486,
+          "sourceIds": [
+            "os-ATD-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 72856800000,
+          "operatingCashFlow": 5084473873,
+          "freeCashFlow": 2735992223,
+          "acquisitions": -223986967,
+          "dilutedShares": 950600000,
+          "fcfPerShare": 2.8781740195665897,
+          "cashReturn": 0.09577041234390207,
+          "capex": 2348481650,
+          "ebitda": 5902400000,
+          "totalDebt": 13963708590,
+          "cash": 2269904321,
+          "totalEquity": 15101312157,
+          "goodwill": 9568776813,
+          "netDebt": 11693804269,
+          "revenueGrowth": 0.051878695128025676,
+          "ebitdaMargin": 0.0810137145743431,
+          "ocfMargin": 0.06978722470654763,
+          "fcfMargin": 0.03755301115338582,
+          "fcfConversion": 0.4635389372119816,
+          "capexIntensity": 0.03223421355316182,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 1.981194813804554,
+          "goodwillToEquity": 0.6336387668514307,
+          "revenuePerShare": 76.642962339575,
+          "sourceIds": [
+            "os-ATD-FY2025"
+          ]
+        },
+        {
+          "fiscalYear": 2026,
+          "revenue": 76506600000,
+          "operatingCashFlow": 5363200000,
+          "freeCashFlow": 3372700000,
+          "acquisitions": 1724400000,
+          "dilutedShares": 932600000,
+          "fcfPerShare": 3.616448638215741,
+          "cashReturn": 0.10911722553087248,
+          "capex": 1990500000,
+          "ebitda": 7162100000,
+          "totalDebt": 16446000000,
+          "cash": 3111300000,
+          "totalEquity": 16306900000,
+          "goodwill": 10947900000,
+          "netDebt": 13334700000,
+          "revenueGrowth": 0.050095529861317045,
+          "ebitdaMargin": 0.09361414570769058,
+          "ocfMargin": 0.07010114160085536,
+          "fcfMargin": 0.04408377839297525,
+          "fcfConversion": 0.47090937015679757,
+          "capexIntensity": 0.026017363207880104,
+          "acqToOcf": 0.3215244630071599,
+          "netDebtToEbitda": 1.8618421971209562,
+          "goodwillToEquity": 0.6713661088250986,
+          "revenuePerShare": 82.03581385374223,
+          "sourceIds": [
+            "os-ATD-FY2026"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2022–FY2026",
+        "operatingCashFlow": 23311825899,
+        "capex": 9649787512,
+        "freeCashFlow": 13662038387,
+        "acquisitions": 6155675052,
+        "fcfAfterAcquisitions": 7506363335,
+        "revenueAdded": 13696700000,
+        "goodwillAdded": 4879517852
+      },
+      "reportingCurrency": "USD"
+    },
+    {
+      "ticker": "DSG",
+      "name": "Descartes Systems",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Logistics software",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.7435762335104366,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-DSG-FY2022",
+            "os-DSG-FY2023",
+            "os-DSG-FY2024",
+            "os-DSG-FY2025",
+            "os-DSG-FY2026"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.11146103755375547,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-DSG-FY2022",
+            "os-DSG-FY2026"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.1446235627007233,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-DSG-FY2022",
+            "os-DSG-FY2026"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.015997679814385046,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-DSG-FY2022",
+            "os-DSG-FY2026"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.1781631520305494,
+          "period": "FY2026",
+          "sourceIds": [
+            "os-DSG-FY2025",
+            "os-DSG-FY2026"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": -1.3089313423555833,
+          "period": "FY2026 debt, FY2024–FY2026 EBITDA",
+          "sourceIds": [
+            "os-DSG-FY2024",
+            "os-DSG-FY2025",
+            "os-DSG-FY2026"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2026",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 9
+      },
+      "history": [
+        {
+          "fiscalYear": 2022,
+          "revenue": 424690000,
+          "operatingCashFlow": 176138000,
+          "freeCashFlow": 171309000,
+          "acquisitions": 90278000,
+          "dilutedShares": 86200000,
+          "fcfPerShare": 1.9873433874709976,
+          "cashReturn": null,
+          "capex": 4829000,
+          "ebitda": 167961000,
+          "totalDebt": 11413556,
+          "cash": 213484823,
+          "totalEquity": 1000043026,
+          "goodwill": 608897402,
+          "netDebt": -202071267,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.3954908286043938,
+          "ocfMargin": 0.4147448727306977,
+          "fcfMargin": 0.40337422590595495,
+          "fcfConversion": 1.0199331987782878,
+          "capexIntensity": 0.011370646824742753,
+          "acqToOcf": 0.5125413028420898,
+          "netDebtToEbitda": -1.2030844481754692,
+          "goodwillToEquity": 0.6088712047075463,
+          "revenuePerShare": 4.926798143851508,
+          "sourceIds": [
+            "os-DSG-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 486014000,
+          "operatingCashFlow": 192395000,
+          "freeCashFlow": 186324000,
+          "acquisitions": 115561000,
+          "dilutedShares": 86451000,
+          "fcfPerShare": 2.155255578304473,
+          "cashReturn": 0.1759873217420152,
+          "capex": 6071000,
+          "ebitda": 200297000,
+          "totalDebt": 7315390,
+          "cash": 276210967,
+          "totalEquity": 1098698743,
+          "goodwill": 675221563,
+          "netDebt": -268895577,
+          "revenueGrowth": 0.1443970896418565,
+          "ebitdaMargin": 0.41212187303246406,
+          "ocfMargin": 0.39586308213343646,
+          "fcfMargin": 0.38337167242095904,
+          "fcfConversion": 0.9302385956854071,
+          "capexIntensity": 0.012491409712477418,
+          "acqToOcf": 0.6006445073936433,
+          "netDebtToEbitda": -1.3424842958207062,
+          "goodwillToEquity": 0.6145647906689196,
+          "revenuePerShare": 5.621843587697077,
+          "sourceIds": [
+            "os-DSG-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 572931000,
+          "operatingCashFlow": 207680000,
+          "freeCashFlow": 202117000,
+          "acquisitions": 142700000,
+          "dilutedShares": 86818000,
+          "fcfPerShare": 2.328054090165634,
+          "cashReturn": 0.17247632239222946,
+          "capex": 5563000,
+          "ebitda": 218490000,
+          "totalDebt": 6936978,
+          "cash": 319065252,
+          "totalEquity": 1230756097,
+          "goodwill": 755942838,
+          "netDebt": -312128274,
+          "revenueGrowth": 0.17883641211981538,
+          "ebitdaMargin": 0.3813548228320688,
+          "ocfMargin": 0.36248693123604764,
+          "fcfMargin": 0.35277721051924227,
+          "fcfConversion": 0.9250629319419653,
+          "capexIntensity": 0.009709720716805339,
+          "acqToOcf": 0.6871147919876733,
+          "netDebtToEbitda": -1.428570067279967,
+          "goodwillToEquity": 0.6142101102262506,
+          "revenuePerShare": 6.599219055956138,
+          "sourceIds": [
+            "os-DSG-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 651000000,
+          "operatingCashFlow": 219272000,
+          "freeCashFlow": 212529000,
+          "acquisitions": 290204000,
+          "dilutedShares": 87323000,
+          "fcfPerShare": 2.433826139734091,
+          "cashReturn": 0.16312609832302558,
+          "capex": 6743000,
+          "ebitda": 267625000,
+          "totalDebt": 7754904,
+          "cash": 231918387,
+          "totalEquity": 1360254017,
+          "goodwill": 908230309,
+          "netDebt": -224163483,
+          "revenueGrowth": 0.1362624818695446,
+          "ebitdaMargin": 0.41109831029185867,
+          "ocfMargin": 0.33682334869431646,
+          "fcfMargin": 0.32646543778801845,
+          "fcfConversion": 0.7941298458664175,
+          "capexIntensity": 0.010357910906298003,
+          "acqToOcf": 1.3234886351198512,
+          "netDebtToEbitda": -0.8376029257356375,
+          "goodwillToEquity": 0.6676916940874581,
+          "revenuePerShare": 7.455080562967374,
+          "sourceIds": [
+            "os-DSG-FY2025"
+          ]
+        },
+        {
+          "fiscalYear": 2026,
+          "revenue": 728992000,
+          "operatingCashFlow": 271456297,
+          "freeCashFlow": 265613331,
+          "acquisitions": 154609191,
+          "dilutedShares": 87579000,
+          "fcfPerShare": 3.0328427020176068,
+          "cashReturn": 0.1781631520305494,
+          "capex": 5842966,
+          "ebitda": 305188000,
+          "totalDebt": 8293118,
+          "cash": 353546884,
+          "totalEquity": 1605384443,
+          "goodwill": 1017211603,
+          "netDebt": -345253766,
+          "revenueGrowth": 0.11980337941628272,
+          "ebitdaMargin": 0.418643825995347,
+          "ocfMargin": 0.37237212068170844,
+          "fcfMargin": 0.3643569902001668,
+          "fcfConversion": 0.8703269165235855,
+          "capexIntensity": 0.008015130481541635,
+          "acqToOcf": 0.5695546307404319,
+          "netDebtToEbitda": -1.1312822456977338,
+          "goodwillToEquity": 0.6336249285555087,
+          "revenuePerShare": 8.323821920780096,
+          "sourceIds": [
+            "os-DSG-FY2026"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2022–FY2026",
+        "operatingCashFlow": 1066941297,
+        "capex": 29048966,
+        "freeCashFlow": 1037892331,
+        "acquisitions": 793352191,
+        "fcfAfterAcquisitions": 244540140,
+        "revenueAdded": 304302000,
+        "goodwillAdded": 408314201
+      },
+      "reportingCurrency": "USD"
+    },
+    {
+      "ticker": "ENGH",
+      "name": "Enghouse Systems",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Contact-centre and telecom software",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.3287526758756302,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-ENGH-FY2021",
+            "os-ENGH-FY2022",
+            "os-ENGH-FY2023",
+            "os-ENGH-FY2024",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": -0.023887019523877062,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-ENGH-FY2021",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.01654878292575246,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-ENGH-FY2021",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.013010021474588407,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-ENGH-FY2021",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.1680726351420157,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-ENGH-FY2024",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": -1.854401135034607,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-ENGH-FY2023",
+            "os-ENGH-FY2024",
+            "os-ENGH-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · weak per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Failed: Free cash flow per share ≥ 7%/yr.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": false
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 3,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 14
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 467177000,
+          "operatingCashFlow": 118460000,
+          "freeCashFlow": 115127000,
+          "acquisitions": 35634000,
+          "dilutedShares": 55880000,
+          "fcfPerShare": 2.060254115962777,
+          "cashReturn": null,
+          "capex": 3333000,
+          "ebitda": 163333000,
+          "totalDebt": 25601000,
+          "cash": 195890000,
+          "totalEquity": 454311000,
+          "goodwill": 223021000,
+          "netDebt": -170289000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.34961695460178904,
+          "ocfMargin": 0.25356556508560996,
+          "fcfMargin": 0.24643122413988702,
+          "fcfConversion": 0.704860622164535,
+          "capexIntensity": 0.007134340945722927,
+          "acqToOcf": 0.3008104001350667,
+          "netDebtToEbitda": -1.0425878420160042,
+          "goodwillToEquity": 0.49089940591357023,
+          "revenuePerShare": 8.360361488904797,
+          "sourceIds": [
+            "os-ENGH-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 427585000,
+          "operatingCashFlow": 103181000,
+          "freeCashFlow": 102262000,
+          "acquisitions": 20111000,
+          "dilutedShares": 55587000,
+          "fcfPerShare": 1.8396747440948422,
+          "cashReturn": 0.20291005343497817,
+          "capex": 919000,
+          "ebitda": 143789000,
+          "totalDebt": 19877000,
+          "cash": 225104000,
+          "totalEquity": 508165000,
+          "goodwill": 230002000,
+          "netDebt": -205227000,
+          "revenueGrowth": -0.08474732274919361,
+          "ebitdaMargin": 0.33628167498859873,
+          "ocfMargin": 0.2413110843458026,
+          "fcfMargin": 0.23916180408573734,
+          "fcfConversion": 0.7111948758249935,
+          "capexIntensity": 0.00214928026006525,
+          "acqToOcf": 0.1949099155852337,
+          "netDebtToEbitda": -1.4272788599962445,
+          "goodwillToEquity": 0.4526128324461543,
+          "revenuePerShare": 7.692176228254808,
+          "sourceIds": [
+            "os-ENGH-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 454022000,
+          "operatingCashFlow": 115298000,
+          "freeCashFlow": 114238000,
+          "acquisitions": 56166000,
+          "dilutedShares": 55321000,
+          "fcfPerShare": 2.065002440302959,
+          "cashReturn": 0.20850630832059502,
+          "capex": 1060000,
+          "ebitda": 136903000,
+          "totalDebt": 12402000,
+          "cash": 239532000,
+          "totalEquity": 555331000,
+          "goodwill": 280241000,
+          "netDebt": -227130000,
+          "revenueGrowth": 0.061828642258264344,
+          "ebitdaMargin": 0.3015338463774883,
+          "ocfMargin": 0.2539480465704305,
+          "fcfMargin": 0.25161335794300715,
+          "fcfConversion": 0.834444825898629,
+          "capexIntensity": 0.002334688627423341,
+          "acqToOcf": 0.4871376780169647,
+          "netDebtToEbitda": -1.6590578730926275,
+          "goodwillToEquity": 0.5046377745884887,
+          "revenuePerShare": 8.207046148840405,
+          "sourceIds": [
+            "os-ENGH-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 502505000,
+          "operatingCashFlow": 132071000,
+          "freeCashFlow": 130094000,
+          "acquisitions": 43277000,
+          "dilutedShares": 55362000,
+          "fcfPerShare": 2.3498789783606084,
+          "cashReturn": 0.2215067238308639,
+          "capex": 1977000,
+          "ebitda": 150655000,
+          "totalDebt": 11088000,
+          "cash": 274240000,
+          "totalEquity": 595807000,
+          "goodwill": 309831000,
+          "netDebt": -263152000,
+          "revenueGrowth": 0.10678557426732627,
+          "ebitdaMargin": 0.29980796210982974,
+          "ocfMargin": 0.26282524551994507,
+          "fcfMargin": 0.2588909563088925,
+          "fcfConversion": 0.8635226179018287,
+          "capexIntensity": 0.003934289211052626,
+          "acqToOcf": 0.32767980858780504,
+          "netDebtToEbitda": -1.7467193256114966,
+          "goodwillToEquity": 0.5200190665769284,
+          "revenuePerShare": 9.076713269029298,
+          "sourceIds": [
+            "os-ENGH-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 498878000,
+          "operatingCashFlow": 104634000,
+          "freeCashFlow": 103155000,
+          "acquisitions": 33399000,
+          "dilutedShares": 55153000,
+          "fcfPerShare": 1.8703425017678095,
+          "cashReturn": 0.1680726351420157,
+          "capex": 1479000,
+          "ebitda": 129698000,
+          "totalDebt": 11141000,
+          "cash": 269061000,
+          "totalEquity": 609469000,
+          "goodwill": 341593000,
+          "netDebt": -257920000,
+          "revenueGrowth": -0.0072178386284713625,
+          "ebitdaMargin": 0.25997939375959656,
+          "ocfMargin": 0.2097386535385405,
+          "fcfMargin": 0.2067740008579252,
+          "fcfConversion": 0.7953476537803205,
+          "capexIntensity": 0.0029646526806153006,
+          "acqToOcf": 0.3191983485291588,
+          "netDebtToEbitda": -1.988619716572345,
+          "goodwillToEquity": 0.5604764147151045,
+          "revenuePerShare": 9.045346581328305,
+          "sourceIds": [
+            "os-ENGH-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 573644000,
+        "capex": 8768000,
+        "freeCashFlow": 564876000,
+        "acquisitions": 188587000,
+        "fcfAfterAcquisitions": 376289000,
+        "revenueAdded": 31701000,
+        "goodwillAdded": 118572000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "GIB.A",
+      "name": "CGI",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "IT services",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.27497135822474517,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-GIB.A-FY2022",
+            "os-GIB.A-FY2023",
+            "os-GIB.A-FY2024",
+            "os-GIB.A-FY2025",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.12780958796357722,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-GIB.A-FY2022",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.06532777726167827,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-GIB.A-FY2022",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.1298815491718126,
+          "period": "FY2022–FY2026",
+          "sourceIds": [
+            "os-GIB.A-FY2022",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.1517409506916378,
+          "period": "FY2026",
+          "sourceIds": [
+            "os-GIB.A-FY2025",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 1.1704188130323232,
+          "period": "FY2026 debt, FY2024–FY2026 EBITDA",
+          "sourceIds": [
+            "os-GIB.A-FY2024",
+            "os-GIB.A-FY2025",
+            "os-GIB.A-FY2026"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2026",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "add",
+      "verdictSource": "model",
+      "proposedWeightPct": 1.66,
+      "reason": "Passed every check.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": true
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": true
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 4,
+        "available": 4,
+        "total": 4,
+        "recommendation": "pass",
+        "rank": 7
+      },
+      "history": [
+        {
+          "fiscalYear": 2022,
+          "revenue": 12867201000,
+          "operatingCashFlow": 1864998000,
+          "freeCashFlow": 1571241000,
+          "acquisitions": 568121000,
+          "dilutedShares": 242867445,
+          "fcfPerShare": 6.469541440599419,
+          "cashReturn": null,
+          "capex": 293757000,
+          "ebitda": 2568486999,
+          "totalDebt": 3977920000,
+          "cash": 966458000,
+          "totalEquity": 7272724000,
+          "goodwill": 8481456000,
+          "netDebt": 3011462000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.19961505217801448,
+          "ocfMargin": 0.1449420118641187,
+          "fcfMargin": 0.12211210503356558,
+          "fcfConversion": 0.6117379611466742,
+          "capexIntensity": 0.022829906830553123,
+          "acqToOcf": 0.30462284678053275,
+          "netDebtToEbitda": 1.1724653467868302,
+          "goodwillToEquity": 1.166200724790326,
+          "revenuePerShare": 52.9803448955458,
+          "sourceIds": [
+            "os-GIB.A-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 14296360000,
+          "operatingCashFlow": 2112249000,
+          "freeCashFlow": 1805280000,
+          "acquisitions": 13039000,
+          "dilutedShares": 237702081,
+          "fcfPerShare": 7.594716850627824,
+          "cashReturn": 0.1549237183391578,
+          "capex": 306969000,
+          "ebitda": 2815279000,
+          "totalDebt": 3744467000,
+          "cash": 1568291000,
+          "totalEquity": 8310294000,
+          "goodwill": 8724450000,
+          "netDebt": 2176176000,
+          "revenueGrowth": 0.11106992111182534,
+          "ebitdaMargin": 0.19692278314200257,
+          "ocfMargin": 0.1477473286906597,
+          "fcfMargin": 0.12627549949777425,
+          "fcfConversion": 0.6412437275310902,
+          "capexIntensity": 0.021471829192885462,
+          "acqToOcf": 0.006173041151871773,
+          "netDebtToEbitda": 0.7729876861227608,
+          "goodwillToEquity": 1.0498365039792816,
+          "revenuePerShare": 60.14402541137198,
+          "sourceIds": [
+            "os-GIB.A-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 14676152000,
+          "operatingCashFlow": 2204983000,
+          "freeCashFlow": 2095250000,
+          "acquisitions": 374580999,
+          "dilutedShares": 231672861,
+          "fcfPerShare": 9.044002784598927,
+          "cashReturn": 0.16896699133758392,
+          "capex": 109733000,
+          "ebitda": 2926913000,
+          "totalDebt": 3317951000,
+          "cash": 1461145000,
+          "totalEquity": 9427990000,
+          "goodwill": 9470376000,
+          "netDebt": 1856806000,
+          "revenueGrowth": 0.026565643282625784,
+          "ebitdaMargin": 0.19943327106451336,
+          "ocfMargin": 0.15024258402338705,
+          "fcfMargin": 0.14276562412272645,
+          "fcfConversion": 0.715856603868991,
+          "capexIntensity": 0.0074769599006606095,
+          "acqToOcf": 0.16987931380876858,
+          "netDebtToEbitda": 0.6343905678098393,
+          "goodwillToEquity": 1.0044957620871469,
+          "revenuePerShare": 63.348602579738504,
+          "sourceIds": [
+            "os-GIB.A-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 15912673000,
+          "operatingCashFlow": 2234197000,
+          "freeCashFlow": 2117586000,
+          "acquisitions": 1842104000,
+          "dilutedShares": 225489344,
+          "fcfPerShare": 9.391069052025802,
+          "cashReturn": 0.1540130703238758,
+          "capex": 116611000,
+          "ebitda": 2812795000,
+          "totalDebt": 4470510000,
+          "cash": 864209000,
+          "totalEquity": 10282332000,
+          "goodwill": 11744782000,
+          "netDebt": 3606301000,
+          "revenueGrowth": 0.08425376079506397,
+          "ebitdaMargin": 0.17676445685775105,
+          "ocfMargin": 0.14040362671940787,
+          "fcfMargin": 0.1330754424476642,
+          "fcfConversion": 0.7528405020628948,
+          "capexIntensity": 0.00732818427174366,
+          "acqToOcf": 0.8245038373966127,
+          "netDebtToEbitda": 1.2821058768946902,
+          "goodwillToEquity": 1.1422294086594365,
+          "revenuePerShare": 70.56951214510607,
+          "sourceIds": [
+            "os-GIB.A-FY2025"
+          ]
+        },
+        {
+          "fiscalYear": 2026,
+          "revenue": 16573609000,
+          "operatingCashFlow": 2479406000,
+          "freeCashFlow": 2211894000,
+          "acquisitions": 198197000,
+          "dilutedShares": 211323445,
+          "fcfPerShare": 10.46686514125302,
+          "cashReturn": 0.1517409506916378,
+          "capex": 267512000,
+          "ebitda": 3134013000,
+          "totalDebt": 3955847000,
+          "cash": 493857000,
+          "totalEquity": 10444865000,
+          "goodwill": 11931826000,
+          "netDebt": 3461990000,
+          "revenueGrowth": 0.041535196506583105,
+          "ebitdaMargin": 0.18909659326462933,
+          "ocfMargin": 0.14959964362620115,
+          "fcfMargin": 0.13345880188195583,
+          "fcfConversion": 0.7057705248829536,
+          "capexIntensity": 0.016140841744245325,
+          "acqToOcf": 0.07993729143189941,
+          "netDebtToEbitda": 1.1046508103189105,
+          "goodwillToEquity": 1.142362874005552,
+          "revenuePerShare": 78.42768699895083,
+          "sourceIds": [
+            "os-GIB.A-FY2026"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2022–FY2026",
+        "operatingCashFlow": 10895833000,
+        "capex": 1094582000,
+        "freeCashFlow": 9801251000,
+        "acquisitions": 2996041999,
+        "fcfAfterAcquisitions": 6805209001,
+        "revenueAdded": 3706408000,
+        "goodwillAdded": 3450370000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "PBH",
+      "name": "Premium Brands",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Specialty food",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.08575365698537206,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-PBH-FY2021",
+            "os-PBH-FY2022",
+            "os-PBH-FY2023",
+            "os-PBH-FY2024",
+            "os-PBH-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-PBH-FY2021",
+            "os-PBH-FY2025"
+          ],
+          "note": "Starting FCF per share was zero or negative, so growth is undefined"
+        },
+        "revenueCagr": {
+          "value": 0.1096488995074325,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-PBH-FY2021",
+            "os-PBH-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.027459954233409523,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-PBH-FY2021",
+            "os-PBH-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": -0.024978586937035634,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-PBH-FY2024",
+            "os-PBH-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 6.962186600904233,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-PBH-FY2023",
+            "os-PBH-FY2024",
+            "os-PBH-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Not enough data",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": false
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": false
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": null
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": false
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 2,
+        "available": 3,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 27
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 4931700000,
+          "operatingCashFlow": 66300000,
+          "freeCashFlow": -76900000,
+          "acquisitions": 211200000,
+          "dilutedShares": 43700000,
+          "fcfPerShare": -1.759725400457666,
+          "cashReturn": null,
+          "capex": 143200000,
+          "ebitda": 374900000,
+          "totalDebt": 1954900000,
+          "cash": 16500000,
+          "totalEquity": 1773900000,
+          "goodwill": 1001200000,
+          "netDebt": 1938400000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.0760184115011051,
+          "ocfMargin": 0.01344364012409514,
+          "fcfMargin": -0.015593000385262689,
+          "fcfConversion": -0.20512136569751935,
+          "capexIntensity": 0.02903664050935783,
+          "acqToOcf": 3.18552036199095,
+          "netDebtToEbitda": 5.170445452120566,
+          "goodwillToEquity": 0.5644061108292463,
+          "revenuePerShare": 112.85354691075514,
+          "sourceIds": [
+            "os-PBH-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 6029800000,
+          "operatingCashFlow": 96500000,
+          "freeCashFlow": -131900000,
+          "acquisitions": 125200000,
+          "dilutedShares": 44800000,
+          "fcfPerShare": -2.9441964285714284,
+          "cashReturn": -0.032486484489489306,
+          "capex": 228400000,
+          "ebitda": 415200000,
+          "totalDebt": 2578500000,
+          "cash": 11400000,
+          "totalEquity": 1813000000,
+          "goodwill": 1093000000,
+          "netDebt": 2567100000,
+          "revenueGrowth": 0.22266155686680045,
+          "ebitdaMargin": 0.06885800524063816,
+          "ocfMargin": 0.016003847557132907,
+          "fcfMargin": -0.02187468904441275,
+          "fcfConversion": -0.31767822736030826,
+          "capexIntensity": 0.03787853660154566,
+          "acqToOcf": 1.2974093264248705,
+          "netDebtToEbitda": 6.182803468208093,
+          "goodwillToEquity": 0.6028681742967458,
+          "revenuePerShare": 134.59375,
+          "sourceIds": [
+            "os-PBH-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 6261000000,
+          "operatingCashFlow": 433900000,
+          "freeCashFlow": 34200000,
+          "acquisitions": 9000000,
+          "dilutedShares": 44600000,
+          "fcfPerShare": 0.7668161434977578,
+          "cashReturn": 0.007765138614535794,
+          "capex": 399700000,
+          "ebitda": 452900000,
+          "totalDebt": 2650600000,
+          "cash": 27600000,
+          "totalEquity": 1766500000,
+          "goodwill": 1084100000,
+          "netDebt": 2623000000,
+          "revenueGrowth": 0.03834289694517223,
+          "ebitdaMargin": 0.07233668743012299,
+          "ocfMargin": 0.06930202842996326,
+          "fcfMargin": 0.005462386200287494,
+          "fcfConversion": 0.07551335835725326,
+          "capexIntensity": 0.06383964222967577,
+          "acqToOcf": 0.020742106476146577,
+          "netDebtToEbitda": 5.791565466990505,
+          "goodwillToEquity": 0.6136994056043023,
+          "revenuePerShare": 140.38116591928252,
+          "sourceIds": [
+            "os-PBH-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 6470500000,
+          "operatingCashFlow": 253100000,
+          "freeCashFlow": -111700000,
+          "acquisitions": -54800000,
+          "dilutedShares": 44600000,
+          "fcfPerShare": -2.504484304932735,
+          "cashReturn": -0.02380343519584026,
+          "capex": 364800000,
+          "ebitda": 496800000,
+          "totalDebt": 3198900000,
+          "cash": 49200000,
+          "totalEquity": 1769200000,
+          "goodwill": 1133900000,
+          "netDebt": 3149700000,
+          "revenueGrowth": 0.03346110844912964,
+          "ebitdaMargin": 0.07677922880766556,
+          "ocfMargin": 0.039115987945290163,
+          "fcfMargin": -0.017262962676763773,
+          "fcfConversion": -0.2248389694041868,
+          "capexIntensity": 0.05637895062205394,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 6.339975845410628,
+          "goodwillToEquity": 0.6409111462808049,
+          "revenuePerShare": 145.07847533632287,
+          "sourceIds": [
+            "os-PBH-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 7477200000,
+          "operatingCashFlow": 93600000,
+          "freeCashFlow": -125400000,
+          "acquisitions": -209700000,
+          "dilutedShares": 44900000,
+          "fcfPerShare": -2.7928730512249444,
+          "cashReturn": -0.024978586937035634,
+          "capex": 219000000,
+          "ebitda": 510100000,
+          "totalDebt": 3417100000,
+          "cash": 29300000,
+          "totalEquity": 1655400000,
+          "goodwill": 1112700000,
+          "netDebt": 3387800000,
+          "revenueGrowth": 0.15558303067769108,
+          "ebitdaMargin": 0.06822072433531269,
+          "ocfMargin": 0.012518054886856042,
+          "fcfMargin": -0.0167709837907238,
+          "fcfConversion": -0.24583415016663399,
+          "capexIntensity": 0.029289038677579843,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 6.641442854342285,
+          "goodwillToEquity": 0.6721638274737224,
+          "revenuePerShare": 166.53006681514478,
+          "sourceIds": [
+            "os-PBH-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 943400000,
+        "capex": 1355100000,
+        "freeCashFlow": -411700000,
+        "acquisitions": 80900000,
+        "fcfAfterAcquisitions": -492600000,
+        "revenueAdded": 2545500000,
+        "goodwillAdded": 111500000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "EIF",
+      "name": "Exchange Income",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Aviation and manufacturing",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.41256070683359414,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-EIF-FY2021",
+            "os-EIF-FY2022",
+            "os-EIF-FY2023",
+            "os-EIF-FY2024",
+            "os-EIF-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-EIF-FY2021",
+            "os-EIF-FY2025"
+          ],
+          "note": "Missing or not computable from the data provided"
+        },
+        "revenueCagr": {
+          "value": 0.23406703410371477,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-EIF-FY2021",
+            "os-EIF-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": 0.49545979100745297,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-EIF-FY2021",
+            "os-EIF-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": -0.02024990547818338,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-EIF-FY2024",
+            "os-EIF-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 3.5929538404177546,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-EIF-FY2023",
+            "os-EIF-FY2024",
+            "os-EIF-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Not enough data",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": false
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": null
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": false
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": false
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 1,
+        "available": 3,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 33
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 1413146000,
+          "operatingCashFlow": 285047000,
+          "freeCashFlow": 5624000,
+          "acquisitions": 135710000,
+          "dilutedShares": 38087674,
+          "fcfPerShare": 0.14765931886520559,
+          "cashReturn": null,
+          "capex": 279423000,
+          "ebitda": 332846000,
+          "totalDebt": 1289827000,
+          "cash": 75408000,
+          "totalEquity": 800275000,
+          "goodwill": 486875000,
+          "netDebt": 1214419000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.23553546484227392,
+          "ocfMargin": 0.20171093432667256,
+          "fcfMargin": 0.003979772790638759,
+          "fcfConversion": 0.016896702979756404,
+          "capexIntensity": 0.1977311615360338,
+          "acqToOcf": 0.4760969243668588,
+          "netDebtToEbitda": 3.648591240393455,
+          "goodwillToEquity": 0.6083846177876355,
+          "revenuePerShare": 37.10244946961056,
+          "sourceIds": [
+            "os-EIF-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 2059373000,
+          "operatingCashFlow": 335119000,
+          "freeCashFlow": -31460000,
+          "acquisitions": 314775000,
+          "dilutedShares": 47314038,
+          "fcfPerShare": -0.6649189401251273,
+          "cashReturn": -0.01287333331560147,
+          "capex": 366579000,
+          "ebitda": 449595000,
+          "totalDebt": 1778467000,
+          "cash": 139896000,
+          "totalEquity": 1019054000,
+          "goodwill": 626341000,
+          "netDebt": 1638571000,
+          "revenueGrowth": 0.4572966982887827,
+          "ebitdaMargin": 0.21831644874435083,
+          "ocfMargin": 0.16272865576075826,
+          "fcfMargin": -0.015276494350464923,
+          "fcfConversion": -0.06997408779012222,
+          "capexIntensity": 0.17800515011122317,
+          "acqToOcf": 0.9392932062938837,
+          "netDebtToEbitda": 3.644548982973565,
+          "goodwillToEquity": 0.6146298429720113,
+          "revenuePerShare": 43.52562341011773,
+          "sourceIds": [
+            "os-EIF-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 2498415000,
+          "operatingCashFlow": 353226000,
+          "freeCashFlow": -152613000,
+          "acquisitions": 155837000,
+          "dilutedShares": 51988998,
+          "fcfPerShare": -2.9354864658095545,
+          "cashReturn": -0.050454206211521,
+          "capex": 505839000,
+          "ebitda": 548707000,
+          "totalDebt": 2006571000,
+          "cash": 103559000,
+          "totalEquity": 1245473000,
+          "goodwill": 713196000,
+          "netDebt": 1903012000,
+          "revenueGrowth": 0.21319207350975278,
+          "ebitdaMargin": 0.21962204037359687,
+          "ocfMargin": 0.14138003494215332,
+          "fcfMargin": -0.06108392720985104,
+          "fcfConversion": -0.2781320449711777,
+          "capexIntensity": 0.20246396215200438,
+          "acqToOcf": 0.4411821326855894,
+          "netDebtToEbitda": 3.4681751827478053,
+          "goodwillToEquity": 0.5726306391226466,
+          "revenuePerShare": 48.05660997736483,
+          "sourceIds": [
+            "os-EIF-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 2659895000,
+          "operatingCashFlow": 357008000,
+          "freeCashFlow": -133382000,
+          "acquisitions": 147813000,
+          "dilutedShares": 52839043,
+          "fcfPerShare": -2.5243076412265832,
+          "cashReturn": -0.03814117054292161,
+          "capex": 490390000,
+          "ebitda": 616260000,
+          "totalDebt": 2332409000,
+          "cash": 71797000,
+          "totalEquity": 1409669000,
+          "goodwill": 827229000,
+          "netDebt": 2260612000,
+          "revenueGrowth": 0.06463297730761308,
+          "ebitdaMargin": 0.2316858372228979,
+          "ocfMargin": 0.13421883194637382,
+          "fcfMargin": -0.050145588453679564,
+          "fcfConversion": -0.21643786713400187,
+          "capexIntensity": 0.18436442040005338,
+          "acqToOcf": 0.41403273876215657,
+          "netDebtToEbitda": 3.6682763768539255,
+          "goodwillToEquity": 0.5868249922499537,
+          "revenuePerShare": 50.339575605107,
+          "sourceIds": [
+            "os-EIF-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 3277495000,
+          "operatingCashFlow": 647944000,
+          "freeCashFlow": -80365000,
+          "acquisitions": 62051999,
+          "dilutedShares": 56958585,
+          "fcfPerShare": -1.4109374381403612,
+          "cashReturn": -0.02024990547818338,
+          "capex": 728309000,
+          "ebitda": 744669000,
+          "totalDebt": 2432851000,
+          "cash": 145773000,
+          "totalEquity": 1762392000,
+          "goodwill": 825444000,
+          "netDebt": 2287078000,
+          "revenueGrowth": 0.23218961650741843,
+          "ebitdaMargin": 0.2272067539386025,
+          "ocfMargin": 0.19769488588083278,
+          "fcfMargin": -0.024520250984364583,
+          "fcfConversion": -0.10792043176229976,
+          "capexIntensity": 0.22221513686519737,
+          "acqToOcf": 0.09576753392268468,
+          "netDebtToEbitda": 3.0712679056063834,
+          "goodwillToEquity": 0.4683657211335503,
+          "revenuePerShare": 57.54172088369119,
+          "sourceIds": [
+            "os-EIF-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 1978344000,
+        "capex": 2370540000,
+        "freeCashFlow": -392196000,
+        "acquisitions": 816186999,
+        "fcfAfterAcquisitions": -1208382999,
+        "revenueAdded": 1864349000,
+        "goodwillAdded": 338569000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
+      "ticker": "MTY",
+      "name": "MTY Food Group",
+      "hqCountry": "CA",
+      "listedOn": "TSX",
+      "subSector": "Restaurant franchising",
+      "inIndex": false,
+      "metrics": {
+        "acqIntensity": {
+          "value": 0.5991997359760693,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-MTY-FY2021",
+            "os-MTY-FY2022",
+            "os-MTY-FY2023",
+            "os-MTY-FY2024",
+            "os-MTY-FY2025"
+          ]
+        },
+        "fcfPerShareCagr": {
+          "value": 0.08315662673347934,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-MTY-FY2021",
+            "os-MTY-FY2025"
+          ]
+        },
+        "revenueCagr": {
+          "value": 0.21181540707941382,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-MTY-FY2021",
+            "os-MTY-FY2025"
+          ]
+        },
+        "shareCountChange": {
+          "value": -0.0710246795622137,
+          "period": "FY2021–FY2025",
+          "sourceIds": [
+            "os-MTY-FY2021",
+            "os-MTY-FY2025"
+          ]
+        },
+        "cashReturn": {
+          "value": 0.07693596266194781,
+          "period": "FY2025",
+          "sourceIds": [
+            "os-MTY-FY2024",
+            "os-MTY-FY2025"
+          ]
+        },
+        "netDebtToEbitda": {
+          "value": 6.147351606694724,
+          "period": "FY2025 debt, FY2023–FY2025 EBITDA",
+          "sourceIds": [
+            "os-MTY-FY2023",
+            "os-MTY-FY2024",
+            "os-MTY-FY2025"
+          ]
+        },
+        "organicGrowth": {
+          "value": null,
+          "period": "FY2025",
+          "sourceIds": [],
+          "note": "Not reported in the data provided"
+        }
+      },
+      "zone": "Acquirer · strong per-share growth",
+      "verdict": "reject",
+      "verdictSource": "model",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
+      "model": {
+        "checks": [
+          {
+            "id": "themeFit",
+            "label": "Acquisitions ≥ 20% of cash flow",
+            "rule": "Cash spent on acquisitions is at least 20% of operating cash flow",
+            "target": "≥ 20%",
+            "threshold": 0.2,
+            "op": ">=",
+            "kind": "gate",
+            "metricId": "acqIntensity",
+            "pass": true
+          },
+          {
+            "id": "debtLimit",
+            "label": "Net debt ≤ 3× EBITDA",
+            "rule": "Net debt is at most 3 times average EBITDA of the last 3 years",
+            "target": "≤ 3×",
+            "threshold": 3,
+            "op": "<=",
+            "kind": "gate",
+            "metricId": "netDebtToEbitda",
+            "pass": false
+          },
+          {
+            "id": "ownersGain",
+            "label": "Free cash flow per share ≥ 7%/yr",
+            "rule": "Free cash flow per share grew at least 7% a year",
+            "target": "≥ 7%",
+            "threshold": 0.07,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "fcfPerShareCagr",
+            "pass": true
+          },
+          {
+            "id": "cashReturn",
+            "label": "Return on capital ≥ 8%",
+            "rule": "Free cash flow is at least 8% of the debt and equity invested",
+            "target": "≥ 8%",
+            "threshold": 0.08,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "cashReturn",
+            "pass": false
+          },
+          {
+            "id": "noDilution",
+            "label": "Share count up ≤ 5%",
+            "rule": "Diluted share count rose no more than 5% over the period",
+            "target": "≤ 5%",
+            "threshold": 0.05,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "shareCountChange",
+            "pass": true
+          },
+          {
+            "id": "selfFunded",
+            "label": "Acquisitions ≤ 100% of cash flow",
+            "rule": "Cash spent on acquisitions did not exceed operating cash flow",
+            "target": "≤ 100%",
+            "threshold": 1,
+            "op": "<=",
+            "kind": "score",
+            "metricId": "acqIntensity",
+            "pass": true
+          }
+        ],
+        "passed": 3,
+        "available": 4,
+        "total": 4,
+        "recommendation": "fail",
+        "rank": 26
+      },
+      "history": [
+        {
+          "fiscalYear": 2021,
+          "revenue": 551903000,
+          "operatingCashFlow": 139299000,
+          "freeCashFlow": 132536000,
+          "acquisitions": -13965000,
+          "dilutedShares": 24745131,
+          "fcfPerShare": 5.356043578835772,
+          "cashReturn": null,
+          "capex": 6763000,
+          "ebitda": 169803000,
+          "totalDebt": 834276000,
+          "cash": 61231000,
+          "totalEquity": 648898000,
+          "goodwill": 428390000,
+          "netDebt": 773045000,
+          "revenueGrowth": null,
+          "ebitdaMargin": 0.3076681953169307,
+          "ocfMargin": 0.2523976133487225,
+          "fcfMargin": 0.24014364843097427,
+          "fcfConversion": 0.7805280236509367,
+          "capexIntensity": 0.012253964917748227,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 4.552599188471346,
+          "goodwillToEquity": 0.6601807988312492,
+          "revenuePerShare": 22.303498817605774,
+          "sourceIds": [
+            "os-MTY-FY2021"
+          ]
+        },
+        {
+          "fiscalYear": 2022,
+          "revenue": 716522000,
+          "operatingCashFlow": 142797000,
+          "freeCashFlow": 130139000,
+          "acquisitions": 246893000,
+          "dilutedShares": 24465738,
+          "fcfPerShare": 5.319234596561118,
+          "cashReturn": 0.07926670124282298,
+          "capex": 12658000,
+          "ebitda": 165598000,
+          "totalDebt": 1075773000,
+          "cash": 59479000,
+          "totalEquity": 724626000,
+          "goodwill": 529548000,
+          "netDebt": 1016294000,
+          "revenueGrowth": 0.29827524039550424,
+          "ebitdaMargin": 0.2311136294489213,
+          "ocfMargin": 0.19929185705393554,
+          "fcfMargin": 0.18162596542743978,
+          "fcfConversion": 0.7858730177900699,
+          "capexIntensity": 0.017665891626495768,
+          "acqToOcf": 1.7289789001169493,
+          "netDebtToEbitda": 6.137115182550514,
+          "goodwillToEquity": 0.7307880203028873,
+          "revenuePerShare": 29.28675194674283,
+          "sourceIds": [
+            "os-MTY-FY2022"
+          ]
+        },
+        {
+          "fiscalYear": 2023,
+          "revenue": 1169334000,
+          "operatingCashFlow": 184586000,
+          "freeCashFlow": 152417000,
+          "acquisitions": 291046000,
+          "dilutedShares": 24478163,
+          "fcfPerShare": 6.226651893771604,
+          "cashReturn": 0.07784620908518178,
+          "capex": 32169000,
+          "ebitda": 263022000,
+          "totalDebt": 1302561000,
+          "cash": 58895000,
+          "totalEquity": 812889000,
+          "goodwill": 719187000,
+          "netDebt": 1243666000,
+          "revenueGrowth": 0.6319582650637385,
+          "ebitdaMargin": 0.22493316708485342,
+          "ocfMargin": 0.15785566826928832,
+          "fcfMargin": 0.13034513663333144,
+          "fcfConversion": 0.5794838454577944,
+          "capexIntensity": 0.02751053163595688,
+          "acqToOcf": 1.5767501327294595,
+          "netDebtToEbitda": 4.728372531575306,
+          "goodwillToEquity": 0.8847296494355318,
+          "revenuePerShare": 47.7704965033528,
+          "sourceIds": [
+            "os-MTY-FY2023"
+          ]
+        },
+        {
+          "fiscalYear": 2024,
+          "revenue": 1159604000,
+          "operatingCashFlow": 204807000,
+          "freeCashFlow": 177081000,
+          "acquisitions": -4302000,
+          "dilutedShares": 23930693,
+          "fcfPerShare": 7.399743918824248,
+          "cashReturn": 0.08553309232406657,
+          "capex": 27726000,
+          "ebitda": 165344000,
+          "totalDebt": 1221743000,
+          "cash": 50409000,
+          "totalEquity": 803450000,
+          "goodwill": 693835000,
+          "netDebt": 1171334000,
+          "revenueGrowth": -0.008320975871735525,
+          "ebitdaMargin": 0.14258660715209676,
+          "ocfMargin": 0.17661805236960204,
+          "fcfMargin": 0.15270816589111455,
+          "fcfConversion": 1.070985339655506,
+          "capexIntensity": 0.023909886478487484,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 7.084224404877105,
+          "goodwillToEquity": 0.8635696060738067,
+          "revenuePerShare": 48.4567663794776,
+          "sourceIds": [
+            "os-MTY-FY2024"
+          ]
+        },
+        {
+          "fiscalYear": 2025,
+          "revenue": 1190169000,
+          "operatingCashFlow": 182979000,
+          "freeCashFlow": 169474000,
+          "acquisitions": -7675000,
+          "dilutedShares": 22987616,
+          "fcfPerShare": 7.372404341537635,
+          "cashReturn": 0.07693596266194781,
+          "capex": 13505000,
+          "ebitda": 289692000,
+          "totalDebt": 1523374000,
+          "cash": 51989000,
+          "totalEquity": 857019000,
+          "goodwill": 692752000,
+          "netDebt": 1471385000,
+          "revenueGrowth": 0.02635813605334225,
+          "ebitdaMargin": 0.24340408799086516,
+          "ocfMargin": 0.15374203159383248,
+          "fcfMargin": 0.14239490358092002,
+          "fcfConversion": 0.5850144291178216,
+          "capexIntensity": 0.011347128012912452,
+          "acqToOcf": 0,
+          "netDebtToEbitda": 5.079135771785206,
+          "goodwillToEquity": 0.8083274699860796,
+          "revenuePerShare": 51.77435537465042,
+          "sourceIds": [
+            "os-MTY-FY2025"
+          ]
+        }
+      ],
+      "totals": {
+        "period": "FY2021–FY2025",
+        "operatingCashFlow": 854468000,
+        "capex": 92821000,
+        "freeCashFlow": 761647000,
+        "acquisitions": 511997000,
+        "fcfAfterAcquisitions": 249650000,
+        "revenueAdded": 638266000,
+        "goodwillAdded": 264362000
+      },
+      "reportingCurrency": "CAD"
+    },
+    {
       "ticker": "ARE",
       "name": "Aecon Group",
       "hqCountry": "CA",
@@ -2662,7 +7013,7 @@
         "available": 3,
         "total": 4,
         "recommendation": "fail",
-        "rank": 16
+        "rank": 28
       },
       "history": [
         {
@@ -3246,7 +7597,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 17
+        "rank": 29
       },
       "history": [
         {
@@ -3494,7 +7845,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 2
+        "rank": 8
       },
       "history": [
         {
@@ -3664,6 +8015,7 @@
       "ticker": "WCN",
       "name": "Waste Connections",
       "hqCountry": "CA",
+      "listedOn": "TSX",
       "subSector": "Waste",
       "inIndex": true,
       "metrics": {
@@ -3802,7 +8154,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 19
+        "rank": 31
       },
       "history": [
         {
@@ -4110,7 +8462,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 18
+        "rank": 30
       },
       "history": [
         {
@@ -4418,7 +8770,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 5
+        "rank": 12
       },
       "history": [
         {
@@ -4726,7 +9078,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 12
+        "rank": 20
       },
       "history": [
         {
@@ -5034,7 +9386,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 20
+        "rank": 32
       },
       "history": [
         {
@@ -5342,7 +9694,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 8
+        "rank": 16
       },
       "history": [
         {
@@ -5650,7 +10002,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 11
+        "rank": 19
       },
       "history": [
         {
@@ -5958,7 +10310,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 14
+        "rank": 23
       },
       "history": [
         {
@@ -6266,7 +10618,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 3
+        "rank": 10
       },
       "history": [
         {
@@ -6574,7 +10926,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 9
+        "rank": 17
       },
       "history": [
         {
@@ -6882,7 +11234,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 6
+        "rank": 13
       },
       "history": [
         {
@@ -7190,7 +11542,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 15
+        "rank": 24
       },
       "history": [
         {
@@ -7498,7 +11850,7 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 10
+        "rank": 18
       },
       "history": [
         {
@@ -7675,123 +12027,11 @@
       "note": "No Onesheet data for this company in the cache"
     },
     {
-      "ticker": "STN",
-      "name": "Stantec",
-      "listedOn": "TSX",
-      "subSector": "Engineering and design",
-      "why": "150th acquisition since its 1994 IPO, closed Aug 2025",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "GFL",
-      "name": "GFL Environmental",
-      "listedOn": "TSX",
-      "subSector": "Waste management",
-      "why": "\"Over 100 acquisitions\" since 2007 per its 2019 F-1; more than 200 by about 2023",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "FSV",
-      "name": "FirstService",
-      "listedOn": "TSX",
-      "subSector": "Property services",
-      "why": "2025 growth attributed mainly to tuck-under acquisitions",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "CIGI",
-      "name": "Colliers International",
-      "listedOn": "TSX",
-      "subSector": "Real estate services and engineering",
-      "why": "Seven acquisitions from Q2 2025; engineering built by acquisition",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "BYD",
-      "name": "Boyd Group Services",
-      "listedOn": "TSX",
-      "subSector": "Auto collision repair",
-      "why": "Consolidator of collision centres",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "CCL.B",
-      "name": "CCL Industries",
-      "listedOn": "TSX",
-      "subSector": "Specialty packaging and labels",
-      "why": "Named in the Globe's list (as CCL-A)",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "RCH",
-      "name": "Richelieu Hardware",
-      "listedOn": "TSX",
-      "subSector": "Hardware distribution",
-      "why": "In Aktagon's Canadian serial-acquirer screen",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "ATD",
-      "name": "Alimentation Couche-Tard",
-      "listedOn": "TSX",
-      "subSector": "Convenience retail",
-      "why": "Named in the Globe's list",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
       "ticker": "DND",
       "name": "Dye & Durham",
       "listedOn": "TSX",
       "subSector": "Legal software",
       "why": "In Aktagon's screen (ROIC -9.5%); now in a strategic review and selling assets",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "DSG",
-      "name": "Descartes Systems",
-      "listedOn": "TSX",
-      "subSector": "Logistics software",
-      "why": "In both lists",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "ENGH",
-      "name": "Enghouse Systems",
-      "listedOn": "TSX",
-      "subSector": "Contact-centre and telecom software",
-      "why": "In both lists",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "GIB.A",
-      "name": "CGI",
-      "listedOn": "TSX",
-      "subSector": "IT services",
-      "why": "In both lists",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "PBH",
-      "name": "Premium Brands",
-      "listedOn": "TSX",
-      "subSector": "Specialty food",
-      "why": "In both lists",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "EIF",
-      "name": "Exchange Income",
-      "listedOn": "TSX",
-      "subSector": "Aviation and manufacturing",
-      "why": "In Aktagon's screen",
-      "note": "No Onesheet data for this company in the cache"
-    },
-    {
-      "ticker": "MTY",
-      "name": "MTY Food Group",
-      "listedOn": "TSX",
-      "subSector": "Restaurant franchising",
-      "why": "In Aktagon's screen",
       "note": "No Onesheet data for this company in the cache"
     }
   ],
@@ -8202,6 +12442,286 @@
     {
       "id": "os-DHR-FY2025",
       "label": "Onesheet API · DHR annual statements, FY2025"
+    },
+    {
+      "id": "os-ATD-FY2022",
+      "label": "Onesheet API · ATD.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-ATD-FY2023",
+      "label": "Onesheet API · ATD.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-ATD-FY2024",
+      "label": "Onesheet API · ATD.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-ATD-FY2025",
+      "label": "Onesheet API · ATD.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-ATD-FY2026",
+      "label": "Onesheet API · ATD.TO annual statements, FY2026"
+    },
+    {
+      "id": "os-BYD-FY2021",
+      "label": "Onesheet API · BYD.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-BYD-FY2022",
+      "label": "Onesheet API · BYD.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-BYD-FY2023",
+      "label": "Onesheet API · BYD.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-BYD-FY2024",
+      "label": "Onesheet API · BYD.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-BYD-FY2025",
+      "label": "Onesheet API · BYD.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-CCL.B-FY2021",
+      "label": "Onesheet API · CCL-B.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-CCL.B-FY2022",
+      "label": "Onesheet API · CCL-B.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-CCL.B-FY2023",
+      "label": "Onesheet API · CCL-B.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-CCL.B-FY2024",
+      "label": "Onesheet API · CCL-B.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-CCL.B-FY2025",
+      "label": "Onesheet API · CCL-B.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-CIGI-FY2021",
+      "label": "Onesheet API · CIGI.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-CIGI-FY2022",
+      "label": "Onesheet API · CIGI.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-CIGI-FY2023",
+      "label": "Onesheet API · CIGI.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-CIGI-FY2024",
+      "label": "Onesheet API · CIGI.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-CIGI-FY2025",
+      "label": "Onesheet API · CIGI.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-DSG-FY2022",
+      "label": "Onesheet API · DSG.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-DSG-FY2023",
+      "label": "Onesheet API · DSG.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-DSG-FY2024",
+      "label": "Onesheet API · DSG.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-DSG-FY2025",
+      "label": "Onesheet API · DSG.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-DSG-FY2026",
+      "label": "Onesheet API · DSG.TO annual statements, FY2026"
+    },
+    {
+      "id": "os-EIF-FY2021",
+      "label": "Onesheet API · EIF.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-EIF-FY2022",
+      "label": "Onesheet API · EIF.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-EIF-FY2023",
+      "label": "Onesheet API · EIF.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-EIF-FY2024",
+      "label": "Onesheet API · EIF.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-EIF-FY2025",
+      "label": "Onesheet API · EIF.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-ENGH-FY2021",
+      "label": "Onesheet API · ENGH.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-ENGH-FY2022",
+      "label": "Onesheet API · ENGH.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-ENGH-FY2023",
+      "label": "Onesheet API · ENGH.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-ENGH-FY2024",
+      "label": "Onesheet API · ENGH.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-ENGH-FY2025",
+      "label": "Onesheet API · ENGH.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-FSV-FY2021",
+      "label": "Onesheet API · FSV.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-FSV-FY2022",
+      "label": "Onesheet API · FSV.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-FSV-FY2023",
+      "label": "Onesheet API · FSV.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-FSV-FY2024",
+      "label": "Onesheet API · FSV.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-FSV-FY2025",
+      "label": "Onesheet API · FSV.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-GFL-FY2021",
+      "label": "Onesheet API · GFL.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-GFL-FY2022",
+      "label": "Onesheet API · GFL.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-GFL-FY2023",
+      "label": "Onesheet API · GFL.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-GFL-FY2024",
+      "label": "Onesheet API · GFL.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-GFL-FY2025",
+      "label": "Onesheet API · GFL.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-GIB.A-FY2022",
+      "label": "Onesheet API · GIB-A.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-GIB.A-FY2023",
+      "label": "Onesheet API · GIB-A.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-GIB.A-FY2024",
+      "label": "Onesheet API · GIB-A.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-GIB.A-FY2025",
+      "label": "Onesheet API · GIB-A.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-GIB.A-FY2026",
+      "label": "Onesheet API · GIB-A.TO annual statements, FY2026"
+    },
+    {
+      "id": "os-MTY-FY2021",
+      "label": "Onesheet API · MTY.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-MTY-FY2022",
+      "label": "Onesheet API · MTY.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-MTY-FY2023",
+      "label": "Onesheet API · MTY.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-MTY-FY2024",
+      "label": "Onesheet API · MTY.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-MTY-FY2025",
+      "label": "Onesheet API · MTY.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-PBH-FY2021",
+      "label": "Onesheet API · PBH.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-PBH-FY2022",
+      "label": "Onesheet API · PBH.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-PBH-FY2023",
+      "label": "Onesheet API · PBH.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-PBH-FY2024",
+      "label": "Onesheet API · PBH.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-PBH-FY2025",
+      "label": "Onesheet API · PBH.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-RCH-FY2021",
+      "label": "Onesheet API · RCH.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-RCH-FY2022",
+      "label": "Onesheet API · RCH.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-RCH-FY2023",
+      "label": "Onesheet API · RCH.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-RCH-FY2024",
+      "label": "Onesheet API · RCH.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-RCH-FY2025",
+      "label": "Onesheet API · RCH.TO annual statements, FY2025"
+    },
+    {
+      "id": "os-STN-FY2021",
+      "label": "Onesheet API · STN.TO annual statements, FY2021"
+    },
+    {
+      "id": "os-STN-FY2022",
+      "label": "Onesheet API · STN.TO annual statements, FY2022"
+    },
+    {
+      "id": "os-STN-FY2023",
+      "label": "Onesheet API · STN.TO annual statements, FY2023"
+    },
+    {
+      "id": "os-STN-FY2024",
+      "label": "Onesheet API · STN.TO annual statements, FY2024"
+    },
+    {
+      "id": "os-STN-FY2025",
+      "label": "Onesheet API · STN.TO annual statements, FY2025"
     }
   ]
 }

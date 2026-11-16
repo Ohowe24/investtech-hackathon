@@ -10,10 +10,11 @@
 //
 // No number is typed here. Every value is copied from a raw file; missing stays empty.
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Deal } from "../contract/types";
 import { reits } from "./industries/reits";
+import { yearsFromStatements } from "./statement-rows";
 
 const root = process.cwd();
 const rawDir = join(root, "engine", "raw");
@@ -37,6 +38,8 @@ const HOLDING_NAMES: Record<string, string> = {
 // Our "what counts as Canadian" rule (methodology.md): HQ or incorporation, whatever the listing.
 const HQ_OVERRIDE: Record<string, string> = { WCN: "CA" };
 
+/** API symbol -> our ticker: "TECK-B.TO" -> "TECK.B", "KMP-UN.TO" -> "KMP.UN", "CSU.TO" -> "CSU". Same rule as engine/onesheet-fetch.mjs. */
+const tickerOf = (symbol: string) => symbol.replace(/\.(TO|V)$/, "").replace(/-/g, ".");
 const csvCell = (v: unknown) => {
   if (v == null) return "";
   const s = String(v);
@@ -56,37 +59,63 @@ const loadStmt = (ticker: string, st: string): Stmt => {
 
 const holdings: { ticker: string; countryCode: string; subSector: string }[] =
   indexes.indexes.find((i: { name: string }) => i.name === INDEX_NAME)?.positions ?? [];
+const sourceRows: unknown[][] = [];
+
 // REITs: the profile's Canadian universe and the organizers' REIT index. Statements only; their KPIs come further down.
 const reitHoldings: { ticker: string }[] = indexes.indexes.find((i: { name: string }) => i.name === reits.indexName)?.positions ?? [];
 const REIT_TICKERS = [...reits.universe.map((u) => u.ticker), ...reitHoldings.map((h) => h.ticker)];
 /** The API's symbol: TSX units are "KMP-UN.TO"; US listings are the plain ticker. */
 const reitSymbol = (t: string) => (t.endsWith(".UN") ? `${t.replace(/\.UN$/, "")}-UN.TO` : t);
-const tickers = [...Object.keys(CANDIDATES), ...holdings.map((h) => h.ticker), ...REIT_TICKERS];
+// The Canadian market map (npm run discover): every company in the broad TSX index ETFs, with its profile.
+// Used by "choose your own industry": candidates are the Canadian companies in the chosen profile industry.
+type Profile = { symbol: string; companyName?: string; exchangeShortName?: string; sector?: string; industry?: string; country?: string; mktCap?: number; isEtf?: boolean; isFund?: boolean };
+const marketDir = join(rawDir, "market");
+const etfMembers = new Map<string, string[]>();
+if (existsSync(marketDir)) {
+  for (const f of readdirSync(marketDir).filter((x) => x.startsWith("etf-") && x.endsWith(".json"))) {
+    const etf = f.slice(4, -5);
+    const j = JSON.parse(readFileSync(join(marketDir, f), "utf8"));
+    for (const h of (j.data?.holdings ?? []) as { symbol: string }[]) {
+      const t = tickerOf(h.symbol);
+      etfMembers.set(t, [...(etfMembers.get(t) ?? []), etf]);
+    }
+  }
+}
+const marketRows: unknown[][] = [];
+const marketSymbols = new Map<string, string>();
+const profileDir = join(marketDir, "profiles");
+if (existsSync(profileDir)) {
+  for (const f of readdirSync(profileDir).filter((x) => x.endsWith(".json")).sort()) {
+    const j = JSON.parse(readFileSync(join(profileDir, f), "utf8"));
+    const p = j.data as Profile | undefined;
+    if (!j.success || !p || p.isEtf || p.isFund) continue;
+    const ticker = f.slice(0, -5);
+    const sourceId = `os-profile-${ticker}`;
+    sourceRows.push([sourceId, `Onesheet API · ${p.symbol} company profile${etfMembers.has(ticker) ? `; held by ${etfMembers.get(ticker)!.join(", ")} (Onesheet ETF holdings)` : ""}`, "", ""]);
+    marketRows.push([ticker, p.symbol, p.companyName ?? "", p.exchangeShortName ?? "", p.sector ?? "", p.industry ?? "", p.country ?? "", n(p.mktCap), (etfMembers.get(ticker) ?? []).join(" "), sourceId]);
+    if (p.country === "CA" && existsSync(join(rawDir, "statements", `${ticker}-income.json`))) marketSymbols.set(ticker, p.symbol);
+  }
+}
+
+const tickers = [...new Set([...Object.keys(CANDIDATES), ...holdings.map((h) => h.ticker), ...REIT_TICKERS, ...marketSymbols.keys()])];
 
 const finRows: unknown[][] = [];
-const sourceRows: unknown[][] = [];
 const organicRows: unknown[][] = [];
 const deals: Record<string, Deal[]> = {};
 const warnings: string[] = [];
 
 for (const ticker of tickers) {
-  const symbol = CANDIDATES[ticker]?.symbol ?? (REIT_TICKERS.includes(ticker) ? reitSymbol(ticker) : ticker);
+  const symbol = CANDIDATES[ticker]?.symbol ?? marketSymbols.get(ticker) ?? (REIT_TICKERS.includes(ticker) ? reitSymbol(ticker) : ticker);
   const income = loadStmt(ticker, "income");
   const balance = loadStmt(ticker, "balance");
   const cash = loadStmt(ticker, "cash");
-  const years = [...new Set(income.map((r) => String(r.date).slice(0, 4)))].sort();
-  if (years.length === 0) warnings.push(`${ticker}: no statements in engine/raw/statements (run node engine/fetch-statements.mjs)`);
-  for (const y of years) {
-    const inc = income.find((r) => String(r.date).startsWith(y));
-    const bal = balance.find((r) => String(r.date).startsWith(y));
-    const cf = cash.find((r) => String(r.date).startsWith(y));
-    const sourceId = `os-${ticker}-FY${y}`;
-    sourceRows.push([sourceId, `Onesheet API · ${symbol} annual statements, FY${y}`, "", ""]);
+  const years = yearsFromStatements(ticker, symbol, income, balance, cash);
+  if (years.length === 0) warnings.push(`${ticker}: no statements in engine/raw/statements (run npm run fetch-statements / npm run discover)`);
+  for (const r of years) {
+    sourceRows.push([r.sourceId, r.sourceLabel, "", ""]);
     finRows.push([
-      ticker, y, inc?.reportedCurrency ?? bal?.reportedCurrency ?? cf?.reportedCurrency ?? "",
-      n(inc?.revenue), n(cf?.operatingCashFlow), flip(cf?.capitalExpenditure), flip(cf?.acquisitionsNet),
-      n(inc?.weightedAverageShsOutDil), n(bal?.totalDebt), n(bal?.cashAndCashEquivalents),
-      n(bal?.totalEquity), n(inc?.ebitda), n(bal?.goodwill), n(bal?.totalAssets), String(inc?.date ?? ""), sourceId,
+      ticker, r.year, r.currency, r.revenue, r.ocf, r.capex, r.acquisitions, r.shares, r.debt, r.cash,
+      r.equity, r.ebitda, r.goodwill, r.assets, r.periodEnd, r.sourceId,
     ]);
   }
 
@@ -241,6 +270,7 @@ for (const ticker of REIT_TICKERS) {
 }
 
 mkdirSync(outDir, { recursive: true });
+writeFileSync(join(outDir, "market.csv"), csv(["ticker", "symbol", "name", "exchange", "sector", "industry", "country", "market_cap", "in_etfs", "source_id"], marketRows));
 writeFileSync(join(outDir, "distributions.csv"), csv(["ticker", "date", "amount", "currency", "source_id"], distRows));
 writeFileSync(join(outDir, "facts.csv"), csv(["ticker", "metric", "period_type", "fiscal_year", "fiscal_quarter", "report_date", "value", "source_id"], factRows));
 writeFileSync(join(outDir, "financials.csv"), csv(
@@ -262,5 +292,5 @@ if (!existsSync(companiesFile)) {
   console.log("Created engine/input/companies.csv (verdicts empty = model decides)");
 } else console.log("Kept existing engine/input/companies.csv (human decisions are never overwritten)");
 
-console.log(`financials: ${finRows.length} rows · facts: ${factRows.length} · distributions: ${distRows.length} · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
+console.log(`market: ${marketRows.length} companies (${marketSymbols.size} Canadian with statements) · financials: ${finRows.length} rows · facts: ${factRows.length} · distributions: ${distRows.length} · sources: ${sourceRows.length} · organic: ${organicRows.length} · deals: ${Object.values(deals).flat().length}`);
 for (const w of warnings) console.log("  - " + w);

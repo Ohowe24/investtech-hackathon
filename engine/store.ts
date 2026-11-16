@@ -26,6 +26,23 @@ export interface StoredCompany {
   deals?: Deal[];
 }
 
+/** One company in the Canadian market map (engine/input/market.csv, from npm run discover). Labels only, no figures. */
+export interface MarketEntry {
+  ticker: string;
+  symbol: string;
+  name: string;
+  exchange: string;
+  sector: string;
+  industry: string;
+  /** ISO-2 country from the company profile */
+  country: string;
+  /** market capitalisation in the listing currency, as the profile gives it */
+  marketCap: number | null;
+  /** broad index ETFs that hold it */
+  etfs: string[];
+  sourceId: string;
+}
+
 /** A human decision typed in companies.csv. It overrides the model for that ticker. */
 export interface Decision {
   verdict: Verdict;
@@ -37,6 +54,8 @@ export interface Store {
   /** true while built from engine/input-sample (FAKE) */
   isFake: boolean;
   companies: Record<string, StoredCompany>;
+  /** the Canadian market map, for industries that find their own candidates */
+  market: MarketEntry[];
   sources: Source[];
   decisions: Record<string, Decision>;
   /** problems found while reading the inputs */
@@ -77,6 +96,12 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
       else decisions[c.ticker] = { verdict: c.verdict as Verdict, reason: c.reason || undefined, proposedWeightPct: num(c.proposed_weight_pct) ?? undefined };
     }
   }
+
+  // The market map. Names and labels fill in only what companies.csv did not set.
+  const market: MarketEntry[] = csv("market.csv").map((r) => ({
+    ticker: r.ticker, symbol: r.symbol, name: r.name, exchange: r.exchange, sector: r.sector, industry: r.industry,
+    country: r.country, marketCap: num(r.market_cap), etfs: r.in_etfs ? r.in_etfs.split(" ") : [], sourceId: r.source_id,
+  }));
 
   for (const r of csv("financials.csv")) {
     const year = num(r.fiscal_year);
@@ -146,10 +171,19 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     for (const [t, list] of Object.entries(deals)) if (list.length) company(t).deals = list;
   }
 
+  for (const m of market) {
+    const c = companies[m.ticker];
+    if (!c) continue;
+    if (c.name === c.ticker && m.name) c.name = m.name;
+    if (!c.hqCountry && m.country) c.hqCountry = m.country;
+    c.listedOn ??= m.exchange || undefined;
+    c.subSector ??= m.industry || undefined;
+  }
+
   for (const c of Object.values(companies)) {
     c.financials.sort((a, b) => a.year - b.year);
     c.distributions.sort((a, b) => a.date.localeCompare(b.date));
     c.facts.sort((a, b) => a.reportDate.localeCompare(b.reportDate) || a.metric.localeCompare(b.metric));
   }
-  return { isFake, companies, sources, decisions, warnings };
+  return { isFake, companies, market, sources, decisions, warnings };
 }

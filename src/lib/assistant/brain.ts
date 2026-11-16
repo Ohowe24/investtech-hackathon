@@ -281,8 +281,10 @@ function strongest(w: W, c: Company): { def: MetricDef; r: { pos: number; n: num
   return best;
 }
 
+/** One full slot: the largest model weight (companies that share a slot each get a fraction of it). */
 function slotWeight(w: W): number | undefined {
-  return modelAdditions(w.ds)[0]?.weightPct;
+  const weights = modelAdditions(w.ds).map((a) => a.weightPct).filter((x): x is number => x != null);
+  return weights.length ? Math.max(...weights) : undefined;
 }
 
 function whyQuestion(c: Company): string {

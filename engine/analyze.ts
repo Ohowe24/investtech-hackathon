@@ -64,7 +64,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
         id: k.id,
         label: k.label,
         rule: k.rule,
-        target: `${k.op === ">=" ? "≥" : "≤"} ${unit === "multiple" ? `${k.threshold}×` : `${Math.round(k.threshold * 1000) / 10}%`}`,
+        target: `${k.op === ">=" ? "≥" : "≤"} ${unit === "multiple" ? `${Math.round(k.threshold * 100) / 100}×` : `${Math.round(k.threshold * 1000) / 10}%`}`,
         threshold: k.threshold,
         op: k.op,
         kind: k.kind,
@@ -206,11 +206,11 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     metricDefs: profile.metricDefs,
     rules: {
       result:
-        `Passes: ${gates === 2 ? "both" : `all ${gates}`} must-pass checks pass, and ` +
+        `Passes: ${gates === 1 ? "the must-pass check passes" : `${gates === 2 ? "both" : `all ${gates}`} must-pass checks pass`}, and ` +
         (profile.scoring.passShare >= 1
           ? `every other check passes, with data on at least ${profile.scoring.minAvailable} of them. `
           : `at least ${profile.scoring.passShare * 100}% of the other checks with data pass (${profile.scoring.minAvailable} or more with data). `) +
-        `Fails: a must-pass check fails, or fewer than ${profile.scoring.mixedShare * 100}% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.`,
+        `Fails: ${gates === 1 ? "the" : "a"} must-pass check fails, or fewer than ${profile.scoring.mixedShare * 100}% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.`,
       weight:
         `${profile.sleevePct}% of the index is split equally among the companies we add, at most ${profile.maxWeightPct}% each.` +
         profile.relatedGroups.map((g) => ` ${g.join(" and ")} share one slot (one controls the other).`).join(""),

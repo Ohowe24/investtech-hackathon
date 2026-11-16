@@ -22,7 +22,7 @@ async function Analysis({ searchParams }: { searchParams: SearchParams }) {
   await connection(); // the engine stamps each run with the time it ran, so this renders per request
   const params = await searchParams;
   const query = fromSearch(params);
-  const result = query ? runAnalysis(query) : { ok: false as const, error: "The address has no industry or holdings." };
+  const result = query ? await runAnalysis(query) : { ok: false as const, error: "The address has no industry or holdings." };
   if (!result.ok || !query) {
     return (
       <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-5 text-center">
