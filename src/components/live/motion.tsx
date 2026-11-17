@@ -21,27 +21,12 @@ export function useNow(ms = 1000): number {
   return now;
 }
 
-const DIGITS = "0123456789";
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+<>/";
-
-function scramble(text: string, locked: number, letters: boolean): string {
-  let out = "";
-  for (let i = 0; i < text.length; i++) {
-    const ch = text[i];
-    if (i < locked) out += ch;
-    else if (/[0-9]/.test(ch)) out += DIGITS[(Math.random() * 10) | 0];
-    else if (letters && /[A-Za-z]/.test(ch)) out += GLYPHS[(Math.random() * GLYPHS.length) | 0];
-    else out += ch;
-  }
-  return out;
-}
-
 /**
- * Text that decodes into place: characters flicker, then lock left to right.
- * Digits flicker by default; `letters` makes words flicker too. The final text
- * is exactly `text`.
+ * A value shown as is. It used to scramble and "decode" into place; that effect is gone, and the
+ * component stays so every caller keeps working. The props other than `text`, `className` and
+ * `style` are accepted and ignored.
  */
-export function Decode({ text, delay = 0, duration = 650, letters = false, className = "", style }: {
+export function Decode({ text, className = "", style }: {
   text: string;
   delay?: number;
   duration?: number;
@@ -49,32 +34,7 @@ export function Decode({ text, delay = 0, duration = 650, letters = false, class
   className?: string;
   style?: CSSProperties;
 }) {
-  const [shown, setShown] = useState(() => (prefersReducedMotion() ? text : scramble(text, 0, letters)));
-
-  useEffect(() => {
-    let raf = 0;
-    if (prefersReducedMotion()) {
-      raf = requestAnimationFrame(() => setShown(text));
-      return () => cancelAnimationFrame(raf);
-    }
-    let last = 0;
-    const start = performance.now() + delay;
-    const tick = (now: number) => {
-      const p = (now - start) / duration;
-      if (p >= 1) {
-        setShown(text);
-        return;
-      }
-      raf = requestAnimationFrame(tick);
-      if (now - last < 45) return; // ~22 frames a second reads as flicker, not blur
-      last = now;
-      setShown(scramble(text, p < 0 ? 0 : Math.floor(p * text.length), letters));
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [text, delay, duration, letters]);
-
-  return <span className={className} style={style} aria-label={text}><span aria-hidden>{shown}</span></span>;
+  return <span className={className} style={style}>{text}</span>;
 }
 
 // One shared observer for every Reveal on the page.
@@ -120,10 +80,5 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
 
 /** Decodes only once it is on screen. */
 export function DecodeInView(props: Parameters<typeof Decode>[0]) {
-  const [ref, inView] = useInView<HTMLSpanElement>();
-  return (
-    <span ref={ref} className="inline-block">
-      {inView ? <Decode {...props} /> : <span className={`${props.className ?? ""} opacity-0`}>{props.text}</span>}
-    </span>
-  );
+  return <Decode {...props} />;
 }

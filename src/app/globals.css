@@ -188,21 +188,7 @@ body {
 }
 .spot:hover::after { opacity: 1; }
 
-/* A one-off X-ray pass down a panel when it appears. */
 .scan-once { position: relative; overflow: hidden; }
-.scan-once::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 90px;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(180deg, transparent, rgba(61, 220, 108, 0.1) 70%, rgba(61, 220, 108, 0.55) 98%, transparent);
-  --scan-h: 900px;
-  animation: scan-down 1.6s cubic-bezier(0.5, 0, 0.3, 1) 0.15s both;
-}
 
 /* The X in the logo gets scanned every few seconds. */
 .logo-scan { position: relative; overflow: hidden; }
@@ -213,21 +199,6 @@ body {
   width: 35%;
   background: linear-gradient(90deg, transparent, rgba(61, 220, 108, 0.85), transparent);
   animation: scan-across 3.4s ease-in-out infinite;
-}
-
-/* The ambient X-ray line that drifts down the window. */
-.xray-sweep {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 140px;
-  z-index: 30;
-  pointer-events: none;
-  background: linear-gradient(180deg, transparent 0%, rgba(61, 220, 108, 0.035) 75%, rgba(61, 220, 108, 0.22) 99%, transparent 100%);
-  mix-blend-mode: screen;
-  --scan-h: 110vh;
-  animation: scan-down 9s cubic-bezier(0.45, 0, 0.55, 1) 2s infinite;
 }
 
 .marquee { animation: marquee var(--marquee-s, 60s) linear infinite; }
@@ -241,10 +212,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .enter > *, .stagger > *, .a-rise, .a-fade, .a-pip, .a-stamp, .a-grow-y, .a-grow-x, .a-draw, .a-pop, .a-glow, .a-float, .marquee, .xray-sweep, .logo-scan::after, .scan-once::before {
+  .enter > *, .stagger > *, .a-rise, .a-fade, .a-pip, .a-stamp, .a-grow-y, .a-grow-x, .a-draw, .a-pop, .a-glow, .a-float, .marquee, .logo-scan::after {
     animation: none !important;
   }
-  .xray-sweep, .scan-once::before { display: none; }
 }
 
 /* Map: dots fly out from the crosshair, then ping each time the radar beam passes. */

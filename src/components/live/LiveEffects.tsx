@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-/** Page-wide effects: the soft light that follows the pointer over cards, and the X-ray line that drifts down the window. */
+/** Page-wide effect: the soft light that follows the pointer over cards. */
 export default function LiveEffects() {
   useEffect(() => {
     let raf = 0;
@@ -28,5 +28,5 @@ export default function LiveEffects() {
     };
   }, []);
 
-  return <div aria-hidden className="xray-sweep" />;
+  return null;
 }
