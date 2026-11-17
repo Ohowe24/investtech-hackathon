@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, Verdict } from "@contract/types";
-import { formatValue, formatMetric, recStyle, verdictStyle } from "@/lib/format";
+import { formatValue, formatMetric, listNames, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics } from "@/lib/rank";
 import { median } from "../../engine/metrics";
@@ -65,7 +65,7 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
           </div>
           <h1 className="mt-3 text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">
             <Decode
-              text={adds.length ? `${adds.length} Canadian ${adds.length === 1 ? "company passes" : "companies pass"}: ${adds.map((c) => c.ticker).join(", ")}` : candidates.length ? "No Canadian candidate passes every bar yet" : "No Canadian candidate could be tested"}
+              text={adds.length ? `${adds.length} Canadian ${adds.length === 1 ? "company passes" : "companies pass"}${adds.length <= 3 ? `: ${listNames(adds.map((c) => c.ticker))}` : " the bar"}` : candidates.length ? "No Canadian candidate passes every bar yet" : "No Canadian candidate could be tested"}
               letters duration={900} delay={150} />
           </h1>
           {adds.length === 1 && <div className="mt-1.5 text-lg font-semibold text-teal">{adds[0].name}</div>}

@@ -32,3 +32,13 @@ export const recStyle: Record<"pass" | "mixed" | "fail", { label: string; badge:
 };
 
 export const pct = (v: number, digits = 1) => `${v.toFixed(digits)}%`;
+
+/**
+ * "A", "A and B", "A, B and C". Past `max` names the rest become "and N more",
+ * so a list that grows with the data (every company that passes) never turns into a wall of text.
+ */
+export function listNames(names: string[], max = Infinity): string {
+  const shown = names.length > max ? names.slice(0, max) : names;
+  const parts = shown.length < names.length ? [...shown, `${names.length - shown.length} more`] : shown;
+  return parts.length <= 2 ? parts.join(" and ") : `${parts.slice(0, -1).join(", ")} and ${parts[parts.length - 1]}`;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import type { Company, Dataset, IndexSnapshot } from "@contract/types";
-import { formatMetric } from "@/lib/format";
+import { formatMetric, listNames } from "@/lib/format";
 import { Card } from "./ui";
 import { Decode } from "./live/motion";
 
@@ -19,6 +19,9 @@ export default function Recommendation({ dataset, onOpen }: Props) {
   const yours = dataset.companies.filter((c) => c.inIndex).length;
   const checks = dataset.companies[0]?.model?.checks ?? [];
   const one = picks.length === 1 ? picks[0] : null;
+  // Full names fit the headline for one or two picks; past that it says how many and the tickers go in chips below.
+  const named = picks.length <= 2;
+  const toCard = (t: string) => document.getElementById(`why-${t}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   return (
     <div className="enter space-y-5">
@@ -29,8 +32,18 @@ export default function Recommendation({ dataset, onOpen }: Props) {
             <span className="live-dot" /> Recommendation · {dataset.industryName ?? dataset.industryId}
           </div>
           <h1 className="mt-3 text-[34px] font-bold leading-[1.06] tracking-[-0.035em] text-ink md:text-[44px]">
-            <Decode text={`Add ${listNames(picks.map((c) => c.name))}`} letters duration={1100} delay={200} />
+            <Decode text={named ? `Add ${listNames(picks.map((c) => c.name))}` : `Add these ${picks.length} companies`} letters duration={1100} delay={200} />
           </h1>
+          {!named && (
+            <div className="mt-4 flex flex-wrap gap-1.5">
+              {picks.map((c) => (
+                <button key={c.ticker} onClick={() => toCard(c.ticker)} title={c.name}
+                  className="rounded-md border border-line px-2 py-0.5 font-mono text-xs font-semibold text-ink transition-colors hover:border-teal hover:text-teal">
+                  {c.ticker}
+                </button>
+              ))}
+            </div>
+          )}
           {one && (
             <div className="mt-4 flex flex-wrap items-center gap-2.5 text-[13.5px] text-muted">
               <span className="rounded-md border border-line px-2 py-0.5 font-mono text-xs font-semibold text-ink">{one.ticker}</span>
@@ -67,7 +80,7 @@ function Pick({ company: c, dataset, onOpen, wide }: { company: Company; dataset
   const def = (id: string) => dataset.metricDefs.find((d) => d.id === id);
 
   return (
-    <section className="a-glow panel">
+    <section id={`why-${c.ticker}`} className="a-glow panel scroll-mt-24">
       <div className="flex flex-wrap items-end justify-between gap-3 px-6 pb-4 pt-5">
         <div>
           <h2 className="text-base font-semibold tracking-tight text-ink">Why {c.ticker}{wide ? "" : ` · ${c.name}`}</h2>
@@ -99,9 +112,4 @@ function Pick({ company: c, dataset, onOpen, wide }: { company: Company; dataset
       })}
     </section>
   );
-}
-
-/** "A", "A and B", "A, B and C". */
-function listNames(names: string[]): string {
-  return names.length <= 2 ? names.join(" and ") : `${names.slice(0, -1).join(", ")} and ${names[names.length - 1]}`;
 }

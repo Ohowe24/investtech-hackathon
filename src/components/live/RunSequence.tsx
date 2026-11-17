@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Company, Dataset } from "@contract/types";
 import { auditLine, passMark, sourcesByCompany } from "@/lib/audit";
-import { recStyle, verdictStyle } from "@/lib/format";
+import { listNames, recStyle, verdictStyle } from "@/lib/format";
 import { setSoundEnabled, sfx, soundEnabled } from "./sound";
 import { panelsClass, usePanelTheme } from "../theme";
 
@@ -129,8 +129,13 @@ function narrate(run: Run, t: number, industry: string): { step: number; title: 
   }
   if (t < run.R) return { step: 2, title: `Rejecting ${run.rejects.length} ${run.rejects.length === 1 ? "candidate" : "candidates"}`, detail: run.rejects.length ? "Failed a must-pass check" : "Every candidate cleared the must-pass checks" };
   if (t < run.P) return { step: 3, title: `Ranking ${run.tested.length} companies by KPIs passed`, detail: "Must-pass checks first, then share of scored checks passed" };
-  if (t < run.READY) return { step: 4, title: `Keeping ${run.picks.length}, watching ${run.watch.length}`, detail: run.picks.length ? `Add: ${run.picks.map((c) => c.ticker).join(", ")}` : "No candidate clears the whole bar" };
-  return { step: 5, title: run.picks.length ? "Recommendation ready" : "Results ready", detail: run.picks.length ? `Add ${run.picks.map((c) => c.ticker).join(" + ")}` : "Opening the ranking" };
+  if (t < run.READY) return { step: 4, title: `Keeping ${run.picks.length}, watching ${run.watch.length}`, detail: run.picks.length ? `Add: ${listNames(run.picks.map((c) => c.ticker), 6)}` : "No candidate clears the whole bar" };
+  return { step: 5, title: run.picks.length ? "Recommendation ready" : "Results ready", detail: run.picks.length ? addLine(run.picks) : "Opening the ranking" };
+}
+
+/** "Add A + B + C" while the tickers fit on one line; past three, how many. */
+function addLine(picks: Company[]): string {
+  return picks.length <= 3 ? `Add ${picks.map((c) => c.ticker).join(" + ")}` : `Add ${picks.length} companies`;
 }
 
 const STEPS = ["Generate candidates", "Compare against KPIs", "Reject", "Rank", "Verdicts"];
@@ -372,9 +377,11 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
                 <div className="a-stamp panel px-10 py-8 text-center">
                   <div className="kicker !text-teal">Recommendation ready</div>
                   <div className="mt-3 text-4xl font-bold tracking-[-0.03em] text-ink md:text-5xl">
-                    Add {run.picks.map((c) => c.ticker).join(" + ")}
+                    {addLine(run.picks)}
                   </div>
-                  <div className="mt-3 text-sm text-muted">{run.picks.map((c) => c.name).join("  ·  ")}</div>
+                  <div className="mx-auto mt-3 max-w-xl text-sm text-muted">
+                    {run.picks.length <= 3 ? run.picks.map((c) => c.name).join("  ·  ") : listNames(run.picks.map((c) => c.ticker), 8)}
+                  </div>
                   <div className="mt-5 font-mono text-[11px] text-faint">Opening the recommendation…</div>
                 </div>
               </div>
