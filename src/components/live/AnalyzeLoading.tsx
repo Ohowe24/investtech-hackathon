@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { panelsClass, usePanelTheme } from "../theme";
 
 /*
   Shown while the server runs the engine for /analyze. It says, in order, what the engine does.
@@ -39,24 +40,40 @@ export default function AnalyzeLoading() {
     return () => clearInterval(t);
   }, []);
 
+  const theme = usePanelTheme();
   const list = steps ?? ["Starting the engine"];
   const at = Math.min(i, list.length - 1);
   return (
-    <div className="mx-auto flex min-h-[70vh] w-full max-w-lg flex-col justify-center px-5">
-      <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-signal">
-        <span className="live-dot" /> Engine running
+    <div className="min-h-screen w-full">
+      <header className="border-b border-white/10 bg-black/35 backdrop-blur-xl">
+        <div className="mx-auto flex min-h-14 w-full max-w-[1240px] items-center gap-2 px-5 py-2 text-sm font-semibold tracking-tight text-white md:px-8">
+          <span className="grid h-6 w-6 place-items-center rounded-md bg-white text-[11px] font-bold text-[#050505]">X</span>
+          Index X-ray
+        </div>
+      </header>
+      <div className={`${panelsClass(theme)} mx-auto flex min-h-[75vh] w-full max-w-[1240px] items-center px-5 py-8 md:px-8`}>
+        <section className="panel mx-auto grid w-full max-w-4xl gap-8 px-6 py-8 md:grid-cols-[1fr_340px] md:px-9"
+          style={{ backgroundImage: "radial-gradient(70% 120% at 0% 0%, var(--color-tealsoft), transparent 55%)" }}>
+          <div className="min-w-0 self-center">
+            <div className="kicker flex items-center gap-2"><span className="live-dot" /> Engine running</div>
+            <h1 key={at} className="a-fade mt-4 text-[28px] font-bold leading-tight tracking-[-0.03em] text-ink md:text-[34px]">{list[at]}…</h1>
+            <p className="mt-3 text-[14px] text-muted">Every number comes from filings. The counts appear when the run finishes.</p>
+            <div className="mt-5 h-1 overflow-hidden rounded-full bg-soft">
+              <div className="h-full rounded-full bg-teal transition-[width] duration-700" style={{ width: `${((at + 1) / list.length) * 100}%` }} />
+            </div>
+          </div>
+          <ol className="flex flex-col gap-1.5">
+            {list.map((s, n) => (
+              <li key={s} className={`flex items-center gap-3 rounded-xl border px-3.5 py-2.5 text-[13px] transition-colors duration-300 ${n === at ? "border-teal/50 bg-tealsoft text-ink" : n < at ? "border-line text-ink" : "border-line text-faint"}`}>
+                <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full font-mono text-[10px] font-semibold ${n < at ? "bg-tealsoft text-teal" : n === at ? "bg-teal text-white [.panels-dark_&]:text-[#03160a]" : "ring-1 ring-inset ring-line"}`}>
+                  {n < at ? "✓" : n + 1}
+                </span>
+                <span className="min-w-0">{s}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
       </div>
-      <h1 key={at} className="a-fade mt-3 text-2xl font-semibold tracking-tight text-white md:text-3xl">{list[at]}…</h1>
-      <ol className="mt-6 space-y-2 font-mono text-[12px]">
-        {list.map((s, n) => (
-          <li key={s} className={`flex items-center gap-2.5 transition-colors duration-300 ${n < at ? "text-signal" : n === at ? "text-white" : "text-white/30"}`}>
-            <span className={`grid h-4 w-4 shrink-0 place-items-center rounded-full text-[9px] ${n < at ? "bg-signal/20" : n === at ? "bg-signal text-ink" : "bg-white/10"}`}>
-              {n < at ? "✓" : n + 1}
-            </span>
-            {s}
-          </li>
-        ))}
-      </ol>
     </div>
   );
 }

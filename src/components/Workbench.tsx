@@ -15,6 +15,7 @@ import LiveEffects from "./live/LiveEffects";
 import { primeSound } from "./live/sound";
 import { prefersReducedMotion, useNow } from "./live/motion";
 import { toSearch, type AnalysisQuery } from "@/lib/query";
+import { panelsClass, ThemeSwitch, usePanelTheme } from "./theme";
 
 interface Props {
   dataset: Dataset;
@@ -40,13 +41,8 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
   // The engine run overlay: where to land when it ends (null = stay), and how many runs so far.
   const [run, setRun] = useState<{ to: string | null } | null>(null);
   const [runs, setRuns] = useState(0);
-  // Panel look: dark glass (default) or light. Remembered in this browser only.
-  const [theme, setTheme] = useState<"dark" | "light">("dark");
-  const flipTheme = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    try { window.localStorage.setItem("panel-theme", next); } catch {}
-  };
+  // Panel look: dark glass (default) or light, shared with the front page.
+  const theme = usePanelTheme();
   // Bumped after each run so every view replays its entrance.
   const [epoch, setEpoch] = useState(0);
   useEffect(() => {
@@ -59,10 +55,6 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
       if (fresh && !prefersReducedMotion()) { setRuns(1); setRun({ to: null }); }
     };
     autoplay();
-    const loadTheme = () => {
-      try { if (window.localStorage.getItem("panel-theme") === "light") setTheme("light"); } catch {}
-    };
-    loadTheme();
     window.addEventListener("hashchange", read);
     return () => window.removeEventListener("hashchange", read);
   }, []);
@@ -124,7 +116,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
-            <ThemeSwitch theme={theme} onFlip={flipTheme} />
+            <ThemeSwitch />
             <LiveClock updatedAt={snapshot.updatedAt} source={snapshot.source} />
             <button onClick={() => startRun(null)} title="Replay the engine run"
               className="group flex items-center gap-1.5 rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/80 transition-colors hover:border-signal/60 hover:text-white">
@@ -134,7 +126,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
         </div>
       </header>
 
-      <main key={`${hash}|${epoch}`} className={`panels ${theme === "dark" ? "panels-dark" : "panels-light"} enter mx-auto w-full max-w-[1240px] px-5 py-6 md:px-8 md:py-8`}>
+      <main key={`${hash}|${epoch}`} className={`${panelsClass(theme)} enter mx-auto w-full max-w-[1240px] px-5 py-6 md:px-8 md:py-8`}>
         {start ? (
           <div>
             <Ranking dataset={dataset} snapshot={snapshot} editHref={editHref} onOpen={(t) => go(`c/${t}`)} onGo={go} />
@@ -150,7 +142,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
             </Card>
           </div>
         ) : tab === "xray" ? (
-          <div>
+          <div className="xray-scope">
             <XRay dataset={dataset} snapshot={snapshot} ticker={xrayTicker}
               onPick={(t) => { window.location.hash = `xray/${t}`; }} onOpen={(t) => go(`c/${t}`)} />
           </div>
@@ -182,16 +174,3 @@ function LiveClock({ updatedAt, source }: { updatedAt: string; source: string })
   );
 }
 
-/** Light / Dark panels. Only the panels change; the backdrop stays. */
-function ThemeSwitch({ theme, onFlip }: { theme: "dark" | "light"; onFlip: () => void }) {
-  return (
-    <div role="group" aria-label="Panel colour" className="flex items-center rounded-md border border-white/15 p-0.5 text-[12px] font-medium">
-      {(["light", "dark"] as const).map((t) => (
-        <button key={t} onClick={() => theme !== t && onFlip()} aria-pressed={theme === t}
-          className={`rounded px-2 py-0.5 transition-colors ${theme === t ? "bg-white/15 text-white" : "text-white/55 hover:text-white"}`}>
-          {t === "light" ? "Light" : "Dark"}
-        </button>
-      ))}
-    </div>
-  );
-}

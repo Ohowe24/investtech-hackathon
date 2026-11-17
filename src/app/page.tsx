@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Onboarding from "@/components/onboarding/Onboarding";
+import { ThemeSwitch } from "@/components/theme";
 import { industryCatalog, marketKnown, storeIsFake } from "@/lib/server/analysis";
 
 // Step one of the tool: pick an industry, enter the index's holdings, run. The answer opens /analyze.
@@ -19,7 +20,8 @@ export default function Home() {
             <span className="logo-scan grid h-6 w-6 place-items-center rounded-md bg-white text-[11px] font-bold text-ink">X</span>
             Index X-ray
           </Link>
-          <span className="ml-auto hidden text-[12px] text-white/50 sm:block">Canadian candidates for any index · Onesheet data</span>
+          <span className="hidden text-[12px] text-white/50 md:block">Canadian candidates for any index · Onesheet data</span>
+          <div className="ml-auto"><ThemeSwitch /></div>
         </div>
       </header>
       <main className="enter">

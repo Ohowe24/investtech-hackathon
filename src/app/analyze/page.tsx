@@ -26,10 +26,13 @@ async function Analysis({ searchParams }: { searchParams: SearchParams }) {
   const result = query ? await runAnalysis(query) : { ok: false as const, error: "The address has no industry or holdings." };
   if (!result.ok || !query) {
     return (
-      <div className="mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-5 text-center">
-        <h1 className="text-xl font-semibold text-white">Nothing to analyze</h1>
-        <p className="mt-2 text-sm text-white/60">{result.ok ? "" : result.error}</p>
-        <Link href="/" className="mx-auto mt-6 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-ink">Start over</Link>
+      <div className="panels panels-dark mx-auto flex min-h-[70vh] max-w-md flex-col justify-center px-5">
+        <section className="panel px-7 py-8 text-center">
+          <div className="kicker">Index X-ray</div>
+          <h1 className="mt-3 text-xl font-semibold tracking-tight text-ink">Nothing to analyze</h1>
+          <p className="mt-2 text-sm text-muted">{result.ok ? "" : result.error}</p>
+          <Link href="/" className="mx-auto mt-6 inline-block rounded-[10px] bg-ink px-4 py-2 text-sm font-semibold text-white">Start over</Link>
+        </section>
       </div>
     );
   }

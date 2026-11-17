@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Company, Dataset } from "@contract/types";
 import { auditLine, passMark, sourcesByCompany } from "@/lib/audit";
 import { recStyle, verdictStyle } from "@/lib/format";
-import { Decode } from "./motion";
 import { setSoundEnabled, sfx, soundEnabled } from "./sound";
+import { panelsClass, usePanelTheme } from "../theme";
 
 /*
   The engine run, played full screen. The data is already built (npm run engine);
@@ -138,43 +138,43 @@ const STEPS = ["Generate candidates", "Compare against KPIs", "Reject", "Rank", 
 function Narration({ run, t, industry }: { run: Run; t: number; industry: string }) {
   const n = narrate(run, t, industry);
   return (
-    <div className="relative border-b border-white/10 px-5 py-5 md:px-8">
-      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.14em]">
+    <div className="px-6 py-6 md:px-8">
+      <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-2">
         {STEPS.map((label, i) => {
           const done = i < n.step;
           const on = i === n.step;
           return (
-            <span key={label} className="flex items-center gap-1.5">
-              {i > 0 && <span className={`h-px w-4 md:w-8 ${done || on ? "bg-signal/60" : "bg-white/15"}`} />}
-              <span className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-300 ${
-                on ? "border-signal/70 bg-signal/10 text-white shadow-[0_0_18px_-4px_rgba(61,220,108,0.6)]" : done ? "border-white/15 text-signal" : "border-white/10 text-white/35"
+            <li key={label} className="flex items-center gap-1.5">
+              {i > 0 && <span className={`h-px w-4 md:w-8 ${done || on ? "bg-teal/60" : "bg-line"}`} />}
+              <span className={`flex items-center gap-2 rounded-full border px-2.5 py-1 font-mono text-[10.5px] font-semibold uppercase tracking-[0.12em] transition-colors duration-300 ${
+                on ? "border-teal/50 bg-tealsoft text-teal" : done ? "border-line text-teal" : "border-line text-faint"
               }`}>
-                <span className={`grid h-3.5 w-3.5 place-items-center rounded-full text-[9px] ${on ? "bg-signal text-ink" : done ? "bg-signal/20 text-signal" : "bg-white/10 text-white/50"}`}>
+                <span className={`grid h-4 w-4 place-items-center rounded-full text-[9px] ${on ? "bg-teal text-white [.panels-dark_&]:text-[#03160a]" : done ? "bg-tealsoft text-teal" : "ring-1 ring-inset ring-line"}`}>
                   {done ? "✓" : i + 1}
                 </span>
                 {label}
               </span>
-            </span>
+            </li>
           );
         })}
-      </div>
-      <h2 key={n.title} className="mt-4 text-2xl font-semibold tracking-tight text-white md:text-4xl" aria-live="polite">
-        <Decode text={`${n.title}${n.step < 5 ? "…" : ""}`} letters duration={420} />
+      </ol>
+      <h2 className="mt-5 text-[28px] font-bold leading-tight tracking-[-0.03em] text-ink md:text-[40px]" aria-live="polite">
+        {n.title}{n.step < 5 ? "…" : ""}
       </h2>
-      <p key={n.detail} className="a-fade mt-1.5 font-mono text-[12px] text-white/55 md:text-[13px]">{n.detail}</p>
+      <p key={n.detail} className="a-fade mt-1.5 font-mono text-[12.5px] text-muted md:text-[13px]">{n.detail}</p>
     </div>
   );
 }
 
 const toneClass: Record<Tone, string> = {
-  dim: "text-white/40",
-  head: "text-white font-semibold",
-  pass: "text-signal",
-  fail: "text-[#ff6b5e]",
-  none: "text-white/45",
-  result: "text-white",
-  good: "text-signal font-semibold",
-  warn: "text-[#f0c050]",
+  dim: "text-faint",
+  head: "text-ink font-semibold",
+  pass: "text-teal",
+  fail: "text-bad",
+  none: "text-faint",
+  result: "text-ink",
+  good: "text-teal font-semibold",
+  warn: "text-warn",
 };
 
 const clock = (ms: number) => {
@@ -184,6 +184,7 @@ const clock = (ms: number) => {
 
 export default function RunSequence({ dataset, runNo, onDone }: { dataset: Dataset; runNo: number; onDone: () => void }) {
   const run = useMemo(() => buildRun(dataset), [dataset]);
+  const theme = usePanelTheme();
   const [t, setT] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const [sound, setSound] = useState(soundEnabled);
@@ -237,142 +238,156 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
   const firstCandidate = run.start.get(run.candidates[0]?.ticker ?? "") ?? Infinity;
   const phase = t < BOOT ? "Generating candidates" : t < firstCandidate ? "Measuring your stocks" : t < run.X ? "Comparing against KPIs" : t < run.R ? "Rejecting" : t < run.P ? "Ranking" : t < run.READY ? "Verdicts" : "Ready";
 
+  // The candidate board: one row when 12 or fewer, else rows of 10; cards slide into rank order.
+  const n = run.candidates.length;
+  const perRow = (n <= 12 ? n : 10) || 1;
+  const rows = Math.ceil(n / perRow);
+  const big = rows === 1;
+  const rowH = big ? 150 : 62;
+
   return (
     <div role="dialog" aria-label="Engine run" aria-live="polite"
-      className={`fixed inset-0 z-[70] flex flex-col overflow-hidden bg-black/[0.93] text-white backdrop-blur-md transition-all duration-500 ${leaving ? "scale-[1.015] opacity-0" : "opacity-100"}`}>
-      <div className="run-grid pointer-events-none absolute inset-0" />
-      <div className="pointer-events-none absolute -left-40 top-1/3 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgba(61,220,108,0.12),transparent_65%)] blur-2xl" />
+      className={`${panelsClass(theme)} fixed inset-0 z-[70] flex flex-col overflow-hidden bg-black/45 backdrop-blur-sm transition-all duration-500 ${leaving ? "scale-[1.015] opacity-0" : "opacity-100"}`}>
       {dataset.isFake && (
-        <div className="relative bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">FAKE SAMPLE DATA: not real companies or numbers</div>
+        <div className="bg-red-600 px-4 py-2 text-center text-sm font-semibold text-white">FAKE SAMPLE DATA: not real companies or numbers</div>
       )}
 
-      <div className="relative h-[2px] bg-white/10">
-        <div className="h-full bg-signal shadow-[0_0_14px_#3ddc6c]" style={{ width: `${Math.min(100, (t / (run.READY + 200)) * 100)}%` }} />
-      </div>
-
-      <header className="relative flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 md:px-8">
-        <span className="logo-scan grid h-7 w-7 place-items-center rounded-md bg-white text-[12px] font-bold text-ink">X</span>
-        <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-white/50">Engine run <span className="text-white">#{runNo}</span></div>
-        <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em]">
-          <span className={`live-dot ${phase === "Ready" ? "" : ""}`} />
-          <span className={phase === "Ready" ? "text-signal" : "text-white"}>{phase}</span>
+      <header className="border-b border-white/10 bg-black/35 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 md:px-8">
+          <span className="grid h-6 w-6 place-items-center rounded-md bg-[#fff] text-[11px] font-bold text-[#050505]">X</span>
+          <span className="text-sm font-semibold tracking-tight text-white">Index X-ray</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/50">Engine run #{runNo}</span>
+          <span className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-white">
+            <span className="live-dot" />{phase}
+          </span>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="font-mono text-[12px] tabular-nums text-white/70">{clock(t)}</span>
+            <button onClick={() => { setSoundEnabled(!sound); setSound(!sound); }} aria-pressed={sound}
+              className="rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/75 hover:border-white/40 hover:text-white">
+              {sound ? "Sound on" : "Sound off"}
+            </button>
+            <button onClick={finish} className="rounded-md bg-[#fff] px-3 py-1 text-[12px] font-semibold text-[#050505] hover:opacity-85">Skip ⏎</button>
+          </div>
         </div>
-        <div className="ml-auto flex items-center gap-2">
-          <span className="font-mono text-sm tabular-nums text-white/70">{clock(t)}</span>
-          <button onClick={() => { setSoundEnabled(!sound); setSound(!sound); }} aria-pressed={sound}
-            className="rounded-md border border-white/15 px-2.5 py-1 font-mono text-[11px] text-white/70 hover:border-white/40 hover:text-white">
-            {sound ? "♪ Sound on" : "♪ Sound off"}
-          </button>
-          <button onClick={finish} className="rounded-md bg-white px-3 py-1 text-[12px] font-semibold text-ink hover:bg-white/85">Skip ⏎</button>
+        <div className="h-[2px] bg-white/10">
+          <div className="h-full bg-[var(--color-signal)]" style={{ width: `${Math.min(100, (t / (run.READY + 200)) * 100)}%` }} />
         </div>
       </header>
 
-      <Narration run={run} t={t} industry={dataset.industryName ?? "this industry"} />
-
-      <div className="relative grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 md:grid-cols-4">
-        <Counter label="Filings read" value={reads} of={run.reads.length} />
-        <Counter label="Companies tested" value={companiesDone} of={run.tested.length} />
-        <Counter label="Checks run" value={fired.length} of={run.checks.length} />
-        <div className="bg-black/70 px-5 py-3 md:px-8">
-          <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">Pass · Fail</div>
-          <div className="mt-1 font-mono text-2xl font-semibold tabular-nums">
-            <span className="text-signal">{passes}</span><span className="text-white/30"> · </span><span className="text-[#ff6b5e]">{fails}</span>
+      <div className="mx-auto flex min-h-0 w-full max-w-[1240px] flex-1 flex-col gap-4 px-5 py-5 md:px-8">
+        <section className="panel shrink-0">
+          <Narration run={run} t={t} industry={dataset.industryName ?? "this industry"} />
+          <div className="grid grid-cols-2 border-t border-line md:grid-cols-4 md:divide-x md:divide-line">
+            <Counter label="Filings read" value={reads} of={run.reads.length} />
+            <Counter label="Companies tested" value={companiesDone} of={run.tested.length} />
+            <Counter label="Checks run" value={fired.length} of={run.checks.length} />
+            <div className="px-6 py-4 md:px-8">
+              <div className="kicker">Pass · Fail</div>
+              <div className="mt-1 font-mono text-2xl font-semibold tabular-nums">
+                <span className="text-teal">{passes}</span><span className="text-faint"> · </span><span className="text-bad">{fails}</span>
+              </div>
+            </div>
           </div>
+        </section>
+
+        <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,0.8fr)] gap-4 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-1">
+          <section className="panel order-2 flex min-h-0 flex-col lg:order-1">
+            <div className="flex items-center justify-between border-b border-line px-5 py-3">
+              <span className="kicker">Engine log</span>
+              <span className="font-mono text-[10.5px] text-faint">every line from the dataset</span>
+            </div>
+            <div className="flex min-h-0 flex-1 flex-col justify-end overflow-hidden px-5 py-3 font-mono text-[11px] leading-[1.6]">
+              {lines.map((l, i) => (
+                <div key={`${l.at}-${i}-${l.text}`} className={`flex gap-2 whitespace-nowrap ${toneClass[l.tone]}`}>
+                  <span className="w-12 shrink-0 text-faint opacity-70">{l.tag}</span>
+                  <span className="min-w-0 truncate">{l.text}</span>
+                  {l.right && <span className="ml-auto shrink-0 pl-3 tabular-nums">{l.right}</span>}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="relative order-1 flex min-h-0 flex-col gap-4 lg:order-2">
+            <div className="panel shrink-0 px-5 py-4">
+              <div className="mb-3 flex items-baseline justify-between">
+                <span className="kicker">Canadian candidates</span>
+                <span className="kicker">{t >= run.R ? "ranked" : "queued A–Z"}</span>
+              </div>
+              <div className="relative" style={{ height: rows * rowH }}>
+                {run.candidates.map((c) => {
+                  const slot = t >= run.R ? run.ranked.indexOf(c) : run.candidates.indexOf(c);
+                  const vi = run.ranked.indexOf(c);
+                  return (
+                    <div key={c.ticker} className="absolute px-0.5 pb-1 transition-[left,top] duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]"
+                      style={{ left: `${((slot % perRow) / perRow) * 100}%`, top: Math.floor(slot / perRow) * rowH, width: `${100 / perRow}%`, height: rowH }}>
+                      <Cell c={c} t={t} start={run.start.get(c.ticker)!} big={big}
+                        rankShown={t >= run.R + 160 + vi * 110} verdictShown={t >= run.P + 120 + vi * 170} />
+                    </div>
+                  );
+                })}
+              </div>
+              {run.holdings.length > 0 && (
+                <div className="mt-4 border-t border-line pt-3">
+                  <div className="kicker mb-2">Your stocks · same KPIs</div>
+                  <div className="grid grid-cols-5 gap-1.5">
+                    {run.holdings.map((c) => <div key={c.ticker} className="h-[52px]"><Cell c={c} t={t} start={run.start.get(c.ticker)!} dim={t >= run.R} /></div>)}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="panel hidden min-h-0 flex-1 flex-col px-5 py-4 lg:flex">
+              <div className="mb-3 flex items-baseline justify-between">
+                <span className="kicker">KPIs · live tally</span>
+                <span className="flex items-center gap-3 text-[11px] text-muted">
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-teal" />pass</span>
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-bad" />fail</span>
+                  <span className="flex items-center gap-1"><span className="h-2 w-2 rounded-sm bg-faint" />no data</span>
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col justify-around gap-1.5">
+                {run.rules.map((k) => {
+                  const mine = fired.filter((f) => f.rule === k.id);
+                  const total = run.tested.length;
+                  const p = mine.filter((f) => f.pass === true).length;
+                  const f = mine.filter((f) => f.pass === false).length;
+                  const z = mine.filter((f) => f.pass === null).length;
+                  return (
+                    <div key={k.id} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] items-center gap-3 text-[12px]">
+                      <span className="truncate text-muted">{k.label}</span>
+                      <div className="flex h-2.5 overflow-hidden rounded-full bg-soft">
+                        <div className="bg-teal transition-[width] duration-150" style={{ width: `${(p / total) * 100}%` }} />
+                        <div className="bg-bad transition-[width] duration-150" style={{ width: `${(f / total) * 100}%` }} />
+                        <div className="bg-faint transition-[width] duration-150" style={{ width: `${(z / total) * 100}%` }} />
+                      </div>
+                      <span className="w-24 text-right font-mono tabular-nums"><span className="text-teal">{p}</span> <span className="text-faint">/</span> <span className="text-bad">{f}</span>{z > 0 && <span className="text-faint"> / {z}</span>}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {t >= run.READY && run.picks.length > 0 && (
+              <div className="a-fade pointer-events-none absolute inset-0 grid place-items-center">
+                <div className="a-stamp panel px-10 py-8 text-center">
+                  <div className="kicker !text-teal">Recommendation ready</div>
+                  <div className="mt-3 text-4xl font-bold tracking-[-0.03em] text-ink md:text-5xl">
+                    Add {run.picks.map((c) => c.ticker).join(" + ")}
+                  </div>
+                  <div className="mt-3 text-sm text-muted">{run.picks.map((c) => c.name).join("  ·  ")}</div>
+                  <div className="mt-5 font-mono text-[11px] text-faint">Opening the recommendation…</div>
+                </div>
+              </div>
+            )}
+          </section>
         </div>
       </div>
 
-      <div className="relative grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_minmax(0,0.8fr)] gap-4 px-5 py-4 md:px-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-1">
-        <section className="order-2 flex min-h-0 flex-col overflow-hidden rounded-xl border border-white/10 bg-black/60 lg:order-1">
-          <div className="flex items-center gap-1.5 border-b border-white/10 px-3 py-2">
-            <span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" /><span className="h-2 w-2 rounded-full bg-white/20" />
-            <span className="ml-2 font-mono text-[10px] text-white/40">engine.log</span>
-          </div>
-          <div className="flex min-h-0 flex-1 flex-col justify-end overflow-hidden px-3 py-2 font-mono text-[11px] leading-[1.55]">
-            {lines.map((l, i) => (
-              <div key={`${l.at}-${i}-${l.text}`} className={`flex gap-2 whitespace-nowrap ${toneClass[l.tone]} ${i === lines.length - 1 ? "caret" : ""}`}>
-                <span className="w-12 shrink-0 text-white/25">{l.tag}</span>
-                <span className="min-w-0 truncate">{l.text}</span>
-                {l.right && <span className="ml-auto shrink-0 pl-3 tabular-nums">{l.right}</span>}
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="relative order-1 flex min-h-0 flex-col gap-4 overflow-hidden lg:order-2">
-          <div>
-            <div className="mb-2 flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-              <span>Canadian candidates</span>
-              <span>{t >= run.R ? "ranked" : "queued A–Z"}</span>
-            </div>
-            <div className="relative h-[150px]">
-              {run.candidates.map((c) => {
-                const slot = t >= run.R ? run.ranked.indexOf(c) : run.candidates.indexOf(c);
-                const vi = run.ranked.indexOf(c);
-                return (
-                  <div key={c.ticker} className="absolute top-0 h-full px-1 transition-[left] duration-700 ease-[cubic-bezier(0.2,0.9,0.2,1)]"
-                    style={{ left: `${(slot / run.candidates.length) * 100}%`, width: `${100 / run.candidates.length}%` }}>
-                    <Cell c={c} t={t} start={run.start.get(c.ticker)!} big
-                      rankShown={t >= run.R + 160 + vi * 110} verdictShown={t >= run.P + 120 + vi * 170} />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          {run.holdings.length > 0 && (
-            <div className="min-h-0">
-              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">Your stocks · same KPIs</div>
-              <div className="grid grid-cols-5 gap-1.5">
-                {run.holdings.map((c) => <Cell key={c.ticker} c={c} t={t} start={run.start.get(c.ticker)!} dim={t >= run.R} />)}
-              </div>
-            </div>
-          )}
-          <div className="hidden min-h-0 flex-1 flex-col rounded-xl border border-white/10 bg-black/40 p-3 lg:flex">
-            <div className="mb-2 flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-              <span>KPIs · live tally</span>
-              <span><span className="text-signal">■</span> pass <span className="ml-2 text-[#ff6b5e]">■</span> fail <span className="ml-2 text-white/40">■</span> no data</span>
-            </div>
-            <div className="flex flex-1 flex-col justify-around gap-1.5">
-              {run.rules.map((k) => {
-                const mine = fired.filter((f) => f.rule === k.id);
-                const n = run.tested.length;
-                const p = mine.filter((f) => f.pass === true).length;
-                const f = mine.filter((f) => f.pass === false).length;
-                const z = mine.filter((f) => f.pass === null).length;
-                return (
-                  <div key={k.id} className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)_auto] items-center gap-3 font-mono text-[11px]">
-                    <span className="truncate text-white/70">{k.label}</span>
-                    <div className="flex h-2.5 overflow-hidden rounded-full bg-white/[0.06]">
-                      <div className="bg-signal shadow-[0_0_10px_rgba(61,220,108,0.6)] transition-[width] duration-150" style={{ width: `${(p / n) * 100}%` }} />
-                      <div className="bg-[#ff6b5e] transition-[width] duration-150" style={{ width: `${(f / n) * 100}%` }} />
-                      <div className="bg-white/30 transition-[width] duration-150" style={{ width: `${(z / n) * 100}%` }} />
-                    </div>
-                    <span className="w-24 text-right tabular-nums"><span className="text-signal">{p}</span> <span className="text-white/25">/</span> <span className="text-[#ff6b5e]">{f}</span>{z > 0 && <span className="text-white/40"> / {z}</span>}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {t >= run.READY && run.picks.length > 0 && (
-            <div className="a-fade pointer-events-none absolute inset-0 grid place-items-center bg-black/55 backdrop-blur-[2px]">
-              <div className="a-stamp text-center">
-                <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-signal">Recommendation ready</div>
-                <div className="mt-3 text-5xl font-extrabold tracking-tight text-white md:text-6xl">
-                  Add {run.picks.map((c) => c.ticker).join(" + ")}
-                </div>
-                <div className="mt-3 font-mono text-sm text-white/60">
-                  {run.picks.map((c) => c.name).join("  ·  ")}
-                </div>
-                <div className="mt-6 font-mono text-[11px] text-white/40">Opening the recommendation…</div>
-              </div>
-            </div>
-          )}
-        </section>
-      </div>
-
-      <footer className="relative flex flex-wrap items-center justify-between gap-2 border-t border-white/10 px-5 py-2 font-mono text-[10px] text-white/35 md:px-8">
-        <span>Replaying the engine&apos;s output · dataset built {run.built} · every figure from data/companies.json</span>
-        <span>Esc to skip</span>
+      <footer className="border-t border-white/10 bg-black/35 px-5 py-2 backdrop-blur-xl">
+        <div className="mx-auto flex w-full max-w-[1240px] flex-wrap items-center justify-between gap-2 font-mono text-[10.5px] text-white/50 md:px-3">
+          <span>Replaying the engine&apos;s output · dataset built {run.built} · every figure from data/companies.json</span>
+          <span>Esc to skip</span>
+        </div>
       </footer>
     </div>
   );
@@ -381,17 +396,17 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
 function Counter({ label, value, of }: { label: string; value: number; of: number }) {
   const full = value >= of;
   return (
-    <div className="bg-black/70 px-5 py-3 md:px-8">
-      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">{label}</div>
+    <div className="px-6 py-4 md:px-8">
+      <div className="kicker">{label}</div>
       <div className="mt-1 font-mono text-2xl font-semibold tabular-nums">
-        <span className={full ? "text-signal" : "text-white"}>{value}</span>
-        <span className="text-base text-white/30"> / {of}</span>
+        <span className={full ? "text-teal" : "text-ink"}>{value}</span>
+        <span className="text-base text-faint"> / {of}</span>
       </div>
     </div>
   );
 }
 
-/** One company on the board: queued, being scanned (a beam passes and its checks fire), then scored. */
+/** One company on the board: queued, being tested (its checks fire one by one), then scored. */
 function Cell({ c, t, start, big = false, dim = false, rankShown = false, verdictShown = false }: {
   c: Company; t: number; start: number; big?: boolean; dim?: boolean; rankShown?: boolean; verdictShown?: boolean;
 }) {
@@ -399,42 +414,40 @@ function Cell({ c, t, start, big = false, dim = false, rankShown = false, verdic
   const p = (t - start) / SCAN;
   const state = p < 0 ? "queued" : p < 1 ? "scanning" : "done";
   const rec = recStyle[m.recommendation];
-  const recTone = m.recommendation === "pass" ? "text-signal" : m.recommendation === "mixed" ? "text-[#f0c050]" : "text-[#ff6b5e]";
+  const recTone = m.recommendation === "pass" ? "text-teal" : m.recommendation === "mixed" ? "text-warn" : "text-bad";
   const add = c.verdict === "add";
 
   return (
-    <div className={`relative flex h-full flex-col overflow-hidden rounded-lg border transition-all duration-300 ${
-      state === "scanning" ? "border-signal/70 bg-signal/[0.07] shadow-[0_0_24px_-4px_rgba(61,220,108,0.5)]"
-        : state === "done" ? "border-white/15 bg-white/[0.04]" : "border-white/[0.07] bg-white/[0.015]"
-    } ${dim ? "opacity-40" : ""} ${verdictShown && add ? "a-glow border-signal/80 bg-signal/10" : ""} ${big ? "p-3" : "px-2 py-1.5"}`}>
-      {state === "scanning" && (
-        <span className="pointer-events-none absolute inset-y-0 w-10 bg-gradient-to-r from-transparent via-signal/50 to-transparent"
-          style={{ left: `calc(${p * 115 - 15}% )` }} />
-      )}
+    <div className={`relative flex h-full flex-col overflow-hidden rounded-lg border transition-colors duration-300 ${
+      verdictShown && add ? "border-teal bg-tealsoft"
+        : !big && verdictShown ? (c.verdict === "watch" ? "border-warn/50 bg-warnsoft" : "border-bad/50 bg-badsoft")
+        : state === "scanning" ? "border-teal/60 bg-tealsoft"
+        : state === "done" ? "border-line bg-[var(--panel-hi)]" : "border-line"
+    } ${dim ? "opacity-40" : ""} ${big ? "p-3" : "px-2 py-1.5"}`}>
       <div className="flex items-baseline justify-between gap-1">
-        <span className={`font-mono font-semibold ${big ? "text-sm" : "text-[11px]"} ${state === "queued" ? "text-white/35" : "text-white"}`}>{c.ticker}</span>
-        {big && rankShown && <span className="a-stamp font-mono text-[11px] text-white/70">#{m.rank}</span>}
-        {!big && <span className={`font-mono text-[9px] ${state === "done" ? recTone : "text-white/30"}`}>{state === "done" ? rec.label : state === "scanning" ? "···" : ""}</span>}
+        <span className={`truncate font-mono font-semibold ${big ? "text-sm" : "text-[11px]"} ${state === "queued" ? "text-faint" : "text-ink"}`}>{c.ticker}</span>
+        {big && rankShown && <span className="a-stamp font-mono text-[11px] text-muted">#{m.rank}</span>}
+        {!big && state === "done" && <span title={verdictShown ? verdictStyle[c.verdict].label : rec.label} className={`h-1.5 w-1.5 shrink-0 self-center rounded-full ${verdictShown ? (add ? "bg-teal" : c.verdict === "watch" ? "bg-warn" : "bg-bad") : m.recommendation === "pass" ? "bg-teal" : m.recommendation === "mixed" ? "bg-warn" : "bg-bad"}`} />}
       </div>
-      {big && <div className="mt-0.5 truncate text-[11px] text-white/45">{c.name}</div>}
-      <div className={`flex gap-[3px] ${big ? "mt-3" : "mt-1"}`}>
+      {big && <div className="mt-0.5 truncate text-[11px] text-muted">{c.name}</div>}
+      <div className={`flex gap-[3px] ${big ? "mt-3" : "mt-1.5"}`}>
         {m.checks.map((k, i) => {
           const on = t >= start + CHECK0 + i * CHECK_GAP;
           return (
-            <span key={k.id} className={`${big ? "h-5" : "h-2.5"} flex-1 rounded-[2px] transition-colors duration-150 ${
-              !on ? "bg-white/[0.08]" : k.pass === null ? "bg-white/30" : k.pass ? "bg-signal shadow-[0_0_8px_rgba(61,220,108,0.7)]" : "bg-[#ff6b5e] shadow-[0_0_8px_rgba(255,107,94,0.6)]"
+            <span key={k.id} className={`${big ? "h-5" : "h-2"} flex-1 rounded-[2px] transition-colors duration-150 ${
+              !on ? "bg-soft" : k.pass === null ? "bg-faint" : k.pass ? "bg-teal" : "bg-bad"
             }`} />
           );
         })}
       </div>
       {big && (
         <div className="mt-auto flex flex-wrap items-end justify-between gap-1 pt-2">
-          <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-wider ${state === "done" ? recTone : "text-white/30"}`}>
-            {state === "done" ? `${rec.label} ${m.passed}/${m.available}` : state === "scanning" ? "scanning" : "queued"}
+          <span className={`whitespace-nowrap font-mono text-[10px] uppercase tracking-wider ${state === "done" ? recTone : "text-faint"}`}>
+            {state === "done" ? `${rec.label} ${m.passed}/${m.available}` : state === "scanning" ? "testing" : "queued"}
           </span>
           {verdictShown && (
             <span className={`a-stamp rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase ${
-              add ? "bg-signal text-ink" : c.verdict === "watch" ? "bg-[#f0c050] text-ink" : "bg-[#ff6b5e] text-ink"
+              add ? "bg-teal text-white [.panels-dark_&]:text-[#03160a]" : c.verdict === "watch" ? "bg-warnsoft text-warn" : "bg-badsoft text-bad"
             }`}>
               {verdictStyle[c.verdict].label}
             </span>

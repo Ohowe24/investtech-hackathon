@@ -284,3 +284,27 @@ body {
   .kicker { font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-faint); }
 }
 .panels-dark .tile-add { color: #03160a; }
+
+/* X-ray tab: it is drawn as dark "film" with white text. Without changing its markup, give its frames
+   the panel look, and in Light map its white-on-black classes onto the theme colours. Colours only. */
+.panels .xray-scope .run-grid { display: none; }
+.panels .xray-scope section.bg-black\/70 {
+  background-color: var(--panel);
+  border-color: var(--color-line);
+  border-radius: 20px;
+}
+/* White solids (logo, the picked company) stay white in Dark; the panel rule would make them glass. */
+.panels-dark .xray-scope .bg-white { background-color: #fff; backdrop-filter: none; }
+/* Light: only inside the X-ray's own panels; headings that sit on the backdrop keep their white. */
+.panels-light .xray-scope section.bg-black\/70 :is(.text-white) { color: var(--color-ink); }
+.panels-light .xray-scope section.bg-black\/70 :is(.text-white\/90, .text-white\/85, .text-white\/80, .text-white\/75, .text-white\/70) { color: var(--color-muted); }
+.panels-light .xray-scope section.bg-black\/70 :is(.text-white\/60, .text-white\/55, .text-white\/50, .text-white\/45, .text-white\/40, .text-white\/35, .text-white\/30, .text-white\/20) { color: var(--color-faint); }
+.panels-light .xray-scope section.bg-black\/70 :is(.border-white\/10, .border-white\/15, .border-white\/20, .border-white\/\[0\.06\]) { border-color: var(--color-line); }
+.panels-light .xray-scope section.bg-black\/70 :is(.border-white\/40, .border-white) { border-color: var(--color-ink); }
+.panels-light .xray-scope section.bg-black\/70 :is(.bg-white\/10, .bg-white\/15, .bg-white\/25, .bg-white\/\[0\.02\], .bg-white\/\[0\.03\], .bg-white\/\[0\.04\], .bg-white\/\[0\.05\]) { background-color: var(--color-soft); }
+.panels-light .xray-scope section.bg-black\/70 :is(.bg-black\/70, .bg-black\/60) { background-color: var(--panel); }
+.panels-light .xray-scope section.bg-black\/70 .bg-white { background-color: #0a0a0a; color: #fff; }
+.panels-light .xray-scope section.bg-black\/70 { color: var(--color-ink); }
+/* The X-ray's neutral step ("Filings") colours itself white inline; in Light it becomes ink and a hairline. */
+.panels-light .xray-scope section.bg-black\/70 :is([style*="color:#fff"], [style*="color: #fff"], [style*="color: rgb(255, 255, 255)"]) { color: var(--color-ink) !important; }
+.panels-light .xray-scope section.bg-black\/70 :is([style*="srgb, #fff"], [style*="srgb, rgb(255, 255, 255)"]) { border-color: var(--color-line) !important; }
