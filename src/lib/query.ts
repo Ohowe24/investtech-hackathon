@@ -19,6 +19,31 @@ export interface AnalysisQuery {
 const EXCHANGE_PREFIX = /^(TSX|TSXV|TSX-V|CVE|NYSE|NASDAQ|NYSEARCA|AMEX|BATS|LON|XTSE|XTSX)\s*:\s*/;
 const EXCHANGE_SUFFIX = /\.(TO|V|TSX|TSXV|CN|NE)$/;
 
+/**
+ * A quote page link -> its ticker, or "" when the text is not a link. Reads the common shapes:
+ *   finance.yahoo.com/quote/CSU.TO   google.com/finance/quote/CSU:TSE   money.tmx.com/en/quote/CSU
+ *   any link with ?symbol=CSU, ?s=CSU or ?ticker=CSU
+ */
+export function tickerFromLink(raw: string): string {
+  const s = raw.trim();
+  if (!/^(https?:\/\/|www\.)/i.test(s)) return "";
+  let url: URL;
+  try { url = new URL(/^www\./i.test(s) ? `https://${s}` : s); } catch { return ""; }
+  // Google writes CSU:TSE, others TSX:CSU; keep the side that is not an exchange.
+  const strip = (seg: string) => {
+    const bits = seg.split(":");
+    return normalizeTicker(bits.length === 2 && /^(TSE|TSX|TSXV|CVE|NYSE|NASDAQ|NYSEARCA|AMEX|BATS)$/i.test(bits[0]) ? bits[1] : bits[0]);
+  };
+  for (const k of ["symbol", "s", "ticker", "qm_symbol"]) {
+    const v = url.searchParams.get(k);
+    if (v) return strip(v);
+  }
+  const parts = url.pathname.split("/").filter(Boolean).map(decodeURIComponent);
+  const i = parts.findIndex((p) => /^(quote|quotes|stock|stocks|symbol|company|equities)$/i.test(p));
+  const seg = i >= 0 ? parts[i + 1] : parts[parts.length - 1];
+  return seg ? strip(seg) : "";
+}
+
 /** "csu.to" -> "CSU", "CAR-UN" -> "CAR.UN", "TSX:GRT.UN" -> "GRT.UN", "ccl b" -> "CCL.B". Empty if it cannot be a ticker. */
 export function normalizeTicker(raw: string): string {
   let t = raw.trim().toUpperCase().replace(EXCHANGE_PREFIX, "");
@@ -38,15 +63,19 @@ export function parseHoldingsText(text: string): { entries: HoldingEntry[]; reje
   const rejected: string[] = [];
   const seen = new Set<string>();
   const add = (rawTicker: string, weight?: number) => {
-    const ticker = normalizeTicker(rawTicker);
+    const ticker = tickerFromLink(rawTicker) || normalizeTicker(rawTicker);
     if (!ticker) return rejected.push(rawTicker.trim());
     if (seen.has(ticker)) return;
     seen.add(ticker);
     entries.push(weight == null ? { ticker } : { ticker, weightPct: weight });
   };
-  for (const token of text.split(/[\n,;]+/)) {
+  for (const token of text.split(/[\n,;\s]+(?=https?:\/\/|www\.)|[\n,;]+/)) {
     const s = token.trim();
     if (!s) continue;
+    if (/^(https?:\/\/|www\.)/i.test(s)) {
+      add(s.split(/\s+/)[0]);
+      continue;
+    }
     const withWeight = s.match(/^(.+?)[\s:=]+(\d+(?:\.\d+)?)\s*%?$/);
     if (withWeight && normalizeTicker(withWeight[1])) {
       add(withWeight[1], Number(withWeight[2]));
@@ -94,7 +123,7 @@ export function resolveWeights(
 export function toSearch(q: AnalysisQuery): string {
   const p = new URLSearchParams();
   p.set("industry", q.industry);
-  p.set("h", q.holdings.map((h) => (h.weightPct == null ? h.ticker : `${h.ticker}:${h.weightPct}`)).join(","));
+  if (q.holdings.length) p.set("h", q.holdings.map((h) => (h.weightPct == null ? h.ticker : `${h.ticker}:${h.weightPct}`)).join(","));
   if (q.cashPct != null) p.set("cash", String(q.cashPct));
   if (q.value != null) p.set("value", String(q.value));
   return p.toString().replace(/%2C/g, ",").replace(/%3A/g, ":");
@@ -108,11 +137,12 @@ export function fromSearch(params: Params): AnalysisQuery | null {
     return Array.isArray(v) ? v[0] : v;
   };
   const industry = one("industry");
-  const h = one("h");
-  if (!industry || !h) return null;
+  // Holdings are optional: without them the engine just ranks the industry's Canadian candidates.
+  const h = one("h") ?? "";
+  if (!industry) return null;
   const holdings: HoldingEntry[] = [];
   const seen = new Set<string>();
-  for (const part of h.split(",")) {
+  for (const part of h.split(",").filter(Boolean)) {
     const [rawTicker, rawWeight] = part.split(":");
     const ticker = normalizeTicker(rawTicker ?? "");
     if (!ticker || seen.has(ticker)) continue;

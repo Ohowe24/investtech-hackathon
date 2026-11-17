@@ -1,7 +1,7 @@
 "use client";
 
 import type { Company, Dataset, MetricDef, YearRow } from "@contract/types";
-import { formatMetric, formatValue, pct, recStyle, verdictStyle } from "@/lib/format";
+import { formatMetric, formatValue, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from "@/lib/rank";
 import DealTimeline from "./DealTimeline";
@@ -49,7 +49,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
       </div>
 
-      <section data-guide="summary" className="spot scan-once rounded-xl border border-line bg-white">
+      <section className="spot scan-once rounded-xl border border-line bg-white">
         <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-5">
           <div className="flex items-center gap-4">
             <span className="logo-scan grid h-12 w-16 place-items-center rounded-lg bg-ink font-mono text-sm font-semibold text-white">{company.ticker}</span>
@@ -72,8 +72,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
           <div className="grid grid-cols-2 divide-line border-t border-line sm:grid-cols-4 sm:divide-x">
             <Stat label="Rank" value={`${m.rank}`} unit={`of ${tested.length}`} />
             <Stat label="Checks passed" value={`${m.checks.filter((k) => k.pass).length}`} unit={`of ${m.checks.filter((k) => k.pass !== null).length}`} />
-            <Stat label="Weight" info={{ title: "Proposed weight", how: dataset.rules?.weight }}
-              value={company.proposedWeightPct != null ? pct(company.proposedWeightPct, 2) : "—"} unit={company.inIndex ? "already held" : company.proposedWeightPct == null ? "not added" : "proposed"} />
+            <Stat label="Verdict" value={company.inIndex ? "Yours" : verdictStyle[company.verdict].label} unit={company.inIndex ? "you added it" : company.verdict === "add" ? "passes the bar" : "does not pass"} />
             <div className="px-5 py-3.5">
               <div className="text-[11px] font-medium uppercase tracking-wide text-faint">Failed</div>
               <div className="mt-1.5 flex flex-wrap gap-1.5">
@@ -86,11 +85,11 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         )}
       </section>
 
-      <div data-guide="checks" className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
+      <div className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
         {[...scored, ...context].map((d, i) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} i={i} />)}
       </div>
 
-      {company.history?.length ? <div data-guide="history" className="space-y-5"><DeepDive company={company} /></div> : null}
+      {company.history?.length ? <div className="space-y-5"><DeepDive company={company} /></div> : null}
 
       {company.reported?.length ? <ReportedFigures dataset={dataset} company={company} /> : null}
 
@@ -101,7 +100,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
       )}
 
       {company.history?.length ? (
-        <div data-guide="deals">
+        <div>
           <Card title="Acquisitions by year" right={<span className="text-xs text-faint">{company.reportingCurrency}</span>}>
             <DealTimeline dataset={dataset} company={company} />
           </Card>
@@ -154,7 +153,7 @@ function MetricTile({ dataset, company, def, onOpen, i }: { dataset: Dataset; co
   const lowFirst = def.higherIsBetter === false;
 
   return (
-    <section data-guide={`metric:${def.id}`} className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
+    <section className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
       <Explain info={scoredMetricInfo(dataset, def.id)} className="truncate text-left text-[11px] font-medium text-muted">{def.short ?? def.label}</Explain>
       <div className={`mt-1.5 font-mono text-lg font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state]}`}>
         {mv?.value == null ? "—" : <Decode text={formatMetric(mv, def.unit)} delay={300 + i * 70} duration={700} />}

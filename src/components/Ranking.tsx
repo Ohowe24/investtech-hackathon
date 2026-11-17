@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { Company, Dataset, IndexSnapshot, MetricDef } from "@contract/types";
-import { formatValue, formatMetric, pct, recStyle, verdictStyle } from "@/lib/format";
+import { formatValue, formatMetric, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics, stateText } from "@/lib/rank";
 import { median } from "../../engine/metrics";
@@ -14,7 +14,6 @@ interface Props {
   snapshot: IndexSnapshot;
   /** address of the onboarding, pre-filled with this query */
   editHref: string;
-  weightRule?: string;
   onOpen: (ticker: string) => void;
   onGo: (view: string) => void;
 }
@@ -22,8 +21,7 @@ interface Props {
 const hasData = (c: Company) => !!c.model && c.model.checks.some((k) => k.pass !== null);
 
 /** The answer to the onboarding: Canadian candidates ranked, then the index's own holdings ranked the same way. */
-export default function Ranking({ dataset, snapshot, editHref, weightRule, onOpen, onGo }: Props) {
-  const index = snapshot.indexes.find((i) => i.name === dataset.indexName);
+export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
   const byRank = [...dataset.companies].sort((a, b) => (a.model?.rank ?? 1e9) - (b.model?.rank ?? 1e9));
   const candidates = byRank.filter((c) => !c.inIndex);
   const holdings = byRank.filter((c) => c.inIndex);
@@ -46,7 +44,7 @@ export default function Ranking({ dataset, snapshot, editHref, weightRule, onOpe
           <div className="min-w-0">
             <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-muted">
               <span className="live-dot" /> {dataset.industryName ?? dataset.industryId} ·{" "}
-              {dataset.holdingsSource === "organizers" ? `the organizers' “${dataset.indexName}”` : "your index"}
+              {dataset.holdingsSource === "organizers" ? `with the organizers' “${dataset.indexName}” holdings` : holdings.length ? `with your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : "Canadian candidates"}
             </div>
             <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
               <Decode
@@ -54,13 +52,13 @@ export default function Ranking({ dataset, snapshot, editHref, weightRule, onOpe
                 letters duration={900} delay={150} />
             </h1>
             <p className="mt-1 max-w-2xl text-sm text-muted">
-              {candidates.length} Canadian {candidates.length === 1 ? "candidate" : "candidates"} tested{unmeasured.length ? ` (${unmeasured.length} more without data)` : ""}, against {holdings.length} holdings, on {checks.length} declared checks.
+              {candidates.length} Canadian {candidates.length === 1 ? "candidate" : "candidates"} tested{unmeasured.length ? ` (${unmeasured.length} more without data)` : ""}{holdings.length ? `, against your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : ""}, on {checks.length} declared checks.
               {" "}Ranked by checks passed; must-pass checks come first.
             </p>
           </div>
           <div className="flex shrink-0 flex-wrap gap-2">
             <Link href={editHref} className="rounded-lg border border-line px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:border-ink">
-              Edit holdings
+              {holdings.length ? "Edit your stocks" : "Add your stocks"}
             </Link>
             {adds.length > 0 && (
               <button onClick={() => onGo("recommendation")} className="rounded-lg bg-ink px-3 py-2 text-[13px] font-semibold text-white">
@@ -70,17 +68,17 @@ export default function Ranking({ dataset, snapshot, editHref, weightRule, onOpe
           </div>
         </div>
         <div className="grid grid-cols-2 border-t border-line sm:grid-cols-4 sm:divide-x sm:divide-line">
-          <Stat label="Add" value={String(adds.length)} sub={adds.length ? `${pct(adds.reduce((s, c) => s + (c.proposedWeightPct ?? 0), 0), 2)} of the index` : "none pass"} />
+          <Stat label="Add" value={String(adds.length)} sub={adds.length ? "pass the bar" : "none pass"} />
           <Stat label="Watch" value={String(candidates.filter((c) => c.verdict === "watch").length)} sub="mixed results" />
           <Stat label="Reject" value={String(candidates.filter((c) => c.verdict === "reject").length)} sub="fail a must-pass check" />
-          <Stat label="Index cash" value={index ? pct(index.cashPct, 2) : "—"} sub={weightRule ?? "before additions"} />
+          <Stat label="Your stocks" value={String(holdings.length)} sub={holdings.length ? "ranked below" : "none added"} />
         </div>
       </section>
 
       <RankTable
         title="Canadian candidates, ranked"
-        subtitle="Each one tested on the same checks as your holdings. Click a row for the full company page."
-        dataset={dataset} rows={candidates} metrics={metrics} medians={medians} medianLabel="Your index median" onOpen={onOpen} showVerdict
+        subtitle={`Each one tested on the same checks${holdings.length ? " as your stocks" : ""}. Click a row for the full company page.`}
+        dataset={dataset} rows={candidates} metrics={metrics} medians={medians} medianLabel="Your stocks' median" onOpen={onOpen} showVerdict
         empty="No Canadian candidate in this industry has data yet." />
 
       {unmeasured.length > 0 && (
@@ -98,17 +96,17 @@ export default function Ranking({ dataset, snapshot, editHref, weightRule, onOpe
         </section>
       )}
 
-      <RankTable
-        title="Your holdings, ranked on the same checks"
-        subtitle="How the index you already own does on the bar the candidates must clear."
+      {holdings.length > 0 && <RankTable
+        title="Your stocks, ranked on the same checks"
+        subtitle="How the stocks you added do on the bar the candidates must clear."
         dataset={dataset} rows={measuredHoldings} metrics={metrics} medians={medians} medianLabel="Median" onOpen={onOpen}
-        empty={blankHoldings.length ? "None of your holdings has data in the engine's cache yet." : "No holdings."} />
+        empty="None of your stocks has data in the engine's cache yet." />}
 
       {blankHoldings.length > 0 && (
         <section className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] px-5 py-4">
-          <h3 className="text-[13px] font-semibold text-white">Holdings without data ({blankHoldings.length})</h3>
+          <h3 className="text-[13px] font-semibold text-white">Your stocks without data ({blankHoldings.length})</h3>
           <p className="mt-0.5 text-xs text-white/55">
-            Kept in the index and in every before/after, but not ranked: the engine has no Onesheet data cached for them.
+            Listed, not ranked: the engine has no Onesheet data cached for them.
           </p>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {blankHoldings.map((c) => (
@@ -171,7 +169,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                 <th className="px-3 py-2.5 text-left font-medium">Checks</th>
                 {showVerdict && (
                   <th className="py-2.5 pr-5 text-right font-medium">
-                    <Explain info={{ title: "Proposed weight", how: dataset.rules?.weight }} className="uppercase tracking-wide">Verdict</Explain>
+                    <Explain info={{ title: "Verdict", how: dataset.rules?.result }} className="uppercase tracking-wide">Verdict</Explain>
                   </th>
                 )}
               </tr>
@@ -224,7 +222,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                     {showVerdict && (
                       <td className="py-3 pr-5 text-right">
                         <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${verdictStyle[c.verdict].badge}`}>
-                          {verdictStyle[c.verdict].label}{c.proposedWeightPct != null ? ` ${pct(c.proposedWeightPct, 2)}` : ""}
+                          {verdictStyle[c.verdict].label}
                         </span>
                       </td>
                     )}
@@ -235,7 +233,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                 <tr className="bg-canvas text-xs text-muted">
                   <td className="py-2.5 pl-5" />
                   <td className="py-2.5 pr-3 font-medium" colSpan={2}>
-                    <Explain info={{ title: medianLabel, how: "The middle value among your holdings that have data for this metric. A reference line, not a check." }}>{medianLabel}</Explain>
+                    <Explain info={{ title: medianLabel, how: "The middle value among your stocks that have data for this metric. A reference line, not a check." }}>{medianLabel}</Explain>
                   </td>
                   {metrics.map((d) => (
                     <td key={d.id} className="px-3 py-2.5 text-right font-mono tabular-nums">{medians[d.id] == null ? "—" : formatValue(medians[d.id], d.unit)}</td>

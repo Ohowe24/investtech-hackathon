@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fromSearch, normalizeTicker, parseHoldingsText, resolveWeights, toSearch } from "./query";
+import { fromSearch, normalizeTicker, parseHoldingsText, resolveWeights, tickerFromLink, toSearch } from "./query";
 
 describe("tickers", () => {
   it("normalizes exchange suffixes, prefixes and unit separators", () => {
@@ -56,8 +56,30 @@ describe("address", () => {
     const q = { industry: "reits", holdings: [{ ticker: "CAR.UN", weightPct: 3.42 }, { ticker: "O" }], cashPct: 14.62, value: 99721.75 };
     expect(fromSearch(Object.fromEntries(new URLSearchParams(toSearch(q))))).toEqual(q);
   });
-  it("needs an industry and holdings", () => {
-    expect(fromSearch({ industry: "reits" })).toBeNull();
+  it("needs an industry; holdings are optional", () => {
+    expect(fromSearch({ industry: "reits" })?.holdings).toEqual([]);
     expect(fromSearch({ h: "O" })).toBeNull();
+  });
+});
+
+describe("quote links", () => {
+  it("reads the ticker out of common quote page links", () => {
+    expect(tickerFromLink("https://finance.yahoo.com/quote/CSU.TO/")).toBe("CSU");
+    expect(tickerFromLink("https://www.google.com/finance/quote/GRT.UN:TSE?hl=en")).toBe("GRT.UN");
+    expect(tickerFromLink("https://money.tmx.com/en/quote/CAR.UN")).toBe("CAR.UN");
+    expect(tickerFromLink("https://example.com/chart?symbol=TSX:TFII")).toBe("TFII");
+    expect(tickerFromLink("www.marketwatch.com/investing/stock/tfii?countrycode=ca")).toBe("TFII");
+    expect(tickerFromLink("CSU")).toBe("");
+  });
+  it("accepts links pasted with plain tickers", () => {
+    const { entries } = parseHoldingsText("https://finance.yahoo.com/quote/CSU.TO, TOI\nhttps://money.tmx.com/en/quote/CAR.UN");
+    expect(entries.map((e) => e.ticker)).toEqual(["CSU", "TOI", "CAR.UN"]);
+  });
+});
+
+describe("optional holdings", () => {
+  it("round-trips a query with no holdings", () => {
+    const q = fromSearch(Object.fromEntries(new URLSearchParams(toSearch({ industry: "reits", holdings: [] }))));
+    expect(q).toEqual({ industry: "reits", holdings: [], cashPct: undefined, value: undefined });
   });
 });

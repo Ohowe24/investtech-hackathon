@@ -63,12 +63,19 @@ function customOptions(): IndustryOption[] {
   return customCatalog;
 }
 
-/** Every company the engine has statements for, for holding suggestions in "choose your own" industries. */
+/** Every company in the Onesheet data (statements cache plus the Canadian market map), for the holdings search in any industry. */
 export function marketKnown(): TickerInfo[] {
-  return Object.values(store.companies)
-    .filter((c) => c.financials.length > 0)
-    .map((c) => ({ ticker: c.ticker, name: c.name, hasData: true }))
-    .sort((a, b) => a.ticker.localeCompare(b.ticker));
+  const out = new Map<string, TickerInfo>();
+  for (const m of store.market) {
+    const s = store.companies[m.ticker];
+    out.set(m.ticker, { ticker: m.ticker, name: m.name || s?.name || m.ticker, hasData: (s?.financials.length ?? 0) > 0 });
+  }
+  for (const c of Object.values(store.companies)) {
+    const prev = out.get(c.ticker);
+    const name = prev?.name && prev.name !== c.ticker ? prev.name : c.name;
+    out.set(c.ticker, { ticker: c.ticker, name: name || c.ticker, hasData: c.financials.length > 0 });
+  }
+  return [...out.values()].sort((a, b) => a.ticker.localeCompare(b.ticker));
 }
 
 export function industryCatalog(): IndustryOption[] {
@@ -117,8 +124,8 @@ export type AnalysisResult =
 
 /** Runs the engine on the holdings in the query. The organizers' index is used as is when the query matches it exactly. */
 export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
+  // Holdings are optional: with none, the engine ranks the industry's Canadian candidates on their own.
   const holdings = q.holdings.slice(0, 60);
-  if (holdings.length === 0) return { ok: false, error: "No holdings were entered." };
   let profile: IndustryProfile;
   let runStore = store;
   if (isCustomId(q.industry)) {
@@ -136,6 +143,7 @@ export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
 
   const sameAsOrganizers =
     !!ix &&
+    holdings.length > 0 &&
     ix.positions.length === holdings.length &&
     holdings.every((h) => {
       const p = ix.positions.find((x) => x.ticker === h.ticker);
@@ -147,6 +155,18 @@ export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
   if (sameAsOrganizers) {
     index = ix!;
     weightRule = "The organizers' live weights and cash.";
+  } else if (holdings.length === 0) {
+    weightRule = "No holdings entered.";
+    index = {
+      name: profile.indexName,
+      currency: ix?.currency ?? profile.currency,
+      totalValue: 0,
+      cash: 0,
+      cashPct: 100,
+      holdings: 0,
+      method: weightRule,
+      positions: [],
+    };
   } else {
     const resolved = resolveWeights(holdings, q.cashPct ?? ix?.cashPct ?? profile.sleevePct);
     if (!resolved.ok) return { ok: false, error: resolved.error };

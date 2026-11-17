@@ -9,7 +9,7 @@ export default function ReportedFigures({ dataset, company }: { dataset: Dataset
   const series = company.reported ?? [];
   if (series.length === 0) return null;
   return (
-    <section data-guide="history" className="space-y-3">
+    <section className="space-y-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-[13px] font-semibold text-white">Reported figures over time</h2>
         <span className="text-xs text-white/55">As filed on SEDAR · hover a bar for its source · gaps are periods the data does not have</span>

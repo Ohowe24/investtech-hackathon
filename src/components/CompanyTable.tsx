@@ -1,7 +1,7 @@
 "use client";
 
 import type { Dataset } from "@contract/types";
-import { formatMetric, pct, recStyle, verdictStyle } from "@/lib/format";
+import { formatMetric, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics, stateText } from "@/lib/rank";
 import { Dot, Explain, Segmented } from "./ui";
@@ -16,34 +16,23 @@ interface Props {
   scope: "ca" | "all";
   onScope: (s: "ca" | "all") => void;
   onOpen: (ticker: string) => void;
-  /** a list the Guide asked to show; overrides the scope until cleared */
-  filter?: { tickers: string[]; title: string } | null;
-  onClearFilter?: () => void;
 }
 
 /** The overview: one row per company, best first. Click a row to open the company. */
-export default function CompanyTable({ dataset, scope, onScope, onOpen, filter, onClearFilter }: Props) {
+export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props) {
   const tested = dataset.companies.filter((c) => c.model);
   const candidates = tested.filter((c) => !c.inIndex);
   const metrics = scoredMetrics(dataset);
-  const rows = (filter ? tested.filter((c) => filter.tickers.includes(c.ticker)) : scope === "ca" ? candidates : tested)
+  const rows = (scope === "ca" ? candidates : tested)
     .sort((a, b) => a.model!.rank - b.model!.rank);
 
   return (
-    <section key={filter ? `f:${filter.title}` : scope} data-guide="table" className="scan-once overflow-hidden rounded-xl border border-line bg-white">
+    <section key={scope} className="scan-once overflow-hidden rounded-xl border border-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
-        {filter ? (
-          <div className="flex min-w-0 items-center gap-2 rounded-lg bg-tealsoft px-3 py-1.5 text-xs text-teal">
-            <span aria-hidden>✦</span>
-            <span className="truncate">Guide filter: <span className="font-semibold">{filter.title}</span> · {rows.length} {rows.length === 1 ? "company" : "companies"}</span>
-            <button onClick={onClearFilter} className="ml-1 rounded-md bg-white px-2 py-0.5 font-medium text-ink shadow-sm hover:bg-soft">Clear</button>
-          </div>
-        ) : (
           <Segmented value={scope} onChange={onScope} options={[
             { id: "ca", label: `Canadian · ${candidates.length}` },
             { id: "all", label: `All · ${tested.length}` },
           ]} />
-        )}
         <div className="flex items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5"><Dot pass={true} size={8} /> Pass</span>
           <span className="flex items-center gap-1.5"><Dot pass={false} size={8} /> Fail</span>
@@ -68,9 +57,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen, filter, 
               <th className="px-3 py-2.5 text-left font-medium">
                 <Explain info={{ title: "Checks", how: "One bar per check. Count = checks passed out of checks with data." }} className="uppercase tracking-wide">Checks</Explain>
               </th>
-              <th className="py-2.5 text-right font-medium">
-                <Explain info={{ title: "Proposed weight", how: dataset.rules?.weight }} className="uppercase tracking-wide">Weight</Explain>
-              </th>
+              <th className="py-2.5 text-right font-medium">Verdict</th>
               <th className="w-10" />
             </tr>
           </thead>
@@ -93,7 +80,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen, filter, 
                       <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md bg-soft font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
                       <div className="min-w-0">
                         <div className="truncate font-medium text-ink">{c.name}</div>
-                        <div className="truncate text-xs text-faint">{c.subSector}{(scope === "all" || filter) && !c.inIndex ? " · Candidate" : ""}</div>
+                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Candidate" : ""}</div>
                       </div>
                     </div>
                   </td>
@@ -122,11 +109,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen, filter, 
                     </div>
                   </td>
                   <td className="py-3.5 text-right font-mono text-[13px] tabular-nums">
-                    {c.proposedWeightPct != null ? (
-                      <Decode text={pct(c.proposedWeightPct, 2)} delay={stampAt} className="font-semibold text-ink" />
-                    ) : (
-                      <span className="font-sans text-xs text-faint">{c.inIndex ? "Held" : verdictStyle[c.verdict].label}</span>
-                    )}
+                    <span className={`font-sans text-xs ${c.verdict === "add" ? "font-semibold text-teal" : "text-faint"}`}>{c.inIndex ? "Yours" : verdictStyle[c.verdict].label}</span>
                   </td>
                   <td className="pr-4 text-right text-faint transition-transform group-hover:translate-x-0.5 group-hover:text-ink">›</td>
                 </tr>

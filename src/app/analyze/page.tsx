@@ -2,17 +2,18 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { connection } from "next/server";
 import Workbench from "@/components/Workbench";
+import AnalyzeLoading from "@/components/live/AnalyzeLoading";
 import { fromSearch } from "@/lib/query";
 import { runAnalysis } from "@/lib/server/analysis";
 
-// The result of the onboarding. The address holds the whole question (industry, holdings, weights, cash),
+// The result of the onboarding. The address holds the whole question (industry, and your stocks if any),
 // so a result can be reloaded, shared or edited. The engine runs here, on the server, per request.
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default function AnalyzePage({ searchParams }: { searchParams: SearchParams }) {
   return (
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<AnalyzeLoading />}>
       <Analysis searchParams={searchParams} />
     </Suspense>
   );
@@ -32,14 +33,5 @@ async function Analysis({ searchParams }: { searchParams: SearchParams }) {
       </div>
     );
   }
-  return <Workbench dataset={result.dataset} snapshot={result.snapshot} query={query} weightRule={result.weightRule} />;
-}
-
-function Loading() {
-  return (
-    <div className="mx-auto flex min-h-[70vh] max-w-md flex-col items-center justify-center gap-3 px-5 font-mono text-xs text-white/60">
-      <span className="live-dot" />
-      Running the engine…
-    </div>
-  );
+  return <Workbench dataset={result.dataset} snapshot={result.snapshot} query={query} />;
 }

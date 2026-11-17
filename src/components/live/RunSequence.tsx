@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Company, Dataset } from "@contract/types";
 import { auditLine, passMark, sourcesByCompany } from "@/lib/audit";
-import { pct, recStyle, verdictStyle } from "@/lib/format";
+import { recStyle, verdictStyle } from "@/lib/format";
+import { Decode } from "./motion";
 import { setSoundEnabled, sfx, soundEnabled } from "./sound";
 
 /*
@@ -19,6 +20,7 @@ const SCAN = 980; // how long one company's scan lasts
 const CHECK0 = 170; // first check fires this far into a scan
 const CHECK_GAP = 115; // then one check every this many ms
 const CANDIDATE_PAUSE = 450; // a beat before the candidates
+const REJECT_BEAT = 1100; // how long "Rejecting…" holds before the ranking
 
 type Tone = "dim" | "head" | "pass" | "fail" | "none" | "result" | "good" | "warn";
 interface LogLine { at: number; tone: Tone; tag: string; text: string; right?: string }
@@ -44,13 +46,13 @@ function buildRun(dataset: Dataset) {
   log.push({ at: 0, tone: "head", tag: "boot", text: `${dataset.industryName ?? "Index"} engine` });
   log.push({ at: 140, tone: "dim", tag: "load", text: `${dataset.holdingsSource === "user" ? "your holdings" : "organizers' holdings"} · run ${built}` });
   log.push({ at: 280, tone: "dim", tag: "load", text: `${tested.length} companies · ${dataset.sources.length} filings · ${dataset.metricDefs.length} metrics` });
-  log.push({ at: 420, tone: "dim", tag: "index", text: dataset.indexName });
+  log.push({ at: 420, tone: "dim", tag: "find", text: `${candidates.length} Canadian candidates in ${dataset.industryName ?? "this industry"}` });
   rules.forEach((k, i) =>
     log.push({ at: 560 + i * 70, tone: "dim", tag: k.kind === "gate" ? "gate" : "rule", text: k.label, right: k.target }),
   );
 
   let at = BOOT;
-  log.push({ at: at - 80, tone: "head", tag: "phase", text: `Calibrating on ${holdings.length} index holdings` });
+  if (holdings.length) log.push({ at: at - 80, tone: "head", tag: "phase", text: `Measuring your ${holdings.length} stocks` });
   const scan = (c: Company) => {
     const s = at;
     start.set(c.ticker, s);
@@ -73,11 +75,23 @@ function buildRun(dataset: Dataset) {
     at += PER;
   };
   holdings.forEach(scan);
-  at += CANDIDATE_PAUSE;
-  log.push({ at: at - 120, tone: "head", tag: "phase", text: `Testing ${candidates.length} Canadian candidates` });
+  if (holdings.length) at += CANDIDATE_PAUSE;
+  const C = at; // candidates start
+  log.push({ at: at - 120, tone: "head", tag: "phase", text: `Comparing ${candidates.length} candidates against ${rules.length} KPIs` });
   candidates.forEach(scan);
 
-  const R = at - PER + SCAN + 300; // ranking
+  // Rejections: every candidate that failed a must-pass check, named with the check it failed.
+  const rejects = ranked.filter((c) => c.verdict === "reject");
+  const X = at - PER + SCAN + 250;
+  log.push({ at: X, tone: "head", tag: "reject", text: `Rejecting ${rejects.length} of ${candidates.length} candidates` });
+  rejects.forEach((c, i) => {
+    const failed = c.model!.checks.filter((k) => k.pass === false);
+    const gate = failed.find((k) => k.kind === "gate") ?? failed[0];
+    log.push({ at: X + 120 + i * Math.min(90, 700 / Math.max(1, rejects.length)), tone: "fail", tag: "reject", text: `${c.ticker}  ${gate ? gate.label : "too few checks passed"}` });
+  });
+  if (rejects.length) sounds.push({ at: X, play: sfx.fail });
+
+  const R = X + REJECT_BEAT; // ranking
   log.push({ at: R, tone: "head", tag: "rank", text: `Ranking ${tested.length} companies by checks passed` });
   ranked.forEach((c, i) =>
     log.push({ at: R + 160 + i * 110, tone: "dim", tag: "rank", text: `#${c.model!.rank}  ${c.ticker}  ${c.name}` }),
@@ -88,8 +102,7 @@ function buildRun(dataset: Dataset) {
   log.push({ at: P, tone: "head", tag: "verdict", text: "Verdicts" });
   ranked.forEach((c, i) => {
     const t = P + 120 + i * 170;
-    const weight = c.proposedWeightPct != null ? pct(c.proposedWeightPct, 2) : undefined;
-    log.push({ at: t, tone: c.verdict === "add" ? "good" : c.verdict === "watch" ? "warn" : "fail", tag: "verdict", text: `${verdictStyle[c.verdict].label.toUpperCase()}  ${c.ticker}`, right: weight });
+    log.push({ at: t, tone: c.verdict === "add" ? "good" : c.verdict === "watch" ? "warn" : "fail", tag: "verdict", text: `${verdictStyle[c.verdict].label.toUpperCase()}  ${c.ticker}` });
     if (c.verdict === "add") sounds.push({ at: t, play: sfx.pick });
   });
   const READY = P + 120 + ranked.length * 170 + 200;
@@ -99,7 +112,58 @@ function buildRun(dataset: Dataset) {
   sounds.sort((a, b) => a.at - b.at);
   log.sort((a, b) => a.at - b.at);
   const picks = ranked.filter((c) => c.verdict === "add");
-  return { tested, holdings, candidates, ranked, picks, rules, start, log, sounds, reads, checks, done, R, P, READY, END, built };
+  const watch = ranked.filter((c) => c.verdict === "watch");
+  return { tested, holdings, candidates, ranked, picks, rejects, watch, rules, start, log, sounds, reads, checks, done, C, X, R, P, READY, END, built };
+}
+
+type Run = ReturnType<typeof buildRun>;
+
+/** What the engine is doing right now, in plain words, with the real counts. */
+function narrate(run: Run, t: number, industry: string): { step: number; title: string; detail: string } {
+  const gates = run.rules.filter((k) => k.kind === "gate").length;
+  if (t < BOOT) return { step: 0, title: `Generating candidates in ${industry}`, detail: `Found ${run.candidates.length} Canadian ${run.candidates.length === 1 ? "company" : "companies"} with filings to test` };
+  if (t < run.C) return { step: 1, title: `Measuring your ${run.holdings.length} ${run.holdings.length === 1 ? "stock" : "stocks"}`, detail: `Same ${run.rules.length} KPIs the candidates face` };
+  if (t < run.X) {
+    const current = [...run.candidates].reverse().find((c) => (run.start.get(c.ticker) ?? Infinity) <= t);
+    return { step: 1, title: `Comparing ${run.candidates.length} candidates against ${run.rules.length} KPIs`, detail: current ? `Testing ${current.ticker} · ${current.name}` : `${gates} must-pass, ${run.rules.length - gates} scored` };
+  }
+  if (t < run.R) return { step: 2, title: `Rejecting ${run.rejects.length} ${run.rejects.length === 1 ? "candidate" : "candidates"}`, detail: run.rejects.length ? "Failed a must-pass check" : "Every candidate cleared the must-pass checks" };
+  if (t < run.P) return { step: 3, title: `Ranking ${run.tested.length} companies by KPIs passed`, detail: "Must-pass checks first, then share of scored checks passed" };
+  if (t < run.READY) return { step: 4, title: `Keeping ${run.picks.length}, watching ${run.watch.length}`, detail: run.picks.length ? `Add: ${run.picks.map((c) => c.ticker).join(", ")}` : "No candidate clears the whole bar" };
+  return { step: 5, title: run.picks.length ? "Recommendation ready" : "Results ready", detail: run.picks.length ? `Add ${run.picks.map((c) => c.ticker).join(" + ")}` : "Opening the ranking" };
+}
+
+const STEPS = ["Generate candidates", "Compare against KPIs", "Reject", "Rank", "Verdicts"];
+
+function Narration({ run, t, industry }: { run: Run; t: number; industry: string }) {
+  const n = narrate(run, t, industry);
+  return (
+    <div className="relative border-b border-white/10 px-5 py-5 md:px-8">
+      <div className="flex flex-wrap items-center gap-x-1.5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.14em]">
+        {STEPS.map((label, i) => {
+          const done = i < n.step;
+          const on = i === n.step;
+          return (
+            <span key={label} className="flex items-center gap-1.5">
+              {i > 0 && <span className={`h-px w-4 md:w-8 ${done || on ? "bg-signal/60" : "bg-white/15"}`} />}
+              <span className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-300 ${
+                on ? "border-signal/70 bg-signal/10 text-white shadow-[0_0_18px_-4px_rgba(61,220,108,0.6)]" : done ? "border-white/15 text-signal" : "border-white/10 text-white/35"
+              }`}>
+                <span className={`grid h-3.5 w-3.5 place-items-center rounded-full text-[9px] ${on ? "bg-signal text-ink" : done ? "bg-signal/20 text-signal" : "bg-white/10 text-white/50"}`}>
+                  {done ? "✓" : i + 1}
+                </span>
+                {label}
+              </span>
+            </span>
+          );
+        })}
+      </div>
+      <h2 key={n.title} className="mt-4 text-2xl font-semibold tracking-tight text-white md:text-4xl" aria-live="polite">
+        <Decode text={`${n.title}${n.step < 5 ? "…" : ""}`} letters duration={420} />
+      </h2>
+      <p key={n.detail} className="a-fade mt-1.5 font-mono text-[12px] text-white/55 md:text-[13px]">{n.detail}</p>
+    </div>
+  );
 }
 
 const toneClass: Record<Tone, string> = {
@@ -171,7 +235,7 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
   const passes = fired.filter((c) => c.pass === true).length;
   const fails = fired.filter((c) => c.pass === false).length;
   const firstCandidate = run.start.get(run.candidates[0]?.ticker ?? "") ?? Infinity;
-  const phase = t < BOOT ? "Booting" : t < firstCandidate ? "Calibrating on the index" : t < run.R ? "Testing candidates" : t < run.P ? "Ranking" : t < run.READY ? "Verdicts" : "Ready";
+  const phase = t < BOOT ? "Generating candidates" : t < firstCandidate ? "Measuring your stocks" : t < run.X ? "Comparing against KPIs" : t < run.R ? "Rejecting" : t < run.P ? "Ranking" : t < run.READY ? "Verdicts" : "Ready";
 
   return (
     <div role="dialog" aria-label="Engine run" aria-live="polite"
@@ -203,7 +267,9 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
         </div>
       </header>
 
-      <div className="relative grid grid-cols-2 gap-px border-y border-white/10 bg-white/10 md:grid-cols-4">
+      <Narration run={run} t={t} industry={dataset.industryName ?? "this industry"} />
+
+      <div className="relative grid grid-cols-2 gap-px border-b border-white/10 bg-white/10 md:grid-cols-4">
         <Counter label="Filings read" value={reads} of={run.reads.length} />
         <Counter label="Companies tested" value={companiesDone} of={run.tested.length} />
         <Counter label="Checks run" value={fired.length} of={run.checks.length} />
@@ -252,15 +318,17 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
               })}
             </div>
           </div>
-          <div className="min-h-0">
-            <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">Index holdings · calibration</div>
-            <div className="grid grid-cols-5 gap-1.5">
-              {run.holdings.map((c) => <Cell key={c.ticker} c={c} t={t} start={run.start.get(c.ticker)!} dim={t >= run.R} />)}
+          {run.holdings.length > 0 && (
+            <div className="min-h-0">
+              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">Your stocks · same KPIs</div>
+              <div className="grid grid-cols-5 gap-1.5">
+                {run.holdings.map((c) => <Cell key={c.ticker} c={c} t={t} start={run.start.get(c.ticker)!} dim={t >= run.R} />)}
+              </div>
             </div>
-          </div>
+          )}
           <div className="hidden min-h-0 flex-1 flex-col rounded-xl border border-white/10 bg-black/40 p-3 lg:flex">
             <div className="mb-2 flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-white/45">
-              <span>Checks by rule · live tally</span>
+              <span>KPIs · live tally</span>
               <span><span className="text-signal">■</span> pass <span className="ml-2 text-[#ff6b5e]">■</span> fail <span className="ml-2 text-white/40">■</span> no data</span>
             </div>
             <div className="flex flex-1 flex-col justify-around gap-1.5">
@@ -293,7 +361,7 @@ export default function RunSequence({ dataset, runNo, onDone }: { dataset: Datas
                   Add {run.picks.map((c) => c.ticker).join(" + ")}
                 </div>
                 <div className="mt-3 font-mono text-sm text-white/60">
-                  {run.picks.map((c) => `${c.ticker} ${c.proposedWeightPct != null ? pct(c.proposedWeightPct, 2) : ""}`).join("  ·  ")}
+                  {run.picks.map((c) => c.name).join("  ·  ")}
                 </div>
                 <div className="mt-6 font-mono text-[11px] text-white/40">Opening the recommendation…</div>
               </div>
@@ -368,7 +436,7 @@ function Cell({ c, t, start, big = false, dim = false, rankShown = false, verdic
             <span className={`a-stamp rounded px-1.5 py-0.5 font-mono text-[10px] font-bold uppercase ${
               add ? "bg-signal text-ink" : c.verdict === "watch" ? "bg-[#f0c050] text-ink" : "bg-[#ff6b5e] text-ink"
             }`}>
-              {verdictStyle[c.verdict].label}{add && c.proposedWeightPct != null ? ` ${pct(c.proposedWeightPct, 2)}` : ""}
+              {verdictStyle[c.verdict].label}
             </span>
           )}
         </div>

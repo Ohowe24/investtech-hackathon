@@ -6,7 +6,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, Unit } from "@contract/types";
-import { formatValue, pct, recStyle, verdictStyle } from "@/lib/format";
+import { formatValue, recStyle, verdictStyle } from "@/lib/format";
 import { getIndustry } from "../../engine/industries";
 import { proveCompany, proveEngine, type CheckProof, type CompanyProof, type InputUnit, type Reproduction } from "../../engine/proof";
 import { Decode, prefersReducedMotion } from "./live/motion";
@@ -90,7 +90,6 @@ function Hero({ dataset, engine, tested, current, onPick }: {
     ["Metrics re-run", engine.metrics],
     ["Checks re-applied", engine.checks],
     ["Results re-tallied", engine.results],
-    ["Weights re-derived", engine.weights],
     ["Rules match config", engine.rules],
   ];
   const all = counters.every(([, c]) => c.matched === c.total);
@@ -286,7 +285,7 @@ function DecisionPath({ dataset, c, proof, resultRef, reproduced, total, onOpen 
     {
       key: "v", title: "Verdict",
       main: c.inIndex ? "Held" : verdictStyle[v.stored].label,
-      sub: c.inIndex ? "already in the index" : proof.weight ? `${pct(proof.weight.stored, 2)} · weight rule ${proof.weight.match ? "✓" : "✕"}` : v.source === "human" ? "set by a person" : "from the result ✓",
+      sub: c.inIndex ? "already in the index" : v.source === "human" ? "set by a person" : "from the result ✓",
       tone: c.inIndex ? "#fff" : v.stored === "add" ? PASS : v.stored === "reject" ? FAIL : HOLD, ok: v.match,
     },
   ];
