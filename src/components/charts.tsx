@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import { useInView } from "./live/motion";
 
 /** Series colours: ink, the dark teal, a light teal, a warm ochre, grey. */
-export const C = { ink: "#000000", teal: "#2f5454", sea: "#8fb3b3", ochre: "#c9982a", grey: "#b5b5b5", bad: "#c8372d" };
+export const C = { ink: "var(--color-ink)", teal: "var(--color-teal)", sea: "#8fb3b3", ochre: "#c9982a", grey: "#b5b5b5", bad: "var(--color-bad)" };
 
 export interface Series {
   label: string;
@@ -86,7 +86,7 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
       <svg viewBox={`0 0 ${W} ${H}`} className="h-auto w-full" onMouseLeave={() => setHover(null)}>
         {dl?.ticks.map((t) => (
           <g key={t}>
-            <line x1={PAD.left} x2={W - padR} y1={y(t)} y2={y(t)} stroke={t === 0 ? "#000" : "#ececec"} strokeWidth={1} />
+            <line x1={PAD.left} x2={W - padR} y1={y(t)} y2={y(t)} stroke={t === 0 ? "var(--color-ink)" : "var(--color-line)"} strokeWidth={1} />
             <text x={PAD.left - 6} y={y(t) + 3} textAnchor="end" className="fill-faint text-[9px] tabular-nums">{fmtLeft(t)}</text>
           </g>
         ))}
@@ -99,7 +99,7 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
             <text x={cx(i)} y={H - 7} textAnchor="middle" className={`text-[10px] ${at === i ? "fill-ink font-semibold" : "fill-muted"}`}>FY{yr}</text>
           </g>
         ))}
-        {hover != null && dl && <line x1={PAD.left} x2={W - padR} y1={y(0)} y2={y(0)} stroke="#000" strokeWidth={1} pointerEvents="none" />}
+        {hover != null && dl && <line x1={PAD.left} x2={W - padR} y1={y(0)} y2={y(0)} stroke="var(--color-ink)" strokeWidth={1} pointerEvents="none" />}
         {bars.map((s, b) =>
           s.values.map((v, i) => {
             if (v == null) return null;
@@ -130,7 +130,7 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
                   className={s.dashed ? "a-fade" : "a-draw"} style={{ animationDelay: "250ms" }} />
               ))}
               {s.values.map((v, i) => v == null ? null : (
-                <circle key={i} cx={cx(i)} cy={y(v, s.axis)} r={at === i ? 4 : 2.75} fill="#fff" stroke={s.color} strokeWidth={2}
+                <circle key={i} cx={cx(i)} cy={y(v, s.axis)} r={at === i ? 4 : 2.75} fill="var(--panel-solid)" stroke={s.color} strokeWidth={2}
                   className="a-pop" style={{ animationDelay: `${300 + (i / Math.max(years.length - 1, 1)) * 1100}ms` }} />
               ))}
             </g>

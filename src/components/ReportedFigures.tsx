@@ -84,10 +84,10 @@ function SeriesCard({ dataset, company, s }: { dataset: Dataset; company: Compan
         })}
         {checks.map((k, j) => (
           <g key={k.id}>
-            <line x1={PAD.left} x2={W - PAD.right} y1={y(k.threshold!)} y2={y(k.threshold!)} stroke={k.kind === "gate" ? "#000" : "#2f5454"} strokeDasharray="4 3" strokeWidth={1} />
+            <line x1={PAD.left} x2={W - PAD.right} y1={y(k.threshold!)} y2={y(k.threshold!)} stroke={k.kind === "gate" ? "var(--color-ink)" : "var(--color-teal)"} strokeDasharray="4 3" strokeWidth={1} />
             {/* Two lines close together: one label on the right, the next on the left. */}
             <text x={j % 2 ? PAD.left : W - PAD.right} y={y(k.threshold!) - 3} textAnchor={j % 2 ? "start" : "end"}
-              className="fill-muted text-[8.5px]" paintOrder="stroke" stroke="#fff" strokeWidth={3}>{k.kind === "gate" ? "must" : "pass"} {k.target}</text>
+              className="fill-muted text-[8.5px]" paintOrder="stroke" stroke="var(--panel-solid)" strokeWidth={3}>{k.kind === "gate" ? "must" : "pass"} {k.target}</text>
           </g>
         ))}
       </svg>

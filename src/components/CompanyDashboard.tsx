@@ -7,6 +7,7 @@ import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from
 import DealTimeline from "./DealTimeline";
 import ReportedFigures from "./ReportedFigures";
 import { Card, Explain } from "./ui";
+import { Pips } from "./Ranking";
 import { C, ChartCard, SplitBar, TrendChart } from "./charts";
 import { Decode, DecodeInView } from "./live/motion";
 
@@ -49,12 +50,12 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
       </div>
 
-      <section className="spot scan-once rounded-xl border border-line bg-white">
-        <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-5">
-          <div className="flex items-center gap-4">
-            <span className="logo-scan grid h-12 w-16 place-items-center rounded-lg bg-ink font-mono text-sm font-semibold text-white">{company.ticker}</span>
+      <section className="spot scan-once panel">
+        <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-6 md:px-8">
+          <div className="flex items-center gap-5">
+            <span className="logo-scan grid h-16 w-16 shrink-0 place-items-center rounded-2xl border border-line bg-gradient-to-b from-[#1b1b1b] to-[#050505] font-mono text-sm font-bold text-white">{company.ticker}</span>
             <div>
-              <h1 className="text-xl font-semibold tracking-tight text-ink"><Decode text={company.name} letters duration={700} /></h1>
+              <h1 className="text-[28px] font-bold leading-tight tracking-[-0.03em] text-ink"><Decode text={company.name} letters duration={700} /></h1>
               <div className="mt-0.5 text-xs text-muted">
                 {[company.subSector, `HQ ${company.hqCountry}`, company.listedOn, years.length ? `FY${years[0]}–FY${years[years.length - 1]}` : null,
                   company.inIndex ? "In the index" : "Candidate"].filter(Boolean).join(" · ")}
@@ -71,23 +72,35 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         {m && (
           <div className="grid grid-cols-2 divide-line border-t border-line sm:grid-cols-4 sm:divide-x">
             <Stat label="Rank" value={`${m.rank}`} unit={`of ${tested.length}`} />
-            <Stat label="Checks passed" value={`${m.checks.filter((k) => k.pass).length}`} unit={`of ${m.checks.filter((k) => k.pass !== null).length}`} />
-            <Stat label="Verdict" value={company.inIndex ? "Yours" : verdictStyle[company.verdict].label} unit={company.inIndex ? "you added it" : company.verdict === "add" ? "passes the bar" : "does not pass"} />
-            <div className="px-5 py-3.5">
-              <div className="text-[11px] font-medium uppercase tracking-wide text-faint">Failed</div>
-              <div className="mt-1.5 flex flex-wrap gap-1.5">
-                {failed.length === 0 && <span className="text-sm font-medium text-teal">None</span>}
-                {failed.map((k) => <span key={k.id} className="rounded-md bg-badsoft px-2 py-0.5 text-xs font-medium text-bad">{k.label}</span>)}
-                {noData.map((k) => <span key={k.id} className="rounded-md bg-soft px-2 py-0.5 text-xs text-muted">No data: {k.label}</span>)}
+            <div className="px-6 py-4">
+              <div className="kicker">Passed · Failed · No data</div>
+              <div className="mt-1.5 flex items-baseline gap-2 font-mono text-xl font-semibold tabular-nums">
+                <span className="text-teal">{m.checks.filter((k) => k.pass).length}</span><span className="text-sm text-faint">·</span>
+                <span className={failed.length ? "text-bad" : "text-ink"}>{failed.length}</span><span className="text-sm text-faint">·</span>
+                <span className="text-faint">{noData.length}</span>
               </div>
+              <div className="mt-2"><Pips checks={m.checks} passed={m.passed} available={m.available} /></div>
+            </div>
+            <Stat label="Verdict" value={company.inIndex ? "Yours" : verdictStyle[company.verdict].label} unit={company.inIndex ? "you added it" : company.verdict === "add" ? "passes the bar" : "does not pass"} />
+            <div className="px-6 py-4">
+              <div className="kicker">Must-pass check</div>
+              {m.checks.filter((k) => k.kind === "gate").map((k) => (
+                <div key={k.id} className="mt-1.5" title={k.rule}>
+                  <span className={`text-lg font-semibold ${k.pass === null ? "text-faint" : k.pass ? "text-teal" : "text-bad"}`}>{k.pass === null ? "No data" : k.pass ? "Passes" : "Fails"}</span>
+                  <div className="text-xs text-faint">{k.label}</div>
+                </div>
+              ))}
+              {failed.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {failed.map((k) => <span key={k.id} className="rounded-md bg-badsoft px-2 py-0.5 text-xs font-medium text-bad">✕ {k.label}</span>)}
+                </div>
+              )}
             </div>
           </div>
         )}
       </section>
 
-      <div className="stagger grid grid-cols-2 gap-2.5 md:grid-cols-4 xl:grid-cols-7" style={{ ["--d" as string]: "200ms" }}>
-        {[...scored, ...context].map((d, i) => <MetricTile key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} i={i} />)}
-      </div>
+      <ChecksPanel dataset={dataset} company={company} scored={scored} context={context} onOpen={onOpen} />
 
       {company.history?.length ? <div className="space-y-5"><DeepDive company={company} /></div> : null}
 
@@ -130,8 +143,8 @@ function NavBtn({ disabled, onClick, label, children }: { disabled: boolean; onC
 
 function Stat({ label, value, unit, info }: { label: string; value: string; unit?: string; info?: { title: string; how?: string } }) {
   return (
-    <div className="px-5 py-3.5">
-      <div className="text-[11px] font-medium uppercase tracking-wide text-faint">
+    <div className="px-6 py-4">
+      <div className="kicker">
         {info ? <Explain info={info} className="uppercase tracking-wide">{label}</Explain> : label}
       </div>
       <div className="mt-1 flex items-baseline gap-1.5">
@@ -139,52 +152,6 @@ function Stat({ label, value, unit, info }: { label: string; value: string; unit
         {unit && <span className="text-xs text-muted">{unit}</span>}
       </div>
     </div>
-  );
-}
-
-/** One metric, small: the value, its pass lines, and where it sits among every company tested. */
-function MetricTile({ dataset, company, def, onOpen, i }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void; i: number }) {
-  const tested = dataset.companies.filter((c) => c.model);
-  const mv = company.metrics[def.id];
-  const checks = company.model?.checks.filter((k) => k.metricId === def.id) ?? [];
-  const withData = ranking(tested, def).filter((c) => c.metrics[def.id]?.value != null);
-  const pos = withData.findIndex((c) => c.ticker === company.ticker);
-  const state = metricState(company, def.id);
-  const lowFirst = def.higherIsBetter === false;
-
-  return (
-    <section className="spot flex min-w-0 flex-col rounded-lg border border-line bg-white p-3" title={mv?.note} style={{ ["--i" as string]: i }}>
-      <Explain info={scoredMetricInfo(dataset, def.id)} className="truncate text-left text-[11px] font-medium text-muted">{def.short ?? def.label}</Explain>
-      <div className={`mt-1.5 font-mono text-lg font-semibold leading-none tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : stateText[state]}`}>
-        {mv?.value == null ? "—" : <Decode text={formatMetric(mv, def.unit)} delay={300 + i * 70} duration={700} />}
-      </div>
-      <div className="mt-1.5 flex flex-wrap gap-1">
-        {checks.map((k) => (
-          <span key={k.id} title={k.rule}
-            className={`rounded px-1 py-px font-mono text-[10px] font-medium ${k.pass === null ? "bg-soft text-faint" : k.pass ? "bg-tealsoft text-teal" : "bg-badsoft text-bad"}`}>
-            {k.pass === null ? "" : k.pass ? "✓ " : "✕ "}{k.target}
-          </span>
-        ))}
-        {checks.length === 0 && <span className="rounded bg-soft px-1 py-px text-[10px] text-faint">Not scored</span>}
-      </div>
-      {pos >= 0 ? (
-        <div className="mt-auto pt-2">
-          <div className="flex items-end gap-px" role="img" aria-label={`Ranked ${pos + 1} of ${withData.length}`}>
-            {withData.map((c, j) => {
-              const me = c.ticker === company.ticker;
-              return (
-                <button key={c.ticker} onClick={() => onOpen(c.ticker)} title={`${c.ticker} · ${formatMetric(c.metrics[def.id], def.unit)}`}
-                  style={{ transformOrigin: "center bottom", animationDelay: `${450 + i * 70 + j * 25}ms` }}
-                  className={`a-grow-y flex-1 rounded-[2px] ${stateBg[metricState(c, def.id)]} ${me ? "h-3.5 shadow-[0_0_8px_rgba(61,220,108,0.9)]" : "h-2 opacity-30 hover:opacity-100"}`} />
-              );
-            })}
-          </div>
-          <div className="mt-1 text-[10px] text-faint">{ordinal(pos + 1)} {lowFirst ? "lowest" : "highest"} of {withData.length}</div>
-        </div>
-      ) : (
-        <p className="mt-auto pt-2 text-[10px] leading-snug text-faint">{mv?.note ?? "No data."}</p>
-      )}
-    </section>
   );
 }
 
@@ -373,5 +340,85 @@ function FinancialTable({ company }: { company: Company }) {
         </table>
       </div>
     </Card>
+  );
+}
+
+/** Every metric as one row: tested checks first (value, the bar, where it sits among everyone tested), then checks without data, then figures that are not scored. */
+function ChecksPanel({ dataset, company, scored, context, onOpen }: { dataset: Dataset; company: Company; scored: MetricDef[]; context: MetricDef[]; onOpen: (t: string) => void }) {
+  const has = (d: MetricDef) => company.metrics[d.id]?.value != null;
+  const groups = [
+    { key: "Tested", rows: scored.filter(has) },
+    { key: "Not tested · no data", rows: scored.filter((d) => !has(d)) },
+    { key: "Also reported · not scored", rows: context },
+  ].filter((g) => g.rows.length);
+  let i = 0;
+  return (
+    <section className="panel">
+      <div className="px-6 pb-4 pt-5">
+        <h2 className="text-base font-semibold tracking-tight text-ink">How {company.ticker} scores on each check</h2>
+        <p className="mt-0.5 text-[13px] text-faint">Each figure against the bar, and where it sits among the {dataset.companies.filter((c) => c.model).length} companies tested. Click a bar segment to open that company.</p>
+      </div>
+      {groups.map((g) => (
+        <div key={g.key}>
+          <div className="kicker border-t border-line bg-[var(--panel-hi)] px-6 py-2.5">{g.key} · {g.rows.length}</div>
+          {g.rows.map((d) => <MetricRow key={d.id} dataset={dataset} company={company} def={d} onOpen={onOpen} i={i++} />)}
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function MetricRow({ dataset, company, def, onOpen, i }: { dataset: Dataset; company: Company; def: MetricDef; onOpen: (t: string) => void; i: number }) {
+  const tested = dataset.companies.filter((c) => c.model);
+  const mv = company.metrics[def.id];
+  const checks = company.model?.checks.filter((k) => k.metricId === def.id) ?? [];
+  const withData = ranking(tested, def).filter((c) => c.metrics[def.id]?.value != null);
+  const pos = withData.findIndex((c) => c.ticker === company.ticker);
+  const state = metricState(company, def.id);
+  const gate = checks.some((k) => k.kind === "gate");
+
+  return (
+    <div className="grid items-center gap-x-6 gap-y-2 border-t border-line px-6 py-4 md:grid-cols-[230px_120px_150px_1fr_90px]">
+      <div className="min-w-0">
+        <Explain info={scoredMetricInfo(dataset, def.id)} className="text-left text-[14px] font-medium text-ink">{def.short ?? def.label}</Explain>
+        {gate && <span className="kicker mt-0.5 block !text-[9.5px] !text-warn">Must pass</span>}
+      </div>
+      <div className={`font-mono text-xl font-semibold tabular-nums tracking-tight ${mv?.value == null ? "text-faint" : state === "fail" ? "text-bad" : "text-ink"}`}>
+        {mv?.value == null ? "—" : <Decode text={formatMetric(mv, def.unit)} delay={300 + i * 70} duration={700} />}
+      </div>
+      <div className="flex flex-wrap gap-1">
+        {checks.map((k) => (
+          <span key={k.id} title={k.rule}
+            className={`rounded-md px-1.5 py-0.5 font-mono text-[11px] font-medium ${k.pass === null ? "text-faint ring-1 ring-inset ring-line" : k.pass ? "bg-tealsoft text-teal" : "bg-badsoft text-bad"}`}>
+            {k.pass === null ? "" : k.pass ? "✓ " : "✕ "}{k.target}
+          </span>
+        ))}
+        {checks.length === 0 && <span className="rounded-md px-1.5 py-0.5 text-[11px] text-faint ring-1 ring-inset ring-line">Not scored</span>}
+      </div>
+      {pos >= 0 ? (
+        <div className="min-w-0">
+          <div className="flex items-center gap-[3px]" role="img" aria-label={`Ranked ${pos + 1} of ${withData.length}`}>
+            {withData.map((c, j) => {
+              const me = c.ticker === company.ticker;
+              return (
+                <button key={c.ticker} onClick={() => onOpen(c.ticker)} title={`${c.ticker} · ${formatMetric(c.metrics[def.id], def.unit)}`}
+                  style={{ transformOrigin: "center bottom", animationDelay: `${450 + i * 70 + j * 25}ms` }}
+                  className={`a-grow-y flex-1 rounded-[3px] ${me ? "h-[18px] bg-ink" : `h-2.5 ${stateBg[metricState(c, def.id)]} opacity-35 hover:opacity-100`}`} />
+              );
+            })}
+          </div>
+          <div className="mt-1.5 text-[11.5px] text-faint">{ordinal(pos + 1)} {def.higherIsBetter === false ? "lowest" : "highest"} of {withData.length}</div>
+        </div>
+      ) : (
+        <p className="text-[12.5px] text-faint">{mv?.note ?? "No data."}</p>
+      )}
+      <div className="md:text-right">
+        {checks.length > 0 && (
+          <span className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${state === "pass" ? "bg-teal text-white [.panels-dark_&]:text-[#03160a]" : state === "fail" ? "bg-badsoft text-bad" : "text-faint ring-1 ring-inset ring-line"}`}>
+            {state === "pass" ? "Pass" : state === "fail" ? "Fail" : "No data"}
+          </span>
+        )}
+      </div>
+    </div>
   );
 }

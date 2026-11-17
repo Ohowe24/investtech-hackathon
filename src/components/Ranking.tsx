@@ -1,10 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import type { Company, Dataset, IndexSnapshot, MetricDef } from "@contract/types";
+import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, Verdict } from "@contract/types";
 import { formatValue, formatMetric, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
-import { metricState, scoredMetrics, stateText } from "@/lib/rank";
+import { metricState, scoredMetrics } from "@/lib/rank";
 import { median } from "../../engine/metrics";
 import { Dot, Explain } from "./ui";
 import { Decode } from "./live/motion";
@@ -20,6 +21,21 @@ interface Props {
 
 const hasData = (c: Company) => !!c.model && c.model.checks.some((k) => k.pass !== null);
 
+/** Verdict groups on the ranking, in order, with the plain rule for each. */
+const GROUPS: { id: Verdict; label: string; desc: string }[] = [
+  { id: "add", label: "Add", desc: "Passes the must-pass check and enough of the scored checks" },
+  { id: "watch", label: "Watch", desc: "Mixed results: not enough checks pass, or not enough data to say" },
+  { id: "reject", label: "Reject", desc: "Fails the must-pass check, or too few of its checks pass" },
+];
+const groupText: Record<string, string> = { add: "text-teal", watch: "text-warn", reject: "text-bad" };
+const groupLine: Record<string, string> = { add: "border-teal", watch: "border-warn", reject: "border-bad" };
+const tileStyle: Record<string, string> = {
+  add: "bg-teal text-white",
+  watch: "bg-warnsoft text-warn ring-1 ring-inset ring-warn/35",
+  reject: "bg-badsoft text-bad ring-1 ring-inset ring-bad/35",
+  existing: "bg-soft text-muted",
+};
+
 /** The answer to the onboarding: Canadian candidates ranked, then the index's own holdings ranked the same way. */
 export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
   const byRank = [...dataset.companies].sort((a, b) => (a.model?.rank ?? 1e9) - (b.model?.rank ?? 1e9));
@@ -31,6 +47,8 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
   const metrics = scoredMetrics(dataset);
   const adds = candidates.filter((c) => c.verdict === "add");
   const checks = dataset.companies[0]?.model?.checks ?? [];
+  const many = candidates.length > 12;
+  const count = (v: Verdict) => candidates.filter((c) => c.verdict === v).length;
 
   // Your index's median on each metric, from the holdings that have a value. Shown as a reference row.
   const medians: Record<string, number | null> = Object.fromEntries(
@@ -39,57 +57,80 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
 
   return (
     <div className="space-y-5">
-      <section className="spot scan-once rounded-xl border border-line bg-white">
-        <div className="flex flex-wrap items-start justify-between gap-4 px-5 py-5">
-          <div className="min-w-0">
-            <div className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-wide text-muted">
-              <span className="live-dot" /> {dataset.industryName ?? dataset.industryId} ·{" "}
-              {dataset.holdingsSource === "organizers" ? `with the organizers' “${dataset.indexName}” holdings` : holdings.length ? `with your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : "Canadian candidates"}
-            </div>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight text-ink">
-              <Decode
-                text={adds.length ? `${adds.length} Canadian ${adds.length === 1 ? "company passes" : "companies pass"}: ${adds.map((c) => c.ticker).join(", ")}` : candidates.length ? "No Canadian candidate passes every bar yet" : "No Canadian candidate could be tested"}
-                letters duration={900} delay={150} />
-            </h1>
-            <p className="mt-1 max-w-2xl text-sm text-muted">
-              {candidates.length} Canadian {candidates.length === 1 ? "candidate" : "candidates"} tested{unmeasured.length ? ` (${unmeasured.length} more without data)` : ""}{holdings.length ? `, against your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : ""}, on {checks.length} declared checks.
-              {" "}Ranked by checks passed; must-pass checks come first.
-            </p>
+      <section className="spot scan-once panel grid gap-8 px-6 py-7 md:px-8 lg:grid-cols-[1fr_minmax(0,500px)]">
+        <div className="min-w-0">
+          <div className="kicker flex items-center gap-2">
+            <span className="live-dot" /> {dataset.industryName ?? dataset.industryId} ·{" "}
+            {dataset.holdingsSource === "organizers" ? `with the organizers' “${dataset.indexName}” holdings` : holdings.length ? `with your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : "Canadian candidates"}
           </div>
-          <div className="flex shrink-0 flex-wrap gap-2">
-            <Link href={editHref} className="rounded-lg border border-line px-3 py-2 text-[13px] font-medium text-ink transition-colors hover:border-ink">
+          <h1 className="mt-3 text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">
+            <Decode
+              text={adds.length ? `${adds.length} Canadian ${adds.length === 1 ? "company passes" : "companies pass"}: ${adds.map((c) => c.ticker).join(", ")}` : candidates.length ? "No Canadian candidate passes every bar yet" : "No Canadian candidate could be tested"}
+              letters duration={900} delay={150} />
+          </h1>
+          {adds.length === 1 && <div className="mt-1.5 text-lg font-semibold text-teal">{adds[0].name}</div>}
+          <p className="mt-3 max-w-xl text-[15px] text-muted">
+            {candidates.length} Canadian {candidates.length === 1 ? "candidate" : "candidates"} tested{unmeasured.length ? ` (${unmeasured.length} more without data)` : ""}{holdings.length ? `, against your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : ""}, on {checks.length} declared checks.
+            {" "}Ranked by checks passed; must-pass checks come first.
+          </p>
+          <div className="mt-5 flex flex-wrap gap-2.5">
+            <Link href={editHref} className="rounded-[10px] border border-line px-4 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-ink">
               {holdings.length ? "Edit your stocks" : "Add your stocks"}
             </Link>
             {adds.length > 0 && (
-              <button onClick={() => onGo("recommendation")} className="rounded-lg bg-ink px-3 py-2 text-[13px] font-semibold text-white">
+              <button onClick={() => onGo("recommendation")} className="rounded-[10px] bg-ink px-4 py-2 text-[13.5px] font-semibold text-white">
                 Recommendation →
               </button>
             )}
           </div>
         </div>
-        <div className="grid grid-cols-2 border-t border-line sm:grid-cols-4 sm:divide-x sm:divide-line">
-          <Stat label="Add" value={String(adds.length)} sub={adds.length ? "pass the bar" : "none pass"} />
-          <Stat label="Watch" value={String(candidates.filter((c) => c.verdict === "watch").length)} sub="mixed results" />
-          <Stat label="Reject" value={String(candidates.filter((c) => c.verdict === "reject").length)} sub="fail a must-pass check" />
-          <Stat label="Your stocks" value={String(holdings.length)} sub={holdings.length ? "ranked below" : "none added"} />
-        </div>
+
+        {candidates.length > 0 && (
+          <div className="min-w-0">
+            <div className="kicker mb-3">All {candidates.length} candidates, best to worst</div>
+            {/* One row when they fit; a wrapping grid when there are many. */}
+            <div className={many ? "grid grid-cols-[repeat(auto-fill,minmax(46px,1fr))] gap-1" : "flex gap-1"}>
+              {candidates.map((c, i) => (
+                <button key={c.ticker} onClick={() => onOpen(c.ticker)} title={`#${i + 1} ${c.name} · ${verdictStyle[c.verdict].label}`}
+                  className={`tile-${c.verdict} flex min-w-0 flex-col justify-end rounded-lg p-1.5 text-left font-mono text-[10px] font-semibold transition-transform hover:-translate-y-0.5 ${tileStyle[c.verdict]} ${many ? "h-11" : `h-14 flex-1 ${c.verdict === "add" ? "flex-[1.7]" : ""}`}`}>
+                  <span className="text-[9px] font-medium opacity-70">#{i + 1}</span>
+                  <span className="truncate">{c.ticker}</span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-4 grid grid-cols-3 gap-3">
+              {GROUPS.map((g) => (
+                <div key={g.id} className={`border-t-2 pt-2 ${groupLine[g.id]}`}>
+                  <div className={`kicker ${groupText[g.id]}`}>{g.label}</div>
+                  <div className="mt-1 text-[26px] font-bold leading-none tracking-tight text-ink"><Decode text={String(count(g.id))} delay={300} /></div>
+                  <div className="mt-1 text-xs text-faint">{g.id === "add" ? (adds.length ? "pass the bar" : "none pass") : g.id === "watch" ? "mixed results" : "fail the bar"}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-4 flex items-baseline gap-3 rounded-xl border border-line bg-[var(--panel-hi)] px-4 py-3">
+              <span className="kicker">Your stocks</span>
+              <span className="font-mono text-lg font-semibold text-ink">{holdings.length}</span>
+              <span className="text-[12.5px] text-faint">{holdings.length ? "ranked on the same checks, below" : "none added: candidates are ranked against each other"}</span>
+            </div>
+          </div>
+        )}
       </section>
 
       <RankTable
         title="Canadian candidates, ranked"
-        subtitle={`Each one tested on the same checks${holdings.length ? " as your stocks" : ""}. Click a row for the full company page.`}
-        dataset={dataset} rows={candidates} metrics={metrics} medians={medians} medianLabel="Your stocks' median" onOpen={onOpen} showVerdict
+        subtitle={`Each one tested on the same checks${holdings.length ? " as your stocks" : ""}. Click ▾ to see why; click a row for the full company page.`}
+        dataset={dataset} rows={candidates} metrics={metrics} medians={medians} medianLabel="Your stocks' median" onOpen={onOpen} grouped
         empty="No Canadian candidate in this industry has data yet." />
 
       {unmeasured.length > 0 && (
-        <section className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] px-5 py-4">
-          <h3 className="text-[13px] font-semibold text-white">Also Canadian, not tested ({unmeasured.length})</h3>
-          <p className="mt-0.5 text-xs text-white/55">In this industry&apos;s universe, but the engine has no filing data for them. Nothing is guessed: they are listed, not ranked.</p>
+        <section className="panel px-6 py-5">
+          <h3 className="text-[13px] font-semibold text-ink">Also Canadian, not tested ({unmeasured.length})</h3>
+          <p className="mt-0.5 text-xs text-muted">In this industry&apos;s universe, but the engine has no filing data for them. Nothing is guessed: they are listed, not ranked.</p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {unmeasured.map((u) => (
               <li key={u.ticker} className="flex items-start gap-3 text-[13px]">
-                <span className="mt-px grid h-6 min-w-14 place-items-center rounded-md border border-white/15 px-1.5 font-mono text-[11px] font-semibold text-white/80">{u.ticker}</span>
-                <span className="min-w-0 text-white/70"><span className="text-white">{u.name}</span>{u.subSector ? ` · ${u.subSector}` : ""}<span className="block text-xs text-white/45">{u.note}</span></span>
+                <span className="mt-px grid h-6 min-w-14 place-items-center rounded-md border border-line px-1.5 font-mono text-[11px] font-semibold text-ink">{u.ticker}</span>
+                <span className="min-w-0 text-muted"><span className="text-ink">{u.name}</span>{u.subSector ? ` · ${u.subSector}` : ""}<span className="block text-xs text-faint">{u.note}</span></span>
               </li>
             ))}
           </ul>
@@ -103,14 +144,12 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
         empty="None of your stocks has data in the engine's cache yet." />}
 
       {blankHoldings.length > 0 && (
-        <section className="rounded-xl border border-dashed border-white/20 bg-white/[0.03] px-5 py-4">
-          <h3 className="text-[13px] font-semibold text-white">Your stocks without data ({blankHoldings.length})</h3>
-          <p className="mt-0.5 text-xs text-white/55">
-            Listed, not ranked: the engine has no Onesheet data cached for them.
-          </p>
+        <section className="panel px-6 py-5">
+          <h3 className="text-[13px] font-semibold text-ink">Your stocks without data ({blankHoldings.length})</h3>
+          <p className="mt-0.5 text-xs text-muted">Listed, not ranked: the engine has no Onesheet data cached for them.</p>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {blankHoldings.map((c) => (
-              <span key={c.ticker} title={c.name} className="rounded-md border border-white/15 px-2 py-0.5 font-mono text-[11px] font-semibold text-white/75">{c.ticker}</span>
+              <span key={c.ticker} title={c.name} className="rounded-md border border-line px-2 py-0.5 font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
             ))}
           </div>
         </section>
@@ -119,29 +158,51 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
   );
 }
 
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
+const ROW = 70;
+
+/** The checks on one metric, as the bar a value must clear ("≥ 5.8%"), and whether any is must-pass. */
+function barFor(dataset: Dataset, metricId: string): { target: string; gate: boolean } {
+  const ks = (dataset.companies.find((c) => c.model)?.model?.checks ?? []).filter((k) => k.metricId === metricId);
+  return { target: ks.map((k) => k.target).join(" · "), gate: ks.some((k) => k.kind === "gate") };
+}
+
+export function Pips({ checks, passed, available }: { checks: CheckResult[]; passed: number; available: number }) {
   return (
-    <div className="border-line px-5 py-3.5 [&:nth-child(-n+2)]:border-b sm:[&:nth-child(-n+2)]:border-b-0">
-      <div className="text-[11px] font-medium uppercase tracking-wide text-faint">{label}</div>
-      <div className="mt-1 font-mono text-xl font-semibold tabular-nums text-ink"><Decode text={value} delay={300} /></div>
-      <div className="truncate text-xs text-muted" title={sub}>{sub}</div>
+    <div className="flex items-center gap-2">
+      <div className="flex items-center gap-[3px]">
+        {checks.map((k, i) => (
+          <span key={k.id} title={`${k.label}: ${k.pass === null ? "no data" : k.pass ? "pass" : "fail"}`}
+            className={`h-[18px] w-1.5 rounded-full ${k.pass === null ? "ring-1 ring-inset ring-faint/60" : k.pass ? "bg-teal" : "bg-bad"} ${k.kind === "gate" && i === 0 ? "mr-1" : ""}`} />
+        ))}
+      </div>
+      <span className="font-mono text-xs tabular-nums text-muted">{passed}/{available}</span>
     </div>
   );
 }
 
-const ROW = 90;
-
-function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLabel, onOpen, showVerdict, empty }: {
+function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLabel, onOpen, grouped, empty }: {
   title: string; subtitle: string; dataset: Dataset; rows: Company[]; metrics: MetricDef[]; medians: Record<string, number | null>;
-  medianLabel: string; onOpen: (t: string) => void; showVerdict?: boolean; empty: string;
+  medianLabel: string; onOpen: (t: string) => void; grouped?: boolean; empty: string;
 }) {
+  const [open, setOpen] = useState<string | null>(null);
   const showMedian = metrics.some((d) => medians[d.id] != null);
+  const cols = 3 + metrics.length + (grouped ? 1 : 0);
+  // Rank numbers run through the whole list, across groups.
+  const rankNo = new Map(rows.map((c, i) => [c.ticker, i + 1]));
+  const known = (c: Company) => GROUPS.some((g) => g.id === c.verdict);
+  const groups: { g: { id: string; label: string; desc: string } | null; rows: Company[] }[] = grouped
+    ? [
+        ...GROUPS.map((g) => ({ g, rows: rows.filter((c) => c.verdict === g.id) })).filter((x) => x.rows.length),
+        ...(rows.some((c) => !known(c)) ? [{ g: { id: "existing", label: "Other", desc: "" }, rows: rows.filter((c) => !known(c)) }] : []),
+      ]
+    : [{ g: null, rows }];
+
   return (
-    <section className="overflow-hidden rounded-xl border border-line bg-white">
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-line px-5 py-3">
+    <section className="panel">
+      <div className="flex flex-wrap items-end justify-between gap-3 px-6 pb-4 pt-5">
         <div>
-          <h2 className="text-[13px] font-semibold text-ink">{title}</h2>
-          <p className="text-xs text-muted">{subtitle}</p>
+          <h2 className="text-base font-semibold tracking-tight text-ink">{title}</h2>
+          <p className="mt-0.5 text-[13px] text-faint">{subtitle}</p>
         </div>
         <div className="flex items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5"><Dot pass={true} size={8} /> Pass</span>
@@ -150,101 +211,148 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
         </div>
       </div>
       {rows.length === 0 ? (
-        <p className="px-5 py-6 text-sm text-muted">{empty}</p>
+        <p className="border-t border-line px-6 py-6 text-sm text-muted">{empty}</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[880px] text-sm">
+          <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-line bg-canvas text-[11px] font-medium uppercase tracking-wide text-faint">
-                <th className="w-12 py-2.5 pl-5 text-left font-medium">#</th>
-                <th className="py-2.5 text-left font-medium">Company</th>
-                <th className="py-2.5 text-left font-medium">
-                  <Explain info={{ title: "Result", how: dataset.rules?.result }} className="uppercase tracking-wide">Result</Explain>
-                </th>
-                {metrics.map((d) => (
-                  <th key={d.id} className="px-3 py-2.5 text-right font-medium">
-                    <Explain info={scoredMetricInfo(dataset, d.id)} className="uppercase tracking-wide">{d.short ?? d.label}</Explain>
-                  </th>
-                ))}
-                <th className="px-3 py-2.5 text-left font-medium">Checks</th>
-                {showVerdict && (
-                  <th className="py-2.5 pr-5 text-right font-medium">
-                    <Explain info={{ title: "Verdict", how: dataset.rules?.result }} className="uppercase tracking-wide">Verdict</Explain>
+              <tr className="border-y border-line bg-[var(--panel-hi)] text-[11.5px] font-medium text-muted">
+                <th className="w-10 py-3 pl-5 text-left align-bottom font-medium">#</th>
+                <th className="py-3 text-left align-bottom font-medium">Company</th>
+                {metrics.map((d) => {
+                  const bar = barFor(dataset, d.id);
+                  return (
+                    <th key={d.id} className="px-1.5 py-3 text-right align-bottom font-medium leading-tight">
+                      {bar.gate && <span className="kicker mb-0.5 block !text-[9.5px] !text-warn">Must pass</span>}
+                      <Explain info={scoredMetricInfo(dataset, d.id)}>{d.short ?? d.label}</Explain>
+                      {bar.target && <span className="mt-1 block font-mono text-[10.5px] text-faint">{bar.target}</span>}
+                    </th>
+                  );
+                })}
+                <th className="px-2 py-3 text-left align-bottom font-medium">Checks<span className="mt-1 block font-mono text-[10.5px] text-faint">passed</span></th>
+                {grouped && (
+                  <th className="py-3 pr-5 text-right align-bottom font-medium">
+                    <Explain info={{ title: "Verdict", how: dataset.rules?.result }}>Verdict</Explain>
                   </th>
                 )}
               </tr>
             </thead>
-            <tbody>
-              {rows.map((c, r) => {
-                const m = c.model!;
-                const rec = recStyle[m.recommendation];
-                const t0 = 200 + r * ROW;
-                return (
-                  <tr key={c.ticker} onClick={() => onOpen(c.ticker)} tabIndex={0} onKeyDown={(e) => e.key === "Enter" && onOpen(c.ticker)}
-                    style={{ animationDelay: `${t0}ms` }}
-                    className="a-rise group cursor-pointer border-b border-line outline-none transition-colors hover:bg-canvas focus-visible:bg-canvas">
-                    <td className="relative py-3 pl-5 font-mono text-sm font-semibold tabular-nums text-ink">
-                      <span className="absolute inset-y-1 left-0 w-[3px] origin-center scale-y-0 rounded-r bg-signal transition-transform duration-300 group-hover:scale-y-100" />
-                      {r + 1}
-                    </td>
-                    <td className="py-3 pr-3">
-                      <div className="flex items-center gap-3">
-                        <span className="grid h-8 min-w-14 shrink-0 place-items-center rounded-md bg-soft px-1.5 font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
-                        <div className="min-w-0">
-                          <div className="max-w-[220px] truncate font-medium text-ink">{c.name}</div>
-                          <div className="max-w-[220px] truncate text-xs text-faint">{[c.subSector, c.listedOn].filter(Boolean).join(" · ")}</div>
-                        </div>
+            {groups.map(({ g, rows: grp }) => (
+              <tbody key={g?.id ?? "all"}>
+                {g && (
+                  <tr>
+                    <td colSpan={cols} className="px-5 pb-2 pt-5">
+                      <div className="flex items-center gap-2.5">
+                        <span className={`kicker ${groupText[g.id] ?? "text-muted"}`}>{g.label}</span>
+                        <span className="rounded-full bg-soft px-2 font-mono text-[11px] font-semibold text-muted">{grp.length}</span>
+                        {g.desc && <span className="text-[12.5px] text-faint">{g.desc}</span>}
                       </div>
                     </td>
-                    <td className="py-3 pr-3">
-                      <span className={`a-stamp rounded-full px-2.5 py-1 text-xs font-medium ${rec.badge}`} style={{ animationDelay: `${t0 + 350}ms` }}>{rec.label}</span>
-                    </td>
-                    {metrics.map((d) => {
-                      const st = metricState(c, d.id);
-                      return (
-                        <td key={d.id} title={c.metrics[d.id]?.period ? `${c.metrics[d.id]?.period}${c.metrics[d.id]?.note ? ` · ${c.metrics[d.id]?.note}` : ""}` : c.metrics[d.id]?.note}
-                          className={`px-3 py-3 text-right font-mono text-[13px] tabular-nums ${stateText[st]}`}>
-                          {st === "none" ? "—" : formatMetric(c.metrics[d.id], d.unit)}
-                        </td>
-                      );
-                    })}
-                    <td className="px-3 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="flex gap-[3px]">
-                          {m.checks.map((k) => (
-                            <span key={k.id} title={`${k.label}: ${k.pass === null ? "no data" : k.pass ? "pass" : "fail"}`}
-                              className={`h-4 w-1.5 rounded-full ${k.pass === null ? "bg-line" : k.pass ? "bg-teal" : "bg-bad"} ${k.kind === "gate" ? "ring-1 ring-ink/30 ring-offset-1" : ""}`} />
-                          ))}
-                        </div>
-                        <span className="font-mono text-xs tabular-nums text-muted">{m.passed}/{m.available}</span>
-                      </div>
-                    </td>
-                    {showVerdict && (
-                      <td className="py-3 pr-5 text-right">
-                        <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${verdictStyle[c.verdict].badge}`}>
-                          {verdictStyle[c.verdict].label}
-                        </span>
-                      </td>
-                    )}
                   </tr>
-                );
-              })}
-              {showMedian && (
-                <tr className="bg-canvas text-xs text-muted">
-                  <td className="py-2.5 pl-5" />
-                  <td className="py-2.5 pr-3 font-medium" colSpan={2}>
+                )}
+                {grp.flatMap((c) => {
+                  const m = c.model!;
+                  const n = rankNo.get(c.ticker)!;
+                  const top = grouped && n === 1 && c.verdict === "add";
+                  const isOpen = open === c.ticker;
+                  const t0 = 200 + n * ROW;
+                  // When a verdict was typed by hand, also show what the model said.
+                  const modelVerdict = m.recommendation === "pass" ? "add" : m.recommendation === "fail" ? "reject" : "watch";
+                  const row = (
+                    <tr key={c.ticker} onClick={() => onOpen(c.ticker)} tabIndex={0} onKeyDown={(e) => e.key === "Enter" && onOpen(c.ticker)}
+                      style={{ animationDelay: `${t0}ms` }}
+                      className={`a-rise group cursor-pointer outline-none transition-colors hover:bg-canvas focus-visible:bg-canvas ${isOpen ? "" : "border-b border-line"} ${top ? "bg-gradient-to-r from-tealsoft to-transparent" : ""}`}>
+                      <td className={`relative py-3.5 pl-5 font-mono text-[15px] font-semibold tabular-nums ${top ? "text-teal" : "text-faint"}`}>
+                        <span className={`absolute inset-y-2 left-0 w-[3px] rounded-r bg-teal transition-transform duration-300 ${top ? "" : "origin-center scale-y-0 group-hover:scale-y-100"}`} />
+                        {n}
+                      </td>
+                      <td className="py-3.5 pr-2">
+                        <div className="flex items-center gap-2.5">
+                          <span className="grid h-7 min-w-[46px] shrink-0 place-items-center rounded-md border border-line bg-[var(--panel-hi)] px-1.5 font-mono text-[11.5px] font-semibold text-ink">{c.ticker}</span>
+                          <div className="min-w-0">
+                            <div className="max-w-[190px] truncate font-semibold text-ink">{c.name}</div>
+                            <div className="max-w-[190px] truncate text-xs text-faint">{[c.subSector, c.listedOn].filter(Boolean).join(" · ")}</div>
+                          </div>
+                        </div>
+                      </td>
+                      {metrics.map((d) => {
+                        const st = metricState(c, d.id);
+                        const mv = c.metrics[d.id];
+                        return (
+                          <td key={d.id} title={mv?.period ? `${mv.period}${mv.note ? ` · ${mv.note}` : ""}` : mv?.note}
+                            className="whitespace-nowrap px-1.5 py-3.5 text-right font-mono text-[13px] tabular-nums">
+                            <span className="inline-flex items-center gap-1.5">
+                              <span className={st === "none" ? "text-faint" : st === "fail" ? "rounded-md bg-badsoft px-1.5 py-0.5 text-bad" : "text-ink"}>
+                                {st === "none" ? "—" : formatMetric(mv, d.unit)}
+                              </span>
+                              {st !== "plain" && <Dot pass={st === "none" ? null : st === "pass"} size={7} />}
+                            </span>
+                          </td>
+                        );
+                      })}
+                      <td className="px-2 py-3.5"><Pips checks={m.checks} passed={m.passed} available={m.available} /></td>
+                      {grouped && (
+                        <td className="py-3.5 pr-4 text-right">
+                          <span className="inline-flex items-center gap-1">
+                            {c.verdict !== modelVerdict && <span className="text-[11px] text-faint" title="The engine's result; this verdict was set by hand">model: {recStyle[m.recommendation].label}</span>}
+                            <span className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${verdictStyle[c.verdict].badge}`}>
+                              {verdictStyle[c.verdict].label}
+                            </span>
+                            <button onClick={(e) => { e.stopPropagation(); setOpen(isOpen ? null : c.ticker); }} aria-expanded={isOpen}
+                              aria-label={`Why ${c.ticker} is ${verdictStyle[c.verdict].label}`} title="Why"
+                              className="grid h-6 w-6 place-items-center rounded-md text-[11px] text-faint hover:bg-soft hover:text-ink">
+                              {isOpen ? "▴" : "▾"}
+                            </button>
+                          </span>
+                        </td>
+                      )}
+                    </tr>
+                  );
+                  return isOpen ? [row, (
+                    <tr key={`${c.ticker}-why`} className="border-b border-line">
+                      <td colSpan={cols} className="px-5 pb-4 pl-[60px]"><Reason company={c} /></td>
+                    </tr>
+                  )] : [row];
+                })}
+              </tbody>
+            ))}
+            {showMedian && (
+              <tbody>
+                <tr className="bg-[var(--panel-hi)] text-xs text-muted">
+                  <td className="py-3 pl-5" />
+                  <td className="py-3 pr-3 font-medium">
                     <Explain info={{ title: medianLabel, how: "The middle value among your stocks that have data for this metric. A reference line, not a check." }}>{medianLabel}</Explain>
                   </td>
                   {metrics.map((d) => (
-                    <td key={d.id} className="px-3 py-2.5 text-right font-mono tabular-nums">{medians[d.id] == null ? "—" : formatValue(medians[d.id], d.unit)}</td>
+                    <td key={d.id} className="px-1.5 py-3 text-right font-mono tabular-nums">{medians[d.id] == null ? "—" : formatValue(medians[d.id], d.unit)}</td>
                   ))}
-                  <td colSpan={showVerdict ? 2 : 1} />
+                  <td colSpan={grouped ? 2 : 1} />
                 </tr>
-              )}
-            </tbody>
+              </tbody>
+            )}
           </table>
         </div>
       )}
+      {grouped && dataset.rules?.result && (
+        <p className="border-t border-line px-6 py-3.5 text-xs text-faint">{dataset.rules.result}</p>
+      )}
     </section>
+  );
+}
+
+/** Why a company got its verdict: failed checks in red, checks without data listed plainly. */
+export function Reason({ company: c }: { company: Company }) {
+  const checks = c.model?.checks ?? [];
+  const failed = checks.filter((k) => k.pass === false);
+  const nd = checks.filter((k) => k.pass === null);
+  const passed = checks.filter((k) => k.pass === true);
+  return (
+    <div className="flex flex-wrap items-center gap-1.5 text-xs">
+      {failed.length > 0 && <span className="kicker mr-1">Failed</span>}
+      {failed.map((k) => <span key={k.id} title={k.rule} className="rounded-md bg-badsoft px-2 py-0.5 text-bad">{k.label}</span>)}
+      {nd.length > 0 && <span className={`kicker mr-1 ${failed.length ? "ml-3" : ""}`}>No data</span>}
+      {nd.map((k) => <span key={k.id} title={c.metrics[k.metricId]?.note ?? k.rule} className="rounded-md px-2 py-0.5 text-muted ring-1 ring-inset ring-line">{k.label}</span>)}
+      {failed.length === 0 && nd.length === 0 && passed.length > 0 && <span className="rounded-md bg-tealsoft px-2 py-0.5 text-teal">Passes all {passed.length} checks</span>}
+    </div>
   );
 }
