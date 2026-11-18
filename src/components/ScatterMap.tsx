@@ -237,6 +237,12 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
                   <span className="text-white">{recStyle[focus.model.recommendation].label}</span>
                 </div>
               )}
+              {focus.model?.score && (
+                <div className="flex justify-between">
+                  <span>Quality score</span>
+                  <span className="tabular-nums text-white">{focus.model.score.value == null ? "—" : `${focus.model.score.value} / 100`}</span>
+                </div>
+              )}
             </div>
             {offChart(focus) && <div className="mt-1 text-white/55">Value is beyond the chart; shown at the edge.</div>}
           </div>
@@ -254,7 +260,9 @@ export default function ScatterMap({ dataset, hovered, onHover, onSelect }: Prop
               <div className="mt-1.5 flex flex-wrap gap-1.5">
                 {here.length ? here.map((c) => (
                   <button key={c.ticker} onClick={() => onSelect(c.ticker)} onMouseEnter={() => onHover(c.ticker)} onMouseLeave={() => onHover(null)}
-                    className="rounded-md border border-line bg-[var(--panel-hi)] px-1.5 py-0.5 font-mono text-[11px] font-semibold text-ink hover:border-ink">{c.ticker}</button>
+                    className="inline-flex items-center gap-1 rounded-md border border-line bg-[var(--panel-hi)] px-1.5 py-0.5 font-mono text-[11px] font-semibold text-ink hover:border-ink">
+                    {c.ticker}{c.model?.score?.value != null && <span className="font-normal text-faint">{c.model.score.value}</span>}
+                  </button>
                 )) : <span className="text-xs text-faint">None</span>}
               </div>
             </div>

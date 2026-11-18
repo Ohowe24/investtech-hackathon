@@ -10,6 +10,7 @@
 import type { MetricDef, MetricValue } from "../../contract/types";
 import { cagr, cashReturnOnCapital, freeCashFlow, median, netDebtToEbitda, perShare, ratioOfPositive, sumStrict } from "../metrics";
 import type { MarketEntry, Store } from "../store";
+import { OIL_GAS_EP, oilGasKeeps, oilGasMetricDefs, oilGasMetrics, oilGasScore } from "./oilgas";
 import type { CheckDef, FinRow, IndustryProfile, MetricContext, UniverseEntry } from "./types";
 
 export const CUSTOM_PREFIX = "custom:";
@@ -60,7 +61,7 @@ export function customIndustries(store: Store): CustomIndustry[] {
 const metricDefs: MetricDef[] = [
   {
     id: "cashFromOperations",
-    short: "Operating cash margin",
+    short: "Cash margin",
     label: "Operating cash flow ÷ revenue, last three fiscal years combined",
     unit: "pct",
     higherIsBetter: true,
@@ -174,6 +175,20 @@ function computeMetrics(rows: FinRow[], _ctx: MetricContext): { metrics: Record<
   return { metrics, warnings: [] };
 }
 
+// ---------------------------------------------------------------- oil & gas producers (see oilgas.ts)
+
+const oilGasDefs: MetricDef[] = [
+  ...metricDefs.filter((d) => (oilGasKeeps as readonly string[]).includes(d.id) && d.id !== "shareCountGrowth"),
+  ...oilGasMetricDefs,
+  ...metricDefs.filter((d) => d.id === "shareCountGrowth"),
+];
+
+function oilGasComputeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<string, MetricValue>; warnings: string[] } {
+  const base = computeMetrics(rows, ctx);
+  const kept = Object.fromEntries(oilGasKeeps.map((id) => [id, base.metrics[id]]));
+  return { metrics: { ...kept, ...oilGasMetrics(rows) }, warnings: base.warnings };
+}
+
 // ---------------------------------------------------------------- the profile for one run
 
 const pct = (v: number) => `${Math.round(v * 1000) / 10}%`;
@@ -187,6 +202,8 @@ export function customProfile(id: string, store: Store, holdings: string[]): Ind
   const industry = customIndustries(store).find((c) => c.id === id);
   if (!industry) return null;
   const members = canadianIn(store, industry.name);
+  const producer = industry.name === OIL_GAS_EP;
+  const compute = producer ? oilGasComputeMetrics : computeMetrics;
   const universe: UniverseEntry[] = members
     .sort((a, b) => (b.marketCap ?? 0) - (a.marketCap ?? 0))
     .map((m) => ({
@@ -200,7 +217,7 @@ export function customProfile(id: string, store: Store, holdings: string[]): Ind
   // Every company tested in this run: the candidates (minus those already held) and the holdings.
   const tested = [...new Set([...universe.map((u) => u.ticker), ...holdings])].filter((t) => hasStatements(store, t));
   const values = (metricId: string) =>
-    tested.map((t) => computeMetrics(store.companies[t].financials, { ticker: t, lookup: () => undefined, facts: [], distributions: [] }).metrics[metricId]?.value ?? null);
+    tested.map((t) => compute(store.companies[t].financials, { ticker: t, lookup: () => undefined, facts: [], distributions: [] }).metrics[metricId]?.value ?? null);
   const med = (metricId: string) => {
     const v = values(metricId).filter((x): x is number => x != null);
     return v.length >= MIN_FOR_MEDIAN ? median(v) : null;
@@ -213,12 +230,23 @@ export function customProfile(id: string, store: Store, holdings: string[]): Ind
       rule: (m) => `Revenue per share grew at least as fast as ${peers} (${pct(m)} a year over three years)` },
     { id: "cashFlowGrowth", metricId: "cashFlowPerShareGrowth", op: ">=", label: "Cash flow / share ≥ peers",
       rule: (m) => `Operating cash flow per share grew at least as fast as ${peers} (${pct(m)} a year over three years)` },
-    { id: "fcfMargin", metricId: "fcfMargin", op: ">=", label: "FCF margin ≥ peers",
-      rule: (m) => `Free cash flow margin is at least ${peers} (${pct(m)})` },
-    { id: "returnOnCapital", metricId: "cashReturnOnCapital", op: ">=", label: "Return on capital ≥ peers",
-      rule: (m) => `Cash return on capital is at least ${peers} (${pct(m)})` },
-    { id: "leverage", metricId: "netDebtToEbitda", op: "<=", label: "Net debt ÷ EBITDA ≤ peers",
-      rule: (m) => `Net debt is at most ${peers} (${Math.round(m * 10) / 10}× EBITDA)` },
+    ...(producer
+      ? [
+          { id: "fcfMargin", metricId: "fcfMarginCycle", op: ">=" as const, label: "5-yr FCF margin ≥ peers",
+            rule: (m: number) => `Free cash flow margin over five fiscal years is at least ${peers} (${pct(m)})` },
+          { id: "returnOnCapital", metricId: "cashReturnCycle", op: ">=" as const, label: "4-yr return on capital ≥ peers",
+            rule: (m: number) => `Cash return on capital, averaged over four fiscal years, is at least ${peers} (${pct(m)})` },
+          { id: "leverage", metricId: "netDebtToAvgEbitda", op: "<=" as const, label: "Net debt ÷ 3-yr EBITDA ≤ peers",
+            rule: (m: number) => `Net debt is at most ${peers} (${Math.round(m * 10) / 10}× average EBITDA of three years)` },
+        ]
+      : [
+          { id: "fcfMargin", metricId: "fcfMargin", op: ">=" as const, label: "FCF margin ≥ peers",
+            rule: (m: number) => `Free cash flow margin is at least ${peers} (${pct(m)})` },
+          { id: "returnOnCapital", metricId: "cashReturnOnCapital", op: ">=" as const, label: "Return on capital ≥ peers",
+            rule: (m: number) => `Cash return on capital is at least ${peers} (${pct(m)})` },
+          { id: "leverage", metricId: "netDebtToEbitda", op: "<=" as const, label: "Net debt ÷ EBITDA ≤ peers",
+            rule: (m: number) => `Net debt is at most ${peers} (${Math.round(m * 10) / 10}× EBITDA)` },
+        ]),
     { id: "dilution", metricId: "shareCountGrowth", op: "<=", label: "Dilution ≤ peers",
       rule: (m) => `Diluted shares grew no faster than ${peers} (${pct(m)} a year over three years)` },
   ];
@@ -232,8 +260,10 @@ export function customProfile(id: string, store: Store, holdings: string[]): Ind
     if (m == null) continue; // too few companies with this figure to set a peer line
     checks.push({ id: s.id, kind: "score", label: s.label, metricId: s.metricId, op: s.op, threshold: m, rule: s.rule(m) });
   }
-  const xLine = med("netDebtToEbitda");
-  const yLine = med("revenuePerShareGrowth");
+  const mapX = producer ? "netDebtToAvgEbitda" : "netDebtToEbitda";
+  const mapY = producer ? "fcfMarginCycle" : "revenuePerShareGrowth";
+  const xLine = med(mapX);
+  const yLine = med(mapY);
 
   return {
     id,
@@ -247,26 +277,34 @@ export function customProfile(id: string, store: Store, holdings: string[]): Ind
     relatedGroups: [],
     scoring: { passShare: 0.75, mixedShare: 0.5, minAvailable: 4 },
     checks,
-    metricDefs,
-    mapTitle: "Leverage vs revenue per share growth",
+    ...(producer ? { score: oilGasScore } : {}),
+    metricDefs: producer ? oilGasDefs : metricDefs,
+    mapTitle: producer ? "Leverage vs five-year free cash flow margin" : "Leverage vs revenue per share growth",
     map: {
-      x: "netDebtToEbitda",
-      y: "revenuePerShareGrowth",
+      x: mapX,
+      y: mapY,
       xThreshold: xLine ?? 0,
       yThreshold: yLine ?? 0,
-      zones: {
-        topLeft: "Less debt than peers · growing faster",
-        topRight: "More debt than peers · growing faster",
-        bottomLeft: "Less debt than peers · growing slower",
-        bottomRight: "More debt than peers · growing slower",
-      },
+      zones: producer
+        ? {
+            topLeft: "Less debt than peers · more free cash",
+            topRight: "More debt than peers · more free cash",
+            bottomLeft: "Less debt than peers · less free cash",
+            bottomRight: "More debt than peers · less free cash",
+          }
+        : {
+            topLeft: "Less debt than peers · growing faster",
+            topRight: "More debt than peers · growing faster",
+            bottomLeft: "Less debt than peers · growing slower",
+            bottomRight: "More debt than peers · growing slower",
+          },
     },
-    rankTiebreak: "cashFlowPerShareGrowth",
+    rankTiebreak: producer ? "fcfMarginCycle" : "cashFlowPerShareGrowth",
     ruleControls: [],
     extraInputs: [],
     hasStatements: false,
     universe,
     holdingNames: {},
-    computeMetrics,
+    computeMetrics: compute,
   };
 }

@@ -201,3 +201,44 @@ export function median(values: N[]): number | null {
   const mid = Math.floor(v.length / 2);
   return v.length % 2 ? v[mid] : (v[mid - 1] + v[mid]) / 2;
 }
+
+// ---------------------------------------------------------------- quality score (0-100)
+
+/**
+ * Grade 0-1 on a straight line between two declared points. `zero` earns 0, `full` earns 1, values beyond are clamped.
+ * Works both ways: full > zero when higher is better, full < zero when lower is better. Null if the value is missing.
+ */
+export function rampGrade(value: N, zero: number, full: number): number | null {
+  if (!isNum(value) || zero === full) return null;
+  const g = (value - zero) / (full - zero);
+  return Math.min(1, Math.max(0, g));
+}
+
+/**
+ * Grade 0-1 by position among peers (the value itself is one of `peers`): 0 = worst, 1 = best, ties share the
+ * average position, the median company gets 0.5. Null if the value is missing or fewer than 3 peers have the figure.
+ */
+export function peerGrade(value: N, peers: N[], higherIsBetter: boolean): number | null {
+  const v = peers.filter(isNum);
+  if (!isNum(value) || v.length < 3) return null;
+  const below = v.filter((p) => p < value).length;
+  const equal = v.filter((p) => p === value).length; // includes the company itself
+  const pos = (below + (Math.max(equal, 1) - 1) / 2) / (v.length - 1);
+  return higherIsBetter ? pos : 1 - pos;
+}
+
+/**
+ * Weighted score out of 100 from graded parts. Parts without data drop out and the remaining weights are rescaled,
+ * but only if the parts with data carry at least `minCoverage` of the total weight; otherwise the score is null.
+ * Coverage is the share of total weight that had data (0-1). The score is rounded to a whole number.
+ */
+export function weightedScore(parts: { weight: number; grade: number | null }[], minCoverage: number): { value: number | null; coverage: number } {
+  const total = parts.reduce((s, p) => s + Math.max(0, p.weight), 0);
+  if (total <= 0) return { value: null, coverage: 0 };
+  const known = parts.filter((p) => p.grade != null && p.weight > 0);
+  const knownWeight = known.reduce((s, p) => s + p.weight, 0);
+  const coverage = knownWeight / total;
+  if (knownWeight <= 0 || coverage < minCoverage) return { value: null, coverage };
+  const value = known.reduce((s, p) => s + p.weight * (p.grade as number), 0) / knownWeight;
+  return { value: Math.round(value * 100), coverage };
+}

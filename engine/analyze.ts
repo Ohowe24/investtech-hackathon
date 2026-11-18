@@ -11,10 +11,10 @@
 // A company with no data is never guessed at: holdings keep their row with empty metrics and a note,
 // candidates without data are listed in `unmeasured`.
 
-import type { CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, ReportedSeries, Verdict, YearRow } from "../contract/types";
+import type { CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, QualityScore, ReportedSeries, Verdict, YearRow } from "../contract/types";
 import { factSeries, periodLabel } from "./facts";
 import type { IndustryProfile } from "./industries/types";
-import { acquisitionIntensity, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, pctChange, perShare, quadrant, ratioOfPositive, sumStrict, tally } from "./metrics";
+import { acquisitionIntensity, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, pctChange, peerGrade, perShare, quadrant, rampGrade, ratioOfPositive, sumStrict, tally, weightedScore } from "./metrics";
 import { cashReturnFor } from "./statements";
 import type { Store, StoredCompany } from "./store";
 
@@ -105,7 +105,36 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
   const holdingDrafts = req.holdings.map((t) => draft(t, false));
   const drafts = [...candidateDrafts, ...holdingDrafts];
 
-  // 3. Rank: recommendation first, then share of scored checks passed, then how many had data, then the profile's tie-break metric.
+  // 2b. Quality score out of 100: each weighted variable graded 0-1, on declared points or against every company tested here.
+  const scoreOf = new Map<string, QualityScore>();
+  if (profile.score) {
+    const tested = drafts.filter((d) => d.checks.some((k) => k.pass !== null));
+    for (const d of drafts) {
+      const parts = profile.score.components.map((c) => {
+        const def = profile.metricDefs.find((m) => m.id === c.metricId);
+        const v = d.metrics[c.metricId]?.value;
+        const grade =
+          c.scale.kind === "ramp"
+            ? rampGrade(v, c.scale.zero, c.scale.full)
+            : peerGrade(v, tested.map((x) => x.metrics[c.metricId]?.value), def?.higherIsBetter !== false);
+        return { metricId: c.metricId, weight: c.weight, grade, scale: scaleText(c.scale, def?.unit, tested.length) };
+      });
+      const { value, coverage } = weightedScore(parts, profile.score.minCoverage);
+      scoreOf.set(d.ticker, {
+        value,
+        coverage,
+        parts,
+        ...(value == null
+          ? { note: `Data covers ${Math.round(coverage * 100)}% of the weight; a score needs at least ${Math.round(profile.score.minCoverage * 100)}%` }
+          : coverage < 1
+            ? { note: `Scored on the ${Math.round(coverage * 100)}% of the weight that has data; the other weights were rescaled` }
+            : {}),
+      });
+    }
+  }
+  const scoreValue = (d: Draft) => scoreOf.get(d.ticker)?.value ?? -1;
+
+  // 3. Rank: recommendation first, then the quality score, then share of scored checks passed, then how many had data, then the profile's tie-break metric.
   const recOrder = { pass: 0, mixed: 1, fail: 2 } as const;
   const share = (d: Draft) => (d.t.available > 0 ? d.t.passed / d.t.available : 0);
   const hasData = (d: Draft) => (d.checks.some((k) => k.pass !== null) ? 0 : 1);
@@ -113,6 +142,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     (a, b) =>
       hasData(a) - hasData(b) ||
       recOrder[a.t.recommendation] - recOrder[b.t.recommendation] ||
+      scoreValue(b) - scoreValue(a) ||
       share(b) - share(a) ||
       b.t.available - a.t.available ||
       (b.metrics[profile.rankTiebreak]?.value ?? -Infinity) - (a.metrics[profile.rankTiebreak]?.value ?? -Infinity),
@@ -175,7 +205,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
       verdictSource: decision || !d.isCandidate ? "human" : "model",
       proposedWeightPct: verdict === "add" ? (decision?.proposedWeightPct ?? modelWeights[d.ticker]) : undefined,
       reason: decision?.reason || (d.isCandidate ? modelReason(d) : undefined),
-      model: { checks: d.checks, ...d.t, rank: rankOf.get(d.ticker)! },
+      model: { checks: d.checks, ...d.t, rank: rankOf.get(d.ticker)!, ...(scoreOf.has(d.ticker) ? { score: scoreOf.get(d.ticker) } : {}) },
       history: historyFor(rows),
       totals: totalsFor(rows),
       ...(s?.deals ? { deals: s.deals } : {}),
@@ -203,17 +233,32 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     holdingsSource: req.holdingsSource,
     currency: profile.currency,
     question: profile.question,
-    metricDefs: profile.metricDefs,
+    metricDefs: profile.score
+      ? profile.metricDefs.map((m) => ({ ...m, weight: profile.score!.components.find((c) => c.metricId === m.id)?.weight ?? 0 }))
+      : profile.metricDefs,
     rules: {
       result:
         `Passes: ${gates === 1 ? "the must-pass check passes" : `${gates === 2 ? "both" : `all ${gates}`} must-pass checks pass`}, and ` +
         (profile.scoring.passShare >= 1
           ? `every other check passes, with data on at least ${profile.scoring.minAvailable} of them. `
           : `at least ${profile.scoring.passShare * 100}% of the other checks with data pass (${profile.scoring.minAvailable} or more with data). `) +
-        `Fails: ${gates === 1 ? "the" : "a"} must-pass check fails, or fewer than ${profile.scoring.mixedShare * 100}% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.`,
+        `Fails: ${gates === 1 ? "the" : "a"} must-pass check fails, or fewer than ${profile.scoring.mixedShare * 100}% pass. Mixed: anything else. Every scored check counts the same toward the verdict. Missing data is never a fail.` +
+        (profile.score ? " Within each verdict, companies are ranked by their quality score." : ""),
       weight:
         `${profile.sleevePct}% of the index is split equally among the companies we add, at most ${profile.maxWeightPct}% each.` +
         profile.relatedGroups.map((g) => ` ${g.join(" and ")} share one slot (one controls the other).`).join(""),
+      ...(profile.score
+        ? {
+            score:
+              `Out of 100. Each variable earns a share of its points: ${profile.score.components
+                .map((c) => `${profile.metricDefs.find((m) => m.id === c.metricId)?.short ?? c.metricId} ${c.weight}`)
+                .join(", ")}. ` +
+              (profile.score.components.some((c) => c.scale.kind === "peers")
+                ? "Points follow each company's position among all companies tested here: best gets all, median half, worst none. "
+                : "Points rise in a straight line between two declared values per variable. ") +
+              `A variable with no data drops out and the others are rescaled, if those with data carry at least ${Math.round(profile.score.minCoverage * 100)}% of the weight.`,
+          }
+        : {}),
     },
     map: profile.map,
     mapTitle: profile.mapTitle,
@@ -223,6 +268,13 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     sources: store.sources.filter((s) => used.has(s.id)),
   };
   return { dataset, warnings };
+}
+
+/** The grading rule of one score component, in one plain line. */
+function scaleText(scale: NonNullable<IndustryProfile["score"]>["components"][number]["scale"], unit: string | undefined, n: number): string {
+  if (scale.kind === "peers") return `Position among the ${n} companies tested: best = all points, median = half, worst = none`;
+  const f = (v: number) => (unit === "multiple" ? `${Math.round(v * 100) / 100}×` : `${Math.round(v * 1000) / 10}%`);
+  return `No points at ${f(scale.zero)}, all points at ${f(scale.full)}, a straight line between`;
 }
 
 function historyFor(rows: StoredCompany["financials"]): YearRow[] {

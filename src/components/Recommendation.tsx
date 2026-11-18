@@ -2,7 +2,8 @@
 
 import type { Company, Dataset, IndexSnapshot } from "@contract/types";
 import { formatMetric, listNames } from "@/lib/format";
-import { Card } from "./ui";
+import { Card, Explain } from "./ui";
+import { ScoreCell } from "./Ranking";
 import { Decode } from "./live/motion";
 
 interface Props {
@@ -38,8 +39,9 @@ export default function Recommendation({ dataset, onOpen }: Props) {
             <div className="mt-4 flex flex-wrap gap-1.5">
               {picks.map((c) => (
                 <button key={c.ticker} onClick={() => toCard(c.ticker)} title={c.name}
-                  className="rounded-md border border-line px-2 py-0.5 font-mono text-xs font-semibold text-ink transition-colors hover:border-teal hover:text-teal">
+                  className="inline-flex items-center gap-1.5 rounded-md border border-line px-2 py-0.5 font-mono text-xs font-semibold text-ink transition-colors hover:border-teal hover:text-teal">
                   {c.ticker}
+                  {c.model?.score?.value != null && <span className="font-normal text-faint">{c.model.score.value}</span>}
                 </button>
               ))}
             </div>
@@ -49,12 +51,14 @@ export default function Recommendation({ dataset, onOpen }: Props) {
               <span className="rounded-md border border-line px-2 py-0.5 font-mono text-xs font-semibold text-ink">{one.ticker}</span>
               {one.listedOn && <span>{one.listedOn}</span>}
               {one.model && <><span className="text-faint">·</span><span>Ranked <b className="text-ink">#{one.model.rank} of {dataset.companies.length}</b></span></>}
+              {one.model?.score?.value != null && <><span className="text-faint">·</span><span>Quality score <b className="text-ink">{one.model.score.value} / 100</b></span></>}
               <span className="a-stamp rounded-full bg-teal px-2.5 py-0.5 text-[11px] font-bold text-white [.panels-dark_&]:text-[#03160a]" style={{ animationDelay: "1100ms" }}>ADD</span>
             </div>
           )}
           <p className="mt-4 max-w-2xl text-[15px] text-muted">
             {picks.length} of {tested} Canadian {tested === 1 ? "candidate" : "candidates"} pass every must-pass check and enough of the {checks.filter((k) => k.kind === "score").length} scored checks
             {yours ? `, tested on the same bar as your ${yours} ${yours === 1 ? "stock" : "stocks"}` : ""}.
+            {dataset.rules?.score && " Ordered by quality score out of 100."}
           </p>
         </div>
         <div className="lg:text-right">
@@ -78,24 +82,37 @@ export default function Recommendation({ dataset, onOpen }: Props) {
 function Pick({ company: c, dataset, onOpen, wide }: { company: Company; dataset: Dataset; onOpen: (t: string) => void; wide: boolean }) {
   const m = c.model;
   const def = (id: string) => dataset.metricDefs.find((d) => d.id === id);
+  // Score points sit on the last check row of each variable (a variable can have two checks).
+  const parts = m?.score ? new Map(m.score.parts.map((p) => [p.metricId, p])) : null;
+  const lastOf = new Map((m?.checks ?? []).map((k) => [k.metricId, k.id]));
+  const cols = parts ? "grid-cols-[28px_1fr_auto_auto_auto]" : "grid-cols-[28px_1fr_auto_auto]";
 
   return (
     <section id={`why-${c.ticker}`} className="a-glow panel scroll-mt-24">
-      <div className="flex flex-wrap items-end justify-between gap-3 px-6 pb-4 pt-5">
-        <div>
+      <div className="flex items-end justify-between gap-4 px-6 pb-4 pt-5">
+        <div className="min-w-0">
           <h2 className="text-base font-semibold tracking-tight text-ink">Why {c.ticker}{wide ? "" : ` · ${c.name}`}</h2>
           {m && <p className="mt-0.5 text-[13px] text-faint">Passes {m.passed} of {m.available} scored checks and every must-pass check. Ranked #{m.rank} of {dataset.companies.length}.</p>}
         </div>
-        <button onClick={() => onOpen(c.ticker)} className="text-[13.5px] font-semibold text-ink hover:underline">Full analysis →</button>
+        <div className="flex shrink-0 items-center gap-5">
+          {m?.score && (
+            <div className="text-right">
+              <Explain info={{ title: "Quality score", how: dataset.rules?.score }} className="kicker">Quality score</Explain>
+              <div className="mt-1"><ScoreCell score={m.score} /></div>
+            </div>
+          )}
+          <button onClick={() => onOpen(c.ticker)} className="text-[13.5px] font-semibold text-ink hover:underline">Full analysis →</button>
+        </div>
       </div>
-      <div className="grid grid-cols-[28px_1fr_auto_auto] items-center gap-x-4 border-y border-line bg-[var(--panel-hi)] px-6 py-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-faint">
-        <span /><span>Check</span><span className="w-24 text-right">{c.ticker}</span><span className="w-24 text-right">The bar</span>
+      <div className={`grid ${cols} items-center gap-x-4 border-y border-line bg-[var(--panel-hi)] px-6 py-2 font-mono text-[10.5px] uppercase tracking-[0.1em] text-faint`}>
+        <span /><span>Check</span><span className="w-20 text-right">{c.ticker}</span><span className="w-20 text-right">The bar</span>
+        {parts && <Explain info={{ title: "Points", how: dataset.rules?.score }} className="w-[76px] text-right uppercase">Points</Explain>}
       </div>
       {(m?.checks ?? []).map((k, i) => {
         const d = def(k.metricId);
         const mv = c.metrics[k.metricId];
         return (
-          <div key={k.id} title={k.rule} className={`grid grid-cols-[28px_1fr_auto_auto] items-center gap-x-4 px-6 py-3.5 ${i ? "border-t border-line" : ""}`}>
+          <div key={k.id} title={k.rule} className={`grid ${cols} items-center gap-x-4 px-6 py-3.5 ${i ? "border-t border-line" : ""}`}>
             <span className={`grid h-5 w-5 place-items-center rounded-full text-[11px] font-bold ${k.pass === null ? "text-faint ring-1 ring-inset ring-line" : k.pass ? "bg-tealsoft text-teal" : "bg-badsoft text-bad"}`}>
               {k.pass === null ? "·" : k.pass ? "✓" : "✕"}
             </span>
@@ -103,13 +120,26 @@ function Pick({ company: c, dataset, onOpen, wide }: { company: Company; dataset
               {d?.short ?? d?.label ?? k.label}
               {k.kind === "gate" && <span className="kicker ml-2 !text-[9.5px] !text-warn">Must pass</span>}
             </span>
-            <span className={`w-24 text-right font-mono text-base font-semibold tabular-nums ${mv?.value == null ? "text-faint" : "text-ink"}`} title={mv?.note}>
+            <span className={`w-20 text-right font-mono text-base font-semibold tabular-nums ${mv?.value == null ? "text-faint" : "text-ink"}`} title={mv?.note}>
               {mv?.value == null ? "—" : formatMetric(mv, d?.unit ?? "pct")}
             </span>
-            <span className="w-24 text-right font-mono text-[11px] text-faint">{k.target}</span>
+            <span className="w-20 text-right font-mono text-[11px] text-faint">{k.target}</span>
+            {parts && <Points part={lastOf.get(k.metricId) === k.id ? parts.get(k.metricId) : undefined} />}
           </div>
         );
       })}
     </section>
+  );
+}
+
+/** Points a variable earned in the quality score, out of its weight. Blank on a row that carries no points. */
+function Points({ part }: { part?: { weight: number; grade: number | null; scale: string } }) {
+  if (!part) return <span className="w-[76px]" />;
+  if (part.grade == null) return <span className="w-[76px] whitespace-nowrap text-right font-mono text-[11px] text-faint">no data</span>;
+  const earned = Math.round(part.grade * part.weight * 10) / 10;
+  return (
+    <span title={part.scale} className="w-[76px] whitespace-nowrap text-right font-mono text-[12px] tabular-nums">
+      <span className="font-semibold text-ink">{earned}</span><span className="text-faint"> / {part.weight}</span>
+    </span>
   );
 }

@@ -67,6 +67,18 @@ export interface CheckDef {
   rule: string;
 }
 
+/**
+ * One variable in the quality score. Grades run 0-1:
+ * - "ramp": a straight line between two declared points (`zero` earns nothing, `full` earns all the points);
+ * - "peers": position among every company tested in the run (the median company gets half the points).
+ */
+export interface ScoreComponent {
+  metricId: string;
+  /** points out of 100; the components of a profile add up to 100 */
+  weight: number;
+  scale: { kind: "ramp"; zero: number; full: number } | { kind: "peers" };
+}
+
 /** A threshold the rule lab lets the user move. id must match a CheckDef.id. */
 export interface RuleControl {
   id: string;
@@ -121,6 +133,8 @@ export interface IndustryProfile {
   /** how check results become a recommendation (see tally() in metrics.ts) */
   scoring: { passShare: number; mixedShare: number; minAvailable: number };
   checks: CheckDef[];
+  /** the quality score: weighted variables, and the share of weight that must have data for a score to be shown */
+  score?: { components: ScoreComponent[]; minCoverage: number };
   metricDefs: MetricDef[];
   map: MapConfig;
   /** title of the map view */

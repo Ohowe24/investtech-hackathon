@@ -33,6 +33,8 @@ export interface MetricDef {
   /** research figures behind the choice of this metric, each naming its source */
   facts?: string[];
   higherIsBetter?: boolean;
+  /** weight in the quality score (points out of 100); absent or 0 = shown but not scored */
+  weight?: number;
 }
 
 export type Verdict = "add" | "reject" | "watch" | "existing";
@@ -146,6 +148,30 @@ export interface ModelResult {
   recommendation: "pass" | "mixed" | "fail";
   /** rank among all companies tested (1 = best) */
   rank: number;
+  /** weighted quality score out of 100, when the industry declares weights */
+  score?: QualityScore;
+}
+
+/** One variable's contribution to the quality score. */
+export interface ScorePart {
+  /** MetricDef.id */
+  metricId: string;
+  /** points available for this variable (all parts add up to 100) */
+  weight: number;
+  /** 0-1: share of this variable's points earned; null = no data, so it drops out and the others are rescaled */
+  grade: number | null;
+  /** how the grade is set, in one plain line, e.g. "0 at 0%, full at 15% a year" or "rank among the 32 companies tested" */
+  scale: string;
+}
+
+/** Weighted quality score: each variable graded 0-1, times its weight, out of 100. */
+export interface QualityScore {
+  /** 0-100, whole number; null when the variables with data carry too little of the weight */
+  value: number | null;
+  /** share of the total weight that had data, 0-1 */
+  coverage: number;
+  parts: ScorePart[];
+  note?: string;
 }
 
 export interface YearRow {
@@ -250,6 +276,8 @@ export interface Dataset {
     result: string;
     /** how proposed weights are set */
     weight: string;
+    /** how the quality score out of 100 is built, when the industry has one */
+    score?: string;
   };
   map: MapConfig;
   /** title of the map view, e.g. "Acquisition spend vs FCF per share growth" */

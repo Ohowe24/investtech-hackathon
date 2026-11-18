@@ -40,10 +40,16 @@ export function scoredMetricInfo(dataset: Dataset, metricId: string): Explanatio
     ? "Not scored. Shown for context."
     : checks.map((k) => k.kind === "gate"
         ? `${k.target}: must pass. Failing it fails the company.`
-        : `${k.target}: 1 of ${nScored} scored checks. All count the same.`).join(" ");
+        : `${k.target}: 1 of ${nScored} scored checks. All count the same toward the verdict.`).join(" ");
+  const points = dataset.metricDefs.find((m) => m.id === metricId)?.weight;
+  const scale = dataset.companies.flatMap((c) => c.model?.score?.parts ?? []).find((p) => p.metricId === metricId)?.scale;
+  const score = !dataset.rules?.score
+    ? undefined
+    : points ? `${points} of 100 points. ${scale ? `${scale}.` : ""}` : "No points: shown for context.";
   return {
     ...metricInfo(dataset, metricId),
     pass: checks.length ? checks.map((k) => k.target).join(" and ") : undefined,
     weight,
+    score,
   };
 }

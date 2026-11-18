@@ -35,7 +35,7 @@ const TABS: { id: Tab; label: string }[] = [
 /** The results. The address hash holds the view (none = ranking, #recommendation, #companies or #map) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot, query }: Props) {
   const [hash, setHash] = useState<string | null>(null);
-  const [scope, setScope] = useState<"ca" | "all">("ca");
+  const [scope, setScope] = useState<"ca" | "held" | "all">("ca");
   const [hovered, setHovered] = useState<string | null>(null);
   // The engine run overlay: where to land when it ends (null = stay), and how many runs so far.
   const [run, setRun] = useState<{ to: string | null } | null>(null);

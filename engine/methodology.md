@@ -25,7 +25,7 @@ This file says what each metric means and why the thresholds are where they are.
 2. `/analyze` runs `analyze()` (`engine/analyze.ts`) on the server, the same function `npm run engine` uses.
 3. **Candidates** = the profile's Canadian universe minus anything already held. A held Canadian company is ranked with the holdings, never as a candidate.
 4. Every company is tested on the profile's checks. A company the engine has no data for is **never guessed at**: a holding keeps its row with empty metrics and a note; a candidate is listed under "not tested".
-5. Candidates and holdings are ranked separately, each 1 to N, by the same order: has data, result, share of scored checks passed, checks with data, the profile's tie-break metric.
+5. Candidates and holdings are ranked separately, each 1 to N, by the same order: has data, result, quality score out of 100 (industries that declare weights, see "Quality score"), share of scored checks passed, checks with data, the profile's tie-break metric.
 6. **Weights of the index:** typed weights are kept as typed. If every weight is typed, cash is what is left of 100%. Otherwise cash is the number entered (default: the organizers' cash) and the holdings without a weight share the rest equally. When the list matches the organizers' index exactly, their live weights and cash are used.
 7. **"Your index median"** on the ranking is the median of the holdings that have a value (`median()` in `metrics.ts`). A reference line, not a check.
 
@@ -162,3 +162,66 @@ Result: passes if the must-pass check passes and at least 75% of the scored chec
 
 **Limits:** a relative test always passes the best of the group, even in a weak industry, and it needs several companies to mean anything. EBITDA and margins also say little for IFRS real-estate companies, whose EBITDA includes revaluations: the researched REIT model is the one to use for REITs. Onesheet's industry labels decide who counts as a peer.
 
+
+## Quality score (serial acquirers and oil & gas producers)
+
+The pass / fail checks answer "does it clear the bar?". They count every check the same and cannot say how far above or below the bar a company is. The **quality score** adds that: each variable is graded 0–1, multiplied by its weight, and the weights add up to 100.
+
+- **Formula** (`weightedScore()` in `metrics.ts`): score = Σ weight × grade ÷ Σ weight of the variables with data, × 100, rounded.
+- **Missing data:** a variable with no data drops out and the other weights are rescaled. If the variables with data carry less than 60% of the weight, there is no score (shown as "—" with a note). Missing is never graded as 0.
+- **Verdicts do not change.** Add / Watch / Reject still come from the checks. Within each verdict, companies are ranked by score.
+- Weights, scales and grades for every company are in `data/companies.json` (`model.score.parts`) and on the ranking (▾ on any row).
+
+How well each variable measures quality was judged on three things: (1) the research behind it (the `facts` on each metric, and `research_notes/`), (2) whether it measures the company or something outside it (prices, one-off events), and (3) how it behaves on our own data: how much it overlaps with the other variables (rank correlation, Spearman ρ) and whether it separates companies at all. The data checks below were run on the engine's own output (`analyze()` with the organizers' acquirer index; all 32 Canadian E&Ps).
+
+### Serial acquirers: weights (`engine/industries/acquirers.ts`)
+
+Grade = a straight line between two declared points (`rampGrade()`). **Full points need an exceptional result, not a good one**, so no real company gets near 100: the best score is CSU's 82. The pass lines of the checks earn a quarter to two thirds of a variable's points: clearing the bar is the floor of quality, not the top. (A first version gave full points at good levels; CSU then scored 100, which said nothing about how much better it could be.)
+
+| Variable | Weight | No points at | All points at | Assessment |
+|---|---|---|---|---|
+| FCF per share growth | **30** | −5%/yr | 25%/yr | The best single measure of what an acquirer delivers to owners: it nets out deals paid in shares and interest. Leonard's own choice of "one measure". Weakness: two end points only (FY2021, FY2025), so one odd year moves it; capped at 25% so BSP's +113% (three years since IPO) cannot dominate. The 7% check line earns 40% of the points. |
+| Return on capital (FCF ÷ debt + equity) | **25** | 0% | 30% | Strongest evidence for acquirers: return on capital with goodwill included separates winners from losers (Aktagon: 59 of 187 clear 12%). Single year, so it moves with one year's cash flow. 8% (the check) earns about a quarter; Aktagon's 12% earns 40%; only TOI (31%) gets full points. |
+| Share count change | **20** | +20% | −10% (buybacks) | The most replicated finding in merger research (paying in stock destroys value: Loughran & Vijh; Fuller, Netter & Stegemoller). Nearly independent of the other variables (ρ ≤ 0.21 with all but acquisition spend), so it adds information. Caveat: TOI's +42% is mostly a share-structure change in FY2022 (91.5M → 129.8M shares, flat since), not deal dilution; the data is kept as reported. |
+| Net debt ÷ 3-yr EBITDA | **15** | 4.0× | 0× (no net debt) | Measures risk, not skill. No large study sets an optimal level, so it weighs less, and the 3× must-pass check already removes the worst. Overlaps with return on capital (ρ = −0.63: high-return acquirers carry less debt). 3× earns a quarter of the points. |
+| Acquisitions ÷ operating cash flow (self-funding) | **10** | 200% | 50% or less | Above 100%, outside money paid for the deals; that is the "big bets" pattern Bain and NBER w10200 link to losses. Weak on its own (ρ with the total score −0.17). The ≥ 20% part is a fit test (is it an acquirer at all?), not quality, so it stays a must-pass check and earns no points. |
+| Revenue growth | 0 | | | Size alone. Fast asset growth predicts *lower* returns (Cooper, Gulen & Schill); Aktagon finds revenue growth does not separate winners. Shown, not scored. |
+| Organic growth | 0 | | | A good measure, but only CSU, TOI and WSP report it. Weighting it would score three companies on a variable the other 31 lack. Shown, not scored. |
+
+**How much the weights matter:** ranking by equal weights instead gives almost the same order (ρ = 0.94 across 34 companies). The result does not hinge on the exact weights; the variables chosen do the work.
+
+**What the score shows that the checks did not:** TFII (68) and CCL.B (65) score like good adds but are rejected by must-pass checks (acquisitions only 18% of cash flow; net debt 3.2×). The score says "high quality"; the gate says "not this index" or "too much debt". Among the adds, TOI (61) sits well below CSU (82), because of the share-count jump; ENGH (56) passes the checks but earns almost nothing for FCF per share growth.
+
+### Oil & gas producers: what was wrong with the generic test
+
+E&P runs through "choose your own industry" (`custom.ts`), whose generic measures are single-year margins and growth from three years back. For producers that mostly measures the oil and gas price:
+
+- **22 of the 32 producers had their highest revenue in FY2022.** The median company's FY2022 revenue was 1.33× its FY2025 revenue; operating cash flow 1.38×. Three-year growth (FY2022 → FY2025) starts at the peak, so 25 of 31 show falling revenue per share.
+- **Single-year FCF margin is unstable:** the rank of companies on FCF margin in FY2022 and FY2025 correlates at only ρ = 0.21 (FY2024 vs FY2025: 0.58). One year says more about the price that year than about the company.
+- **Small companies with acquisitions look like stars:** TNZ's revenue per share grew 97% a year from FY2022, when its revenue was C$34M, and it passed as an add; over five years its free cash flow margin is 2% and its return on capital negative.
+- **One-year figures mislead after a restructuring:** MER (Meren Energy) reports no revenue for FY2021–FY2024 and consolidated in FY2025, so its single-year 59% margin and 41% return looked best in class.
+- **The must-pass check (operating cash flow positive) passes all 32**, so it separates no one. It stays as a floor.
+
+So producers get their own measures (`engine/industries/oilgas.ts`), still compared with the peer median:
+
+| Variable | Weight | Assessment |
+|---|---|---|
+| Return on capital, mean of 4 years (FCF ÷ avg debt + equity) | **30** | The best available test of whether the money spent replacing reserves earns its keep, averaged over the peak and the years after. Counts capital tied up as well as margin. |
+| Net debt ÷ 3-yr average EBITDA | **30** | Debt is what turns a price fall into a crisis for a producer. Independent of the profit measures (ρ ≈ 0 with both), so it adds the most new information. Averaging EBITDA stops a peak year from making the debt look small. |
+| Free cash flow margin, 5 years combined | **15** | Low-cost producers keep a margin when prices fall. But it ranks companies almost exactly like return on capital (ρ = 0.89), so the two share 45 points, not 50. Empty when a year has no sales (MER). |
+| Share count growth (3 yrs) | **15** | Capital discipline: E&Ps that fund themselves with new shares dilute owners; buybacks mean surplus cash goes back. Independent of the profit and debt measures (ρ ≤ 0.09). |
+| Operating cash flow per share growth (3 yrs) | **5** | Mostly the price (see above), and uncorrelated with every quality measure (ρ ≈ 0). Kept small because comparing with peers removes part of the common price effect. |
+| Revenue per share growth (3 yrs) | **5** | Same, and also inflated by acquisitions from a small base (TNZ, CDR, IPO). |
+| Operating cash flow positive (must pass) | 0 | A floor, not a ranking variable: every producer passes. |
+
+Grades are by **position among the companies tested** (`peerGrade()`): the best gets all the variable's points, the median half, the worst none. That matches the checks (which compare with the median) and needs no typed level for an industry whose normal margins and leverage move with prices.
+
+**How much the weights matter:** equal weights would give ρ = 0.82 with the chosen ranking, so here the weights do matter: equal weights would let the two price-driven growth measures count as much as leverage.
+
+**Effect:** the generic test made 8 producers "add" (ATH, HWX, CNQ, TNZ, FEC, PSK, PXT, MER). The producer test makes 5: PXT 85, ATH 79, PSK 79, HWX 76, CNQ 75. TNZ (27) and MER (26) fall to reject, FEC (63) to watch.
+
+### What the data cannot measure (and the score therefore leaves out)
+
+- **E&P:** reserve life, finding and development cost, recycle ratio, production per share and breakeven price are the industry's own quality measures. None is in the statements data. Return on capital and the five-year margin are the closest proxies.
+- **Acquirers:** returns on each acquisition, and organic growth for 31 of 34 companies.
+- **No test against later returns:** the engine has no per-company price history, so whether a higher score predicted a better stock return is not tested here. Onesheet's price-history endpoint would allow it.

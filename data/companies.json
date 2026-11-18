@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-16T17:35:57.551Z",
+  "generatedAt": "2026-11-18T16:00:42.530Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -20,7 +20,8 @@
         "Steady acquirers win: programmatic acquirers earned 2.1% a year more than the market; other approaches earned zero or less (McKinsey).",
         "Frequent acquirers returned 10.1–11.0% a year, against 5.1% for 'selective large bets', the worst group (Bain).",
         "Big one-off deals are the danger: 2.1% of 1998–2001 deals lost $397bn while all the others gained $157bn (NBER w10200)."
-      ]
+      ],
+      "weight": 10
     },
     {
       "id": "fcfPerShareCagr",
@@ -35,7 +36,8 @@
         "Constellation's founder Mark Leonard, April 2018 letter: asked for one measure of value growth, he chose the increase in free cash flow per share.",
         "Reported profit misleads: in FY2025 Constellation's free cash flow rose 14% while net income fell about 30%.",
         "Topicus, same year: free cash flow up 23%, net income down 53%."
-      ]
+      ],
+      "weight": 30
     },
     {
       "id": "revenueCagr",
@@ -49,7 +51,8 @@
       "facts": [
         "Fast asset growth predicts lower stock returns for up to five years (Cooper, Gulen & Schill).",
         "A screen of 187 listed serial acquirers found revenue growth and deal count do not separate winners (Aktagon)."
-      ]
+      ],
+      "weight": 0
     },
     {
       "id": "shareCountChange",
@@ -63,7 +66,8 @@
       "facts": [
         "Acquirers that paid in stock earned 25.0% less than the market over the next five years (Loughran & Vijh).",
         "Among companies making five or more deals, returns were negative when public targets were paid for in stock (Fuller, Netter & Stegemoller)."
-      ]
+      ],
+      "weight": 20
     },
     {
       "id": "cashReturn",
@@ -78,7 +82,8 @@
         "Of 187 listed serial acquirers, only 59 earn more than 12% on capital once goodwill is included (Aktagon).",
         "Where goodwill is over 40% of assets, only 24% clear that bar (Aktagon).",
         "Skill persists: which company is buying explains about as much of acquirer returns as all deal and company traits combined (Golubov, Yawson & Zhang)."
-      ]
+      ],
+      "weight": 25
     },
     {
       "id": "netDebtToEbitda",
@@ -92,7 +97,8 @@
       "facts": [
         "3× is the cap Lifco, a model serial acquirer, sets for itself. WSP targets 1.0–2.0×.",
         "One date misleads: WSP showed 0.9× in December 2025 and 2.3× by June 2026. Hence the 3-year average."
-      ]
+      ],
+      "weight": 15
     },
     {
       "id": "organicGrowth",
@@ -107,12 +113,14 @@
         "Leonard's favourite metric from 2007 was return on capital plus organic growth: 43% in 2011, 33% in 2017.",
         "Halma, a UK serial acquirer, targets more than 5% organic growth.",
         "A company that stops disclosing it is a listed red flag (REQ Capital)."
-      ]
+      ],
+      "weight": 0
     }
   ],
   "rules": {
-    "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Every scored check counts the same: there are no weights. Missing data is never a fail.",
-    "weight": "15% of the index is split equally among the companies we add, at most 8.2% each. CSU and TOI share one slot (one controls the other)."
+    "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Every scored check counts the same toward the verdict. Missing data is never a fail. Within each verdict, companies are ranked by their quality score.",
+    "weight": "15% of the index is split equally among the companies we add, at most 8.2% each. CSU and TOI share one slot (one controls the other).",
+    "score": "Out of 100. Each variable earns a share of its points: FCF per share 30, Return on capital 25, Share count 20, Net debt 15, Acquisition spend 10. Points rise in a straight line between two declared values per variable. A variable with no data drops out and the others are rescaled, if those with data carry at least 60% of the weight."
   },
   "map": {
     "x": "acqIntensity",
@@ -275,7 +283,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 4
+        "rank": 1,
+        "score": {
+          "value": 82,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.8523461918361203,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.959062144417809,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.6666666666666666,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.730351925262204,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.8654551742335871,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -978,7 +1022,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 11
+        "rank": 10,
+        "score": {
+          "value": 61,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.5577433786745872,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 1,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.6880980274998449,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.9418218210064891,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -1464,7 +1544,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 15
+        "rank": 16,
+        "score": {
+          "value": 49,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.6946849103462851,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.4186932977475403,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.2649603702037286,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.4545535592990083,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.5374886927212073,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -2243,7 +2359,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 2
+        "rank": 7,
+        "score": {
+          "value": 63,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.8947402090912603,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.4641773615651912,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5934897206732823,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.29234246695769206,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.8774854562820179,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -2553,7 +2705,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 21
+        "rank": 20,
+        "score": {
+          "value": 68,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.772648761499394,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.4561437675956031,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 1,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.19530172722257522,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -2972,7 +3160,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 25
+        "rank": 30,
+        "score": {
+          "value": 37,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.49322656620465183,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.07562470644890874,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5088051082560239,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -3283,7 +3507,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 1
+        "rank": 6,
+        "score": {
+          "value": 63,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 1,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.33486510004076814,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5650783753936307,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.3531963545334864,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.7649484099549556,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -3593,7 +3853,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 34
+        "rank": 34,
+        "score": {
+          "value": 10,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.029210087622511215,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.16074252163270702,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.03269648959304131,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.14605262607876235,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.1942878571298885,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -3904,7 +4200,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 5
+        "rank": 11,
+        "score": {
+          "value": 57,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.6542105700939951,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.3342885778273827,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5073222916422361,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.6522774987938316,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.8640212211003245,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -4214,7 +4546,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 22
+        "rank": 21,
+        "score": {
+          "value": 65,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.65403019442582,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.36464174750924594,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7624838769117375,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.7637695355982012,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -4525,7 +4893,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 3
+        "rank": 2,
+        "score": {
+          "value": 74,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.8681787802868826,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.5035301892399345,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7305812347253212,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.7312343774682439,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -4836,7 +5240,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 6
+        "rank": 5,
+        "score": {
+          "value": 66,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.6534121720311002,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.36372408510290827,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 1,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.4640135376304323,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -5147,7 +5587,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 9
+        "rank": 4,
+        "score": {
+          "value": 67,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.5382034585125183,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.5938771734351647,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.6133410672853832,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 1,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.8376158443263756,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -5458,7 +5934,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 14
+        "rank": 13,
+        "score": {
+          "value": 56,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.08704326825374314,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.5602421171400523,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7100334049152947,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 1,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -5769,7 +6281,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 7
+        "rank": 3,
+        "score": {
+          "value": 71,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.5926986265452574,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.505803168972126,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 1,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.7073952967419193,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -6080,7 +6628,44 @@
         "available": 3,
         "total": 4,
         "recommendation": "fail",
-        "rank": 27
+        "rank": 31,
+        "score": {
+          "value": 31,
+          "coverage": 0.7,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": null,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5751334858886349,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ],
+          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+        }
       },
       "history": [
         {
@@ -6391,7 +6976,44 @@
         "available": 3,
         "total": 4,
         "recommendation": "fail",
-        "rank": 33
+        "rank": 33,
+        "score": {
+          "value": 16,
+          "coverage": 0.7,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": null,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.10176153989556136,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ],
+          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+        }
       },
       "history": [
         {
@@ -6701,7 +7323,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 26
+        "rank": 26,
+        "score": {
+          "value": 47,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.44385542244493115,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.25645320887315937,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.9034155985407122,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.9338668426826203,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -7013,7 +7671,44 @@
         "available": 3,
         "total": 4,
         "recommendation": "fail",
-        "rank": 28
+        "rank": 24,
+        "score": {
+          "value": 61,
+          "coverage": 0.7,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": null,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.1354051212047315,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 1,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.6437472042280357,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ],
+          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+        }
       },
       "history": [
         {
@@ -7597,7 +8292,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 29
+        "rank": 28,
+        "score": {
+          "value": 42,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 1,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.37409188752316724,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.15040212254373592,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -7845,7 +8576,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 8
+        "rank": 8,
+        "score": {
+          "value": 63,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.583998254134245,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.44657679052108323,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.6889162833117853,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.7818469508460809,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.8419652732586678,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -8154,7 +8921,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 31
+        "rank": 27,
+        "score": {
+          "value": 43,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.39594714372253914,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.24000670121697806,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7336433187162762,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.09399052439098088,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.9030661991721933,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -8462,7 +9265,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 30
+        "rank": 32,
+        "score": {
+          "value": 30,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.5844178697714888,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.29715637262807076,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.23907469221692748,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.024300932090545846,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -8770,7 +9609,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 12
+        "rank": 14,
+        "score": {
+          "value": 52,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.37221328344717575,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.3528038986889972,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7146596858638744,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.6511001100110011,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.7723788910149837,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -9078,7 +9953,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 20
+        "rank": 19,
+        "score": {
+          "value": 72,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.9413905441214845,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.40153698366954854,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7670982735723771,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.5289835655591282,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -9386,7 +10297,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 32
+        "rank": 29,
+        "score": {
+          "value": 39,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.36734517759019836,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.2982688822963198,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.6259780907668234,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.2379732550922531,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.41018620497987673,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -9694,7 +10641,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 16
+        "rank": 17,
+        "score": {
+          "value": 44,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.45160846616643086,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.2807821115128509,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.4334085778781036,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.5860691300889436,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.620316213094371,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -10002,7 +10985,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 19
+        "rank": 25,
+        "score": {
+          "value": 56,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.9523540898797528,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.281511893987889,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7010309278350514,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.6854416385430001,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -10310,7 +11329,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 23
+        "rank": 23,
+        "score": {
+          "value": 61,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.4283119958620146,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.39857284076699995,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 1,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.5416964977787075,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -10618,7 +11673,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 10
+        "rank": 9,
+        "score": {
+          "value": 61,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.8306199807860425,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.4585567944613315,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.5961331070069302,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.5027175745885887,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.48975992068239566,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -10926,7 +12017,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 17
+        "rank": 15,
+        "score": {
+          "value": 51,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.20623409005118412,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.2611264724316292,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.9508051860993035,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.6520690250818378,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 0.9650103073044644,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -11234,7 +12361,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "pass",
-        "rank": 13
+        "rank": 12,
+        "score": {
+          "value": 56,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.33525326985767956,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.3918681993175389,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.9295125164690381,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.48464804696903374,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -11542,7 +12705,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "fail",
-        "rank": 24
+        "rank": 22,
+        "score": {
+          "value": 62,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0.5484636504950515,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.49456664656281996,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.43367657300901874,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.9856435826819847,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {
@@ -11850,7 +13049,43 @@
         "available": 4,
         "total": 4,
         "recommendation": "mixed",
-        "rank": 18
+        "rank": 18,
+        "score": {
+          "value": 40,
+          "coverage": 1,
+          "parts": [
+            {
+              "metricId": "fcfPerShareCagr",
+              "weight": 30,
+              "grade": 0,
+              "scale": "No points at -5%, all points at 25%, a straight line between"
+            },
+            {
+              "metricId": "cashReturn",
+              "weight": 25,
+              "grade": 0.25474313803833254,
+              "scale": "No points at 0%, all points at 30%, a straight line between"
+            },
+            {
+              "metricId": "shareCountChange",
+              "weight": 20,
+              "grade": 0.7833876221498371,
+              "scale": "No points at 20%, all points at -10%, a straight line between"
+            },
+            {
+              "metricId": "netDebtToEbitda",
+              "weight": 15,
+              "grade": 0.5233770718232045,
+              "scale": "No points at 4×, all points at 0×, a straight line between"
+            },
+            {
+              "metricId": "acqIntensity",
+              "weight": 10,
+              "grade": 1,
+              "scale": "No points at 200%, all points at 50%, a straight line between"
+            }
+          ]
+        }
       },
       "history": [
         {

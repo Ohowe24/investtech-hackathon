@@ -60,6 +60,8 @@ export interface Explanation {
   facts?: string[];
   pass?: string;
   weight?: string;
+  /** this variable's points in the quality score and the range they are earned over */
+  score?: string;
   note?: string;
 }
 
@@ -111,7 +113,8 @@ export function Explain({ info, children, className = "" }: { info: Explanation;
     ["How", info.how],
     ["Why it matters", info.why],
     ["Pass if", info.pass],
-    ["Weight in score", info.weight],
+    ["Role in the verdict", info.weight],
+    ["Quality score", info.score],
     ["", info.note],
   ];
 

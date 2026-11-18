@@ -5,6 +5,7 @@ import { formatMetric, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics, stateText } from "@/lib/rank";
 import { Dot, Explain, Segmented } from "./ui";
+import { ScoreCell } from "./Ranking";
 import { Decode } from "./live/motion";
 
 // Row timing: each row lands, then its checks fire one by one, then its result stamps.
@@ -13,8 +14,8 @@ const PIP = 75;
 
 interface Props {
   dataset: Dataset;
-  scope: "ca" | "all";
-  onScope: (s: "ca" | "all") => void;
+  scope: "ca" | "held" | "all";
+  onScope: (s: "ca" | "held" | "all") => void;
   onOpen: (ticker: string) => void;
 }
 
@@ -23,20 +24,24 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
   const tested = dataset.companies.filter((c) => c.model);
   const candidates = tested.filter((c) => !c.inIndex);
   const metrics = scoredMetrics(dataset);
-  const rows = (scope === "ca" ? candidates : tested)
+  const hasScore = !!dataset.rules?.score;
+  const held = tested.filter((c) => c.inIndex);
+  const rows = (scope === "ca" ? candidates : scope === "held" && held.length ? held : tested)
     .sort((a, b) => a.model!.rank - b.model!.rank);
 
   return (
     <section key={scope} className="scan-once overflow-hidden rounded-xl border border-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
-          <Segmented value={scope} onChange={onScope} options={[
+          <Segmented value={scope === "held" && !held.length ? "all" : scope} onChange={onScope} options={[
             { id: "ca", label: `Canadian · ${candidates.length}` },
+            ...(held.length ? [{ id: "held" as const, label: `Your index · ${held.length}` }] : []),
             { id: "all", label: `All · ${tested.length}` },
           ]} />
         <div className="flex items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5"><Dot pass={true} size={8} /> Pass</span>
           <span className="flex items-center gap-1.5"><Dot pass={false} size={8} /> Fail</span>
           <span className="flex items-center gap-1.5"><Dot pass={null} size={8} /> No data</span>
+          {held.length > 0 && <span className="flex items-center gap-1.5"><HeldChip /> In your index</span>}
         </div>
       </div>
 
@@ -46,6 +51,11 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
             <tr className="border-b border-line bg-canvas text-[11px] font-medium uppercase tracking-wide text-faint">
               <th className="w-12 py-2.5 pl-5 text-left font-medium">#</th>
               <th className="py-2.5 text-left font-medium">Company</th>
+              {hasScore && (
+                <th className="px-3 py-2.5 text-left font-medium">
+                  <Explain info={{ title: "Quality score", how: dataset.rules?.score }} className="uppercase tracking-wide">Score / 100</Explain>
+                </th>
+              )}
               <th className="py-2.5 text-left font-medium">
                 <Explain info={{ title: "Result", how: dataset.rules?.result }} className="uppercase tracking-wide">Result</Explain>
               </th>
@@ -77,13 +87,17 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                   </td>
                   <td className="py-3.5 pr-3">
                     <div className="flex items-center gap-3">
-                      <span className="grid h-8 w-12 shrink-0 place-items-center rounded-md bg-soft font-mono text-[11px] font-semibold text-ink">{c.ticker}</span>
+                      <span className={`grid h-8 w-12 shrink-0 place-items-center rounded-md font-mono text-[11px] font-semibold text-ink ${c.inIndex ? "border border-dashed border-faint" : "bg-soft"}`}>{c.ticker}</span>
                       <div className="min-w-0">
-                        <div className="truncate font-medium text-ink">{c.name}</div>
-                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Candidate" : ""}</div>
+                        <div className="flex min-w-0 items-center gap-2">
+                          <span className="truncate font-medium text-ink">{c.name}</span>
+                          {c.inIndex && <HeldBadge />}
+                        </div>
+                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Canadian candidate" : ""}</div>
                       </div>
                     </div>
                   </td>
+                  {hasScore && <td className="px-3 py-3.5"><ScoreCell score={m.score} big /></td>}
                   <td className="py-3.5 pr-3">
                     <span className={`a-stamp rounded-full px-2.5 py-1 text-xs font-medium ${rec.badge}`} style={{ animationDelay: `${stampAt}ms` }}>{rec.label}</span>
                   </td>
@@ -120,4 +134,18 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
       </div>
     </section>
   );
+}
+
+/** Marks a stock the index already holds (the holdings entered on the setup page). */
+export function HeldBadge() {
+  return (
+    <span title="Already in your index: one of the stocks you entered at setup"
+      className="shrink-0 whitespace-nowrap rounded-full border border-dashed border-faint px-2 py-px text-[10.5px] font-medium text-muted">
+      Your index
+    </span>
+  );
+}
+
+function HeldChip() {
+  return <span className="inline-block h-2.5 w-3.5 rounded-[3px] border border-dashed border-faint" />;
 }

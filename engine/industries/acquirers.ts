@@ -42,6 +42,26 @@ const settings = {
       rule: "Cash spent on acquisitions did not exceed operating cash flow" },
   ] satisfies CheckDef[],
 
+  /**
+   * Quality score out of 100. Weights follow how strongly the evidence links each variable to owner returns;
+   * the reasoning and the data checks are in methodology.md ("Quality score").
+   * Full points need an exceptional result, not just a good one, so a score near 100 is out of reach for real companies:
+   * 25% a year FCF-per-share growth, 30% return on capital, a share count shrinking 10%, no net debt, and acquisitions
+   * at half of cash flow or less. The pass lines of the checks above earn a quarter to two thirds of a variable's points.
+   * Not weighted: revenue growth (size alone does not predict returns) and organic growth (too few companies report it);
+   * acquisition intensity above 20% is a fit test (gate), not quality.
+   */
+  score: {
+    minCoverage: 0.6,
+    components: [
+      { metricId: "fcfPerShareCagr", weight: 30, scale: { kind: "ramp", zero: -0.05, full: 0.25 } },
+      { metricId: "cashReturn", weight: 25, scale: { kind: "ramp", zero: 0, full: 0.3 } },
+      { metricId: "shareCountChange", weight: 20, scale: { kind: "ramp", zero: 0.2, full: -0.1 } },
+      { metricId: "netDebtToEbitda", weight: 15, scale: { kind: "ramp", zero: 4, full: 0 } },
+      { metricId: "acqIntensity", weight: 10, scale: { kind: "ramp", zero: 2, full: 0.5 } },
+    ],
+  } satisfies NonNullable<IndustryProfile["score"]>,
+
   metricDefs: [
     {
       id: "acqIntensity",

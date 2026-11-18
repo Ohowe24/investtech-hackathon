@@ -7,7 +7,8 @@ import { metricState, ordinal, ranking, scoredMetrics, stateBg, stateText } from
 import DealTimeline from "./DealTimeline";
 import ReportedFigures from "./ReportedFigures";
 import { Card, Explain } from "./ui";
-import { Pips } from "./Ranking";
+import { Pips, ScoreBreakdown } from "./Ranking";
+import { HeldBadge } from "./CompanyTable";
 import { C, ChartCard, SplitBar, TrendChart } from "./charts";
 import { Decode, DecodeInView } from "./live/motion";
 
@@ -58,12 +59,13 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
               <h1 className="text-[28px] font-bold leading-tight tracking-[-0.03em] text-ink"><Decode text={company.name} letters duration={700} /></h1>
               <div className="mt-0.5 text-xs text-muted">
                 {[company.subSector, `HQ ${company.hqCountry}`, company.listedOn, years.length ? `FY${years[0]}–FY${years[years.length - 1]}` : null,
-                  company.inIndex ? "In the index" : "Candidate"].filter(Boolean).join(" · ")}
+                  company.inIndex ? "In your index" : "Canadian candidate"].filter(Boolean).join(" · ")}
               </div>
             </div>
           </div>
           <div className="flex flex-wrap items-center gap-2 text-xs">
             {m && <span className={`a-stamp rounded-full px-3 py-1.5 font-medium ${recStyle[m.recommendation].badge}`} style={{ animationDelay: "700ms" }}>{recStyle[m.recommendation].label}</span>}
+            {company.inIndex && <HeldBadge />}
             {!company.inIndex && (
               <span className={`a-stamp rounded-full px-3 py-1.5 font-medium ${verdictStyle[company.verdict].badge}`} style={{ animationDelay: "850ms" }}>{verdictStyle[company.verdict].label}</span>
             )}
@@ -71,7 +73,9 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
         {m && (
           <div className="grid grid-cols-2 divide-line border-t border-line sm:grid-cols-4 sm:divide-x">
-            <Stat label="Rank" value={`${m.rank}`} unit={`of ${tested.length}`} />
+            {m.score
+              ? <Stat label="Quality score" value={m.score.value == null ? "—" : `${m.score.value}`} unit={`/ 100 · rank ${m.rank} of ${tested.length}`} />
+              : <Stat label="Rank" value={`${m.rank}`} unit={`of ${tested.length}`} />}
             <div className="px-6 py-4">
               <div className="kicker">Passed · Failed · No data</div>
               <div className="mt-1.5 flex items-baseline gap-2 font-mono text-xl font-semibold tabular-nums">
@@ -98,6 +102,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
             </div>
           </div>
         )}
+        {m?.score && <div className="border-t border-line px-6 pb-4 pt-1"><ScoreBreakdown dataset={dataset} company={company} /></div>}
       </section>
 
       <ChecksPanel dataset={dataset} company={company} scored={scored} context={context} onOpen={onOpen} />

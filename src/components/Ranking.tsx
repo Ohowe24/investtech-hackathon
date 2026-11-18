@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, Verdict } from "@contract/types";
+import type { CheckResult, Company, Dataset, IndexSnapshot, MetricDef, QualityScore, Verdict } from "@contract/types";
 import { formatValue, formatMetric, listNames, recStyle, verdictStyle } from "@/lib/format";
 import { scoredMetricInfo } from "@/lib/explain";
 import { metricState, scoredMetrics } from "@/lib/rank";
@@ -71,7 +71,7 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
           {adds.length === 1 && <div className="mt-1.5 text-lg font-semibold text-teal">{adds[0].name}</div>}
           <p className="mt-3 max-w-xl text-[15px] text-muted">
             {candidates.length} Canadian {candidates.length === 1 ? "candidate" : "candidates"} tested{unmeasured.length ? ` (${unmeasured.length} more without data)` : ""}{holdings.length ? `, against your ${holdings.length} ${holdings.length === 1 ? "stock" : "stocks"}` : ""}, on {checks.length} declared checks.
-            {" "}Ranked by checks passed; must-pass checks come first.
+            {" "}{dataset.rules?.score ? "Verdict from the checks; within each verdict, ranked by quality score out of 100." : "Ranked by checks passed; must-pass checks come first."}
           </p>
           <div className="mt-5 flex flex-wrap gap-2.5">
             <Link href={editHref} className="rounded-[10px] border border-line px-4 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-ink">
@@ -159,6 +159,7 @@ export default function Ranking({ dataset, editHref, onOpen, onGo }: Props) {
 }
 
 const ROW = 70;
+const HEAD = "py-3 align-bottom font-medium";
 
 /** The checks on one metric, as the bar a value must clear ("≥ 5.8%"), and whether any is must-pass. */
 function barFor(dataset: Dataset, metricId: string): { target: string; gate: boolean } {
@@ -186,7 +187,16 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
 }) {
   const [open, setOpen] = useState<string | null>(null);
   const showMedian = metrics.some((d) => medians[d.id] != null);
-  const cols = 3 + metrics.length + (grouped ? 1 : 0);
+  const hasScore = !!dataset.rules?.score;
+  const cols = 3 + metrics.length + (grouped ? 1 : 0) + (hasScore ? 1 : 0);
+  // Consecutive metric columns that are must-pass, or scored, for the group row above the headers.
+  const runs: { gate: boolean; n: number }[] = [];
+  for (const d of metrics) {
+    const gate = barFor(dataset, d.id).gate;
+    const last = runs[runs.length - 1];
+    if (last && last.gate === gate) last.n++;
+    else runs.push({ gate, n: 1 });
+  }
   // Rank numbers run through the whole list, across groups.
   const rankNo = new Map(rows.map((c, i) => [c.ticker, i + 1]));
   const known = (c: Company) => GROUPS.some((g) => g.id === c.verdict);
@@ -216,22 +226,36 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-y border-line bg-[var(--panel-hi)] text-[11.5px] font-medium text-muted">
-                <th className="w-10 py-3 pl-5 text-left align-bottom font-medium">#</th>
-                <th className="py-3 text-left align-bottom font-medium">Company</th>
-                {metrics.map((d) => {
-                  const bar = barFor(dataset, d.id);
-                  return (
-                    <th key={d.id} className="px-1.5 py-3 text-right align-bottom font-medium leading-tight">
-                      {bar.gate && <span className="kicker mb-0.5 block !text-[9.5px] !text-warn">Must pass</span>}
-                      <Explain info={scoredMetricInfo(dataset, d.id)}>{d.short ?? d.label}</Explain>
-                      {bar.target && <span className="mt-1 block font-mono text-[10.5px] text-faint">{bar.target}</span>}
-                    </th>
-                  );
-                })}
-                <th className="px-2 py-3 text-left align-bottom font-medium">Checks<span className="mt-1 block font-mono text-[10.5px] text-faint">passed</span></th>
+              {/* Column groups: which checks must pass, which are scored, and the result. */}
+              <tr className="bg-[var(--panel-hi)]">
+                <th colSpan={2} className="border-t border-line" />
+                {runs.map((r, i) => (
+                  <th key={i} colSpan={r.n} className="border-t border-line px-2 pb-0 pt-3 text-left font-medium">
+                    <span className={`block whitespace-nowrap border-b pb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] ${r.gate ? "border-warn/50 text-warn" : "border-line text-faint"}`}>
+                      {r.gate ? "Must pass" : "Scored checks"}
+                    </span>
+                  </th>
+                ))}
+                <th colSpan={1 + (hasScore ? 1 : 0) + (grouped ? 1 : 0)} className={`border-t border-line pb-0 pl-3 pr-5 pt-3 text-left font-medium ${hasScore ? "border-l" : ""}`}>
+                  <span className="block border-b border-line pb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-faint">Result</span>
+                </th>
+              </tr>
+              <tr className="border-b border-line bg-[var(--panel-hi)] text-[11px] font-medium uppercase tracking-[0.06em] text-muted">
+                <th className={`${HEAD} w-10 pl-5 text-left`}>#</th>
+                <th className={`${HEAD} text-left`}>Company</th>
+                {metrics.map((d) => (
+                  <th key={d.id} className={`${HEAD} px-2 text-right leading-[1.35]`}>
+                    <Explain info={scoredMetricInfo(dataset, d.id)} className="inline-block max-w-[92px] text-balance text-right">{d.short ?? d.label}</Explain>
+                  </th>
+                ))}
+                {hasScore && (
+                  <th className={`${HEAD} border-l border-line px-3 text-left`}>
+                    <Explain info={{ title: "Quality score", how: dataset.rules?.score }}>Score</Explain>
+                  </th>
+                )}
+                <th className={`${HEAD} px-3 text-left`}>Checks</th>
                 {grouped && (
-                  <th className="py-3 pr-5 text-right align-bottom font-medium">
+                  <th className={`${HEAD} pr-5 text-right`}>
                     <Explain info={{ title: "Verdict", how: dataset.rules?.result }}>Verdict</Explain>
                   </th>
                 )}
@@ -270,8 +294,8 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                         <div className="flex items-center gap-2.5">
                           <span className="grid h-7 min-w-[46px] shrink-0 place-items-center rounded-md border border-line bg-[var(--panel-hi)] px-1.5 font-mono text-[11.5px] font-semibold text-ink">{c.ticker}</span>
                           <div className="min-w-0">
-                            <div className="max-w-[190px] truncate font-semibold text-ink">{c.name}</div>
-                            <div className="max-w-[190px] truncate text-xs text-faint">{[c.subSector, c.listedOn].filter(Boolean).join(" · ")}</div>
+                            <div className="max-w-[170px] truncate font-semibold text-ink">{c.name}</div>
+                            <div className="max-w-[170px] truncate text-xs text-faint">{[c.subSector, c.listedOn].filter(Boolean).join(" · ")}</div>
                           </div>
                         </div>
                       </td>
@@ -290,7 +314,8 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                           </td>
                         );
                       })}
-                      <td className="px-2 py-3.5"><Pips checks={m.checks} passed={m.passed} available={m.available} /></td>
+                      {hasScore && <td className="border-l border-line px-3 py-3.5"><ScoreCell score={m.score} /></td>}
+                      <td className="px-3 py-3.5"><Pips checks={m.checks} passed={m.passed} available={m.available} /></td>
                       {grouped && (
                         <td className="py-3.5 pr-4 text-right">
                           <span className="inline-flex items-center gap-1">
@@ -310,7 +335,10 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                   );
                   return isOpen ? [row, (
                     <tr key={`${c.ticker}-why`} className="border-b border-line">
-                      <td colSpan={cols} className="px-5 pb-4 pl-[60px]"><Reason company={c} /></td>
+                      <td colSpan={cols} className="px-5 pb-4 pl-[60px]">
+                        <Reason company={c} />
+                        {m.score && <ScoreBreakdown dataset={dataset} company={c} />}
+                      </td>
                     </tr>
                   )] : [row];
                 })}
@@ -326,7 +354,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                   {metrics.map((d) => (
                     <td key={d.id} className="px-1.5 py-3 text-right font-mono tabular-nums">{medians[d.id] == null ? "—" : formatValue(medians[d.id], d.unit)}</td>
                   ))}
-                  <td colSpan={grouped ? 2 : 1} />
+                  <td colSpan={(grouped ? 2 : 1) + (hasScore ? 1 : 0)} />
                 </tr>
               </tbody>
             )}
@@ -356,3 +384,43 @@ export function Reason({ company: c }: { company: Company }) {
     </div>
   );
 }
+
+/** Score out of 100 with a thin bar under it. "—" when the data covers too little of the weight. */
+export function ScoreCell({ score, big }: { score?: QualityScore; big?: boolean }) {
+  const v = score?.value;
+  if (v == null) return <span title={score?.note} className="font-mono text-[13px] text-faint">—</span>;
+  const tone = v >= 70 ? "bg-teal" : v >= 45 ? "bg-warn" : "bg-bad";
+  return (
+    <span title={score?.note} className="inline-flex items-center gap-2.5">
+      <span className={`text-right font-mono font-semibold tabular-nums text-ink ${big ? "w-8 text-[18px]" : "w-7 text-[15px]"}`}>{v}</span>
+      <span className="h-1.5 w-12 overflow-hidden rounded-full bg-line"><span className={`block h-full rounded-full ${tone}`} style={{ width: `${v}%` }} /></span>
+    </span>
+  );
+}
+
+/** Points earned on each weighted variable: the value, the grade as points out of the weight, and how it is graded. */
+export function ScoreBreakdown({ dataset, company: c }: { dataset: Dataset; company: Company }) {
+  const s = c.model?.score;
+  if (!s) return null;
+  return (
+    <div className="mt-3 max-w-3xl">
+      <div className="kicker mb-1.5">Quality score{s.value != null ? `: ${s.value} / 100` : ""}</div>
+      <div className="grid gap-x-6 gap-y-1 sm:grid-cols-2">
+        {s.parts.map((p) => {
+          const d = dataset.metricDefs.find((m) => m.id === p.metricId);
+          const earned = p.grade == null ? null : Math.round(p.grade * p.weight * 10) / 10;
+          return (
+            <div key={p.metricId} title={p.scale} className="flex items-center gap-2 text-xs">
+              <span className="w-40 truncate text-muted">{d?.short ?? d?.label ?? p.metricId}</span>
+              <span className="w-16 text-right font-mono tabular-nums text-ink">{formatMetric(c.metrics[p.metricId], d?.unit ?? "pct")}</span>
+              <span className="h-1.5 w-16 overflow-hidden rounded-full bg-line"><span className="block h-full bg-teal" style={{ width: `${(p.grade ?? 0) * 100}%` }} /></span>
+              <span className="whitespace-nowrap font-mono tabular-nums text-faint">{earned == null ? "no data" : `${earned} / ${p.weight}`}</span>
+            </div>
+          );
+        })}
+      </div>
+      {s.note && <p className="mt-1.5 text-[11.5px] text-faint">{s.note}</p>}
+    </div>
+  );
+}
+
