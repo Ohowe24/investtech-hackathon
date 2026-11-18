@@ -43,3 +43,6 @@ next-env.d.ts
 # Onesheet raw downloads (check terms before committing)
 engine/raw/*
 !engine/raw/.gitkeep
+
+# Jarvis speech detector, copied from node_modules on install
+/public/vad/
