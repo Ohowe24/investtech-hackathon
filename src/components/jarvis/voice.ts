@@ -78,8 +78,16 @@ interface Item {
 function pickBrowserVoice(): SpeechSynthesisVoice | null {
   if (typeof speechSynthesis === "undefined") return null;
   const vs = speechSynthesis.getVoices();
-  for (const name of ["Daniel", "Arthur", "Google UK English Male", "Oliver", "George", "Malcolm"]) {
-    const v = vs.find((x) => x.name.includes(name) && x.lang.startsWith("en"));
+  // A calm, crisp British male voice in the spirit of an AI butler. Best-sounding first: Edge's neural UK voices,
+  // then macOS's Enhanced/Premium downloads, then the standard ones.
+  const gb = vs.filter((x) => x.lang.replace("_", "-").startsWith("en-GB"));
+  const wanted = [
+    "Ryan Online", "Thomas Online", "Oliver Online",
+    "Daniel (Premium)", "Daniel (Enhanced)", "Arthur (Premium)", "Arthur (Enhanced)", "Jamie (Premium)", "Jamie (Enhanced)",
+    "Daniel", "Arthur", "Google UK English Male", "Oliver", "George", "Malcolm",
+  ];
+  for (const name of wanted) {
+    const v = gb.find((x) => x.name.includes(name)) ?? vs.find((x) => x.name.includes(name) && x.lang.startsWith("en"));
     if (v) return v;
   }
   return vs.find((x) => x.lang === "en-GB") ?? vs.find((x) => x.lang.startsWith("en")) ?? null;
@@ -235,8 +243,9 @@ export class Speaker {
       const u = new SpeechSynthesisUtterance(text);
       const v = pickBrowserVoice();
       if (v) u.voice = v;
-      u.rate = 1.04;
-      u.pitch = 0.92;
+      // Measured and slightly low: unhurried, dry, composed.
+      u.rate = 1.0;
+      u.pitch = 0.86;
       u.onboundary = () => { this.fake = 0.55 + Math.random() * 0.35; };
       u.onend = () => resolve();
       u.onerror = () => resolve();

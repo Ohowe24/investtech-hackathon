@@ -37,7 +37,8 @@ export async function POST(request: Request) {
     body: JSON.stringify({
       text,
       model_id: model,
-      voice_settings: { stability: 0.5, similarity_boost: 0.8, style: 0.15, use_speaker_boost: true },
+      // High stability and little style: an even, composed, dry delivery rather than an expressive one.
+      voice_settings: { stability: 0.72, similarity_boost: 0.8, style: 0.05, use_speaker_boost: true, speed: 1.0 },
     }),
     signal: request.signal,
   });
