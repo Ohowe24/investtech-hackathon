@@ -347,6 +347,23 @@ body {
 .jarvis-dock { animation: jarvis-rise 380ms cubic-bezier(0.2, 0.9, 0.25, 1); }
 @keyframes jarvis-rise { from { opacity: 0; transform: translateY(18px) scale(0.97); } to { opacity: 1; transform: none; } }
 .jarvis-launch { animation: jarvis-pop 420ms cubic-bezier(0.2, 0.9, 0.25, 1); }
+/* Corner launcher: a standalone orb with two slow counter-rotating arcs and a soft halo. */
+.jarvis-fab { width: 56px; height: 56px; transition: transform 220ms cubic-bezier(0.2,0.9,0.25,1); }
+.jarvis-fab:hover { transform: scale(1.06); }
+.jarvis-fab-halo { position: absolute; inset: -14px; border-radius: 9999px; pointer-events: none;
+  background: radial-gradient(circle, hsl(168 90% 55% / 0.28) 0%, transparent 65%); animation: jarvis-breathe 4s ease-in-out infinite; }
+.jarvis-fab-arc { position: absolute; border-radius: 9999px; pointer-events: none;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - 1.5px), #000 calc(100% - 1px)); }
+.jarvis-fab-arc--a { inset: -6px; background: conic-gradient(from 0deg, transparent 0 62%, hsl(168 95% 62% / 0.95) 88%, transparent 100%); animation: sweep 6s linear infinite; }
+.jarvis-fab-arc--b { inset: -11px; background: conic-gradient(from 180deg, transparent 0 78%, hsl(190 95% 70% / 0.6) 92%, transparent 100%); animation: sweep 9s linear infinite reverse; }
+.jarvis-fab:hover .jarvis-fab-arc--a { animation-duration: 1.6s; }
+.jarvis-fab:hover .jarvis-fab-arc--b { animation-duration: 2.4s; }
+.jarvis-fab-grid { position: absolute; inset: 0; border-radius: 9999px; pointer-events: none; mix-blend-mode: overlay; opacity: 0.55;
+  background: repeating-linear-gradient(0deg, rgba(255,255,255,0.18) 0 1px, transparent 1px 4px); }
+.jarvis-fab-label { opacity: 0; transform: translateX(6px); transition: opacity 200ms ease, transform 200ms ease; }
+.jarvis-fab:hover .jarvis-fab-label, .jarvis-fab:focus-visible .jarvis-fab-label { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .jarvis-fab-arc, .jarvis-fab-halo { animation: none; } }
 @keyframes jarvis-pop { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 .jarvis-caption { animation: jarvis-fade-up 260ms ease-out; }
 .jarvis-in { animation: jarvis-fade-up 280ms ease-out both; }

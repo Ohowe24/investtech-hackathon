@@ -427,14 +427,17 @@ export default function Jarvis({ dataset, query }: Props) {
       )}
 
       {phase === "off" ? (
-        <button type="button" onClick={() => void start()} aria-label="Talk to Jarvis (J)" title="Talk to Jarvis (J)"
-          className="jarvis-launch group fixed bottom-5 right-5 z-[70] flex items-center gap-3 rounded-full border border-white/10 bg-black/75 py-2 pl-2 pr-5 text-white shadow-[0_20px_50px_-10px_rgba(0,0,0,0.8)] backdrop-blur-xl transition-[border-color,transform] hover:-translate-y-0.5 hover:border-signal/50">
-          <span className="jarvis-orb jarvis-orb--off h-10 w-10" aria-hidden><span className="jarvis-core" /></span>
-          <span className="text-left">
-            <span className="block text-[14px] font-semibold leading-tight tracking-tight">Talk to Jarvis</span>
-            <span className="block text-[11px] leading-tight text-white/50">{error ? <span className="text-amber-300">{error}</span> : <>Voice analyst · press <kbd className="font-mono">J</kbd></>}</span>
-          </span>
-        </button>
+        <div className="jarvis-launch fixed bottom-5 right-5 z-[70] flex items-center gap-3">
+          {error && <span className="max-w-[240px] rounded-full border border-amber-300/30 bg-black/80 px-3 py-1.5 text-[11px] leading-tight text-amber-300 backdrop-blur-xl">{error}</span>}
+          <button type="button" onClick={() => void start()} aria-label="Talk to Jarvis (J)" title="Talk to Jarvis"
+            className="jarvis-fab group relative flex items-center rounded-full outline-none focus-visible:ring-2 focus-visible:ring-signal/60">
+            <span className="jarvis-fab-label pointer-events-none absolute right-full mr-3 whitespace-nowrap rounded-full border border-white/10 bg-black/80 px-3 py-1.5 text-[12px] font-semibold tracking-[0.18em] text-white/90 backdrop-blur-xl">JARVIS</span>
+            <span className="jarvis-fab-halo" aria-hidden />
+            <span className="jarvis-fab-arc jarvis-fab-arc--a" aria-hidden />
+            <span className="jarvis-fab-arc jarvis-fab-arc--b" aria-hidden />
+            <span className="jarvis-orb jarvis-orb--off relative h-14 w-14" aria-hidden><span className="jarvis-core" /><span className="jarvis-fab-grid" /></span>
+          </button>
+        </div>
       ) : (
         <section aria-label="Jarvis voice conversation" aria-live="polite"
           className="jarvis-dock fixed bottom-5 left-1/2 z-[70] flex w-[min(620px,calc(100vw-24px))] -translate-x-1/2 items-center gap-4 rounded-[28px] border border-white/10 bg-[#060909]/88 py-3 pl-3 pr-3 text-white shadow-[0_30px_90px_-20px_rgba(0,0,0,0.95),0_0_0_1px_rgba(61,220,108,0.07)] backdrop-blur-2xl">
