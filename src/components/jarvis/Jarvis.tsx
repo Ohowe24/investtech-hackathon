@@ -119,7 +119,6 @@ export default function Jarvis({ dataset, query }: Props) {
         const c = a.company ? findCompany(ds, a.company) : undefined;
         const page = a.page || undefined;
         if (a.company && !c) return;
-        if (page === "xray" && ds.hasStatements === false) return;
         spotlight(null);
         await goTo(page, c?.ticker);
         return;

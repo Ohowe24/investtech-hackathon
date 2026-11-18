@@ -4,7 +4,7 @@
 
 const ATTR = "data-jv";
 const PAGE_NAMES: Record<string, string> = {
-  "": "Ranking (home)", ranking: "Ranking (home)", recommendation: "Recommendation", companies: "Companies table", map: "Map", xray: "X-ray",
+  "": "Ranking (home)", ranking: "Ranking (home)", recommendation: "Recommendation", companies: "Companies table", map: "Map",
 };
 
 export interface ScreenElement {
@@ -23,7 +23,6 @@ export interface Screen {
 export function pageName(): string {
   const h = decodeURIComponent(window.location.hash.replace(/^#/, ""));
   if (h.startsWith("c/")) return `Company page: ${h.slice(2)}`;
-  if (h.startsWith("xray/")) return `X-ray: ${h.slice(5)}`;
   return PAGE_NAMES[h] ?? h;
 }
 
@@ -102,7 +101,7 @@ const settle = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /** Goes to a page and waits for it to draw. */
 export async function goTo(page?: string, ticker?: string): Promise<void> {
-  const hash = ticker && page === "xray" ? `xray/${ticker}` : ticker ? `c/${ticker}` : page === "ranking" || !page ? "" : page;
+  const hash = ticker ? `c/${ticker}` : page === "ranking" || !page ? "" : page;
   if (decodeURIComponent(window.location.hash.replace(/^#/, "")) !== hash) {
     window.location.assign(`#${hash}`);
     window.scrollTo({ top: 0, behavior: "smooth" });

@@ -7,7 +7,6 @@ import Ranking from "./Ranking";
 import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
-import XRay from "./XRay";
 import Recommendation from "./Recommendation";
 import Jarvis from "./jarvis/Jarvis";
 import { Card } from "./ui";
@@ -25,16 +24,15 @@ interface Props {
   query: AnalysisQuery;
 }
 
-type Tab = "ranking" | "recommendation" | "companies" | "map" | "xray";
+type Tab = "ranking" | "recommendation" | "companies" | "map";
 const TABS: { id: Tab; label: string }[] = [
   { id: "ranking", label: "Ranking" },
   { id: "recommendation", label: "Recommendation" },
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
-  { id: "xray", label: "X-ray" },
 ];
 
-/** The results. The address hash holds the view (none = ranking, #recommendation, #companies, #map, #xray or #xray/CSU) or the open company (#c/CSU), so Back works. */
+/** The results. The address hash holds the view (none = ranking, #recommendation, #companies or #map) or the open company (#c/CSU), so Back works. */
 export default function Workbench({ dataset, snapshot, query }: Props) {
   const [hash, setHash] = useState<string | null>(null);
   const [scope, setScope] = useState<"ca" | "all">("ca");
@@ -83,12 +81,10 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
 
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "" || hash === "ranking";
-  const tabs = TABS.filter((t) => t.id !== "xray" || dataset.hasStatements !== false);
+  const tabs = TABS;
   const editHref = `/?${toSearch(query)}`;
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const isXray = (hash === "xray" || hash === "test" || hash.startsWith("xray/")) && dataset.hasStatements !== false;
-  const xrayTicker = hash.startsWith("xray/") ? decodeURIComponent(hash.slice(5)) : null;
-  const tab: Tab = start ? "ranking" : company ? "companies" : isXray ? "xray" : hash === "map" || hash === "recommendation" ? hash : "companies";
+  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" ? hash : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -141,11 +137,6 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
             <Card title={dataset.mapTitle ?? "Map"}>
               <ScatterMap dataset={dataset} hovered={hovered} onHover={setHovered} onSelect={(t) => go(`c/${t}`)} />
             </Card>
-          </div>
-        ) : tab === "xray" ? (
-          <div className="xray-scope">
-            <XRay dataset={dataset} snapshot={snapshot} ticker={xrayTicker}
-              onPick={(t) => { window.location.hash = `xray/${t}`; }} onOpen={(t) => go(`c/${t}`)} />
           </div>
         ) : (
           <CompanyTable dataset={dataset} scope={scope} onScope={setScope} onOpen={(t) => go(`c/${t}`)} />
