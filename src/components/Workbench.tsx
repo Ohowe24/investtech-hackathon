@@ -9,6 +9,7 @@ import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import XRay from "./XRay";
 import Recommendation from "./Recommendation";
+import Jarvis from "./jarvis/Jarvis";
 import { Card } from "./ui";
 import RunSequence from "./live/RunSequence";
 import LiveEffects from "./live/LiveEffects";
@@ -155,6 +156,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
         Not investment advice · Onesheet API and SEDAR filings · {new Date(dataset.generatedAt).toLocaleDateString("en-CA")}
       </footer>
 
+      <Jarvis dataset={dataset} query={query} />
       <LiveEffects />
       {run && <RunSequence dataset={dataset} runNo={runs} onDone={endRun} />}
     </div>

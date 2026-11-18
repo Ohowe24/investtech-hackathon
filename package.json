@@ -13,9 +13,12 @@
     "onesheet": "node engine/onesheet-try.mjs",
     "inputs": "tsx engine/make-inputs.ts",
     "fetch-statements": "node engine/fetch-statements.mjs",
-    "discover": "node engine/discover.mjs"
+    "discover": "node engine/discover.mjs",
+    "postinstall": "node scripts/copy-vad-assets.mjs"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.10.0",
+    "@ricky0123/vad-web": "^0.0.31",
     "next": "16.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0"
