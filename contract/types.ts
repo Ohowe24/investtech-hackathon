@@ -287,6 +287,14 @@ export interface Dataset {
   companies: Company[];
   /** Canadian candidates in the industry's universe that had no data to test */
   unmeasured?: UnmeasuredCandidate[];
+  /** which candidates this run tests: only the ones the organizers provided, or those plus the rest of the researched universe */
+  candidateSet?: {
+    mode: "provided" | "expanded";
+    /** tickers the organizers provided */
+    provided: string[];
+    /** further Canadian candidates "Generate more" adds: in the universe, not provided, not already held, with data to test */
+    more: number;
+  };
   sources: Source[];
 }
 

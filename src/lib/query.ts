@@ -14,6 +14,8 @@ export interface AnalysisQuery {
   cashPct?: number;
   /** total index value, for dollar amounts */
   value?: number;
+  /** test the industry's full researched universe, not only the candidates the organizers provided */
+  more?: boolean;
 }
 
 const EXCHANGE_PREFIX = /^(TSX|TSXV|TSX-V|CVE|NYSE|NASDAQ|NYSEARCA|AMEX|BATS|LON|XTSE|XTSX)\s*:\s*/;
@@ -126,6 +128,7 @@ export function toSearch(q: AnalysisQuery): string {
   if (q.holdings.length) p.set("h", q.holdings.map((h) => (h.weightPct == null ? h.ticker : `${h.ticker}:${h.weightPct}`)).join(","));
   if (q.cashPct != null) p.set("cash", String(q.cashPct));
   if (q.value != null) p.set("value", String(q.value));
+  if (q.more) p.set("more", "1");
   return p.toString().replace(/%2C/g, ",").replace(/%3A/g, ":");
 }
 
@@ -155,5 +158,5 @@ export function fromSearch(params: Params): AnalysisQuery | null {
     const n = v == null || v === "" ? NaN : Number(v);
     return Number.isFinite(n) ? n : undefined;
   };
-  return { industry, holdings, cashPct: num("cash"), value: num("value") };
+  return { industry, holdings, cashPct: num("cash"), value: num("value"), ...(one("more") === "1" ? { more: true } : {}) };
 }

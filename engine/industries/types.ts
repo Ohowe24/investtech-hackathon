@@ -110,6 +110,8 @@ export interface UniverseEntry {
   why: string;
   /** where that is confirmed */
   sourceUrl?: string;
+  /** one of the candidates the organizers gave us to analyze (data pack). A run starts with these when the industry has any. */
+  provided?: boolean;
 }
 
 export interface IndustryProfile {

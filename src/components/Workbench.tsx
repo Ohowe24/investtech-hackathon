@@ -83,6 +83,11 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
   const start = hash === "" || hash === "ranking";
   const tabs = TABS;
   const editHref = `/?${toSearch(query)}`;
+  // Re-run the engine with more (or only the provided) candidates, replaying the run, and land on Companies.
+  const rerun = (more: boolean) => {
+    try { window.sessionStorage.setItem("engine-run", "1"); } catch {}
+    window.location.assign(`/analyze?${toSearch({ ...query, more: more || undefined })}#companies`);
+  };
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
   const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" ? hash : "companies";
 
@@ -139,7 +144,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
             </Card>
           </div>
         ) : (
-          <CompanyTable dataset={dataset} scope={scope} onScope={setScope} onOpen={(t) => go(`c/${t}`)} />
+          <CompanyTable dataset={dataset} scope={scope} onScope={setScope} onOpen={(t) => go(`c/${t}`)} onCandidates={rerun} />
         )}
       </main>
 

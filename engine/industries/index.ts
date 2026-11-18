@@ -17,4 +17,13 @@ export function getIndustry(id: string = defaultIndustryId): IndustryProfile {
   return profile;
 }
 
+/**
+ * The profile narrowed to the candidates the organizers provided, when it has any; unchanged otherwise.
+ * A run starts with these; "Generate more candidates" runs the full researched universe.
+ */
+export function providedOnly(profile: IndustryProfile): IndustryProfile {
+  const provided = profile.universe.filter((u) => u.provided);
+  return provided.length ? { ...profile, universe: provided } : profile;
+}
+
 export type { IndustryProfile } from "./types";

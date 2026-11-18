@@ -260,12 +260,12 @@ function computeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<s
 
 /** Canadian serial acquirers the tool tests. Sources: reports/REIT evaluation variables.md, appendix B (TerraVest left out: blog sources only). */
 const universe: UniverseEntry[] = [
-  { ticker: "CSU", name: "Constellation Software", listedOn: "TSX", subSector: "Software serial acquirers", why: "Archetypal acquire-and-hold programme", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
-  { ticker: "TOI", name: "Topicus.com", listedOn: "TSXV", subSector: "Software serial acquirers", why: "CSU spin-off running the same programme", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
+  { ticker: "CSU", provided: true, name: "Constellation Software", listedOn: "TSX", subSector: "Software serial acquirers", why: "Archetypal acquire-and-hold programme", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "TOI", provided: true, name: "Topicus.com", listedOn: "TSXV", subSector: "Software serial acquirers", why: "CSU spin-off running the same programme", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
   { ticker: "LMN", name: "Lumine Group", listedOn: "TSXV", subSector: "Communications and media software", why: "Says it aims to reinvest all free cash flow in acquisitions", sourceUrl: "https://www.luminegroup.com/?p=5801" },
-  { ticker: "WSP", name: "WSP Global", listedOn: "TSX", subSector: "Engineering", why: "Platform acquirer: POWER, Ricardo, TRC (US$3.3B)", sourceUrl: "https://www.financierworldwide.com/fw-news/2025/12/18/wsp-global-strikes-33bn-trc-deal" },
+  { ticker: "WSP", provided: true, name: "WSP Global", listedOn: "TSX", subSector: "Engineering", why: "Platform acquirer: POWER, Ricardo, TRC (US$3.3B)", sourceUrl: "https://www.financierworldwide.com/fw-news/2025/12/18/wsp-global-strikes-33bn-trc-deal" },
   { ticker: "STN", name: "Stantec", listedOn: "TSX", subSector: "Engineering and design", why: "150th acquisition since its 1994 IPO, closed Aug 2025", sourceUrl: "https://www.stantec.com/en/news-media/2025/stantec-successfully-completes-150th-acquisition" },
-  { ticker: "TFII", name: "TFI International", listedOn: "TSX", subSector: "Trucking & logistics", why: "Named in the Globe's list of serial acquirers", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
+  { ticker: "TFII", provided: true, name: "TFI International", listedOn: "TSX", subSector: "Trucking & logistics", why: "Named in the Globe's list of serial acquirers", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
   { ticker: "GFL", name: "GFL Environmental", listedOn: "TSX", subSector: "Waste management", why: "\"Over 100 acquisitions\" since 2007 per its 2019 F-1; more than 200 by about 2023", sourceUrl: "https://www.sec.gov/Archives/edgar/data/1780232/000104746919004816/a2239324zf-1a.htm" },
   { ticker: "WCN", name: "Waste Connections", listedOn: "TSX", subSector: "Waste management", why: "19 acquisitions in 2025, about $330M annualized revenue", sourceUrl: "https://investors.wasteconnections.com/news/news-details/2026/Waste-Connections-Reports-Fourth-Quarter-2025-Results-and-Provides-2026-Outlook/default.aspx" },
   { ticker: "FSV", name: "FirstService", listedOn: "TSX", subSector: "Property services", why: "2025 growth attributed mainly to tuck-under acquisitions", sourceUrl: "https://www.firstservice.com/wp-content/uploads/2026/03/FirstService-Annual-Report-2025-FINAL-V1.pdf" },
@@ -281,7 +281,7 @@ const universe: UniverseEntry[] = [
   { ticker: "PBH", name: "Premium Brands", listedOn: "TSX", subSector: "Specialty food", why: "In both lists", sourceUrl: "https://www.theglobeandmail.com/investing/markets/inside-the-market/article-company-growth-strategic-acquisition/" },
   { ticker: "EIF", name: "Exchange Income", listedOn: "TSX", subSector: "Aviation and manufacturing", why: "In Aktagon's screen", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
   { ticker: "MTY", name: "MTY Food Group", listedOn: "TSX", subSector: "Restaurant franchising", why: "In Aktagon's screen", sourceUrl: "https://serial-acquirers.aktagon.com/scorecard/canada/" },
-  { ticker: "ARE", name: "Aecon Group", listedOn: "TSX", subSector: "Construction", why: "Not confirmed. Occasional bolt-ons; no source names it a serial acquirer (see the serial-acquirer report)" },
+  { ticker: "ARE", provided: true, name: "Aecon Group", listedOn: "TSX", subSector: "Construction", why: "Not confirmed. Occasional bolt-ons; no source names it a serial acquirer (see the serial-acquirer report)" },
 ];
 
 export const acquirers: IndustryProfile = {

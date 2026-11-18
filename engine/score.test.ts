@@ -128,3 +128,17 @@ describe("quality score in a run", () => {
     expect(p.metricDefs.map((d) => d.id)).toContain("fcfMargin");
   });
 });
+
+describe("provided candidates", () => {
+  it("a serial acquirers run starts with the organizers' 5 candidates", async () => {
+    const { providedOnly, getIndustry } = await import("./industries");
+    const narrowed = providedOnly(getIndustry("acquirers"));
+    expect(narrowed.universe.map((u) => u.ticker).sort()).toEqual(["ARE", "CSU", "TFII", "TOI", "WSP"]);
+    expect(getIndustry("acquirers").universe.length).toBeGreaterThan(5);
+  });
+  it("leaves an industry without provided candidates unchanged", async () => {
+    const { providedOnly, getIndustry } = await import("./industries");
+    const reits = getIndustry("reits");
+    expect(providedOnly(reits).universe.length).toBe(reits.universe.length);
+  });
+});

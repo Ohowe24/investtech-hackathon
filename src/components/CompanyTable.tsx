@@ -17,31 +17,38 @@ interface Props {
   scope: "ca" | "held" | "all";
   onScope: (s: "ca" | "held" | "all") => void;
   onOpen: (ticker: string) => void;
+  /** re-run with the full candidate universe (true) or only the provided candidates (false) */
+  onCandidates?: (more: boolean) => void;
 }
 
 /** The overview: one row per company, best first. Click a row to open the company. */
-export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props) {
+export default function CompanyTable({ dataset, scope, onScope, onOpen, onCandidates }: Props) {
   const tested = dataset.companies.filter((c) => c.model);
   const candidates = tested.filter((c) => !c.inIndex);
   const metrics = scoredMetrics(dataset);
   const hasScore = !!dataset.rules?.score;
   const held = tested.filter((c) => c.inIndex);
+  const set = dataset.candidateSet;
+  const provided = new Set(set?.provided ?? []);
+  const indexLabel = dataset.holdingsSource === "organizers" ? "Index" : "Your index";
   const rows = (scope === "ca" ? candidates : scope === "held" && held.length ? held : tested)
     .sort((a, b) => a.model!.rank - b.model!.rank);
 
   return (
+    <div className="space-y-5">
+    {set && onCandidates && <MoreCandidates set={set} tested={candidates.length} onCandidates={onCandidates} />}
     <section key={scope} className="scan-once overflow-hidden rounded-xl border border-line bg-white">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-line px-5 py-3">
           <Segmented value={scope === "held" && !held.length ? "all" : scope} onChange={onScope} options={[
-            { id: "ca", label: `Canadian · ${candidates.length}` },
-            ...(held.length ? [{ id: "held" as const, label: `Your index · ${held.length}` }] : []),
-            { id: "all", label: `All · ${tested.length}` },
+            { id: "ca", label: `Candidates · ${candidates.length}` },
+            ...(held.length ? [{ id: "held" as const, label: `${indexLabel} · ${held.length}` }] : []),
+            { id: "all", label: held.length ? `Candidates + ${indexLabel.toLowerCase()} · ${tested.length}` : `All · ${tested.length}` },
           ]} />
         <div className="flex items-center gap-4 text-xs text-muted">
           <span className="flex items-center gap-1.5"><Dot pass={true} size={8} /> Pass</span>
           <span className="flex items-center gap-1.5"><Dot pass={false} size={8} /> Fail</span>
           <span className="flex items-center gap-1.5"><Dot pass={null} size={8} /> No data</span>
-          {held.length > 0 && <span className="flex items-center gap-1.5"><HeldChip /> In your index</span>}
+          {held.length > 0 && <span className="flex items-center gap-1.5"><HeldChip /> In the {indexLabel.toLowerCase()}</span>}
         </div>
       </div>
 
@@ -83,7 +90,7 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                   className="a-rise group relative cursor-pointer border-b border-line outline-none transition-colors last:border-0 hover:bg-canvas focus-visible:bg-canvas">
                   <td className="relative py-3.5 pl-5 font-mono text-xs tabular-nums text-faint">
                     <span className="absolute inset-y-1 left-0 w-[3px] origin-center scale-y-0 rounded-r bg-signal transition-transform duration-300 group-hover:scale-y-100" />
-                    {m.rank}
+                    {r + 1}
                   </td>
                   <td className="py-3.5 pr-3">
                     <div className="flex items-center gap-3">
@@ -91,9 +98,10 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
                       <div className="min-w-0">
                         <div className="flex min-w-0 items-center gap-2">
                           <span className="truncate font-medium text-ink">{c.name}</span>
-                          {c.inIndex && <HeldBadge />}
+                          {c.inIndex && <HeldBadge label={indexLabel} />}
+                          {set?.mode === "expanded" && provided.has(c.ticker) && <ProvidedBadge />}
                         </div>
-                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Canadian candidate" : ""}</div>
+                        <div className="truncate text-xs text-faint">{c.subSector}{scope === "all" && !c.inIndex ? " · Candidate" : ""}</div>
                       </div>
                     </div>
                   </td>
@@ -133,15 +141,59 @@ export default function CompanyTable({ dataset, scope, onScope, onOpen }: Props)
         </table>
       </div>
     </section>
+    </div>
+  );
+}
+
+/** The candidate set this run tests, and the button to add the rest of the researched universe (or go back to the provided ones). */
+function MoreCandidates({ set, tested, onCandidates }: { set: NonNullable<Dataset["candidateSet"]>; tested: number; onCandidates: (more: boolean) => void }) {
+  const expanded = set.mode === "expanded";
+  return (
+    <section className="panel flex flex-wrap items-center justify-between gap-4 px-6 py-5">
+      <div className="min-w-0 max-w-2xl">
+        <div className="kicker">{expanded ? "Expanded candidate set" : "Provided candidates"}</div>
+        <h2 className="mt-1.5 text-base font-semibold tracking-tight text-ink">
+          {expanded
+            ? `${tested} Canadian candidates: the ${set.provided.length} provided plus ${tested - set.provided.length} more`
+            : `Testing the ${set.provided.length} candidates the organizers provided`}
+        </h2>
+        <p className="mt-1 text-[13px] text-muted">
+          {expanded
+            ? `Added from our researched list of Canadian serial acquirers, each with a cited source. The ${set.provided.length} provided ones are marked.`
+            : `${set.provided.join(", ")}. Our researched list has ${set.more} more Canadian serial acquirers with filing data; add them to test the same checks on a wider field.`}
+        </p>
+      </div>
+      {expanded ? (
+        <button onClick={() => onCandidates(false)}
+          className="rounded-[10px] border border-line px-4 py-2 text-[13.5px] font-medium text-ink transition-colors hover:border-ink">
+          Back to the {set.provided.length} provided
+        </button>
+      ) : (
+        <button onClick={() => onCandidates(true)}
+          className="rounded-[10px] bg-ink px-4 py-2 text-[13.5px] font-semibold text-white">
+          Generate more candidates · +{set.more}
+        </button>
+      )}
+    </section>
+  );
+}
+
+/** One of the candidates the organizers gave us to analyze. */
+function ProvidedBadge() {
+  return (
+    <span title="One of the candidates the organizers provided"
+      className="shrink-0 whitespace-nowrap rounded-full bg-teal/10 px-2 py-px text-[10.5px] font-medium text-teal">
+      Provided
+    </span>
   );
 }
 
 /** Marks a stock the index already holds (the holdings entered on the setup page). */
-export function HeldBadge() {
+export function HeldBadge({ label = "Your index" }: { label?: string }) {
   return (
-    <span title="Already in your index: one of the stocks you entered at setup"
+    <span title="Already held by the index: one of the stocks entered at setup"
       className="shrink-0 whitespace-nowrap rounded-full border border-dashed border-faint px-2 py-px text-[10.5px] font-medium text-muted">
-      Your index
+      {label}
     </span>
   );
 }

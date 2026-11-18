@@ -83,3 +83,12 @@ describe("optional holdings", () => {
     expect(q).toEqual({ industry: "reits", holdings: [], cashPct: undefined, value: undefined });
   });
 });
+
+describe("more candidates flag", () => {
+  it("survives the address round trip, and is absent by default", () => {
+    const q = { industry: "acquirers", holdings: [{ ticker: "AME" }], more: true };
+    const back = fromSearch(Object.fromEntries(new URLSearchParams(toSearch(q))));
+    expect(back?.more).toBe(true);
+    expect(fromSearch({ industry: "acquirers" })?.more).toBeUndefined();
+  });
+});

@@ -6,7 +6,7 @@ import storeJson from "@data/store.json";
 import snapshotJson from "@data/indexes.json";
 import type { Dataset, IndexDef, IndexPosition, IndexSnapshot } from "@contract/types";
 import { analyze } from "../../../engine/analyze";
-import { industries, getIndustry } from "../../../engine/industries";
+import { industries, getIndustry, providedOnly } from "../../../engine/industries";
 import { customIndustries, customProfile, isCustomId } from "../../../engine/industries/custom";
 import type { IndustryProfile } from "../../../engine/industries/types";
 import { passes } from "../../../engine/metrics";
@@ -99,7 +99,8 @@ function fixedOptions(): IndustryOption[] {
       tagline: profile.tagline,
       question: profile.question,
       checks: profile.checks.map((k) => ({ id: k.id, label: k.label, kind: k.kind, rule: k.rule })),
-      universe: profile.universe.map((u) => ({ ...info(u.ticker), subSector: u.subSector, listedOn: u.listedOn, why: u.why })),
+      // The setup shows the candidates a run starts with (the provided ones, when the industry has them).
+      universe: providedOnly(profile).universe.map((u) => ({ ...info(u.ticker), subSector: u.subSector, listedOn: u.listedOn, why: u.why })),
       organizers: ix
         ? {
             name: ix.name,
@@ -127,6 +128,7 @@ export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
   // Holdings are optional: with none, the engine ranks the industry's Canadian candidates on their own.
   const holdings = q.holdings.slice(0, 60);
   let profile: IndustryProfile;
+  let candidateSet: Dataset["candidateSet"];
   let runStore = store;
   if (isCustomId(q.industry)) {
     // Holdings the cache does not have are fetched from Onesheet now; the peer medians include them.
@@ -137,7 +139,14 @@ export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
     profile = { ...p, holdingNames: Object.assign({}, ...Object.values(industries).map((x) => x.holdingNames)) };
   } else {
     if (!industries[q.industry]) return { ok: false, error: `Unknown industry "${q.industry}".` };
-    profile = getIndustry(q.industry);
+    // Start with the candidates the organizers provided; "Generate more candidates" (q.more) tests the full universe.
+    const full = getIndustry(q.industry);
+    profile = q.more ? full : providedOnly(full);
+    const provided = full.universe.filter((u) => u.provided).map((u) => u.ticker);
+    // "More" counts only the extra candidates that can be tested: not already held, and with filing data.
+    const heldNow = new Set(holdings.map((h) => h.ticker));
+    const more = full.universe.filter((u) => !u.provided && !heldNow.has(u.ticker) && measurable(full, u.ticker)).length;
+    if (provided.length) candidateSet = { mode: q.more ? "expanded" : "provided", provided, more };
   }
   const ix = organizersIndex(profile);
 
@@ -202,6 +211,7 @@ export async function runAnalysis(q: AnalysisQuery): Promise<AnalysisResult> {
     holdingsSource: sameAsOrganizers ? "organizers" : "user",
     positions: index.positions,
   });
+  if (candidateSet) dataset.candidateSet = candidateSet;
   const snap: IndexSnapshot = {
     updatedAt: sameAsOrganizers ? snapshot.updatedAt : dataset.generatedAt,
     source: sameAsOrganizers ? snapshot.source : "Entered by you",

@@ -23,7 +23,7 @@ This file says what each metric means and why the thresholds are where they are.
 
 1. The user picks an industry (a profile in `engine/industries/`) and types the index's holdings, with optional weights.
 2. `/analyze` runs `analyze()` (`engine/analyze.ts`) on the server, the same function `npm run engine` uses.
-3. **Candidates** = the profile's Canadian universe minus anything already held. A held Canadian company is ranked with the holdings, never as a candidate.
+3. **Candidates** = the profile's Canadian universe minus anything already held. A held Canadian company is ranked with the holdings, never as a candidate. **Serial acquirers start with the 5 candidates the organizers provided** (CSU, TOI, WSP, TFII, ARE: `provided: true` in `acquirers.ts`). "Generate more candidates" on the Companies page re-runs with `more=1` in the address, which tests the rest of the researched universe too (each entry with its source). The provided ones are then marked.
 4. Every company is tested on the profile's checks. A company the engine has no data for is **never guessed at**: a holding keeps its row with empty metrics and a note; a candidate is listed under "not tested".
 5. Candidates and holdings are ranked separately, each 1 to N, by the same order: has data, result, quality score out of 100 (industries that declare weights, see "Quality score"), share of scored checks passed, checks with data, the profile's tie-break metric.
 6. **Weights of the index:** typed weights are kept as typed. If every weight is typed, cash is what is left of 100%. Otherwise cash is the number entered (default: the organizers' cash) and the holdings without a weight share the rest equally. When the list matches the organizers' index exactly, their live weights and cash are used.
