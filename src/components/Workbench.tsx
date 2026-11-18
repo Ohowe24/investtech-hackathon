@@ -10,7 +10,7 @@ import ScatterMap from "./ScatterMap";
 import Recommendation from "./Recommendation";
 import Jarvis from "./jarvis/Jarvis";
 import { Card } from "./ui";
-import RunSequence from "./live/RunSequence";
+import EngineReplay from "./live/EngineReplay";
 import LiveEffects from "./live/LiveEffects";
 import { primeSound } from "./live/sound";
 import { prefersReducedMotion, useNow } from "./live/motion";
@@ -154,7 +154,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
 
       <Jarvis dataset={dataset} query={query} />
       <LiveEffects />
-      {run && <RunSequence dataset={dataset} runNo={runs} onDone={endRun} />}
+      {run && <EngineReplay dataset={dataset} runNo={runs} onDone={endRun} />}
     </div>
   );
 }
