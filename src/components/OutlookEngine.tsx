@@ -238,7 +238,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
         <p className="mt-4 text-[11.5px] text-faint">Published sources only · after inflation · not backtested · not investment advice</p>
       </section>
 
-      <FeaturedCards economy={economy} selected={company.ticker} onSelect={(t) => { setTicker(t); document.getElementById("outlook-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} />
+      <FeaturedCards economy={economy} selected={company.ticker} onSelect={setTicker} />
 
       <AllCompanies economy={economy} focus={initial && !FEATURED.some((c) => c.ticker === initial) ? initial : null} />
 
