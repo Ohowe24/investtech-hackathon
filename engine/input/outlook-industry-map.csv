@@ -2,18 +2,18 @@ naics,title,statcan,cops,bls,peers,note
 513210,Software Publishers,5132,IN41,513200,CMG DCBO DSG DTOL ENGH KXS LSPD OTEX SHOP TCS BB CVO,"COPS projects only Information and cultural industries as a whole (NAICS 51), so its figure is broader than software. Peers: every listed Canadian company Onesheet files under Software - Application or Software - Infrastructure, except the candidates."
 541330,Engineering Services,5413,IN46,541300,STN ATRL,"StatCan, COPS and BLS publish architectural, engineering and related services (5413) together. Peers: the Engineering & Construction companies whose Onesheet profile describes engineering services (Stantec, AtkinsRéalis), not contractors."
 541611,Administrative Management and General Management Consulting Services,5416,IN48,541600,,"Published as management, scientific and technical consulting (5416). COPS groups it with advertising, design and other professional services. No listed Canadian peer."
-541618,Other Management Consulting Services,5416,IN48,541600,,Same series as 541611.
-541690,Other Scientific and Technical Consulting Services,5416,IN48,541600,,Same series as 541611.
+541618,Other Management Consulting Services,5416,IN48,541600,,"Same series as 541611."
+541690,Other Scientific and Technical Consulting Services,5416,IN48,541600,,"Same series as 541611."
 237,Heavy and Civil Engineering Construction,23X,IN08,230000,BDT BDGI,"StatCan splits construction by type of work, not by NAICS: 'Engineering and other construction activities' (23X) is the civil-engineering part. COPS and BLS publish construction (23) as a whole. Peers: the Engineering & Construction companies whose Onesheet profile describes construction work (Bird, Badger)."
-2371,Utility System Construction,23X,IN08,230000,BDT BDGI,Same series as 237.
-237130,Power and Communication Line and Related Structures Construction,23X,IN08,230000,BDT BDGI,Same series as 237.
-236210,Industrial Building Construction,23B,IN08,230000,BDT BDGI,StatCan: non-residential building construction (23B). COPS and BLS: construction (23) as a whole.
-811310,Commercial and Industrial Machinery and Equipment Repair and Maintenance,811A,IN62,811300,,StatCan publishes repair and maintenance except automotive (811A); COPS publishes repair and maintenance (811) as a whole. No listed Canadian peer.
-484,Truck Transportation,484,IN34,484000,MTL,Peers: Onesheet's Trucking industry except TFI (only Mullen Group remains).
-484122,"General Freight Trucking, Long-Distance, Less Than Truckload",484,IN34,484000,MTL,Same series as 484: no source publishes less-than-truckload on its own.
-492110,Couriers and Express Delivery Services,492,IN39,492000,,No listed Canadian peer.
-488510,Freight Transportation Arrangement,488,IN37,487-80,,StatCan and COPS: support activities for transportation (488). BLS combines scenic and sightseeing transportation with support activities (487-488). No listed Canadian peer.
-4881,Support Activities for Air Transportation,488,IN37,487-80,,Same series as 488510: no source publishes airport operations on its own.
+2371,Utility System Construction,23X,IN08,230000,BDT BDGI,"Same series as 237."
+237130,Power and Communication Line and Related Structures Construction,23X,IN08,230000,BDT BDGI,"Same series as 237."
+236210,Industrial Building Construction,23B,IN08,230000,BDT BDGI,"StatCan: non-residential building construction (23B). COPS and BLS: construction (23) as a whole."
+811310,Commercial and Industrial Machinery and Equipment Repair and Maintenance,811A,IN62,811300,,"StatCan publishes repair and maintenance except automotive (811A); COPS publishes repair and maintenance (811) as a whole. No listed Canadian peer."
+484,Truck Transportation,484,IN34,484000,MTL,"Peers: Onesheet's Trucking industry except TFI (only Mullen Group remains)."
+484122,"General Freight Trucking, Long-Distance, Less Than Truckload",484,IN34,484000,MTL,"Same series as 484: no source publishes less-than-truckload on its own."
+492110,Couriers and Express Delivery Services,492,IN39,492000,,"No listed Canadian peer."
+488510,Freight Transportation Arrangement,488,IN37,487-80,,"StatCan and COPS: support activities for transportation (488). BLS combines scenic and sightseeing transportation with support activities (487-488). No listed Canadian peer."
+4881,Support Activities for Air Transportation,488,IN37,487-80,,"Same series as 488510: no source publishes airport operations on its own."
 2211,"Electric Power Generation, Transmission and Distribution",2211,IN07,221100,BEP.UN CPX EMA FTS H NPI PIF TA,"COPS publishes utilities (22) as a whole. Peers: every listed Canadian company Onesheet files under Regulated Electric, Independent Power Producers or Renewable Utilities."
 2362,Nonresidential Building Construction,23B,IN08,230000,BDT BDGI,"StatCan: non-residential building construction (23B). COPS and BLS publish construction (23) as a whole. Peers: the listed Canadian contractors (Bird, Badger)."
 31-33,Manufacturing,31-33,,31-330,,"COPS publishes manufacturing only by sub-industry, with no total. No peer group: manufacturing is too broad."
@@ -31,28 +31,3 @@ naics,title,statcan,cops,bls,peers,note
 5411,Legal Services,5411,IN45,541100,,"COPS: legal, accounting and related services (5411-5412). No peer group."
 323,Printing and Related Support Activities,323,IN13,323000,,
 531,Real Estate,531,IN44,531000,,COPS: real estate and rental and leasing (53). No peer group.
-541620,Environmental Consulting Services,5416,IN48,541600,,"Same series as 541611: StatCan and BLS publish management, scientific and technical consulting (5416); COPS groups it with advertising, design and other professional services. No listed Canadian peer."
-562,Waste Management and Remediation Services,562,IN50,562000,,"StatCan publishes 562 as a whole; COPS groups it with management, administrative and support services (55, 56); BLS has no series in the file. Onesheet's Waste Management industry holds only candidates (GFL, Waste Connections), so no peer."
-238,Specialty Trade Contractors,23,IN08,230000,,"StatCan splits construction by type of work, not by trade, so the construction total (23) is used; COPS and BLS publish construction (23) as a whole. No listed Canadian peer."
-811121,"Automotive Body, Paint, and Interior Repair and Maintenance",8111,IN62,811000,,StatCan publishes automotive repair and maintenance (8111); COPS and BLS publish repair and maintenance (811) as a whole. No listed Canadian peer: AutoCanada is a car dealer.
-445131,Convenience Retailers,445,IN30,445000,,StatCan publishes food and beverage retailers (445); COPS publishes retail trade as a whole; BLS has no retail series in the file. No listed Canadian convenience-store peer; the grocers are a different format.
-457,Gasoline Stations and Fuel Dealers,457,IN30,,,StatCan publishes 457 as a whole; COPS publishes retail trade as a whole; BLS has no retail series in the file. No listed Canadian peer.
-423710,Hardware Merchant Wholesalers,416,IN29,420000,ADEN DBM,"StatCan uses Canadian NAICS, where hardware wholesale sits in building material and supplies merchant wholesalers (416); COPS publishes wholesale trade as a whole; BLS has no wholesale series in the file. Peers: the Industrial - Distribution companies that wholesale building products (ADENTRA, Doman)."
-5415,Computer Systems Design and Related Services,5415,IN47,541500,,StatCan and COPS publish computer systems design and related services (5415) on its own. No listed Canadian peer outside the candidates.
-7225,Restaurants and Other Eating Places,722,IN61,722000,AW BPF.UN PZA QSR,"StatCan publishes food services and drinking places (722); COPS groups 7223-7225. Peers: every listed Canadian company Onesheet files under Restaurants, except the candidates."
-311,Food Manufacturing,311,IN09,311000,HLF MFI SAP RSI,"COPS groups food with beverage and tobacco manufacturing (3111-3123). Peers: Onesheet's Packaged Foods except Jamieson Wellness (supplements), plus Rogers Sugar (Food Confectioners)."
-4131,Food Merchant Wholesalers,413,IN29,420000,,"NAICS Canada code (US NAICS 4244). StatCan publishes food, beverage and tobacco merchant wholesalers (413); COPS publishes wholesale trade (41) as a whole. No listed Canadian peer."
-481,Air Transportation,481,IN31,481000,AC CHR CJT,"Peers: Onesheet's Airlines, Airports & Air Services except Exchange Income."
-332,Fabricated Metal Product Manufacturing,332,IN19,332000,,StatCan and COPS publish fabricated metal product manufacturing (332) as a whole. No listed Canadian peer.
-3345,"Navigational, Measuring, Electromedical, and Control Instruments Manufacturing",334,IN21,334500,,"StatCan and COPS publish computer and electronic product manufacturing (334) as a whole, so the series is broader than instruments. No listed Canadian peer."
-335,"Electrical Equipment, Appliance, and Component Manufacturing",335,IN22,335000,BLDP ELVA HPS.A,"Peers: every listed Canadian company Onesheet files under Electrical Equipment & Parts (Ballard, Electrovaya, Hammond Power)."
-3353,Electrical Equipment Manufacturing,335,IN22,335300,HPS.A,"StatCan and COPS publish electrical equipment, appliance and component manufacturing (335) as a whole. Peer: Hammond Power (transformers), the only Electrical Equipment & Parts company making this kind of equipment."
-3364,Aerospace Product and Parts Manufacturing,3364,IN24,336400,BBD.B MAL MDA,"Peers: the Aerospace & Defense companies whose Onesheet profile describes aircraft, aerostructures or spacecraft (Bombardier, Magellan, MDA Space), not simulators (CAE) or circuit boards (Firan)."
-3363,Motor Vehicle Parts Manufacturing,3363,IN23,336300,LNR MG MRE,"COPS groups motor vehicles, bodies and parts (3361-3363). Peers: Onesheet's Auto - Parts."
-333,Machinery Manufacturing,333,IN20,333000,ATS SIS AFN,"Peers: Onesheet's Industrial - Machinery and Agricultural - Machinery (ATS, Savaria, Ag Growth)."
-524210,Insurance Agencies and Brokerages,52,IN43,524200,,"StatCan publishes no insurance-brokerage series, so finance and insurance (52) is used; its 'Other finance and insurance' (52E) aggregate may be closer. COPS: insurance and funds (5241-5269). No listed Canadian peer."
-334,Computer and Electronic Product Manufacturing,334,IN21,334000,CLS,"StatCan and COPS publish 334 as a whole; no BLS series in the file. Peers: Celestica, the only listed Canadian company Onesheet files under Hardware, Equipment & Parts."
-336413,Other Aircraft Parts and Auxiliary Equipment Manufacturing,3364,IN24,336400,MAL FTG,"StatCan and COPS publish aerospace product and parts manufacturing (3364) as a whole; no BLS series in the file. Peers: the Aerospace & Defense companies that make aircraft parts (Magellan, Firan); Bombardier (aircraft), CAE (training) and MDA (space) are left out."
-423910,Sporting and Recreational Goods and Supplies Merchant Wholesalers,414,IN29,420000,,"StatCan and COPS use Canadian NAICS, where wholesale trade is 41 and recreational goods wholesalers sit in personal and household goods (414); COPS publishes wholesale trade as a whole. No listed Canadian peer."
-423730,Warm Air Heating and Air-Conditioning Equipment and Supplies Merchant Wholesalers,416,IN29,420000,,"StatCan and COPS use Canadian NAICS, where wholesale trade is 41 and heating and air-conditioning wholesalers sit in building material and supplies (416); COPS publishes wholesale trade as a whole. No listed Canadian peer."
-325413,In-Vitro Diagnostic Substance Manufacturing,3254,IN15,325000,,"StatCan publishes pharmaceutical and medicine manufacturing (3254), which includes diagnostic substances; COPS and BLS publish chemical manufacturing (325) as a whole. No listed Canadian peer."

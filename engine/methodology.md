@@ -239,12 +239,10 @@ gap from no gap, so a company is not marked down for one is one of the scored ch
 `engine/input/outlook-tailwind.csv` and `engine/input/outlook-sources.csv`; `npm run engine` reads them. A company
 without an outlook has no value (missing, never a fail). Direction is not scored.
 
-**Coverage:** every company the ranking scores (candidates and index holdings) has its reported revenue segments
-mapped to industries, with a quote from its Onesheet profile; the five featured companies also get deals, direction
-and client markets. A company that reports no revenue split is read as one industry (a `*` row). A segment with a
-negative value (an eliminations line) is left out, since shares need positive parts. US companies are read with the
-same mostly Canadian signals (StatCan, ESDC) plus BLS where copied; their tailwind is indicative. Labels for the
-companies added after the first five are proposed by Claude and await a person's approval. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
+**Coverage:** only the five organizer candidates (CSU, TOI, WSP, TFII, ARE) have an outlook. Every other company in
+the ranking has no tailwind (missing, never 0): it is scored on the other variables with their weights rescaled, and
+the check has no data. A company that reports no revenue split can be read as one industry (a `*` row in
+`engine/input/outlook-segments.csv`). Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
 
 ### Inputs
 
@@ -263,12 +261,9 @@ Two data issues found and handled:
 - **COPS growth-rate file is misaligned.** In `industrial_aagr_tcam_par_secteur_2026_2035.csv`, each growth rate sits on the
   row above its industry (e.g. the 5.0% shown for couriers is warehousing's), and the NAICS column is shifted too. We do
   not use it. We compute growth from the same release's GDP-levels file, whose rows are consistent.
-- **bls.gov refuses scripts.** The first 27 rows were copied from Table 2.11 on 2026-11-19 and checked against the live
-  table by SHA-256 fingerprint (`74f50372…5486`). 16 more rows, for the industries added when every scored company got a
-  tailwind, were read from the same live table in the browser later that day; the table body (every row's cells joined
-  by tabs, rows by new lines) had fingerprint `c9f628fb…c0a8`. Where BLS does not split an industry, its parent is used
-  (wholesale: Wholesale trade 420000); gasoline stations (457) have no BLS row of their own and get none. A test
-  recomputes every published 10-year rate from the copied levels (`engine/outlook.test.ts`).
+- **bls.gov refuses scripts.** The 27 rows we use were copied from Table 2.11 on 2026-11-19. The copy was checked against the
+  live table by SHA-256 fingerprint (`74f50372…5486`), and a test recomputes every published 10-year rate from the copied
+  levels (`engine/outlook.test.ts`).
 - **StatCan answers out of order.** The Web Data Service does not return series in the order requested. The fetcher matches
   each series by the industry in its coordinate, and the build refuses to run if any stored series is filed under the wrong
   industry. (The first version matched by position; every momentum figure published before this fix was attached to the

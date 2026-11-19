@@ -1,4 +1,4 @@
-// Outlook engine, Layer 1: downloads reported segments and KPIs for the 5 serial acquirers from the Onesheet API
+// Outlook engine, Layer 1: downloads reported segments, KPIs and profiles for the 5 serial acquirers from the Onesheet API
 // into engine/raw/segments/ (git-ignored). Read-only. Run from the repo root:
 //   npm run outlook:fetch   (add -- --fresh to re-download)
 // The key is read from .env.local (ONESHEET_API_KEY) and never printed.
@@ -13,13 +13,8 @@ const FRESH = process.argv.includes("--fresh");
 const OUT = "engine/raw/segments";
 mkdirSync(OUT, { recursive: true });
 
-/** our ticker -> Onesheet symbol: the 5 Outlook companies, then every company the acquirer ranking scores
- *  (data/companies.json), with symbols from engine/input/market.csv; US holdings use their plain ticker. */
+/** our ticker -> Onesheet symbol: the 5 Outlook companies (the organizers' candidates) */
 const SYMBOLS = { CSU: "CSU.TO", TOI: "TOI.V", WSP: "WSP.TO", TFII: "TFII.TO", ARE: "ARE.TO" };
-const marketRows = readFileSync("engine/input/market.csv", "utf8").trim().split("\n").slice(1).map((l) => l.split(","));
-const symbolOf = new Map(marketRows.map((r) => [r[0], r[1]]));
-const ranked = JSON.parse(readFileSync("data/companies.json", "utf8")).companies.map((c) => c.ticker);
-for (const t of ranked) SYMBOLS[t] ??= symbolOf.get(t) ?? t.replace(".", "-");
 const PROFILES = "engine/raw/outlook/profiles";
 mkdirSync(PROFILES, { recursive: true });
 

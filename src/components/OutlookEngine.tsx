@@ -240,7 +240,6 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
 
       <FeaturedCards economy={economy} selected={company.ticker} onSelect={setTicker} />
 
-      <AllCompanies economy={economy} focus={initial && !FEATURED.some((c) => c.ticker === initial) ? initial : null} />
 
       <LensBar lens={lens} onChange={setLens} />
 
@@ -824,17 +823,22 @@ function DirectionFinding({ lens }: { lens: LensKey }) {
 }
 
 function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; economy: number | null; selected: string; onSelect: (t: string) => void }) {
-  const W = 980, H = 270, P = { l: 66, r: 16, t: 14, b: 34 };
   const rows = FEATURED.map((c) => ({ c, v: viewOf(c, lens) }));
   const shown = rows.filter((r) => r.v.tailwind != null && r.v.directionGap != null) as { c: OutlookCompany; v: OutlookLens & { tailwind: number; directionGap: number } }[];
-  const missing = rows.filter((r) => r.v.tailwind == null || r.v.directionGap == null);
+  // a tailwind but no direction call: drawn on its own row under the plot, so no company silently disappears
+  const nocall = rows.filter((r) => r.v.tailwind != null && r.v.directionGap == null) as { c: OutlookCompany; v: OutlookLens & { tailwind: number } }[];
+  const missing = rows.filter((r) => r.v.tailwind == null);
+  const LANE = nocall.length ? 40 : 0;
+  const W = 980, H = 270 + LANE, P = { l: 66, r: 16, t: 14, b: 34 };
+  const plotB = H - P.b - LANE; // bottom of the direction plot; the no-call row sits below it
+  const laneY = plotB + LANE / 2 + 4;
   const band = R.directionBand;
-  const xsAll = [...shown.map((r) => r.v.tailwind), ...(economy != null ? [economy] : []), 0];
+  const xsAll = [...shown.map((r) => r.v.tailwind), ...nocall.map((r) => r.v.tailwind), ...(economy != null ? [economy] : []), 0];
   const xPad = (Math.max(...xsAll) - Math.min(...xsAll)) * 0.12 || 0.01;
   const x0 = Math.min(...xsAll), x1 = Math.max(...xsAll) + xPad;
   const yMax = Math.max(band * 2, ...shown.map((r) => Math.abs(r.v.directionGap)) ) * 1.1;
   const sx = (v: number) => P.l + ((v - x0) / (x1 - x0 || 1)) * (W - P.l - P.r);
-  const sy = (v: number) => P.t + ((yMax - v) / (2 * yMax)) * (H - P.t - P.b);
+  const sy = (v: number) => P.t + ((yMax - v) / (2 * yMax)) * (plotB - P.t);
   // dots that land on the same spot share one label
   const groups: { x: number; y: number; tickers: string[] }[] = [];
   for (const r of [...shown].sort((a, b) => a.v.tailwind - b.v.tailwind)) {
@@ -856,6 +860,12 @@ function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; econom
         <text x={W - P.r - 4} y={sy(band) + 12} textAnchor="end" fontSize="10" fill="var(--color-faint)">steady</text>
         <line x1={P.l} x2={W - P.r} y1={sy(0)} y2={sy(0)} stroke="var(--color-line)" />
         <line x1={sx(0)} x2={sx(0)} y1={P.t} y2={H - P.b} stroke="var(--color-line)" />
+        {LANE > 0 && (
+          <g>
+            <line x1={P.l} x2={W - P.r} y1={plotB + 6} y2={plotB + 6} stroke="var(--color-line)" strokeDasharray="3 3" />
+            <text x={P.l - 6} y={laneY + 3} textAnchor="end" fontSize="10" fill="var(--color-faint)">no call</text>
+          </g>
+        )}
         {[yMax, band, 0, -band, -yMax].map((t) => (
           <text key={`y${t}`} x={P.l - 6} y={sy(t) + 3} textAnchor="end" fontSize="10" fill="var(--color-faint)">{pts(t)}</text>
         ))}
@@ -863,7 +873,7 @@ function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; econom
           <text key={`x${t}`} x={sx(t)} y={H - P.b + 14} textAnchor="middle" fontSize="10" fill="var(--color-faint)">{pct(t)}</text>
         ))}
         <text x={(P.l + W - P.r) / 2} y={H - 4} textAnchor="middle" fontSize="10" fill="var(--color-muted)">Tailwind, yearly after inflation</text>
-        <text x={12} y={(P.t + H - P.b) / 2} textAnchor="middle" fontSize="10" fill="var(--color-muted)" transform={`rotate(-90 12 ${(P.t + H - P.b) / 2})`}>Deals vs tailwind</text>
+        <text x={12} y={(P.t + plotB) / 2} textAnchor="middle" fontSize="10" fill="var(--color-muted)" transform={`rotate(-90 12 ${(P.t + plotB) / 2})`}>Deals vs tailwind</text>
         {economy != null && (
           <g>
             <line x1={sx(economy)} x2={sx(economy)} y1={P.t} y2={H - P.b} stroke="var(--color-ink)" strokeDasharray="4 3" strokeOpacity={0.5} />
@@ -881,13 +891,27 @@ function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; econom
             </g>
           );
         })}
+        {nocall.map((r) => {
+          const on = r.c.ticker === selected;
+          return (
+            <g key={r.c.ticker} className="cursor-pointer" onClick={() => onSelect(r.c.ticker)}>
+              <circle cx={sx(r.v.tailwind)} cy={laneY} r={14} fill="transparent" />
+              <circle cx={sx(r.v.tailwind)} cy={laneY} r={on ? 6.5 : 5} fill="var(--panel-solid)" stroke="var(--color-muted)" strokeWidth={2}>
+                <title>{`${r.c.ticker} · ${r.c.name}: tailwind ${pct(r.v.tailwind)}; too few recent deals name ${lens === "own" ? "an industry" : "a client market"} to call a direction`}</title>
+              </circle>
+              <text x={sx(r.v.tailwind) + 10} y={laneY + 4} fontSize="11" fontWeight={600} fill="var(--color-ink)">
+                {r.c.ticker} <tspan fontWeight={400} fill="var(--color-faint)">· no direction call</tspan>
+              </text>
+            </g>
+          );
+        })}
         {groups.map((g) => (
           <text key={g.tickers.join()} x={g.x + 9} y={g.y - 8} fontSize="11" fontWeight={600} fill="var(--color-ink)">{g.tickers.join(" · ")}</text>
         ))}
       </svg>
       {missing.length > 0 && (
         <p className="mt-2 text-[12px] text-faint">
-          Not plotted: {missing.map((r) => `${r.c.ticker} (${r.v.tailwind == null ? "no tailwind" : "too few recent deals with an outlook to call a direction"})`).join("; ")}.
+          Not plotted: {missing.map((r) => r.c.ticker).join(", ")} (no tailwind).
         </p>
       )}
     </div>
@@ -956,88 +980,5 @@ function FeaturedCards({ economy, selected, onSelect }: { economy: number | null
         );
       })}
     </section>
-  );
-}
-
-// ---------------------------------------------------------------- every company the score reads
-
-function AllCompanies({ economy, focus }: { economy: number | null; focus: string | null }) {
-  const [open, setOpen] = useState(focus != null);
-  const rows = [...outlook.companies].sort((a, b) => (b.tailwind ?? -1) - (a.tailwind ?? -1));
-  const vals = rows.map((c) => c.tailwind ?? 0);
-  const lo = Math.min(0, ...vals), hi = Math.max(...vals, economy ?? 0);
-  const x = (v: number) => ((v - lo) / (hi - lo || 1)) * 100;
-  useEffect(() => {
-    if (focus) document.getElementById(`outlook-all-${focus}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [focus]);
-  const passing = rows.filter((c) => c.lagsEconomy === false).length;
-  if (!open)
-    return (
-      <button onClick={() => setOpen(true)} aria-expanded={false}
-        className="panel group flex w-full flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-left transition-colors hover:border-teal/50 md:px-6">
-        <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="text-[14px] font-semibold text-ink">Every company the score reads</span>
-          <span className="text-[12.5px] text-muted">
-            {rows.length} candidates and holdings · {passing} pass the “not lagging the economy” check
-          </span>
-        </span>
-        <span className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted transition-colors group-hover:border-teal group-hover:text-ink">
-          Show all {rows.length} <span aria-hidden>▾</span>
-        </span>
-      </button>
-    );
-  return (
-    <Card title={`Every company the score reads · ${rows.length}`}
-      right={<button onClick={() => setOpen(false)} aria-expanded className="rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted hover:text-ink">Hide <span aria-hidden>▴</span></button>}>
-      <p className="mb-3 text-[12.5px] text-muted">
-        The tailwind of every candidate and index holding, read the same way: each reported revenue segment mapped to an industry, each industry’s outlook from the
-        published sources. The five featured companies are also read on deals and client markets. Line = the whole economy, {pct(economy)} a year.
-      </p>
-      <div className="overflow-x-auto">
-        <table className="w-full min-w-[640px] text-left text-[12.5px]">
-          <thead className="text-[10.5px] uppercase tracking-wide text-faint">
-            <tr>
-              <th className="py-2 pr-2 font-medium">#</th>
-              <th className="py-2 pr-3 font-medium">Company</th>
-              <th className="w-[38%] py-2 pr-3 font-medium">Tailwind</th>
-              <th className="py-2 pr-3 font-medium">Check</th>
-              <th className="py-2 font-medium">Main industry</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.map((c, i) => {
-              const top = c.industryMix[0];
-              return (
-                <tr key={c.ticker} id={`outlook-all-${c.ticker}`} className={`border-t border-line align-middle transition-colors ${focus === c.ticker ? "bg-tealsoft" : "hover:bg-soft"}`}>
-                  <td className="py-2 pr-2 font-mono text-[11px] text-faint">{i + 1}</td>
-                  <td className="py-2 pr-3">
-                    <a href={`#c/${encodeURIComponent(c.ticker)}`} className="font-mono font-semibold text-ink hover:underline">{c.ticker}</a>
-                    {c.featured && <span className="ml-1.5 rounded bg-soft px-1 py-px text-[9.5px] font-semibold uppercase tracking-wide text-muted">featured</span>}
-                    <div className="max-w-[180px] truncate text-[11.5px] text-muted">{c.name}</div>
-                  </td>
-                  <td className="py-2 pr-3">
-                    <div className="flex items-center gap-2.5">
-                      <div className="relative h-2 flex-1 rounded-full bg-line">
-                        {c.tailwind != null && (
-                          <span className={`absolute inset-y-0 rounded-full ${c.trend ? TREND_FILL[c.trend] : "bg-faint"}`}
-                            style={{ left: `${Math.min(x(0), x(c.tailwind))}%`, width: `${Math.abs(x(c.tailwind) - x(0))}%` }} />
-                        )}
-                        {economy != null && <span className="absolute -inset-y-1 w-px bg-ink/50" style={{ left: `${x(economy)}%` }} />}
-                      </div>
-                      <span className="w-12 text-right font-mono tabular-nums text-ink">{pct(c.tailwind)}</span>
-                    </div>
-                  </td>
-                  <td className="whitespace-nowrap py-2 pr-3 text-[11.5px]"><CheckMark c={c} /></td>
-                  <td className="py-2 text-[11.5px] text-muted">
-                    {top ? <>{top.title} <span className="font-mono text-faint">{pct(top.share, 0)}</span></> : "—"}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <p className="mt-3 text-[12px] text-faint">Industry labels for the companies beyond the five featured are proposed by Claude, with a quote from each Onesheet profile, and await approval.</p>
-    </Card>
   );
 }

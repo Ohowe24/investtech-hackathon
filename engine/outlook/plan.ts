@@ -16,7 +16,7 @@ export const LAYERS: OutlookLayer[] = [
     steps: [
       { id: "deals", label: "Disclosed deals", status: "done", detail: "Acquisitions with SEDAR quotes, copied from engine/input/deals.json." },
       { id: "deal-labels", label: "Deal industry labels", status: "in-progress", detail: "A NAICS code per deal with the quote that justifies it (engine/input/outlook-labels.csv). Proposed; awaiting approval." },
-      { id: "segments", label: "Revenue by segment", status: "done", detail: "Onesheet segments for the five featured companies and every other company the acquirer ranking scores (tailwind only), each mapped to an industry with a quote from its Onesheet profile (engine/input/outlook-segments.csv). Labels for the 29 added companies are proposed and await approval." },
+      { id: "segments", label: "Revenue by segment", status: "done", detail: "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each mapped to an industry with a quote (engine/input/outlook-segments.csv)." },
     ],
   },
   {
