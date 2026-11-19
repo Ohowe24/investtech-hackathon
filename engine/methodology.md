@@ -14,6 +14,7 @@ This file says what each metric means and why the thresholds are where they are.
 | Reported organic growth (CSU, TOI, WSP only) | Onesheet data pack, with the SEDAR quote | `engine/input/organic.csv` |
 | Deals (acquisitions, divestitures) for the 5 acquirer candidates and the 5 data-pack REITs | Onesheet data pack events, with SEDAR quotes | `engine/input/deals.json` |
 | REIT figures (FFO, AFFO, payout, debt ratio, occupancy…) for CAR.UN, GRT.UN, KMP.UN, NXR.UN, REI.UN | Onesheet data pack, each value with its SEDAR quote | `engine/input/facts.csv` |
+| Monthly prices (adjusted close, dividends reinvested, up to 20 years), latest price, market cap, USD/CAD rate, and the TSX Composite ETF (XIC) for the generated index | Yahoo Finance via `yahoo-finance2`: live per request (`/api/index-builder`), snapshot by `npm run prices` | `data/prices.json` (fallback only) |
 
 `npm run engine` writes `data/store.json` (every company's figures) and `data/companies.json` (the default view).
 
@@ -163,6 +164,33 @@ Result: passes if the must-pass check passes and at least 75% of the scored chec
 **Limits:** a relative test always passes the best of the group, even in a weak industry, and it needs several companies to mean anything. EBITDA and margins also say little for IFRS real-estate companies, whose EBITDA includes revaluations: the researched REIT model is the one to use for REITs. Onesheet's industry labels decide who counts as a peer.
 
 
+## Generated index ("Choose your own" industries; `engine/indexBuilder.ts`, tests in `engine/indexBuilder.test.ts`)
+
+The **Generate index** button (top right of the results, "Choose your own" industries only) turns the companies the engine tested into a C$100,000 index, back-tests it and projects it. It answers "what would this group have done, and what does that imply", not "what will happen".
+
+**Prices.** `/api/index-builder` fetches, for every tested company, Yahoo Finance's monthly bars from 20 years and a month ago (`engine/prices-fetch.ts`): the adjusted close (splits and dividends folded in, so returns are total returns), the latest price and the market cap. Yahoo stamps a monthly bar at midnight on the 1st in the exchange's time zone, which can fall on the last evening of the previous month in UTC, so a bar's month is read two days after its time (`barMonth`). Results are kept in memory for 6 hours; any ticker Yahoo does not answer for comes from the saved snapshot `data/prices.json` (`npm run prices`, every company in the market map and the statements cache), and the page says when it did. A ticker with no prices anywhere is left out and listed.
+
+**Currency.** Everything is in Canadian dollars. A US listing's month-end close is multiplied by that month's USD/CAD rate (Yahoo `CAD=X`); its latest price and market cap by the latest rate.
+
+**Members.** "Passing" (the model's verdict passes), "Passing + mixed", or "All tested", the default being the first with at least 3 companies. Any member can be unticked; the others are re-weighted.
+
+**Weights** (`targetWeights`, `capWeights`):
+- Market cap: in proportion to market value in CAD, no company above **25%**. A capped company's excess is shared among the others in proportion to their market caps, repeated until nobody is over. With fewer than 4 companies the cap cannot hold and weights stay uncapped.
+- Equal: 1 ÷ n each.
+- Checks passed: in proportion to the quality score out of 100 where the industry has one, else to the share of scored checks passed. A company that passed none gets no weight.
+
+**Positions** (`allocate`): each company's share of $100,000 buys whole shares at the latest price; what whole shares cannot use stays as cash.
+
+**Back-test** (`backtest`): each month's index return is the weight-averaged return of the members with a return that month, rebalanced to the target weights every month, no fees or taxes. A member not yet listed passes its weight to the others in proportion. The test starts at the first month where members with a return carry at least **50%** of the weight, and covers at most **240 months**. The benchmark is XIC over exactly the same months.
+
+**Statistics** (`returnStats`): return a year = (end ÷ start)^(12 ÷ months) − 1; volatility = standard deviation of monthly returns × √12; worst fall = largest drop from a peak to a later low; worst and best 12 months = rolling 12-month returns. Needs at least 12 months.
+
+**Projection** (`projectAt`). Monthly log returns of the back-test have mean μ and standard deviation σ over n months. After T months, the log of the value is taken as normal with mean μ·T and variance **σ²·T + σ²·T²/n**. The first term is the month-to-month ups and downs; the second is the uncertainty in μ itself (its standard error is σ/√n and it compounds over T months), so a short history or a long horizon gives honestly wide bands. Reported: the middle (50th percentile, start × e^(μT)), the likely range (25th–75th), the bad and good cases (10th and 90th), and the chance of ending below $100,000 (Φ(−μT ÷ sd)). Horizons: 1, 3, 5, 10, 20 and 30 years. No projection from fewer than 36 months.
+
+**Market's pace** (`marketPace`): the same formula with the index's own σ but the benchmark's μ (and its n), so the projection does not assume a hot run continues. The page offers both; "Its own past" is the default.
+
+**Limits.** Hindsight (survivorship): the back-test holds today's companies, chosen on today's filings, all the way back; companies that failed, were bought out, or would have failed the checks back then are not in it, so the past looks better than an index built at the time would have done. Monthly rebalancing between volatile, loosely correlated stocks adds return in a back-test that trading costs would eat into. Returns are not normal (crashes are fatter-tailed than the bands suggest). Yahoo Finance is an unofficial source; a bad print in its history passes straight through.
+
 ## Quality score (serial acquirers and oil & gas producers)
 
 The pass / fail checks answer "does it clear the bar?". They count every check the same and cannot say how far above or below the bar a company is. The **quality score** adds that: each variable is graded 0–1, multiplied by its weight, and the weights add up to 100.
@@ -296,3 +324,22 @@ The same tailwind and direction are computed twice.
   shown as text ("serves", "clients") and not scored.
 - Signals describe Canada and the US; Topicus earns in Europe and WSP partly abroad (the page says so per company).
 - Constellation and Topicus disclose only material deals. Analysts' revenue estimates include acquisitions.
+
+## Analyst sentiment (shown, not scored)
+
+Sell-side analysts' current ratings, from Yahoo Finance's recommendation counts for the current month ("0m").
+`npm run fetch-analyst` saves them to `engine/input/analyst.csv` (no API key; Yahoo's endpoint is unofficial, so the
+site reads the saved file and never calls Yahoo). It covers every company in `companies.csv` and every TSX name in
+`market.csv`, and skips a symbol whose Yahoo name does not match ours (a ticker reused by another company).
+
+| Output | Function | Rule |
+|---|---|---|
+| Average rating | `analystConsensus` | Strong buy 1, buy 2, hold 3, sell 4, strong sell 5, averaged over all ratings. |
+| Buy share | `analystConsensus` | (strong buy + buy) ÷ all ratings. |
+| Sentiment | `analystConsensus` | **Bullish** at an average of 2.5 or better (buy on balance), **bearish** at 3.5 or worse (sell on balance), **neutral** between. None called with fewer than 3 analysts (`MIN_ANALYSTS`). |
+
+- Not part of any check, score or verdict.
+- Sell ratings are rare across the industry, so most covered companies come out bullish. Compare the average rating and
+  buy share between companies rather than reading "bullish" on its own.
+- Counts are a snapshot on the fetch date; rerun the fetch to update them. Yahoo's analyst count for a month can differ
+  from its separate "number of analyst opinions" figure; we use the rating counts only.

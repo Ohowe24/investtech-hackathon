@@ -12,6 +12,7 @@ Before substantial work, read `docs/BRIEF.md` (what and why), `docs/TEAM_PLAN.md
 | `src/` | The website. `/` is the onboarding (industry → holdings → run); `/analyze` runs `engine/analyze.ts` on the server against `data/store.json` and `data/indexes.json`. |
 | `contract/types.ts` | Shape of `data/companies.json`, shared by the engine and the website. When it changes, update both sides. |
 | `data/companies.json` | Engine output. Regenerate it with `npm run engine`; hand edits are overwritten on the next run. |
+| `engine/indexBuilder.ts` | The generated index ("Generate index" on custom-industry results, tab `#index`): weights, back-test and projection of a $100,000 index. Prices from `/api/index-builder` (Yahoo Finance live, `data/prices.json` fallback). Formulas in `engine/methodology.md`, "Generated index". |
 | `docs/OUTLOOK_ENGINE.md` | The Outlook engine plan (industry outlook for serial acquirers). Data in `data/outlook.json`, built by `npm run outlook`; tab `#outlook` on `/analyze`. |
 
 ## Numbers: zero tolerance
@@ -29,6 +30,7 @@ npm run fetch-statements  # download annual statements for all 20 companies into
 npm run inputs         # engine/raw/ -> engine/input/*.csv + deals.json (never overwrites companies.csv)
 npm run engine         # rebuild data/store.json + data/companies.json (uses engine/input/ if present, else FAKE sample); add -- --industry <id> to pick a profile
 npm run outlook        # rebuild data/outlook.json (Outlook engine tab); see docs/OUTLOOK_ENGINE.md
+npm run prices         # snapshot of 20 years of monthly prices from Yahoo Finance into data/prices.json (fallback for the generated index)
 npm test               # formula + index-math tests
 npm run build          # production build; must pass before pushing
 npm run refresh-index  # pull the organizers' latest live holdings into data/indexes.json

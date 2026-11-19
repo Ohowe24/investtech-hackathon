@@ -9,6 +9,7 @@ import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import Recommendation from "./Recommendation";
 import OutlookEngine from "./OutlookEngine";
+import IndexBuilder from "./IndexBuilder";
 import Jarvis from "./jarvis/Jarvis";
 import { Card } from "./ui";
 import EngineReplay from "./live/EngineReplay";
@@ -25,7 +26,7 @@ interface Props {
   query: AnalysisQuery;
 }
 
-type Tab = "ranking" | "recommendation" | "companies" | "map" | "outlook";
+type Tab = "ranking" | "recommendation" | "companies" | "map" | "outlook" | "index";
 const TABS: { id: Tab; label: string }[] = [
   { id: "ranking", label: "Ranking" },
   { id: "recommendation", label: "Recommendation" },
@@ -46,6 +47,15 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
   const theme = usePanelTheme();
   // Bumped after each run so every view replays its entrance.
   const [epoch, setEpoch] = useState(0);
+  // Generated index ("Choose your own" industries): play the build when the button is pressed; show its tab once built.
+  const canIndex = dataset.industryId.startsWith("custom:");
+  const indexKey = `index-built:${toSearch(query)}`;
+  const [indexFresh, setIndexFresh] = useState(false);
+  const [indexBuilt, setIndexBuilt] = useState(false);
+  useEffect(() => {
+    const read = () => { try { setIndexBuilt(window.sessionStorage.getItem(indexKey) === "1"); } catch {} };
+    read();
+  }, [indexKey]);
   useEffect(() => {
     const read = () => setHash(window.location.hash.replace(/^#/, ""));
     read();
@@ -83,7 +93,17 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
 
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "" || hash === "ranking";
-  const tabs = TABS;
+  const tabs = canIndex && (indexBuilt || hash === "index") ? [...TABS, { id: "index" as const, label: "Your index" }] : TABS;
+  const generateIndex = () => {
+    setIndexFresh(true);
+    if (hash === "index") setEpoch((e) => e + 1);
+    else go("index");
+  };
+  const indexReady = () => {
+    setIndexFresh(false);
+    setIndexBuilt(true);
+    try { window.sessionStorage.setItem(indexKey, "1"); } catch {}
+  };
   const editHref = `/?${toSearch(query)}`;
   // Re-run the engine with more (or only the provided) candidates, replaying the run, and land on Companies.
   const rerun = (more: boolean) => {
@@ -91,7 +111,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
     window.location.assign(`/analyze?${toSearch({ ...query, more: more || undefined })}#companies`);
   };
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || hash === "outlook" ? hash : "companies";
+  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || hash === "outlook" || (hash === "index" && canIndex) ? hash : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -120,6 +140,12 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-2">
+            {canIndex && (
+              <button onClick={generateIndex} title="Turn these companies into a $100,000 index, back-test it and project it forward"
+                className="group flex items-center gap-1.5 rounded-md bg-signal px-3 py-1 text-[12px] font-semibold text-[#03160a] shadow-[0_0_24px_-6px_rgba(61,220,108,0.8)] transition-transform hover:-translate-y-px">
+                <span className="inline-block transition-transform duration-500 group-hover:rotate-90">✦</span> Generate index
+              </button>
+            )}
             <ThemeSwitch />
             <LiveClock updatedAt={snapshot.updatedAt} source={snapshot.source} />
             <button onClick={() => startRun(null)} title="Replay the engine run"
@@ -141,6 +167,8 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
           <div><Recommendation dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} /></div>
         ) : tab === "outlook" ? (
           <OutlookEngine />
+        ) : tab === "index" ? (
+          <IndexBuilder dataset={dataset} fresh={indexFresh} onBuilt={indexReady} onOpen={(t) => go(`c/${t}`)} />
         ) : tab === "map" ? (
           <div>
             <Card title={dataset.mapTitle ?? "Map"}>
