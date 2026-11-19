@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T16:26:36.761Z",
+  "generatedAt": "2026-11-19T16:49:37.824Z",
   "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
@@ -221,6 +221,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Revenue lines are types of software revenue, not industries; every line belongs to the software business.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -238,6 +241,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -255,6 +261,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -272,6 +281,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Hardware resold inside software solutions; counted with the software business it belongs to.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -292,11 +304,11 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.028869308614141276,
+      "tailwind": 0.04874219222205611,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
-      "dealOutlook": 0.028869308614141276,
+      "dealOutlook": 0.04874219222205611,
       "dealCount": 8,
       "dealsWithOutlook": 8,
       "directionGap": 0,
@@ -321,8 +333,38 @@
           ]
         }
       ],
+      "directionNotes": [
+        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal."
+      ],
+      "customer": {
+        "base": "economy",
+        "tailwind": 0.01918450809756833,
+        "coverage": 1,
+        "trend": null,
+        "decliningShare": null,
+        "dealOutlook": null,
+        "dealCoverage": 0.25,
+        "directionGap": null,
+        "direction": null,
+        "industryMix": [
+          {
+            "naics": "economy",
+            "title": "Whole economy",
+            "share": 1,
+            "segments": [
+              "Maintenance and other recurring",
+              "Professional services",
+              "Licenses",
+              "Hardware and other"
+            ]
+          }
+        ],
+        "notes": [
+          "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "Direction needs client markets for at least half of the recent deals: the filings name them for 2 of 8."
+        ]
+      },
       "notes": [
-        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal.",
         "Deal industry labels are proposed and awaiting approval.",
         "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
       ]
@@ -344,6 +386,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Revenue lines are types of software revenue, not industries; every line belongs to the software business.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -361,6 +406,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -378,6 +426,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -395,6 +446,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Hardware resold inside software solutions; counted with the software business it belongs to.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -432,18 +486,49 @@
           ]
         }
       ],
-      "tailwind": 0.028869308614141276,
+      "tailwind": 0.04874219222205612,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
-      "dealOutlook": 0.028869308614141276,
+      "dealOutlook": 0.04874219222205611,
       "dealCount": 6,
       "dealsWithOutlook": 6,
-      "directionGap": 0,
+      "directionGap": -6.938893903907228e-18,
       "direction": "steady",
       "narrative": [],
+      "directionNotes": [
+        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal."
+      ],
+      "customer": {
+        "base": "economy",
+        "tailwind": 0.01918450809756833,
+        "coverage": 1,
+        "trend": null,
+        "decliningShare": null,
+        "dealOutlook": 0.018022337480482337,
+        "dealCoverage": 0.6388888888888887,
+        "directionGap": -0.001162170617085994,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "economy",
+            "title": "Whole economy",
+            "share": 0.9999999999999999,
+            "segments": [
+              "Maintenance and other recurring",
+              "Professional services",
+              "Licenses",
+              "Hardware and other"
+            ]
+          }
+        ],
+        "notes": [
+          "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "Direction rests on the client markets named for 4 of 6 recent deals (64% of their weight).",
+          "Deals are compared with the whole economy, the base for a company with clients in every sector."
+        ]
+      },
       "notes": [
-        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal.",
         "Deal industry labels are proposed and awaiting approval.",
         "All reported revenue is outside North America, while the signals describe Canada and the United States: read the outlook as indicative.",
         "No narrative: the latest earnings-call transcript in Onesheet is from 2021 (Q1), too old to describe today's markets."
@@ -466,6 +551,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "rail, transit, aviation, highways, bridges, tunnels, water, maritime and urban infrastructure",
           "note": "WSP's sectors are its clients' markets; the work itself is engineering services.",
+          "market": "237",
+          "marketTitle": "Heavy and Civil Engineering Construction",
+          "marketNote": "Transport & Infrastructure clients build highways, bridges, rail, transit and water systems: heavy and civil construction.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -483,6 +571,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "permitting, remediation, mining, water",
           "note": "Mixes engineering with environmental consulting (541620); WSP reports it as one sector, so it stays with engineering.",
+          "market": null,
+          "marketTitle": null,
+          "marketNote": "Clients span mining, permitting, remediation and water: no single market, so this segment is left out of the client view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -500,6 +591,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "commercial buildings, social and critical infrastructure",
           "note": null,
+          "market": "2362",
+          "marketTitle": "Nonresidential Building Construction",
+          "marketNote": "Clients build and run commercial, social and critical buildings: non-residential building construction.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -517,6 +611,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "renewables, nuclear, natural gas, power plants, transmission, distribution",
           "note": null,
+          "market": "2211",
+          "marketTitle": "Electric Power Generation, Transmission and Distribution",
+          "marketNote": "Clients are power producers and grid owners: electric power generation, transmission and distribution.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -570,14 +667,14 @@
           ]
         }
       ],
-      "tailwind": 0.030430626650191698,
+      "tailwind": 0.025898396501788164,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
-      "dealOutlook": 0.029868741870756225,
+      "dealOutlook": 0.021243422824824266,
       "dealCount": 12,
       "dealsWithOutlook": 11,
-      "directionGap": -0.0005618847794354731,
+      "directionGap": -0.004654973676963898,
       "direction": "steady",
       "narrative": [
         {
@@ -599,8 +696,59 @@
           ]
         }
       ],
+      "directionNotes": [
+        "Direction rests on 11 of 12 recent deals; the filings don't say what the other is."
+      ],
+      "customer": {
+        "base": "segments",
+        "tailwind": 0.022939823884575463,
+        "coverage": 0.7062400875034182,
+        "trend": "growing",
+        "decliningShare": 0,
+        "dealOutlook": 0.022339277390900084,
+        "dealCoverage": 0.625,
+        "directionGap": -0.0006005464936753788,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "237",
+            "title": "Heavy and Civil Engineering Construction",
+            "share": 0.36880503144654087,
+            "segments": [
+              "Transport & Infrastructure"
+            ]
+          },
+          {
+            "naics": "2362",
+            "title": "Nonresidential Building Construction",
+            "share": 0.2206781514902926,
+            "segments": [
+              "Property & Buildings"
+            ]
+          },
+          {
+            "naics": "2211",
+            "title": "Electric Power Generation, Transmission and Distribution",
+            "share": 0.11675690456658464,
+            "segments": [
+              "Power & Energy"
+            ]
+          },
+          {
+            "naics": "",
+            "title": "No single client market",
+            "share": 0.2937599124965819,
+            "segments": [
+              "Earth & Environment"
+            ]
+          }
+        ],
+        "notes": [
+          "Earth & Environment has no single client market and is left out of this view (29% of revenue).",
+          "Direction rests on the client markets named for 8 of 12 recent deals (63% of their weight)."
+        ]
+      },
       "notes": [
-        "Direction rests on 11 of 12 recent deals; the filings don't say what the other is.",
         "Deal industry labels are proposed and awaiting approval.",
         "38% of revenue is earned outside Canada and the Americas; the signals describe Canada and the United States."
       ]
@@ -622,6 +770,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "specialized and conventional truckload",
           "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -639,6 +790,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -656,6 +810,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "brokerage, last-mile delivery, warehousing",
           "note": "Mixes brokerage (488510), last-mile delivery (492) and warehousing (493); labelled by brokerage, the asset-light core.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -673,6 +830,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": null,
           "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -714,7 +874,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.017281658363087333,
+      "tailwind": 0.01883367934583086,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -727,7 +887,7 @@
         {
           "speaker": "Alain Bédard",
           "quote": "2023 was not so bad, but then 2024, 2025 with freight recession, increasing inflation on the cost, et cetera, et cetera.",
-          "summary": "Two years of freight recession: the same slump the Statistics Canada trucking figures show.",
+          "summary": "The CEO calls 2024–2025 a freight recession, with rising costs. In contrast, Statistics Canada's real trucking output still grew over the last three years.",
           "call": "Q3 2026 earnings call, 2026-10-29",
           "sourceIds": [
             "onesheet-transcripts"
@@ -745,15 +905,66 @@
         {
           "speaker": "Alain Bédard",
           "quote": "So, we feel very good about 2027 because at one point, the demand will start, the supply will stay constrained, and us, like I said, during the course of 2027, we still have some tweaks to do.",
-          "summary": "Management expects demand to return while trucking capacity stays tight, which is the recovery the official projections assume.",
+          "summary": "Management expects demand to return while trucking capacity stays tight.",
           "call": "Q3 2026 earnings call, 2026-10-29",
           "sourceIds": [
             "onesheet-transcripts"
           ]
         }
       ],
+      "directionNotes": [
+        "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are."
+      ],
+      "customer": {
+        "tailwind": 0.01883367934583086,
+        "coverage": 1,
+        "trend": "stable",
+        "decliningShare": 0,
+        "dealOutlook": null,
+        "dealCoverage": 0.4,
+        "directionGap": null,
+        "direction": null,
+        "industryMix": [
+          {
+            "naics": "484",
+            "title": "Truck Transportation",
+            "share": 0.39230688858277174,
+            "segments": [
+              "Truckload"
+            ]
+          },
+          {
+            "naics": "484122",
+            "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+            "share": 0.32782820035369636,
+            "segments": [
+              "Less-than-truckload"
+            ]
+          },
+          {
+            "naics": "488510",
+            "title": "Freight Transportation Arrangement",
+            "share": 0.21584736000762392,
+            "segments": [
+              "Logistics"
+            ]
+          },
+          {
+            "naics": "492110",
+            "title": "Couriers and Express Delivery Services",
+            "share": 0.06401755105590796,
+            "segments": [
+              "Package and courier"
+            ]
+          }
+        ],
+        "notes": [
+          "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”.",
+          "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are."
+        ],
+        "base": "same"
+      },
       "notes": [
-        "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are.",
         "Deal industry labels are proposed and awaiting approval.",
         "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
       ]
@@ -775,6 +986,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "civil, urban transit, nuclear, utility and industrial projects",
           "note": "Mostly heavy and civil engineering construction; the industrial building part (236210) is not reported separately.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -792,6 +1006,9 @@
           "quoteSource": "Onesheet company profile",
           "serves": "airports",
           "note": null,
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
           "sourceIds": [
             "onesheet-segments",
             "onesheet-profile"
@@ -842,14 +1059,14 @@
           ]
         }
       ],
-      "tailwind": 0.024553761856373268,
+      "tailwind": 0.019289781609515066,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
-      "dealOutlook": 0.021760353403145544,
+      "dealOutlook": 0.019959114456143068,
       "dealCount": 6,
       "dealsWithOutlook": 6,
-      "directionGap": -0.0027934084532277234,
+      "directionGap": 0.000669332846628002,
       "direction": "steady",
       "narrative": [
         {
@@ -871,6 +1088,39 @@
           ]
         }
       ],
+      "directionNotes": [],
+      "customer": {
+        "tailwind": 0.019289781609515066,
+        "coverage": 1,
+        "trend": "growing",
+        "decliningShare": 0,
+        "dealOutlook": 0.019959114456143068,
+        "dealCoverage": 1,
+        "directionGap": 0.000669332846628002,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "237",
+            "title": "Heavy and Civil Engineering Construction",
+            "share": 0.9986102212495386,
+            "segments": [
+              "Construction"
+            ]
+          },
+          {
+            "naics": "4881",
+            "title": "Support Activities for Air Transportation",
+            "share": 0.001389778750461389,
+            "segments": [
+              "Concessions"
+            ]
+          }
+        ],
+        "notes": [
+          "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”."
+        ],
+        "base": "same"
+      },
       "notes": [
         "Deal industry labels are proposed and awaiting approval."
       ]
@@ -892,7 +1142,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Weak: text names the buyer (Aecon Utilities) and 'Utility Services' but not what Duna does. One copy of this row carries a quote about a different deal (Ainsworth Power Construction, Dec 2024), which is missing from the deal list.",
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -910,7 +1169,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Weak: text names the buyer (Aecon Utilities) and 'Utility Services' but not what Duna does. One copy of this row carries a quote about a different deal (Ainsworth Power Construction, Dec 2024), which is missing from the deal list.",
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -928,7 +1196,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Bodell (2025-08-07) and Trinity (2025-09-18) together.",
-      "outlook": 0.01879956238570568,
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -946,7 +1223,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Mostly maintenance and turnarounds; 236210 (industrial construction) is the alternative.",
-      "outlook": 0.013512495396466706,
+      "outlook": 0.0131798340751621,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -964,7 +1250,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.01879956238570568,
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -982,7 +1277,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "The business bought is United Engineers & Constructors; CriticalPoint is the seller. NAICS 237130 includes power plant construction.",
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1000,7 +1304,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1018,7 +1331,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as Bodell Construction Company (2025-08-07).",
-      "outlook": 0.01879956238570568,
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1036,7 +1358,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as Trinity Industrial Services (2025-09-18).",
-      "outlook": 0.013512495396466706,
+      "outlook": 0.0131798340751621,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1054,7 +1385,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: the filing names no businesses. Nine-month total, so it contains the H1 2026 row.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1072,7 +1412,16 @@
       "labelStatus": "proposed",
       "exclude": "contained in the nine-month total (Q3 2026 row)",
       "labelNote": "Company-level label.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1090,7 +1439,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5615",
+          "title": "Travel Arrangement and Reservation Services",
+          "weight": 1,
+          "outlook": 0.021799063574313937
+        }
+      ],
+      "marketsNote": "travel",
       "recent": true
     },
     {
@@ -1108,7 +1466,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: no filing text or profile says what Synchronoss does.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1126,7 +1493,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: deals agreed after June 30, 2026, not named. May overlap the Q3 2026 row.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1144,7 +1520,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: deals agreed after September 30, 2026.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1163,6 +1548,15 @@
       "exclude": "minority share purchase, not a business acquisition",
       "labelNote": "Treasury shares of Asseco Poland bought through Topicus.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1180,7 +1574,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Bought through Topicus, also listed under TOI.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1199,6 +1602,15 @@
       "exclude": "minority share purchase, not a business acquisition",
       "labelNote": "Agreement for the October 2025 purchase.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1217,6 +1629,15 @@
       "exclude": "minority share purchase, not a business acquisition",
       "labelNote": "Same agreement as the row above.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1235,6 +1656,15 @@
       "exclude": "minority share purchase, not a business acquisition",
       "labelNote": "About 9.99% of Asseco.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1252,7 +1682,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: deals agreed after June 30, 2025, not named.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1270,7 +1709,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label: the filing says 'Public Safety Businesses' but not that they are software.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 1,
+          "outlook": 0.008420033575642805
+        }
+      ],
+      "marketsNote": "public safety is bought by governments",
       "recent": true
     },
     {
@@ -1288,7 +1736,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "WideOrbit sellers were paid in Lumine shares; the profile describes Lumine as a communications and media software group.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "516",
+          "title": "Broadcasting and Content Providers",
+          "weight": 1,
+          "outlook": 0.017471450533642185
+        }
+      ],
+      "marketsNote": "broadcasters and media",
       "recent": false
     },
     {
@@ -1306,7 +1763,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Bought in 2023 per the profile.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5222",
+          "title": "Nondepository Credit Intermediation",
+          "weight": 1,
+          "outlook": 0.030625710283383345
+        }
+      ],
+      "marketsNote": "mortgage lending",
       "recent": false
     },
     {
@@ -1324,7 +1790,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Company-level label; the business bought is Allscripts' Hospitals and Large Physician Practices segment (now Altera).",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "622",
+          "title": "Hospitals",
+          "weight": 1,
+          "outlook": 0.02927572477412621
+        }
+      ],
+      "marketsNote": "hospitals (and large physician practices)",
       "recent": false
     },
     {
@@ -1342,7 +1817,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as DerbySoft Holdings Limited (2026-06-01).",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5615",
+          "title": "Travel Arrangement and Reservation Services",
+          "weight": 1,
+          "outlook": 0.021799063574313937
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1360,7 +1844,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as Synchronoss Technologies, Inc. (2026-02-13).",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1378,7 +1871,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as the Conduent row (2024-04-30).",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 1,
+          "outlook": 0.008420033575642805
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1396,7 +1898,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Labelled from its segment: the filing says it 'now operates as part of the Truckload segment'. The name suggests warehousing.",
-      "outlook": 0.01653795302572658,
+      "outlook": 0.017001670773741484,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1415,6 +1926,15 @@
       "exclude": null,
       "labelNote": "Filing calls it 'a non-material business' and gives no industry.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1433,6 +1953,15 @@
       "exclude": null,
       "labelNote": "Filing gives no industry. Probably includes Hearn (2025-12-15).",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1451,6 +1980,15 @@
       "exclude": "contained in the full-year 2025 row (Q4 2025)",
       "labelNote": "Filing gives no industry; the quote on this row is about a 2026 deal.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1469,6 +2007,15 @@
       "exclude": null,
       "labelNote": "Reported in the Logistics segment (asset-light logistics, last-mile delivery, brokerage and warehousing); text doesn't say which.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1486,7 +2033,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Labelled from its segment: the filing says 'Daseke is reported in the Truckload segment'.",
-      "outlook": 0.01653795302572658,
+      "outlook": 0.017001670773741484,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1504,7 +2060,16 @@
       "labelStatus": "proposed",
       "exclude": "contained in the H1 2026 row",
       "labelNote": "Company-level label.",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1522,7 +2087,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1540,7 +2114,46 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "441",
+          "title": "Motor Vehicle and Parts Dealers",
+          "weight": 0.16666666666666666,
+          "outlook": 0.016192022525814753
+        },
+        {
+          "code": null,
+          "title": null,
+          "weight": 0.16666666666666666,
+          "outlook": null
+        },
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.16666666666666666,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "325",
+          "title": "Chemical Manufacturing",
+          "weight": 0.16666666666666666,
+          "outlook": 0.016275949765731212
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.16666666666666666,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "5411",
+          "title": "Legal Services",
+          "weight": 0.16666666666666666,
+          "outlook": 0.007063782412386033
+        }
+      ],
+      "marketsNote": "automotive → dealers; planning: no clear market; government; chemicals; healthcare → practices and clinics; legal",
       "recent": true
     },
     {
@@ -1558,7 +2171,28 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "48-49",
+          "title": "Transportation and Warehousing",
+          "weight": 0.3333333333333333,
+          "outlook": 0.026951463903342687
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.3333333333333333,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "61",
+          "title": "Educational Services",
+          "weight": 0.3333333333333333,
+          "outlook": 0.005513166609362852
+        }
+      ],
+      "marketsNote": "fleet → transportation; healthcare; education",
       "recent": true
     },
     {
@@ -1576,7 +2210,34 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.25,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "52",
+          "title": "Finance and Insurance",
+          "weight": 0.25,
+          "outlook": 0.0348340998989205
+        },
+        {
+          "code": "323",
+          "title": "Printing and Related Support Activities",
+          "weight": 0.25,
+          "outlook": -0.008093367318772526
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.25,
+          "outlook": 0.025383472044729904
+        }
+      ],
+      "marketsNote": "local government; financial services; printing; healthcare",
       "recent": true
     },
     {
@@ -1594,7 +2255,22 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.5,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "531",
+          "title": "Real Estate",
+          "weight": 0.5,
+          "outlook": 0.019505174392315805
+        }
+      ],
+      "marketsNote": "healthcare; real estate",
       "recent": true
     },
     {
@@ -1612,7 +2288,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1631,6 +2316,15 @@
       "exclude": "minority share purchase, not a business acquisition",
       "labelNote": "About 9.99% of Asseco Poland, bought from Cyfrowy Polsat.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1649,6 +2343,15 @@
       "exclude": "same deal as another row",
       "labelNote": "A joint-venture interest that came with Cipal (2025-06-02), not a separate deal.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1666,7 +2369,34 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as 'undisclosed software companies' (EUR 37.7 million, after March 31, 2026).",
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.25,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "52",
+          "title": "Finance and Insurance",
+          "weight": 0.25,
+          "outlook": 0.0348340998989205
+        },
+        {
+          "code": "323",
+          "title": "Printing and Related Support Activities",
+          "weight": 0.25,
+          "outlook": -0.008093367318772526
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.25,
+          "outlook": 0.025383472044729904
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1684,7 +2414,22 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Agreed October 2026; closing expected Q4 2026.",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 0.5,
+          "outlook": 0.022201207704308223
+        },
+        {
+          "code": "31-33",
+          "title": "Manufacturing",
+          "weight": 0.5,
+          "outlook": -0.0020351963373062
+        }
+      ],
+      "marketsNote": "energy → power (WSP's energy work is its Power & Energy sector); industrial → manufacturing",
       "recent": true
     },
     {
@@ -1702,7 +2447,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "Building services = mechanical and electrical engineering for buildings.",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2362",
+          "title": "Nonresidential Building Construction",
+          "weight": 1,
+          "outlook": 0.029441429970020527
+        }
+      ],
+      "marketsNote": "building services",
       "recent": true
     },
     {
@@ -1721,6 +2475,15 @@
       "exclude": "not completed: proposal rejected; WSP chose not to pursue (Sept 22, 2026)",
       "labelNote": null,
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1738,7 +2501,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
       "recent": true
     },
     {
@@ -1756,7 +2528,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as TRC Companies (2026-02-24).",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1774,7 +2555,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as TRC Companies (2026-02-24).",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1792,7 +2582,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Same as TRC Companies (2026-02-24).",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     },
     {
@@ -1810,7 +2609,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.02837038245892831,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1828,7 +2636,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": "541620 (environmental consulting) is the alternative.",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1846,7 +2663,22 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.02837038245892831,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.5,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": null,
+          "title": null,
+          "weight": 0.5,
+          "outlook": null
+        }
+      ],
+      "marketsNote": "healthcare; life sciences: no single market",
       "recent": true
     },
     {
@@ -1864,7 +2696,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
       "recent": true
     },
     {
@@ -1882,7 +2723,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
       "recent": true
     },
     {
@@ -1900,7 +2750,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2362",
+          "title": "Nonresidential Building Construction",
+          "weight": 1,
+          "outlook": 0.029441429970020527
+        }
+      ],
+      "marketsNote": "designs healthcare, science and mission-critical facilities: buildings",
       "recent": true
     },
     {
@@ -1918,7 +2777,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "237",
+          "title": "Heavy and Civil Engineering Construction",
+          "weight": 1,
+          "outlook": 0.019283355672918945
+        }
+      ],
+      "marketsNote": "rail infrastructure: heavy and civil construction",
       "recent": true
     },
     {
@@ -1936,7 +2804,16 @@
       "labelStatus": "proposed",
       "exclude": null,
       "labelNote": null,
-      "outlook": 0.02837038245892831,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1955,6 +2832,15 @@
       "exclude": null,
       "labelNote": "No filing text or profile says what Calibre does.",
       "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
       "recent": true
     },
     {
@@ -1972,7 +2858,16 @@
       "labelStatus": "proposed",
       "exclude": "same deal as another row",
       "labelNote": "Financing note for the TRC deal.",
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
       "recent": false
     }
   ],
@@ -1989,7 +2884,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.017001670773741484,
+          "value": 0.05721721774947186,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2090,7 +2985,7 @@
           ]
         }
       ],
-      "outlook": 0.028869308614141276,
+      "outlook": 0.04874219222205611,
       "trend": "growing",
       "note": "COPS projects only Information and cultural industries as a whole (NAICS 51), so its figure is broader than software. Peers: every listed Canadian company Onesheet files under Software - Application or Software - Infrastructure, except the candidates."
     },
@@ -2106,7 +3001,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.03233793939723606,
+          "value": 0.023273479100428984,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2157,7 +3052,7 @@
           ]
         }
       ],
-      "outlook": 0.030430626650191694,
+      "outlook": 0.025898396501788157,
       "trend": "growing",
       "note": "StatCan, COPS and BLS publish architectural, engineering and related services (5413) together. Peers: the Engineering & Construction companies whose Onesheet profile describes engineering services (Stantec, AtkinsRéalis), not contractors."
     },
@@ -2173,7 +3068,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.050184727410061525,
+          "value": 0.008234749674017383,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2214,8 +3109,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.02837038245892831,
-      "trend": "growing",
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
       "note": "Published as management, scientific and technical consulting (5416). COPS groups it with advertising, design and other professional services. No listed Canadian peer."
     },
     {
@@ -2230,7 +3125,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.050184727410061525,
+          "value": 0.008234749674017383,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2271,8 +3166,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.02837038245892831,
-      "trend": "growing",
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
       "note": "Same series as 541611."
     },
     {
@@ -2287,7 +3182,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.050184727410061525,
+          "value": 0.008234749674017383,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2328,8 +3223,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.02837038245892831,
-      "trend": "growing",
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
       "note": "Same series as 541611."
     },
     {
@@ -2344,7 +3239,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.023273479100428984,
+          "value": 0.012715159127916431,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2395,7 +3290,7 @@
           ]
         }
       ],
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
       "trend": "growing",
       "note": "StatCan splits construction by type of work, not by NAICS: 'Engineering and other construction activities' (23X) is the civil-engineering part. COPS and BLS publish construction (23) as a whole. Peers: the Engineering & Construction companies whose Onesheet profile describes construction work (Bird, Badger)."
     },
@@ -2411,7 +3306,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.023273479100428984,
+          "value": 0.012715159127916431,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2462,7 +3357,7 @@
           ]
         }
       ],
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
       "trend": "growing",
       "note": "Same series as 237."
     },
@@ -2478,7 +3373,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.023273479100428984,
+          "value": 0.012715159127916431,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2529,7 +3424,7 @@
           ]
         }
       ],
-      "outlook": 0.02456251565917522,
+      "outlook": 0.019283355672918945,
       "trend": "growing",
       "note": "Same series as 237."
     },
@@ -2545,7 +3440,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.008234749674017383,
+          "value": 0.033031307722119596,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2596,8 +3491,8 @@
           ]
         }
       ],
-      "outlook": 0.01879956238570568,
-      "trend": "stable",
+      "outlook": 0.029441429970020527,
+      "trend": "growing",
       "note": "StatCan: non-residential building construction (23B). COPS and BLS: construction (23) as a whole."
     },
     {
@@ -2612,7 +3507,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.05721721774947186,
+          "value": -0.04441033127299521,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2653,7 +3548,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.013512495396466706,
+      "outlook": 0.0131798340751621,
       "trend": "stable",
       "note": "StatCan publishes repair and maintenance except automotive (811A); COPS publishes repair and maintenance (811) as a whole. No listed Canadian peer."
     },
@@ -2669,7 +3564,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": -0.04441033127299521,
+          "value": 0.017001670773741484,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2716,7 +3611,7 @@
           "note": "Only 1 listed Canadian peer with estimates (need 2)"
         }
       ],
-      "outlook": 0.01653795302572658,
+      "outlook": 0.017001670773741484,
       "trend": "stable",
       "note": "Peers: Onesheet's Trucking industry except TFI (only Mullen Group remains)."
     },
@@ -2732,7 +3627,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": -0.04441033127299521,
+          "value": 0.017001670773741484,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2779,7 +3674,7 @@
           "note": "Only 1 listed Canadian peer with estimates (need 2)"
         }
       ],
-      "outlook": 0.01653795302572658,
+      "outlook": 0.017001670773741484,
       "trend": "stable",
       "note": "Same series as 484: no source publishes less-than-truckload on its own."
     },
@@ -2795,7 +3690,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.033031307722119596,
+          "value": 0.050184727410061525,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2852,7 +3747,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.012715159127916431,
+          "value": 0.03233793939723606,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2893,8 +3788,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.01826381322251236,
-      "trend": "stable",
+      "outlook": 0.02390706760835415,
+      "trend": "growing",
       "note": "StatCan and COPS: support activities for transportation (488). BLS combines scenic and sightseeing transportation with support activities (487-488). No listed Canadian peer."
     },
     {
@@ -2909,7 +3804,7 @@
           "sourceIds": [
             "statcan-36-10-0434"
           ],
-          "value": 0.012715159127916431,
+          "value": 0.03233793939723606,
           "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
         },
         {
@@ -2950,9 +3845,1031 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.01826381322251236,
-      "trend": "stable",
+      "outlook": 0.02390706760835415,
+      "trend": "growing",
       "note": "Same series as 488510: no source publishes airport operations on its own."
+    },
+    {
+      "naics": "2211",
+      "title": "Electric Power Generation, Transmission and Distribution",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Electric power generation, transmission and distribution [2211]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.0036227239766901675,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Utilities [2211-2213]",
+          "value": 0.015605439602954796
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Electric power generation, transmission and distribution [221100]",
+          "value": 0.02879697580566165
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 8 listed Canadian peers",
+          "value": 0.04593862751454725,
+          "nominal": 0.0668574000648382,
+          "peers": [
+            {
+              "ticker": "BEP.UN",
+              "name": "Brookfield Renewable Partners L.P.",
+              "growth": 0.03959040283507975
+            },
+            {
+              "ticker": "CPX",
+              "name": "Capital Power Corporation",
+              "growth": 0.05739402038104746
+            },
+            {
+              "ticker": "EMA",
+              "name": "Emera Incorporated",
+              "growth": 0.06917306756527464
+            },
+            {
+              "ticker": "FTS",
+              "name": "Fortis Inc.",
+              "growth": 0.06454173256440177
+            },
+            {
+              "ticker": "H",
+              "name": "Hydro One Limited",
+              "growth": 0.0223016338621711
+            },
+            {
+              "ticker": "NPI",
+              "name": "Northland Power Inc.",
+              "growth": 0.07048766467681977
+            },
+            {
+              "ticker": "PIF",
+              "name": "Polaris Renewable Energy Inc.",
+              "growth": 0.18381547724377478
+            },
+            {
+              "ticker": "TA",
+              "name": "TransAlta Corporation",
+              "growth": 0.09135107188764513
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.022201207704308223,
+      "trend": "growing",
+      "note": "COPS publishes utilities (22) as a whole. Peers: every listed Canadian company Onesheet files under Regulated Electric, Independent Power Producers or Renewable Utilities."
+    },
+    {
+      "naics": "2362",
+      "title": "Nonresidential Building Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Non-residential building construction [23B]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.033031307722119596,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.029441429970020527,
+      "trend": "growing",
+      "note": "StatCan: non-residential building construction (23B). COPS and BLS publish construction (23) as a whole. Peers: the listed Canadian contractors (Bird, Badger)."
+    },
+    {
+      "naics": "31-33",
+      "title": "Manufacturing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Manufacturing [31-33]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.019251485621307518,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Manufacturing [31-330]",
+          "value": 0.015181092946695118
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": -0.0020351963373062,
+      "trend": "declining",
+      "note": "COPS publishes manufacturing only by sub-industry, with no total. No peer group: manufacturing is too broad."
+    },
+    {
+      "naics": "621",
+      "title": "Ambulatory Health Care Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Ambulatory health care services [621]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.025383472044729904,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Ambulatory Health Care [6211-6219]",
+          "value": 0.024197663433759953
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Ambulatory healthcare services [621000]",
+          "value": 0.035900716599637894
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.025383472044729904,
+      "trend": "growing",
+      "note": "Healthcare software and consulting mostly serve practices and clinics. No listed Canadian peer."
+    },
+    {
+      "naics": "622",
+      "title": "Hospitals",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Hospitals [622]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.030638884135864686,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Hospitals [6221-6223]",
+          "value": 0.02927572477412621
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Hospitals; private [6220P0]",
+          "value": 0.02818081328029698
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.02927572477412621,
+      "trend": "growing",
+      "note": "BLS splits private and state/local hospitals; the private series (the larger) is used. No listed Canadian peer."
+    },
+    {
+      "naics": "5615",
+      "title": "Travel Arrangement and Reservation Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Travel arrangement and reservation services [5615]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.021799063574313937,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Management, Administrative and Other Support Services [5511, 5611-5619, 5621-5629]",
+          "value": 0.012552013676298435
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Travel arrangement and reservation services [561500]",
+          "value": 0.024861066689476186
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.021799063574313937,
+      "trend": "growing",
+      "note": "COPS groups travel arrangement with all management, administrative and support services (55, 56). No listed Canadian peer."
+    },
+    {
+      "naics": "5222",
+      "title": "Nondepository Credit Intermediation",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Non-depository credit intermediation [5222]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.030625710283383345,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Finance, Banking and Financial Institution [5211-5239]",
+          "value": 0.0348340998989205
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Monetary authorities - central bank, and credit intermediation and related activities [521-20]",
+          "value": 0.01513940317666318
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.030625710283383345,
+      "trend": "growing",
+      "note": "Mortgage lending outside banks. COPS: finance and banking (521-523); BLS: credit intermediation (521-522). No peer group."
+    },
+    {
+      "naics": "52",
+      "title": "Finance and Insurance",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Finance and insurance [52]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.035946309674135035,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Finance, Banking and Financial Institution [5211-5239]",
+          "value": 0.0348340998989205
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Finance and insurance [520000]",
+          "value": 0.017701783894841894
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.0348340998989205,
+      "trend": "growing",
+      "note": "COPS publishes finance and banking (IN42) and insurance separately; finance and banking is used. No peer group."
+    },
+    {
+      "naics": "91",
+      "title": "Public Administration",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Public administration [91]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.017601481110803396,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Public Administration [9111-9191, 9110*]",
+          "value": 0.008420033575642805
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · State and local government, excluding education and hospitals [9992-3]",
+          "value": 0.0076684500488626295
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.008420033575642805,
+      "trend": "stable",
+      "note": "BLS: state and local government excluding education and hospitals, the level that buys local-government and public-safety software. No peer group."
+    },
+    {
+      "naics": "516",
+      "title": "Broadcasting and Content Providers",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Broadcasting and content providers [516]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.002377887906232834,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Information and Culture Industries [5121-5192]",
+          "value": 0.017471450533642185
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Publishing, broadcasting, and content providers [513-90]",
+          "value": 0.032578350572324055
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.017471450533642185,
+      "trend": "stable",
+      "note": "COPS and BLS publish broader groups (information and culture; publishing, broadcasting and content). No peer group."
+    },
+    {
+      "naics": "61",
+      "title": "Educational Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Educational services [61]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.0064806296211732395,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Educational services; state and local [6110Y0]",
+          "value": 0.004545703597552464
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.005513166609362852,
+      "trend": "stable",
+      "note": "COPS publishes schools, colleges and universities separately, with no total. BLS: state and local education, where school software is sold. No peer group."
+    },
+    {
+      "naics": "48-49",
+      "title": "Transportation and Warehousing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Transportation and warehousing [48-49]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.03172183746360857,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Transportation and warehousing [48-490]",
+          "value": 0.022181090343076804
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.026951463903342687,
+      "trend": "growing",
+      "note": "COPS publishes transportation by mode only, with no total. No peer group."
+    },
+    {
+      "naics": "441",
+      "title": "Motor Vehicle and Parts Dealers",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Motor vehicle and parts dealers [441]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.015530853064526173,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Retail Trade [4411-4599]",
+          "value": 0.016192022525814753
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Motor vehicle and parts dealers [441000]",
+          "value": 0.029941018756076687
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.016192022525814753,
+      "trend": "stable",
+      "note": "Automotive vertical software is sold mainly to dealers. COPS: retail trade as a whole. No peer group."
+    },
+    {
+      "naics": "325",
+      "title": "Chemical Manufacturing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Chemical manufacturing [325]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.005288141494813048,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Chemical Manufacturing [3251-3259]",
+          "value": 0.016275949765731212
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Chemical manufacturing [325000]",
+          "value": 0.022278119676520047
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.016275949765731212,
+      "trend": "stable",
+      "note": null
+    },
+    {
+      "naics": "5411",
+      "title": "Legal Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Legal services [5411]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.007063782412386033,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Legal, Accounting, and Related Services [5411 + 5412]",
+          "value": 0.015904629273495896
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Legal services [541100]",
+          "value": 0.006610303615163016
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.007063782412386033,
+      "trend": "stable",
+      "note": "COPS: legal, accounting and related services (5411-5412). No peer group."
+    },
+    {
+      "naics": "323",
+      "title": "Printing and Related Support Activities",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Printing and related support activities [323]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.08579595101989079,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Printing and Related Support Activities [3231]",
+          "value": -0.008093367318772526
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Printing and related support activities [323000]",
+          "value": 0.005910576771692488
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": -0.008093367318772526,
+      "trend": "declining",
+      "note": null
+    },
+    {
+      "naics": "531",
+      "title": "Real Estate",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Real estate [531]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.020704400128346734,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Real Estate and Renta and Leasing [5311-5331]",
+          "value": 0.019505174392315805
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Real estate [531000]",
+          "value": 0.01905368729421819
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.019505174392315805,
+      "trend": "growing",
+      "note": "COPS: real estate and rental and leasing (53). No peer group."
     }
   ]
 }

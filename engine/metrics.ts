@@ -327,3 +327,14 @@ export function directionOf(dealOutlook: N, baseOutlook: N, band: number): Direc
   if (gap < -band) return "away";
   return "steady";
 }
+
+/**
+ * Client-market weights of one deal. A deal counts once: if its text names k client markets, each gets 1/k.
+ * A market named but not placeable ("?") keeps its share with no market, so it lowers coverage instead of
+ * vanishing. A deal that names no market is one row with no market.
+ */
+export function marketWeights(markets: string[]): { market: string | null; weight: number }[] {
+  const named = markets.map((m) => m.trim()).filter(Boolean);
+  if (named.length === 0) return [{ market: null, weight: 1 }];
+  return named.map((m) => ({ market: m === "?" ? null : m, weight: 1 / named.length }));
+}

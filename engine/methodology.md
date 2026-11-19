@@ -249,9 +249,13 @@ Two data issues found and handled:
 - **COPS growth-rate file is misaligned.** In `industrial_aagr_tcam_par_secteur_2026_2035.csv`, each growth rate sits on the
   row above its industry (e.g. the 5.0% shown for couriers is warehousing's), and the NAICS column is shifted too. We do
   not use it. We compute growth from the same release's GDP-levels file, whose rows are consistent.
-- **bls.gov refuses scripts.** The 12 rows we use were copied from Table 2.11 on 2026-11-19. The copy was checked against the
-  live table by SHA-256 fingerprint (`c92d89f7…ab84`), and a test recomputes every published 10-year rate from the copied
+- **bls.gov refuses scripts.** The 27 rows we use were copied from Table 2.11 on 2026-11-19. The copy was checked against the
+  live table by SHA-256 fingerprint (`74f50372…5486`), and a test recomputes every published 10-year rate from the copied
   levels (`engine/outlook.test.ts`).
+- **StatCan answers out of order.** The Web Data Service does not return series in the order requested. The fetcher matches
+  each series by the industry in its coordinate, and the build refuses to run if any stored series is filed under the wrong
+  industry. (The first version matched by position; every momentum figure published before this fix was attached to the
+  wrong industry and has been replaced.)
 
 ### Formulas (`engine/metrics.ts`, tests in `engine/outlook.test.ts`)
 
@@ -266,6 +270,23 @@ Two data issues found and handled:
 | Red flag | — | Share of revenue in declining industries. |
 | Deal outlook | `weightedOutlook(equal weights, 50%)` | Recent deals = fiscal 2024–2026 (the latest fiscal year with a deal and the two before), not excluded. Each counts once: most prices are undisclosed, and those disclosed are in three currencies. Null if fewer than half have an industry with an outlook. |
 | Direction | `directionOf(deal outlook, tailwind, 1 point)` | ↗ toward stronger industries if the deals' outlook is more than 1 point a year above the tailwind, ↘ away if more than 1 point below, → steady otherwise. One point is below what the sources can tell apart. |
+
+### Two views: "What they do" and "Who they sell to"
+
+The same tailwind and direction are computed twice.
+
+- **What they do**: each segment and deal by its own industry (NAICS of the business).
+- **Who they sell to**: by the market its clients are in. Software and engineering firms sell into many markets, so their own
+  industry code says little about demand.
+  - Segments: `market` in `outlook-segments.csv`. WSP's sectors map to heavy and civil construction (Transport & Infrastructure),
+    non-residential buildings (Property & Buildings) and electric power (Power & Energy); Earth & Environment has no single
+    client market and is left out (coverage shown). Constellation and Topicus do not report revenue by vertical: their base is
+    **the whole economy** (declared, not measured). For TFI and Aecon what they do is what their clients buy, so both views are
+    the same.
+  - Deals: `markets` in `outlook-labels.csv`, one code per client market the deal text names, with the reason in `markets_note`.
+    `marketWeights` splits a deal equally across the markets it names, so each deal still counts once; a market named but not
+    placeable (`?`) keeps its share with no outlook and lowers coverage.
+  - Client markets get the same four published signals as industries (`outlook-industry-map.csv`).
 
 ### What it does not do
 

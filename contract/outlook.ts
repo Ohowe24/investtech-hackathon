@@ -54,6 +54,9 @@ export interface OutlookDeal {
   labelNote: string | null;
   /** counted in the recent-deals window (rules.dealYears) and not excluded */
   recent: boolean;
+  /** client view: the client markets the deal text names, each with its share of the deal (a deal counts once) */
+  markets: { code: string | null; title: string | null; weight: number; outlook: number | null }[];
+  marketsNote: string | null;
   /** outlook of the deal's industry; null if unlabelled or the industry has no outlook */
   outlook: number | null;
 }
@@ -79,7 +82,29 @@ export interface OutlookMixRow {
   /** the markets the segment's clients are in, when the text names them; context, never scored */
   serves: string | null;
   note: string | null;
+  /** client view: the market the segment's clients are in (NAICS), "economy" (clients across the whole economy),
+   *  "same" (what it does is what clients buy) or null (no single market) */
+  market: string | null;
+  marketTitle: string | null;
+  marketNote: string | null;
   sourceIds: string[];
+}
+
+/** One way of reading a company: by the industry it is in ("what they do") or by its clients' markets ("who they sell to"). */
+export interface OutlookLens {
+  /** client view only: where the base comes from */
+  base: "segments" | "economy" | "same";
+  tailwind: number | null;
+  coverage: number | null;
+  trend: Trend | null;
+  decliningShare: number | null;
+  dealOutlook: number | null;
+  /** share of the recent deals' weight that has an outlook */
+  dealCoverage: number;
+  directionGap: number | null;
+  direction: Direction | null;
+  industryMix: { naics: string; title: string; share: number | null; segments: string[] }[];
+  notes: string[];
 }
 
 /** A company's revenue by reported region, copied with its share; context for how far the signals (Canada, US) apply. */
@@ -149,6 +174,10 @@ export interface OutlookCompany {
   /** what management said about its markets on the latest earnings call: verbatim quotes with a one-line
    *  summary written by Claude. Shown as text, never scored. */
   narrative: { speaker: string | null; quote: string; summary: string; call: string; sourceIds: string[] }[];
+  /** notes on the direction read by industry ("what they do"); lens-independent notes are in `notes` */
+  directionNotes: string[];
+  /** the same questions answered by client markets ("who they sell to") */
+  customer: OutlookLens;
   notes: string[];
 }
 

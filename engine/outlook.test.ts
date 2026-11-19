@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, directionOf, industryOutlook, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
+import { cagr, directionOf, industryOutlook, marketWeights, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -126,5 +126,24 @@ describe("BLS Table 2.11 cross-check", () => {
       expect(ours, r.bls_code).not.toBeNull();
       expect(Math.abs((ours as number) * 100 - Number(r.published_cagr_pct)), r.bls_code).toBeLessThanOrEqual(0.05 + 1e-9);
     }
+  });
+});
+
+describe("marketWeights", () => {
+  it("splits one deal equally across the markets it names", () => {
+    expect(marketWeights(["621", "531"])).toEqual([{ market: "621", weight: 0.5 }, { market: "531", weight: 0.5 }]);
+  });
+  it("keeps an unplaceable market's share with no market, so coverage drops", () => {
+    const w = marketWeights(["621", "?"]);
+    expect(w).toEqual([{ market: "621", weight: 0.5 }, { market: null, weight: 0.5 }]);
+    expect(weightedOutlook(w.map((x) => ({ weight: x.weight, outlook: x.market ? 0.03 : null })), 0).coverage).toBeCloseTo(0.5, 10);
+  });
+  it("a deal that names no market is one row with no market", () => {
+    expect(marketWeights([])).toEqual([{ market: null, weight: 1 }]);
+    expect(marketWeights([" ", ""])).toEqual([{ market: null, weight: 1 }]);
+  });
+  it("each deal still counts once in total", () => {
+    const sum = (xs: { weight: number }[]) => xs.reduce((s, x) => s + x.weight, 0);
+    expect(sum(marketWeights(["441", "?", "91", "325", "621", "5411"]))).toBeCloseTo(1, 12);
   });
 });

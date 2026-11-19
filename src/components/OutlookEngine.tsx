@@ -10,6 +10,7 @@ import type {
   OutlookData,
   OutlookDeal,
   OutlookIndustry,
+  OutlookLens,
   OutlookSignal,
   StepStatus,
   Trend,
@@ -69,20 +70,93 @@ function DirectionMark({ direction, big = false }: { direction: Direction | null
   );
 }
 
+type LensKey = "own" | "customer";
+
+const LENSES: { key: LensKey; label: string; explain: string }[] = [
+  { key: "own", label: "What they do", explain: "Read by the industry each business is in (its NAICS code): software, engineering, trucking, construction." },
+  {
+    key: "customer",
+    label: "Who they sell to",
+    explain:
+      "Read by the markets their clients are in: power utilities, hospitals, governments… Where a company does not report revenue by client market, its base is the whole economy; for transport and construction both views are the same.",
+  },
+];
+
+/** the company read through one lens; "own" is assembled from the company's own fields, no math */
+function viewOf(c: OutlookCompany, lens: LensKey): OutlookLens {
+  if (lens === "customer") return c.customer;
+  return {
+    base: "segments",
+    tailwind: c.tailwind,
+    coverage: c.coverage,
+    trend: c.trend,
+    decliningShare: c.decliningShare,
+    dealOutlook: c.dealOutlook,
+    dealCoverage: 0,
+    directionGap: c.directionGap,
+    direction: c.direction,
+    industryMix: c.industryMix,
+    notes: c.directionNotes,
+  };
+}
+
+function dealLine(c: OutlookCompany, lens: LensKey): string {
+  if (lens === "own") return `${c.dealsWithOutlook} of ${c.dealCount} with an industry`;
+  if (c.customer.base === "same") return "same as “What they do”";
+  return `${pct(c.customer.dealCoverage, 0)} of deal weight names a client market`;
+}
+
 /** one-line verdict, assembled only from computed fields */
-function verdict(c: OutlookCompany): string {
-  if (c.tailwind == null) return "Not enough published data to judge its industries.";
-  const t = c.trend === "growing" ? "faster than the economy" : c.trend === "stable" ? "growing, but slower than the economy" : "shrinking";
-  const where = `Earns its money in industries ${t}`;
-  if (c.direction == null) return `${where}. Too few recent deals have a known industry to call a direction.`;
-  if (c.direction === "steady") return `${where}, and keeps buying into industries of the same strength.`;
-  return `${where}; recent deals point ${c.direction === "toward" ? "toward stronger" : "toward weaker"} industries.`;
+function verdict(v: OutlookLens, lens: LensKey): string {
+  const what = lens === "own" ? "industries" : "markets";
+  if (v.tailwind == null)
+    return lens === "own" ? "Not enough published data to judge its industries." : "Not enough is reported about its clients’ markets to judge them.";
+  const t = v.trend === "growing" ? "faster than the economy" : v.trend === "stable" ? "growing, but slower than the economy" : "shrinking";
+  const where =
+    lens === "customer" && v.base === "economy"
+      ? "Sells across the whole economy (revenue by client market is not reported)"
+      : `${lens === "own" ? "Earns its money in industries" : "Sells to markets"} ${t}`;
+  if (v.direction == null) return `${where}. Too few recent deals name ${lens === "own" ? "an industry" : "a client market"} to call a direction.`;
+  if (v.direction === "steady") return `${where}, and keeps buying into ${what} of the same strength.`;
+  return `${where}; recent deals point toward ${v.direction === "toward" ? "stronger" : "weaker"} ${what}.`;
+}
+
+function LensSwitch({ lens, onChange }: { lens: LensKey; onChange: (l: LensKey) => void }) {
+  return (
+    <div className="inline-flex rounded-lg border border-line p-0.5" role="tablist" aria-label="Read companies by">
+      {LENSES.map((l) => (
+        <button
+          key={l.key}
+          role="tab"
+          aria-selected={lens === l.key}
+          onClick={() => onChange(l.key)}
+          className={`rounded-md px-3 py-1 text-[12.5px] font-medium transition-colors ${lens === l.key ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+        >
+          {l.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function TailwindCell({ v, lens }: { v: OutlookLens; lens: LensKey }) {
+  const economyBase = lens === "customer" && v.base === "economy";
+  return (
+    <>
+      <div className="flex items-center gap-2">
+        <span className="font-mono text-[14px] font-semibold text-ink">{pct(v.tailwind)}</span>
+        {economyBase ? <span className="text-[11px] text-faint">whole economy</span> : <TrendPill trend={v.trend} />}
+      </div>
+      <div className="text-[11.5px] text-faint">{economyBase ? "client mix not reported" : v.coverage != null ? `${pct(v.coverage, 0)} of revenue covered` : ""}</div>
+    </>
+  );
 }
 
 // ---------------------------------------------------------------- page
 
 export default function OutlookEngine() {
   const [ticker, setTicker] = useState(outlook.companies[0]?.ticker ?? "");
+  const [lens, setLens] = useState<LensKey>("own");
   const company = outlook.companies.find((c) => c.ticker === ticker) ?? outlook.companies[0];
   const economy = outlook.economy.outlook;
 
@@ -104,7 +178,8 @@ export default function OutlookEngine() {
         </div>
       </section>
 
-      <Card title="The answer, company by company">
+      <Card title="The answer, company by company" right={<LensSwitch lens={lens} onChange={setLens} />}>
+        <p className="mb-3 text-[12.5px] text-muted">{LENSES.find((l) => l.key === lens)!.explain}</p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[620px] text-left text-[13px]">
             <thead className="text-[11px] uppercase tracking-wide text-faint">
@@ -117,7 +192,9 @@ export default function OutlookEngine() {
               </tr>
             </thead>
             <tbody>
-              {outlook.companies.map((c) => (
+              {outlook.companies.map((c) => {
+                const v = viewOf(c, lens);
+                return (
                 <tr
                   key={c.ticker}
                   onClick={() => setTicker(c.ticker)}
@@ -129,27 +206,22 @@ export default function OutlookEngine() {
                     <div className="text-[12px] text-muted">{c.name}</div>
                   </td>
                   <td className="py-2.5 pr-3">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[14px] font-semibold text-ink">{pct(c.tailwind)}</span>
-                      <TrendPill trend={c.trend} />
-                    </div>
-                    <div className="text-[11.5px] text-faint">{c.coverage != null ? `${pct(c.coverage, 0)} of revenue covered` : ""}</div>
+                    <TailwindCell v={v} lens={lens} />
                   </td>
                   <td className="py-2.5 pr-3">
-                    <span className={`font-mono ${c.decliningShare ? "font-semibold text-bad" : "text-muted"}`}>{pct(c.decliningShare, 0)}</span>
+                    <span className={`font-mono ${v.decliningShare ? "font-semibold text-bad" : "text-muted"}`}>{pct(v.decliningShare, 0)}</span>
                   </td>
                   <td className="py-2.5 pr-3">
-                    <div className="font-mono text-ink">{pct(c.dealOutlook)}</div>
-                    <div className="text-[11.5px] text-faint">
-                      {c.dealsWithOutlook} of {c.dealCount} with an industry
-                    </div>
+                    <div className="font-mono text-ink">{pct(v.dealOutlook)}</div>
+                    <div className="text-[11.5px] text-faint">{dealLine(c, lens)}</div>
                   </td>
                   <td className="py-2.5 pr-3">
-                    <DirectionMark direction={c.direction} />
-                    {c.directionGap != null && <div className="text-[11.5px] text-faint">{pts(c.directionGap)} vs tailwind</div>}
+                    <DirectionMark direction={v.direction} />
+                    {v.directionGap != null && <div className="text-[11.5px] text-faint">{pts(v.directionGap)} vs tailwind</div>}
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -160,9 +232,9 @@ export default function OutlookEngine() {
         </p>
       </Card>
 
-      <CompanyDetail c={company} economy={economy} />
+      <CompanyDetail c={company} economy={economy} lens={lens} />
 
-      <SignalTable c={company} />
+      <SignalTable c={company} lens={lens} />
 
       <HowItWorks />
 
@@ -194,31 +266,40 @@ export default function OutlookEngine() {
 
 // ---------------------------------------------------------------- company detail
 
-function CompanyDetail({ c, economy }: { c: OutlookCompany; economy: number | null }) {
+function CompanyDetail({ c, economy, lens }: { c: OutlookCompany; economy: number | null; lens: LensKey }) {
   const [showAll, setShowAll] = useState(false);
+  const v = viewOf(c, lens);
+  const client = lens === "customer" && v.base !== "same";
   const deals = outlook.deals.filter((d) => d.ticker === c.ticker);
   const recent = deals.filter((d) => d.recent);
-  const maxShare = Math.max(0, ...c.industryMix.map((g) => g.share ?? 0));
+  const maxShare = Math.max(0, ...v.industryMix.map((g) => g.share ?? 0));
+  const notes = [...v.notes, ...c.notes];
+  const inGroup = (code: string) => (r: OutlookCompany["mix"][number]) =>
+    !client ? r.naics === code : code === "economy" ? true : (r.market ?? "") === code;
 
   return (
     <div className="space-y-5">
       <section className="panel px-6 py-6 md:px-8">
         <div className="kicker">{c.ticker} · {c.name}</div>
-        <p className="mt-2 max-w-3xl text-[18px] font-semibold leading-snug tracking-[-0.01em] text-ink">{verdict(c)}</p>
+        <p className="mt-2 max-w-3xl text-[18px] font-semibold leading-snug tracking-[-0.01em] text-ink">{verdict(v, lens)}</p>
         <div className="mt-5 grid gap-4 sm:grid-cols-3">
-          <Stat label="Tailwind" value={pct(c.tailwind)} sub={<>vs economy {pct(economy)} · <TrendPill trend={c.trend} /></>} />
-          <Stat label={`Recent deals (FY${R.dealYears[0]}–${R.dealYears[2]})`} value={pct(c.dealOutlook)} sub={`${c.dealsWithOutlook} of ${c.dealCount} deals with an industry`} />
+          <Stat
+            label={lens === "own" ? "Tailwind" : "Clients’ markets"}
+            value={pct(v.tailwind)}
+            sub={lens === "customer" && v.base === "economy" ? <>the whole economy (client mix not reported)</> : <>vs economy {pct(economy)} · <TrendPill trend={v.trend} /></>}
+          />
+          <Stat label={`Recent deals (FY${R.dealYears[0]}–${R.dealYears[2]})`} value={pct(v.dealOutlook)} sub={dealLine(c, lens)} />
           <div className="rounded-lg border border-line p-4">
             <div className="text-[11px] font-medium uppercase tracking-wide text-faint">Direction</div>
             <div className="mt-2">
-              <DirectionMark direction={c.direction} big />
+              <DirectionMark direction={v.direction} big />
             </div>
-            <div className="mt-1 text-[12px] text-muted">{c.directionGap != null ? `${pts(c.directionGap)} vs the tailwind` : "Not enough labelled deals"}</div>
+            <div className="mt-1 text-[12px] text-muted">{v.directionGap != null ? `${pts(v.directionGap)} vs the base` : "Not enough deals with a known market"}</div>
           </div>
         </div>
-        {c.notes.length > 0 && (
+        {notes.length > 0 && (
           <ul className="mt-4 space-y-1 text-[12.5px] text-muted">
-            {c.notes.map((n) => (
+            {notes.map((n) => (
               <li key={n} className="flex gap-2">
                 <span className="text-faint">·</span>
                 {n}
@@ -229,32 +310,41 @@ function CompanyDetail({ c, economy }: { c: OutlookCompany; economy: number | nu
       </section>
 
       <div className="grid gap-5 lg:grid-cols-2">
-        <Card title={`Where the money comes from · ${c.mixPeriod ?? "—"} revenue by segment`}>
+        <Card title={client ? `Who pays · ${c.mixPeriod ?? "—"} revenue by client market` : `Where the money comes from · ${c.mixPeriod ?? "—"} revenue by segment`}>
           <ul className="space-y-5">
-            {c.industryMix.map((g) => {
+            {v.industryMix.map((g) => {
               const ind = industryOf.get(g.naics);
-              const rows = c.mix.filter((r) => r.naics === g.naics);
+              const rows = c.mix.filter(inGroup(g.naics));
               const quotes = [...new Map(rows.filter((r) => r.quote).map((r) => [r.quote, r])).values()];
               return (
                 <li key={g.naics}>
                   <div className="flex items-baseline justify-between gap-3 text-[13px]">
-                    <span className="font-medium text-ink">{g.title}</span>
+                    <span className={`font-medium ${g.naics ? "text-ink" : "text-faint"}`}>{g.title}</span>
                     <span className="font-mono font-semibold text-ink">{pct(g.share, 0)}</span>
                   </div>
                   <div className="mt-1 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
-                    <div className="h-full rounded-full bg-teal" style={{ width: `${maxShare > 0 && g.share != null ? (g.share / maxShare) * 100 : 0}%` }} />
+                    <div className={`h-full rounded-full ${g.naics ? "bg-teal" : "bg-faint"}`} style={{ width: `${maxShare > 0 && g.share != null ? (g.share / maxShare) * 100 : 0}%` }} />
                   </div>
-                  <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted">
-                    <span>NAICS {g.naics}</span>
-                    <span className="text-faint">· outlook</span>
-                    <span className="font-mono text-ink">{pct(ind?.outlook)}</span>
-                    <TrendPill trend={ind?.trend ?? null} />
-                  </div>
+                  {ind ? (
+                    <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted">
+                      <span>NAICS {g.naics}</span>
+                      <span className="text-faint">· outlook</span>
+                      <span className="font-mono text-ink">{pct(ind.outlook)}</span>
+                      <TrendPill trend={ind.trend} />
+                    </div>
+                  ) : g.naics === "economy" ? (
+                    <div className="mt-1.5 text-[12px] text-muted">
+                      outlook <span className="font-mono text-ink">{pct(economy)}</span> (the whole economy)
+                    </div>
+                  ) : (
+                    <div className="mt-1.5 text-[12px] text-faint">left out of this view</div>
+                  )}
                   <ul className="mt-2 space-y-1 border-l border-line pl-3 text-[12px]">
                     {rows.map((r) => (
                       <li key={r.segment}>
                         <span className="text-ink">{r.segment}</span> <span className="font-mono text-muted">{pct(r.share, 0)}</span>
                         {r.serves && <span className="text-faint"> · clients: {r.serves}</span>}
+                        {client && r.marketNote && g.naics !== "economy" && <div className="text-[11.5px] text-faint">{r.marketNote}</div>}
                       </li>
                     ))}
                   </ul>
@@ -287,12 +377,32 @@ function CompanyDetail({ c, economy }: { c: OutlookCompany; economy: number | nu
             <ul className="divide-y divide-line">
               {recent.map((d, i) => {
                 const ind = d.naics ? industryOf.get(d.naics) : undefined;
+                const named = d.markets.filter((m) => m.code);
                 return (
                   <li key={`${d.date}-${i}`} className="py-2.5 first:pt-0">
                     <div className="flex items-baseline justify-between gap-3 text-[13px]">
                       <span className="font-medium text-ink">{d.counterparty || "Not named"}</span>
                       <span className="shrink-0 text-[12px] text-faint">{d.date || `FY${d.fiscalYear}`}</span>
                     </div>
+                    {client ? (
+                      <div className="mt-1 space-y-0.5 text-[12px] text-muted">
+                        {named.length === 0 ? (
+                          <span className="text-faint">No client market named in the filings</span>
+                        ) : (
+                          named.map((m) => (
+                            <div key={m.code} className="flex flex-wrap items-center gap-x-2">
+                              <span>
+                                {m.code} · {m.title}
+                              </span>
+                              <span className="font-mono text-ink">{pct(m.outlook)}</span>
+                              <TrendPill trend={m.code ? (industryOf.get(m.code)?.trend ?? null) : null} />
+                              {d.markets.length > 1 && <span className="text-faint">· {Math.round(m.weight * 100)}% of the deal</span>}
+                            </div>
+                          ))
+                        )}
+                        {d.marketsNote && <div className="text-[11.5px] text-faint">{d.marketsNote}</div>}
+                      </div>
+                    ) : (
                     <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] text-muted">
                       {d.naics ? (
                         <>
@@ -307,7 +417,8 @@ function CompanyDetail({ c, economy }: { c: OutlookCompany; economy: number | nu
                       )}
                       <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${LABEL_TAG[d.labelStatus].cls}`}>{LABEL_TAG[d.labelStatus].label}</span>
                     </div>
-                    {d.serves && <div className="mt-0.5 text-[12px] text-faint">Serves: {d.serves}</div>}
+                    )}
+                    {!client && d.serves && <div className="mt-0.5 text-[12px] text-faint">Serves: {d.serves}</div>}
                   </li>
                 );
               })}
@@ -378,9 +489,18 @@ function SignalCell({ s }: { s: OutlookSignal | undefined }) {
   );
 }
 
-function SignalTable({ c }: { c: OutlookCompany }) {
+function SignalTable({ c, lens }: { c: OutlookCompany; lens: LensKey }) {
   const [open, setOpen] = useState<string | null>(null);
-  const codes = [...new Set([...c.mix.map((r) => r.naics), ...outlook.deals.filter((d) => d.ticker === c.ticker && d.recent).map((d) => d.naics)].filter(Boolean) as string[])];
+  const recent = outlook.deals.filter((d) => d.ticker === c.ticker && d.recent);
+  const client = lens === "customer" && c.customer.base !== "same";
+  const codes = [
+    ...new Set(
+      (client
+        ? [...c.mix.map((r) => r.market), ...recent.flatMap((d) => d.markets.map((m) => m.code))]
+        : [...c.mix.map((r) => r.naics), ...recent.map((d) => d.naics)]
+      ).filter((x): x is string => !!x && industryOf.has(x)),
+    ),
+  ];
   // industries that read the same published series are shown once
   const seen = new Set<string>();
   const rows = codes
@@ -394,7 +514,7 @@ function SignalTable({ c }: { c: OutlookCompany }) {
     });
 
   return (
-    <Card title={`Where ${c.ticker}'s industries are heading · published signals, yearly growth after inflation`}>
+    <Card title={`Where ${c.ticker}’s ${client ? "client markets" : "industries"} are heading · published signals, yearly growth after inflation`}>
       <div className="overflow-x-auto">
         <table className="w-full min-w-[600px] text-left text-[13px]">
           <thead className="text-[11px] uppercase tracking-wide text-faint">

@@ -80,11 +80,18 @@ if (fresh(dataPath)) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
   });
-  const parsed = JSON.parse(body);
-  const bad = (parsed as { status: string }[]).filter((p) => p.status !== "SUCCESS");
+  const parsed = JSON.parse(body) as { status: string; object: { coordinate: string } }[];
+  const bad = parsed.filter((p) => p.status !== "SUCCESS");
   if (bad.length) throw new Error(`StatCan: ${bad.length} series failed`);
-  // keep the industry code next to each series so the build never has to guess
-  const byCode = Object.fromEntries(statcanCodes.map((code, i) => [code, parsed[i].object]));
+  // StatCan does NOT return series in the order requested: match each one by the industry member in its coordinate
+  const byMember = new Map(parsed.map((p) => [Number(p.object.coordinate.split(".")[3]), p.object]));
+  const byCode = Object.fromEntries(
+    statcanCodes.map((code) => {
+      const o = byMember.get(memberByCode.get(code)!.memberId);
+      if (!o) throw new Error(`StatCan returned no series for industry ${code}`);
+      return [code, o];
+    }),
+  );
   writeFileSync(dataPath, JSON.stringify({ productId: STATCAN_PID, cubeEndDate: meta.cubeEndDate, fetchedAt: new Date().toISOString(), series: byCode }, null, 1));
 }
 console.log(`StatCan 36-10-0434: ${statcanCodes.length} industries, data to ${meta.cubeEndDate}`);
