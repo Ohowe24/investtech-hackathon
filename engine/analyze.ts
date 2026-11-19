@@ -11,10 +11,10 @@
 // A company with no data is never guessed at: holdings keep their row with empty metrics and a note,
 // candidates without data are listed in `unmeasured`.
 
-import type { CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, QualityScore, ReportedSeries, Verdict, YearRow } from "../contract/types";
+import type { AnalystRatings, CheckResult, Company, Dataset, IndexPosition, MetricValue, ModelResult, QualityScore, ReportedSeries, Verdict, YearRow } from "../contract/types";
 import { factSeries, periodLabel } from "./facts";
 import type { IndustryProfile } from "./industries/types";
-import { acquisitionIntensity, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, pctChange, peerGrade, perShare, quadrant, rampGrade, ratioOfPositive, sumStrict, tally, weightedScore } from "./metrics";
+import { acquisitionIntensity, analystConsensus, MIN_ANALYSTS, equalWeights, freeCashFlow, netDebt, netDebtToEbitda, passes, pctChange, peerGrade, perShare, quadrant, rampGrade, ratioOfPositive, sumStrict, tally, weightedScore } from "./metrics";
 import { cashReturnFor } from "./statements";
 import type { Store, StoredCompany } from "./store";
 
@@ -212,6 +212,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
       ...(!s ? { dataNote: NO_DATA } : {}),
       ...(reportedFor(d.ticker).length ? { reported: reportedFor(d.ticker) } : {}),
       reportingCurrency: rows[rows.length - 1]?.currency || undefined,
+      analyst: analystFor(store, d.ticker),
     };
   });
 
@@ -221,6 +222,7 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     for (const m of Object.values(c.metrics)) m.sourceIds.forEach((id) => used.add(id));
     for (const h of c.history ?? []) h.sourceIds.forEach((id) => used.add(id));
     for (const r of c.reported ?? []) r.points.forEach((p) => used.add(p.sourceId));
+    c.analyst?.sourceIds.forEach((id) => used.add(id));
   }
   const gates = profile.checks.filter((k) => k.kind === "gate").length;
 
@@ -268,6 +270,20 @@ export function analyze(profile: IndustryProfile, store: Store, req: AnalyzeRequ
     sources: store.sources.filter((s) => used.has(s.id)),
   };
   return { dataset, warnings };
+}
+
+/** Analyst ratings for one ticker from the store, or null when there are none. */
+function analystFor(store: Store, ticker: string): AnalystRatings | null {
+  const r = store.analyst?.[ticker];
+  if (!r) return null;
+  const k = analystConsensus(r);
+  if (k.meanScore == null || k.buyShare == null) return null;
+  return {
+    asOf: r.asOf, strongBuy: r.strongBuy, buy: r.buy, hold: r.hold, sell: r.sell, strongSell: r.strongSell,
+    total: k.total, meanScore: k.meanScore, buyShare: k.buyShare, sentiment: k.sentiment,
+    sourceIds: [r.sourceId],
+    ...(k.sentiment == null ? { note: `Only ${k.total} analyst${k.total === 1 ? "" : "s"}: fewer than ${MIN_ANALYSTS}, so no sentiment is called.` } : {}),
+  };
 }
 
 /** The grading rule of one score component, in one plain line. */

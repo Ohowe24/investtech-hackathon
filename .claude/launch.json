@@ -1,0 +1,37 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 3000
+    },
+    {
+      "name": "site-3010",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "next",
+        "start",
+        "-p",
+        "3010"
+      ],
+      "port": 3010
+    },
+    {
+      "name": "loader-mock",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4599",
+        "--directory",
+        "/private/tmp/claude-501/-Users-max--claude-spares-spare-JJSGa3/8f70de71-b090-4298-a6d4-f99076f48637/scratchpad"
+      ],
+      "port": 4599
+    }
+  ]
+}

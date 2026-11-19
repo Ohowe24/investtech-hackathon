@@ -107,6 +107,8 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
 
       <ChecksPanel dataset={dataset} company={company} scored={scored} context={context} onOpen={onOpen} />
 
+      {company.analyst !== undefined && <AnalystPanel dataset={dataset} company={company} />}
+
       {company.history?.length ? <div className="space-y-5"><DeepDive company={company} /></div> : null}
 
       {company.reported?.length ? <ReportedFigures dataset={dataset} company={company} /> : null}
@@ -134,6 +136,74 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
         </div>
       )}
     </div>
+  );
+}
+
+const SENTIMENT_STYLE = {
+  bullish: { label: "Bullish", cls: "bg-tealsoft text-teal" },
+  neutral: { label: "Neutral", cls: "bg-warnsoft text-warn" },
+  bearish: { label: "Bearish", cls: "bg-badsoft text-bad" },
+} as const;
+
+/** Sell-side analysts' current buy / hold / sell ratings. Shown for context; not part of the verdict. */
+function AnalystPanel({ dataset, company }: { dataset: Dataset; company: Company }) {
+  const a = company.analyst;
+  const source = a ? dataset.sources.find((s) => s.id === a.sourceIds[0]) : undefined;
+  const levels = a
+    ? [
+        { label: "Strong buy", n: a.strongBuy, cls: "bg-teal" },
+        { label: "Buy", n: a.buy, cls: "bg-teal/60" },
+        { label: "Hold", n: a.hold, cls: "bg-faint/50" },
+        { label: "Sell", n: a.sell, cls: "bg-bad/60" },
+        { label: "Strong sell", n: a.strongSell, cls: "bg-bad" },
+      ]
+    : [];
+  return (
+    <Card
+      title="What analysts say"
+      right={a ? <span className="text-xs text-faint">Yahoo Finance · as of {a.asOf}</span> : undefined}
+    >
+      {!a ? (
+        <p className="text-sm text-muted">No analyst ratings found for {company.ticker}.</p>
+      ) : (
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            {a.sentiment ? (
+              <span className={`rounded-md px-2.5 py-1 text-sm font-semibold ${SENTIMENT_STYLE[a.sentiment].cls}`}>{SENTIMENT_STYLE[a.sentiment].label}</span>
+            ) : (
+              <span className="rounded-md border border-dashed border-faint px-2.5 py-1 text-sm text-muted">Too few analysts</span>
+            )}
+            <span className="text-sm text-muted">
+              <span className="font-mono font-semibold tabular-nums text-ink">{a.meanScore.toFixed(2)}</span> average rating (1 = strong buy, 5 = strong sell)
+            </span>
+            <span className="text-sm text-muted">
+              <span className="font-mono font-semibold tabular-nums text-ink">{pc(a.buyShare, 0)}</span> rate it buy
+            </span>
+            <span className="text-sm text-muted">
+              <span className="font-mono font-semibold tabular-nums text-ink">{a.total}</span> analyst{a.total === 1 ? "" : "s"}
+            </span>
+          </div>
+          <div className="flex h-3 w-full overflow-hidden rounded-full bg-soft" role="img"
+            aria-label={levels.map((l) => `${l.label} ${l.n}`).join(", ")}>
+            {levels.filter((l) => l.n > 0).map((l) => (
+              <div key={l.label} className={l.cls} style={{ width: `${(l.n / a.total) * 100}%` }} title={`${l.label}: ${l.n}`} />
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-x-5 gap-y-1 text-xs text-muted">
+            {levels.map((l) => (
+              <span key={l.label} className="inline-flex items-center gap-1.5">
+                <span className={`inline-block h-2 w-2 rounded-full ${l.cls}`} />
+                {l.label} <span className="font-mono tabular-nums text-ink">{l.n}</span>
+              </span>
+            ))}
+          </div>
+          <p className="text-xs text-faint">
+            {a.note ? `${a.note} ` : ""}Bullish means an average of 2.5 or better, bearish 3.5 or worse. Sell ratings are rare, so compare the average across companies. Not used in the verdict.
+            {source?.url && <> <a href={source.url} target="_blank" rel="noreferrer" className="underline hover:text-ink">Source</a></>}
+          </p>
+        </div>
+      )}
+    </Card>
   );
 }
 

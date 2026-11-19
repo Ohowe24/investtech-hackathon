@@ -43,6 +43,18 @@ export interface MarketEntry {
   sourceId: string;
 }
 
+/** One row of engine/input/analyst.csv (npm run fetch-analyst): Yahoo Finance rating counts as fetched. */
+export interface AnalystRow {
+  symbol: string;
+  asOf: string;
+  strongBuy: number;
+  buy: number;
+  hold: number;
+  sell: number;
+  strongSell: number;
+  sourceId: string;
+}
+
 /** A human decision typed in companies.csv. It overrides the model for that ticker. */
 export interface Decision {
   verdict: Verdict;
@@ -58,6 +70,8 @@ export interface Store {
   market: MarketEntry[];
   sources: Source[];
   decisions: Record<string, Decision>;
+  /** analyst rating counts by ticker; absent when the file has no row for it */
+  analyst?: Record<string, AnalystRow>;
   /** problems found while reading the inputs */
   warnings: string[];
 }
@@ -161,6 +175,25 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     company(r.ticker).distributions.push({ date: r.date, amount, currency: r.currency ?? "", sourceId: r.source_id });
   }
 
+  const analyst: Record<string, AnalystRow> = {};
+  for (const r of csv("analyst.csv")) {
+    const counts = [num(r.strong_buy), num(r.buy), num(r.hold), num(r.sell), num(r.strong_sell)];
+    if (counts.some((n) => n == null) || !r.as_of || !r.source_id) {
+      warnings.push(`analyst.csv: unreadable row for ${r.ticker}, skipped`);
+      continue;
+    }
+    const [strongBuy, buy, hold, sell, strongSell] = counts as number[];
+    analyst[r.ticker] = { symbol: r.symbol, asOf: r.as_of, strongBuy, buy, hold, sell, strongSell, sourceId: r.source_id };
+    if (!sourceIds.has(r.source_id)) {
+      sources.push({
+        id: r.source_id,
+        label: `Yahoo Finance · ${r.symbol} analyst recommendations (current month), fetched ${r.as_of}`,
+        url: `https://finance.yahoo.com/quote/${encodeURIComponent(r.symbol)}/analysis/`,
+      });
+      sourceIds.add(r.source_id);
+    }
+  }
+
   for (const file of ["organic.csv"]) {
     for (const r of csv(file)) company(r.ticker).extras[file] = r;
   }
@@ -185,5 +218,5 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     c.distributions.sort((a, b) => a.date.localeCompare(b.date));
     c.facts.sort((a, b) => a.reportDate.localeCompare(b.reportDate) || a.metric.localeCompare(b.metric));
   }
-  return { isFake, companies, market, sources, decisions, warnings };
+  return { isFake, companies, market, sources, decisions, analyst, warnings };
 }

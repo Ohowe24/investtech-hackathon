@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cashPayoutRatio, distributionsInYear, netDebt, ratioOfPositive,
+import { analystConsensus, cashPayoutRatio, distributionsInYear, netDebt, ratioOfPositive,
   acquisitionIntensity,
   meanStrict,
   cashReturnOnCapital,
@@ -222,5 +222,31 @@ describe("cashPayoutRatio", () => {
   it("is null when operating cash flow is not positive", () => {
     expect(cashPayoutRatio(0.72, -5, 100)).toBeNull();
     expect(cashPayoutRatio(0.72, 120, null)).toBeNull();
+  });
+});
+
+describe("analystConsensus", () => {
+  const c = (strongBuy: number, buy: number, hold: number, sell: number, strongSell: number) => ({ strongBuy, buy, hold, sell, strongSell });
+  it("averages ratings from 1 (strong buy) to 5 (strong sell)", () => {
+    const r = analystConsensus(c(3, 7, 2, 0, 0));
+    expect(r.total).toBe(12);
+    expect(r.meanScore).toBeCloseTo(23 / 12);
+    expect(r.buyShare).toBeCloseTo(10 / 12);
+    expect(r.sentiment).toBe("bullish");
+  });
+  it("is bullish at exactly 2.5, bearish at exactly 3.5, neutral between", () => {
+    expect(analystConsensus(c(0, 1, 1, 0, 0)).sentiment).toBeNull(); // only 2 analysts
+    expect(analystConsensus(c(0, 2, 2, 0, 0)).sentiment).toBe("bullish"); // 2.5
+    expect(analystConsensus(c(0, 1, 5, 2, 0)).sentiment).toBe("neutral"); // 3.125
+    expect(analystConsensus(c(0, 0, 2, 2, 0)).sentiment).toBe("bearish"); // 3.5
+  });
+  it("calls no sentiment below the minimum number of analysts", () => {
+    const r = analystConsensus(c(2, 0, 0, 0, 0));
+    expect(r.meanScore).toBe(1);
+    expect(r.sentiment).toBeNull();
+  });
+  it("is null with no ratings or bad counts", () => {
+    expect(analystConsensus(c(0, 0, 0, 0, 0)).meanScore).toBeNull();
+    expect(analystConsensus(c(1, -1, 0, 0, 0)).meanScore).toBeNull();
   });
 });
