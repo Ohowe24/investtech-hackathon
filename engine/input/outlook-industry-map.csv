@@ -1,0 +1,33 @@
+naics,title,statcan,cops,bls,peers,note
+513210,Software Publishers,5132,IN41,513200,CMG DCBO DSG DTOL ENGH KXS LSPD OTEX SHOP TCS BB CVO,"COPS projects only Information and cultural industries as a whole (NAICS 51), so its figure is broader than software. Peers: every listed Canadian company Onesheet files under Software - Application or Software - Infrastructure, except the candidates."
+541330,Engineering Services,5413,IN46,541300,STN ATRL,"StatCan, COPS and BLS publish architectural, engineering and related services (5413) together. Peers: the Engineering & Construction companies whose Onesheet profile describes engineering services (Stantec, AtkinsRéalis), not contractors."
+541611,Administrative Management and General Management Consulting Services,5416,IN48,541600,,"Published as management, scientific and technical consulting (5416). COPS groups it with advertising, design and other professional services. No listed Canadian peer."
+541618,Other Management Consulting Services,5416,IN48,541600,,"Same series as 541611."
+541690,Other Scientific and Technical Consulting Services,5416,IN48,541600,,"Same series as 541611."
+237,Heavy and Civil Engineering Construction,23X,IN08,230000,BDT BDGI,"StatCan splits construction by type of work, not by NAICS: 'Engineering and other construction activities' (23X) is the civil-engineering part. COPS and BLS publish construction (23) as a whole. Peers: the Engineering & Construction companies whose Onesheet profile describes construction work (Bird, Badger)."
+2371,Utility System Construction,23X,IN08,230000,BDT BDGI,"Same series as 237."
+237130,Power and Communication Line and Related Structures Construction,23X,IN08,230000,BDT BDGI,"Same series as 237."
+236210,Industrial Building Construction,23B,IN08,230000,BDT BDGI,"StatCan: non-residential building construction (23B). COPS and BLS: construction (23) as a whole."
+811310,Commercial and Industrial Machinery and Equipment Repair and Maintenance,811A,IN62,811300,,"StatCan publishes repair and maintenance except automotive (811A); COPS publishes repair and maintenance (811) as a whole. No listed Canadian peer."
+484,Truck Transportation,484,IN34,484000,MTL,"Peers: Onesheet's Trucking industry except TFI (only Mullen Group remains)."
+484122,"General Freight Trucking, Long-Distance, Less Than Truckload",484,IN34,484000,MTL,"Same series as 484: no source publishes less-than-truckload on its own."
+492110,Couriers and Express Delivery Services,492,IN39,492000,,"No listed Canadian peer."
+488510,Freight Transportation Arrangement,488,IN37,487-80,,"StatCan and COPS: support activities for transportation (488). BLS combines scenic and sightseeing transportation with support activities (487-488). No listed Canadian peer."
+4881,Support Activities for Air Transportation,488,IN37,487-80,,"Same series as 488510: no source publishes airport operations on its own."
+2211,"Electric Power Generation, Transmission and Distribution",2211,IN07,221100,BEP.UN CPX EMA FTS H NPI PIF TA,"COPS publishes utilities (22) as a whole. Peers: every listed Canadian company Onesheet files under Regulated Electric, Independent Power Producers or Renewable Utilities."
+2362,Nonresidential Building Construction,23B,IN08,230000,BDT BDGI,"StatCan: non-residential building construction (23B). COPS and BLS publish construction (23) as a whole. Peers: the listed Canadian contractors (Bird, Badger)."
+31-33,Manufacturing,31-33,,31-330,,"COPS publishes manufacturing only by sub-industry, with no total. No peer group: manufacturing is too broad."
+621,Ambulatory Health Care Services,621,IN55,621000,,Healthcare software and consulting mostly serve practices and clinics. No listed Canadian peer.
+622,Hospitals,622,IN56,6220P0,,BLS splits private and state/local hospitals; the private series (the larger) is used. No listed Canadian peer.
+5615,Travel Arrangement and Reservation Services,5615,IN50,561500,,"COPS groups travel arrangement with all management, administrative and support services (55, 56). No listed Canadian peer."
+5222,Nondepository Credit Intermediation,5222,IN42,521-20,,Mortgage lending outside banks. COPS: finance and banking (521-523); BLS: credit intermediation (521-522). No peer group.
+52,Finance and Insurance,52,IN42,520000,,COPS publishes finance and banking (IN42) and insurance separately; finance and banking is used. No peer group.
+91,Public Administration,91,IN64,9992-3,,"BLS: state and local government excluding education and hospitals, the level that buys local-government and public-safety software. No peer group."
+516,Broadcasting and Content Providers,516,IN41,513-90,,"COPS and BLS publish broader groups (information and culture; publishing, broadcasting and content). No peer group."
+61,Educational Services,61,,6110Y0,,"COPS publishes schools, colleges and universities separately, with no total. BLS: state and local education, where school software is sold. No peer group."
+48-49,Transportation and Warehousing,48-49,,48-490,,"COPS publishes transportation by mode only, with no total. No peer group."
+441,Motor Vehicle and Parts Dealers,441,IN30,441000,,Automotive vertical software is sold mainly to dealers. COPS: retail trade as a whole. No peer group.
+325,Chemical Manufacturing,325,IN15,325000,,
+5411,Legal Services,5411,IN45,541100,,"COPS: legal, accounting and related services (5411-5412). No peer group."
+323,Printing and Related Support Activities,323,IN13,323000,,
+531,Real Estate,531,IN44,531000,,COPS: real estate and rental and leasing (53). No peer group.

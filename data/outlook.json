@@ -1,0 +1,4875 @@
+{
+  "generatedAt": "2026-11-19T16:49:37.824Z",
+  "status": "complete",
+  "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
+  "layers": [
+    {
+      "id": "mix",
+      "title": "1 · Industry map",
+      "question": "Which industries does each company own and buy?",
+      "steps": [
+        {
+          "id": "deals",
+          "label": "Disclosed deals",
+          "status": "done",
+          "detail": "Acquisitions with SEDAR quotes, copied from engine/input/deals.json."
+        },
+        {
+          "id": "deal-labels",
+          "label": "Deal industry labels",
+          "status": "in-progress",
+          "detail": "A NAICS code per deal with the quote that justifies it (engine/input/outlook-labels.csv). Proposed; awaiting approval."
+        },
+        {
+          "id": "segments",
+          "label": "Revenue by segment",
+          "status": "done",
+          "detail": "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each mapped to an industry with a quote (engine/input/outlook-segments.csv)."
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "title": "2 · Industry signals",
+      "question": "Where is each industry heading, according to published sources?",
+      "steps": [
+        {
+          "id": "momentum",
+          "label": "Recent momentum",
+          "status": "done",
+          "detail": "Statistics Canada real GDP by industry (36-10-0434): latest 12 months vs 3 years earlier, yearly rate."
+        },
+        {
+          "id": "projection",
+          "label": "Official projections",
+          "status": "done",
+          "detail": "Canada: ESDC COPS real GDP 2025 → 2035. United States: BLS real output 2025 → 2035 (Table 2.11)."
+        },
+        {
+          "id": "street",
+          "label": "Street forecast",
+          "status": "done",
+          "detail": "Median analyst revenue growth of listed Canadian peers (Onesheet estimates), after inflation."
+        },
+        {
+          "id": "narrative",
+          "label": "Narrative",
+          "status": "done",
+          "detail": "Verbatim quotes from each company's latest earnings call, with a one-line summary by Claude (engine/input/outlook-narrative.csv). Shown as text, never scored."
+        }
+      ]
+    },
+    {
+      "id": "tailwind",
+      "title": "3 · Company tailwind",
+      "question": "How strong are the industries this company earns its money in?",
+      "steps": [
+        {
+          "id": "blend",
+          "label": "Industry outlook",
+          "status": "done",
+          "detail": "Median of the available signals (at least 2), compared with the whole economy measured the same way."
+        },
+        {
+          "id": "weighting",
+          "label": "Revenue-weighted tailwind",
+          "status": "done",
+          "detail": "Share of revenue × industry outlook, with the share of revenue covered shown."
+        }
+      ]
+    },
+    {
+      "id": "direction",
+      "title": "4 · Direction",
+      "question": "Are the new deals heading toward stronger or weaker industries than the existing business?",
+      "steps": [
+        {
+          "id": "compare",
+          "label": "Deals vs base",
+          "status": "done",
+          "detail": "Outlook of the last 3 fiscal years' deals vs the tailwind: toward ↗, steady →, or away ↘ (±1 point)."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "deals",
+      "label": "Onesheet data pack: disclosed deals with SEDAR quotes (engine/input/deals.json), labelled in engine/input/outlook-labels.csv",
+      "status": "fetched"
+    },
+    {
+      "id": "onesheet-segments",
+      "label": "Onesheet API: reported segments and KPIs (/kpis/segments-and-kpis)",
+      "url": "https://api.onesheet.pro/v1/kpis/segments-and-kpis",
+      "status": "fetched"
+    },
+    {
+      "id": "onesheet-profile",
+      "label": "Onesheet data pack: company profiles (segment and subsidiary descriptions quoted for each industry label)",
+      "status": "fetched"
+    },
+    {
+      "id": "statcan-36-10-0434",
+      "label": "Statistics Canada, table 36-10-0434: GDP at basic prices by industry, monthly, chained 2017 dollars, seasonally adjusted",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401",
+      "status": "fetched",
+      "detail": "Monthly data to Aug 2026, fetched 2026-11-19"
+    },
+    {
+      "id": "esdc-cops-2026",
+      "label": "ESDC, Canadian Occupational Projection System 2026–2035: GDP by industry",
+      "url": "https://open.canada.ca/data/en/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890",
+      "status": "fetched",
+      "detail": "Growth computed from the yearly GDP levels; the published growth-rate file is misaligned by one row, so it is not used."
+    },
+    {
+      "id": "bls-ep-2-11",
+      "label": "US Bureau of Labor Statistics, Employment Projections Table 2.11: employment and output by industry, 2025 and projected 2035",
+      "url": "https://www.bls.gov/emp/tables/industry-employment-and-output.htm",
+      "status": "fetched",
+      "detail": "Rows copied on 2026-11-19 (bls.gov refuses scripts); checked against the live table by fingerprint and by recomputing every published rate."
+    },
+    {
+      "id": "onesheet-estimates",
+      "label": "Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates)",
+      "url": "https://api.onesheet.pro/v1/stocks/fundamentals",
+      "status": "fetched"
+    },
+    {
+      "id": "onesheet-transcripts",
+      "label": "Onesheet API: latest earnings-call transcripts (/financials/transcripts)",
+      "url": "https://api.onesheet.pro/v1/financials/transcripts",
+      "status": "fetched",
+      "detail": "Each quote is checked word for word against the transcript when the engine runs."
+    },
+    {
+      "id": "boc-inflation-target",
+      "label": "Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation",
+      "url": "https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/",
+      "status": "fetched"
+    }
+  ],
+  "rules": {
+    "minSignals": 2,
+    "minCoverage": 0.5,
+    "directionBand": 0.01,
+    "inflation": 0.02,
+    "dealYears": [
+      2024,
+      2025,
+      2026
+    ],
+    "streetFrom": 2026,
+    "streetTo": 2028,
+    "minPeers": 2,
+    "momentumYears": 3
+  },
+  "economy": {
+    "signals": [
+      {
+        "kind": "momentum",
+        "label": "Recent momentum",
+        "geo": "Canada",
+        "series": "StatCan 36-10-0434 · All industries [T001]",
+        "sourceIds": [
+          "statcan-36-10-0434"
+        ],
+        "value": 0.016376660505064367,
+        "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+      },
+      {
+        "kind": "projection",
+        "label": "Official projection",
+        "geo": "Canada",
+        "sourceIds": [
+          "esdc-cops-2026"
+        ],
+        "period": "2025 → 2035",
+        "series": "COPS 2026–2035 · Sum of All industries [1111-9110]",
+        "value": 0.01918450809756833
+      },
+      {
+        "kind": "projection",
+        "label": "Official projection",
+        "geo": "United States",
+        "sourceIds": [
+          "bls-ep-2-11"
+        ],
+        "period": "2025 → 2035",
+        "series": "BLS Table 2.11 · Total, all industries [TE1000]",
+        "value": 0.0201090723337769
+      }
+    ],
+    "outlook": 0.01918450809756833
+  },
+  "companies": [
+    {
+      "ticker": "CSU",
+      "name": "Constellation Software",
+      "mixPeriod": "FY2025",
+      "mix": [
+        {
+          "segment": "Maintenance and other recurring",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 8700000000,
+          "currency": "USD",
+          "share": 0.7485158736987009,
+          "period": "FY2025",
+          "quote": "Constellation Software acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Revenue lines are types of software revenue, not industries; every line belongs to the software business.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Professional services",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 2126000000,
+          "currency": "USD",
+          "share": 0.18291318936591242,
+          "period": "FY2025",
+          "quote": "Constellation Software acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Licenses",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 415000000,
+          "currency": "USD",
+          "share": 0.03570506753850125,
+          "period": "FY2025",
+          "quote": "Constellation Software acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Hardware and other",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 382000000,
+          "currency": "USD",
+          "share": 0.03286586939688549,
+          "period": "FY2025",
+          "quote": "Constellation Software acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Hardware resold inside software solutions; counted with the software business it belongs to.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        }
+      ],
+      "industryMix": [
+        {
+          "naics": "513210",
+          "title": "Software Publishers",
+          "share": 1,
+          "segments": [
+            "Maintenance and other recurring",
+            "Professional services",
+            "Licenses",
+            "Hardware and other"
+          ]
+        }
+      ],
+      "geography": [],
+      "tailwind": 0.04874219222205611,
+      "coverage": 1,
+      "trend": "growing",
+      "decliningShare": 0,
+      "dealOutlook": 0.04874219222205611,
+      "dealCount": 8,
+      "dealsWithOutlook": 8,
+      "directionGap": 0,
+      "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Mark Miller",
+          "quote": "On AI, there is an enormous amount of work going on across our businesses and nearly all the learning is happening inside of them rather than at head office.",
+          "summary": "AI is the change management is watching; each software business works out its own response.",
+          "call": "Q3 2026 earnings call, 2026-11-09",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Jamal Baksh",
+          "quote": "And we just -- it's just a very difficult market because of the consolidation that happens because of Epic, et cetera.",
+          "summary": "Hospital software, where Altera (bought 2022) sits, is a hard market as hospitals consolidate onto Epic.",
+          "call": "Q3 2026 earnings call, 2026-11-09",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
+      "directionNotes": [
+        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal."
+      ],
+      "customer": {
+        "base": "economy",
+        "tailwind": 0.01918450809756833,
+        "coverage": 1,
+        "trend": null,
+        "decliningShare": null,
+        "dealOutlook": null,
+        "dealCoverage": 0.25,
+        "directionGap": null,
+        "direction": null,
+        "industryMix": [
+          {
+            "naics": "economy",
+            "title": "Whole economy",
+            "share": 1,
+            "segments": [
+              "Maintenance and other recurring",
+              "Professional services",
+              "Licenses",
+              "Hardware and other"
+            ]
+          }
+        ],
+        "notes": [
+          "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "Direction needs client markets for at least half of the recent deals: the filings name them for 2 of 8."
+        ]
+      },
+      "notes": [
+        "Deal industry labels are proposed and awaiting approval.",
+        "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
+      ]
+    },
+    {
+      "ticker": "TOI",
+      "name": "Topicus.com",
+      "mixPeriod": "FY2025",
+      "mix": [
+        {
+          "segment": "Maintenance and other recurring",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 1097066000,
+          "currency": "EUR",
+          "share": 0.7067349008118265,
+          "period": "FY2025",
+          "quote": "Topicus.com acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Revenue lines are types of software revenue, not industries; every line belongs to the software business.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Professional services",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 371935000,
+          "currency": "EUR",
+          "share": 0.23960221657899042,
+          "period": "FY2025",
+          "quote": "Topicus.com acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Licenses",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 43891000,
+          "currency": "EUR",
+          "share": 0.028274781582449806,
+          "period": "FY2025",
+          "quote": "Topicus.com acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": null,
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Hardware and other",
+          "naics": "513210",
+          "naicsTitle": "Software Publishers",
+          "revenue": 39410000,
+          "currency": "EUR",
+          "share": 0.0253881010267332,
+          "period": "FY2025",
+          "quote": "Topicus.com acquires, manages and builds vertical market software businesses",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Hardware resold inside software solutions; counted with the software business it belongs to.",
+          "market": "economy",
+          "marketTitle": null,
+          "marketNote": "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        }
+      ],
+      "industryMix": [
+        {
+          "naics": "513210",
+          "title": "Software Publishers",
+          "share": 0.9999999999999999,
+          "segments": [
+            "Maintenance and other recurring",
+            "Professional services",
+            "Licenses",
+            "Hardware and other"
+          ]
+        }
+      ],
+      "geography": [
+        {
+          "region": "Netherlands",
+          "share": 0.4440199136508231,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "Rest of world",
+          "share": 0.555980086349177,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        }
+      ],
+      "tailwind": 0.04874219222205612,
+      "coverage": 1,
+      "trend": "growing",
+      "decliningShare": 0,
+      "dealOutlook": 0.04874219222205611,
+      "dealCount": 6,
+      "dealsWithOutlook": 6,
+      "directionGap": -6.938893903907228e-18,
+      "direction": "steady",
+      "narrative": [],
+      "directionNotes": [
+        "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal."
+      ],
+      "customer": {
+        "base": "economy",
+        "tailwind": 0.01918450809756833,
+        "coverage": 1,
+        "trend": null,
+        "decliningShare": null,
+        "dealOutlook": 0.018022337480482337,
+        "dealCoverage": 0.6388888888888887,
+        "directionGap": -0.001162170617085994,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "economy",
+            "title": "Whole economy",
+            "share": 0.9999999999999999,
+            "segments": [
+              "Maintenance and other recurring",
+              "Professional services",
+              "Licenses",
+              "Hardware and other"
+            ]
+          }
+        ],
+        "notes": [
+          "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
+          "Direction rests on the client markets named for 4 of 6 recent deals (64% of their weight).",
+          "Deals are compared with the whole economy, the base for a company with clients in every sector."
+        ]
+      },
+      "notes": [
+        "Deal industry labels are proposed and awaiting approval.",
+        "All reported revenue is outside North America, while the signals describe Canada and the United States: read the outlook as indicative.",
+        "No narrative: the latest earnings-call transcript in Onesheet is from 2021 (Q1), too old to describe today's markets."
+      ]
+    },
+    {
+      "ticker": "WSP",
+      "name": "WSP Global",
+      "mixPeriod": "FY2025",
+      "mix": [
+        {
+          "segment": "Transport & Infrastructure",
+          "naics": "541330",
+          "naicsTitle": "Engineering Services",
+          "revenue": 6743600000,
+          "currency": "CAD",
+          "share": 0.36880503144654087,
+          "period": "FY2025",
+          "quote": "Advisory, planning, design and project management for rail, transit, aviation, highways, bridges, tunnels, water, maritime and urban infrastructure",
+          "quoteSource": "Onesheet company profile",
+          "serves": "rail, transit, aviation, highways, bridges, tunnels, water, maritime and urban infrastructure",
+          "note": "WSP's sectors are its clients' markets; the work itself is engineering services.",
+          "market": "237",
+          "marketTitle": "Heavy and Civil Engineering Construction",
+          "marketNote": "Transport & Infrastructure clients build highways, bridges, rail, transit and water systems: heavy and civil construction.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Earth & Environment",
+          "naics": "541330",
+          "naicsTitle": "Engineering Services",
+          "revenue": 5371400000,
+          "currency": "CAD",
+          "share": 0.2937599124965819,
+          "period": "FY2025",
+          "quote": "Earth-science and environmental services, including permitting, compliance, remediation, geotechnical and mining engineering, water resources and impact assessments",
+          "quoteSource": "Onesheet company profile",
+          "serves": "permitting, remediation, mining, water",
+          "note": "Mixes engineering with environmental consulting (541620); WSP reports it as one sector, so it stays with engineering.",
+          "market": null,
+          "marketTitle": null,
+          "marketNote": "Clients span mining, permitting, remediation and water: no single market, so this segment is left out of the client view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Property & Buildings",
+          "naics": "541330",
+          "naicsTitle": "Engineering Services",
+          "revenue": 4035100000,
+          "currency": "CAD",
+          "share": 0.2206781514902926,
+          "period": "FY2025",
+          "quote": "Technical and advisory services for commercial buildings and social and critical infrastructure",
+          "quoteSource": "Onesheet company profile",
+          "serves": "commercial buildings, social and critical infrastructure",
+          "note": null,
+          "market": "2362",
+          "marketTitle": "Nonresidential Building Construction",
+          "marketNote": "Clients build and run commercial, social and critical buildings: non-residential building construction.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Power & Energy",
+          "naics": "541330",
+          "naicsTitle": "Engineering Services",
+          "revenue": 2134900000,
+          "currency": "CAD",
+          "share": 0.11675690456658464,
+          "period": "FY2025",
+          "quote": "Engineering for energy projects, including renewables, nuclear, natural gas, power plants, transmission, substations, distribution and storage",
+          "quoteSource": "Onesheet company profile",
+          "serves": "renewables, nuclear, natural gas, power plants, transmission, distribution",
+          "note": null,
+          "market": "2211",
+          "marketTitle": "Electric Power Generation, Transmission and Distribution",
+          "marketNote": "Clients are power producers and grid owners: electric power generation, transmission and distribution.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        }
+      ],
+      "industryMix": [
+        {
+          "naics": "541330",
+          "title": "Engineering Services",
+          "share": 0.9999999999999999,
+          "segments": [
+            "Transport & Infrastructure",
+            "Earth & Environment",
+            "Property & Buildings",
+            "Power & Energy"
+          ]
+        }
+      ],
+      "geography": [
+        {
+          "region": "Canada",
+          "share": 0.15570139458572602,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "Americas (US and Latin America)",
+          "share": 0.4600765654908395,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "Europe, Middle East, India, Africa",
+          "share": 0.27607875307629204,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "Australia, New Zealand, Asia",
+          "share": 0.10814328684714247,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        }
+      ],
+      "tailwind": 0.025898396501788164,
+      "coverage": 1,
+      "trend": "growing",
+      "decliningShare": 0,
+      "dealOutlook": 0.021243422824824266,
+      "dealCount": 12,
+      "dealsWithOutlook": 11,
+      "directionGap": -0.004654973676963898,
+      "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Alexandre L'Heureux",
+          "quote": "Looking ahead, demand remains healthy across transportation, defense, data center, water, aviation, energy and municipal infrastructure with additional opportunity from the federal push to accelerate nation-building projects.",
+          "summary": "Management sees healthy demand across most of WSP's client markets.",
+          "call": "Q3 2026 earnings call, 2026-11-05",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alexandre L'Heureux",
+          "quote": "At the same time, the structural drivers in Power & Energy continue to strengthen, fueled by electrification, energy capacity and the need to modernize aging grids.",
+          "summary": "Power & Energy, where the TRC and POWER Engineers deals sit, has long-term drivers: electrification and grid renewal.",
+          "call": "Q3 2026 earnings call, 2026-11-05",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
+      "directionNotes": [
+        "Direction rests on 11 of 12 recent deals; the filings don't say what the other is."
+      ],
+      "customer": {
+        "base": "segments",
+        "tailwind": 0.022939823884575463,
+        "coverage": 0.7062400875034182,
+        "trend": "growing",
+        "decliningShare": 0,
+        "dealOutlook": 0.022339277390900084,
+        "dealCoverage": 0.625,
+        "directionGap": -0.0006005464936753788,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "237",
+            "title": "Heavy and Civil Engineering Construction",
+            "share": 0.36880503144654087,
+            "segments": [
+              "Transport & Infrastructure"
+            ]
+          },
+          {
+            "naics": "2362",
+            "title": "Nonresidential Building Construction",
+            "share": 0.2206781514902926,
+            "segments": [
+              "Property & Buildings"
+            ]
+          },
+          {
+            "naics": "2211",
+            "title": "Electric Power Generation, Transmission and Distribution",
+            "share": 0.11675690456658464,
+            "segments": [
+              "Power & Energy"
+            ]
+          },
+          {
+            "naics": "",
+            "title": "No single client market",
+            "share": 0.2937599124965819,
+            "segments": [
+              "Earth & Environment"
+            ]
+          }
+        ],
+        "notes": [
+          "Earth & Environment has no single client market and is left out of this view (29% of revenue).",
+          "Direction rests on the client markets named for 8 of 12 recent deals (63% of their weight)."
+        ]
+      },
+      "notes": [
+        "Deal industry labels are proposed and awaiting approval.",
+        "38% of revenue is earned outside Canada and the Americas; the signals describe Canada and the United States."
+      ]
+    },
+    {
+      "ticker": "TFII",
+      "name": "TFI International",
+      "mixPeriod": "FY2025",
+      "mix": [
+        {
+          "segment": "Truckload",
+          "naics": "484",
+          "naicsTitle": "Truck Transportation",
+          "revenue": 2733421000,
+          "currency": "USD",
+          "share": 0.39230688858277174,
+          "period": "FY2025",
+          "quote": "Full-load trucking, including specialized and Canadian based conventional truckload",
+          "quoteSource": "Onesheet company profile",
+          "serves": "specialized and conventional truckload",
+          "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Less-than-truckload",
+          "naics": "484122",
+          "naicsTitle": "General Freight Trucking, Long-Distance, Less Than Truckload",
+          "revenue": 2284162000,
+          "currency": "USD",
+          "share": 0.32782820035369636,
+          "period": "FY2025",
+          "quote": "Pickup, consolidation and delivery of smaller shipments",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Logistics",
+          "naics": "488510",
+          "naicsTitle": "Freight Transportation Arrangement",
+          "revenue": 1503929000,
+          "currency": "USD",
+          "share": 0.21584736000762392,
+          "period": "FY2025",
+          "quote": "Asset-light logistics, last-mile delivery, brokerage and warehousing",
+          "quoteSource": "Onesheet company profile",
+          "serves": "brokerage, last-mile delivery, warehousing",
+          "note": "Mixes brokerage (488510), last-mile delivery (492) and warehousing (493); labelled by brokerage, the asset-light core.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Package and courier",
+          "naics": "492110",
+          "naicsTitle": "Couriers and Express Delivery Services",
+          "revenue": 446046000,
+          "currency": "USD",
+          "share": 0.06401755105590796,
+          "period": "FY2025",
+          "quote": "Package and courier delivery operations within the Less-Than-Truckload segment",
+          "quoteSource": "Onesheet company profile",
+          "serves": null,
+          "note": "Revenue before fuel surcharge, as reported.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        }
+      ],
+      "industryMix": [
+        {
+          "naics": "484",
+          "title": "Truck Transportation",
+          "share": 0.39230688858277174,
+          "segments": [
+            "Truckload"
+          ]
+        },
+        {
+          "naics": "484122",
+          "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+          "share": 0.32782820035369636,
+          "segments": [
+            "Less-than-truckload"
+          ]
+        },
+        {
+          "naics": "488510",
+          "title": "Freight Transportation Arrangement",
+          "share": 0.21584736000762392,
+          "segments": [
+            "Logistics"
+          ]
+        },
+        {
+          "naics": "492110",
+          "title": "Couriers and Express Delivery Services",
+          "share": 0.06401755105590796,
+          "segments": [
+            "Package and courier"
+          ]
+        }
+      ],
+      "geography": [],
+      "tailwind": 0.01883367934583086,
+      "coverage": 1,
+      "trend": "stable",
+      "decliningShare": 0,
+      "dealOutlook": null,
+      "dealCount": 5,
+      "dealsWithOutlook": 2,
+      "directionGap": null,
+      "direction": null,
+      "narrative": [
+        {
+          "speaker": "Alain Bédard",
+          "quote": "2023 was not so bad, but then 2024, 2025 with freight recession, increasing inflation on the cost, et cetera, et cetera.",
+          "summary": "The CEO calls 2024–2025 a freight recession, with rising costs. In contrast, Statistics Canada's real trucking output still grew over the last three years.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alain Bédard",
+          "quote": "I mean, we have done that before, but the market, the demand is still soft.",
+          "summary": "Freight demand is still soft.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alain Bédard",
+          "quote": "So, we feel very good about 2027 because at one point, the demand will start, the supply will stay constrained, and us, like I said, during the course of 2027, we still have some tweaks to do.",
+          "summary": "Management expects demand to return while trucking capacity stays tight.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
+      "directionNotes": [
+        "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are."
+      ],
+      "customer": {
+        "tailwind": 0.01883367934583086,
+        "coverage": 1,
+        "trend": "stable",
+        "decliningShare": 0,
+        "dealOutlook": null,
+        "dealCoverage": 0.4,
+        "directionGap": null,
+        "direction": null,
+        "industryMix": [
+          {
+            "naics": "484",
+            "title": "Truck Transportation",
+            "share": 0.39230688858277174,
+            "segments": [
+              "Truckload"
+            ]
+          },
+          {
+            "naics": "484122",
+            "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+            "share": 0.32782820035369636,
+            "segments": [
+              "Less-than-truckload"
+            ]
+          },
+          {
+            "naics": "488510",
+            "title": "Freight Transportation Arrangement",
+            "share": 0.21584736000762392,
+            "segments": [
+              "Logistics"
+            ]
+          },
+          {
+            "naics": "492110",
+            "title": "Couriers and Express Delivery Services",
+            "share": 0.06401755105590796,
+            "segments": [
+              "Package and courier"
+            ]
+          }
+        ],
+        "notes": [
+          "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”.",
+          "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are."
+        ],
+        "base": "same"
+      },
+      "notes": [
+        "Deal industry labels are proposed and awaiting approval.",
+        "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
+      ]
+    },
+    {
+      "ticker": "ARE",
+      "name": "Aecon Group",
+      "mixPeriod": "FY2025",
+      "mix": [
+        {
+          "segment": "Construction",
+          "naics": "237",
+          "naicsTitle": "Heavy and Civil Engineering Construction",
+          "revenue": 5427125000,
+          "currency": "CAD",
+          "share": 0.9986102212495386,
+          "period": "FY2025",
+          "quote": "Construction of civil, urban transportation, nuclear, utility and industrial infrastructure",
+          "quoteSource": "Onesheet company profile",
+          "serves": "civil, urban transit, nuclear, utility and industrial projects",
+          "note": "Mostly heavy and civil engineering construction; the industrial building part (236210) is not reported separately.",
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        },
+        {
+          "segment": "Concessions",
+          "naics": "4881",
+          "naicsTitle": "Support Activities for Air Transportation",
+          "revenue": 7553000,
+          "currency": "CAD",
+          "share": 0.001389778750461389,
+          "period": "FY2025",
+          "quote": "invests in and operates infrastructure such as airports",
+          "quoteSource": "Onesheet company profile",
+          "serves": "airports",
+          "note": null,
+          "market": "same",
+          "marketTitle": null,
+          "marketNote": "What it does is what its clients buy (freight hauled, projects built), so the client view equals the industry view.",
+          "sourceIds": [
+            "onesheet-segments",
+            "onesheet-profile"
+          ]
+        }
+      ],
+      "industryMix": [
+        {
+          "naics": "237",
+          "title": "Heavy and Civil Engineering Construction",
+          "share": 0.9986102212495386,
+          "segments": [
+            "Construction"
+          ]
+        },
+        {
+          "naics": "4881",
+          "title": "Support Activities for Air Transportation",
+          "share": 0.001389778750461389,
+          "segments": [
+            "Concessions"
+          ]
+        }
+      ],
+      "geography": [
+        {
+          "region": "Canada",
+          "share": 0.8467517302773043,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "United States",
+          "share": 0.11527895488932371,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        },
+        {
+          "region": "International",
+          "share": 0.03796931483337191,
+          "period": "FY2025",
+          "sourceIds": [
+            "onesheet-segments"
+          ]
+        }
+      ],
+      "tailwind": 0.019289781609515066,
+      "coverage": 1,
+      "trend": "growing",
+      "decliningShare": 0,
+      "dealOutlook": 0.019959114456143068,
+      "dealCount": 6,
+      "dealsWithOutlook": 6,
+      "directionGap": 0.000669332846628002,
+      "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Adam Borgatti",
+          "quote": "Aecon reinforces its positive outlook, supported by the expectation for double-digit revenue growth for the full-year 2026, based on our strategic positioning in sectors with attractive demand profiles, growing recurring revenue programs, and a healthy pipeline of project opportunities.",
+          "summary": "Management sees strong demand in the sectors it works in.",
+          "call": "Q3 2026 earnings call, 2026-10-30",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Jean-Louis Servranckx",
+          "quote": "Yes, the new build is important, but the real strong market for the years to come is what we call EPU, Extended Power Uprate, or life extension of the reactor.",
+          "summary": "Nuclear refurbishment and life extension, more than new reactors, is the market management expects to be strongest.",
+          "call": "Q3 2026 earnings call, 2026-10-30",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
+      "directionNotes": [],
+      "customer": {
+        "tailwind": 0.019289781609515066,
+        "coverage": 1,
+        "trend": "growing",
+        "decliningShare": 0,
+        "dealOutlook": 0.019959114456143068,
+        "dealCoverage": 1,
+        "directionGap": 0.000669332846628002,
+        "direction": "steady",
+        "industryMix": [
+          {
+            "naics": "237",
+            "title": "Heavy and Civil Engineering Construction",
+            "share": 0.9986102212495386,
+            "segments": [
+              "Construction"
+            ]
+          },
+          {
+            "naics": "4881",
+            "title": "Support Activities for Air Transportation",
+            "share": 0.001389778750461389,
+            "segments": [
+              "Concessions"
+            ]
+          }
+        ],
+        "notes": [
+          "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”."
+        ],
+        "base": "same"
+      },
+      "notes": [
+        "Deal industry labels are proposed and awaiting approval."
+      ]
+    }
+  ],
+  "deals": [
+    {
+      "ticker": "ARE",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon Utilities Group Inc. (AUGI) completed the acquisition of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quote": "On December 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired all of the property and assets of Ainsworth Power Construction, an electrical services and power systems business unit of Ainsworth Inc., headquartered in Toronto, Ontario, from GDI Integrated Facility Services.",
+      "naics": "2371",
+      "naicsTitle": "Utility System Construction",
+      "naicsQuote": "Aecon Utilities Group Inc. (AUGI) completed the acquisition of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "utilities",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Weak: text names the buyer (Aecon Utilities) and 'Utility Services' but not what Duna does. One copy of this row carries a quote about a different deal (Ainsworth Power Construction, Dec 2024), which is missing from the deal list.",
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon, through Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quote": "On March 9, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC (collectively, 'Duna'), as well as a 49% ownership interest in KNX Utility Services, LLC ('KNX'), from Ryker Holdings Inc.",
+      "naics": "2371",
+      "naicsTitle": "Utility System Construction",
+      "naicsQuote": "Aecon Utilities Group Inc. (AUGI) completed the acquisition of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "utilities",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Weak: text names the buyer (Aecon Utilities) and 'Utility Services' but not what Duna does. One copy of this row carries a quote about a different deal (Ainsworth Power Construction, Dec 2024), which is missing from the deal list.",
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "Q3 2025",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell and Trinity",
+      "summary": "Aecon completed the Bodell and Trinity acquisitions in the third quarter of 2025.",
+      "quote": "higher revenue in the U.S. following the Bodell and Trinity acquisitions in the third quarter of 2025",
+      "naics": "236210",
+      "naicsTitle": "Industrial Building Construction",
+      "naicsQuote": "following the Bodell and Trinity acquisitions",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "industrial",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Bodell (2025-08-07) and Trinity (2025-09-18) together.",
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "ARE",
+      "date": "2025-09-18",
+      "fiscalYear": 2025,
+      "counterparty": "Trinity Industrial Services",
+      "summary": "Aecon Group Inc. acquired all of the property and assets of Trinity Industrial Services, headquartered in Beaumont, Texas, on September 18, 2025.",
+      "quote": "On September 18, 2025, the Company acquired the business of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas provides multidisciplinary services supporting maintenance, capital projects, turnarounds and fabrication for core industrial clients",
+      "naics": "811310",
+      "naicsTitle": "Commercial and Industrial Machinery and Equipment Repair and Maintenance",
+      "naicsQuote": "provides multidisciplinary services supporting maintenance, capital projects, turnarounds and fabrication for core industrial clients",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "industrial",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Mostly maintenance and turnarounds; 236210 (industrial construction) is the alternative.",
+      "outlook": 0.0131798340751621,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "2025-08-07",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell Construction Company",
+      "summary": "Aecon acquired Bodell Construction Company, an industrial construction company headquartered in Salt Lake City, Utah, on August 7, 2025.",
+      "quote": "On August 7, 2025, the Company acquired Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah.",
+      "naics": "236210",
+      "naicsTitle": "Industrial Building Construction",
+      "naicsQuote": "an industrial construction company headquartered in Salt Lake City, Utah",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "oil and gas, mining, water and wastewater, power generation",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "2024-12-17",
+      "fiscalYear": 2024,
+      "counterparty": "CriticalPoint Capital, LLC",
+      "summary": "Aecon Group Inc. acquired United Engineers & Constructors Inc. from affiliates of CriticalPoint Capital, LLC on December 17, 2024.",
+      "quote": "On December 17, 2024, the Company acquired United Engineers & Constructors Inc. ('United'), a nuclear and conventional power engineer and contractor headquartered in Mount Laurel, New Jersey, from affiliates of CriticalPoint Capital, LLC.",
+      "naics": "237130",
+      "naicsTitle": "Power and Communication Line and Related Structures Construction",
+      "naicsQuote": "a nuclear and conventional power engineer and contractor",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "nuclear and conventional power",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "The business bought is United Engineers & Constructors; CriticalPoint is the seller. NAICS 237130 includes power plant construction.",
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "2024-07-02",
+      "fiscalYear": 2024,
+      "counterparty": "Xtreme Powerline Construction Inc",
+      "summary": "Aecon, through its subsidiary Aecon Utilities, acquired Xtreme Powerline Construction Inc., an electrical distribution utility contractor based in Port Huron, Michigan, on July 2, 2024.",
+      "quote": "On July 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired a 94.34% interest in Xtreme Powerline Construction Inc. ('Xtreme'), an electrical distribution utility contractor headquartered in Port Huron, Michigan.",
+      "naics": "237130",
+      "naicsTitle": "Power and Communication Line and Related Structures Construction",
+      "naicsQuote": "an electrical distribution utility contractor",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "electric utilities",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.019283355672918945,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "ARE",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Bodell",
+      "summary": "Aecon acquired Bodell, a U.S. industrial construction company, in 2025 to expand industrial capabilities.",
+      "quote": "In the U.S., Aecon acquired Bodell and Trinity. Bodell is an industrial construction company that specializes in capital expenditure projects across the oil and gas, mining, water and wastewater, and power generation sectors in the Western and Southern U.S.",
+      "naics": "236210",
+      "naicsTitle": "Industrial Building Construction",
+      "naicsQuote": "Bodell is an industrial construction company that specializes in capital expenditure projects across the oil and gas, mining, water and wastewater, and power generation sectors",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "oil and gas, mining, water and wastewater, power generation",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as Bodell Construction Company (2025-08-07).",
+      "outlook": 0.029441429970020527,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "ARE",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Trinity",
+      "summary": "Aecon acquired Trinity, a U.S. industrial services company, in 2025 to expand industrial capabilities.",
+      "quote": "Trinity is an industrial services company that specializes in fabrication and O&M projects for industrial clients primarily in Texas and across the Gulf Coast Region",
+      "naics": "811310",
+      "naicsTitle": "Commercial and Industrial Machinery and Equipment Repair and Maintenance",
+      "naicsQuote": "Trinity is an industrial services company that specializes in fabrication and O&M projects for industrial clients",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "industrial",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as Trinity Industrial Services (2025-09-18).",
+      "outlook": 0.0131798340751621,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "Q3 2026",
+      "fiscalYear": 2026,
+      "counterparty": "multiple businesses",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $1,241 plus cash holdbacks of $313 and contingent consideration with an estimated fair value of $51, totaling $1,605 for the nine months ended September 30, 2026.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $707 million on closing plus total estimated deferred payments of $96 million for total consideration of $802 million.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: the filing names no businesses. Nine-month total, so it contains the H1 2026 row.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $757 plus holdbacks and contingent consideration, totaling $999, in the six months ended June 30, 2026.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $384 on closing plus total estimated deferred payments of $71 for total consideration of $454.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "contained in the nine-month total (Q3 2026 row)",
+      "labelNote": "Company-level label.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "2026-06-01",
+      "fiscalYear": 2026,
+      "counterparty": "DerbySoft Holdings Limited",
+      "summary": "Constellation Software acquired 91.8% of DerbySoft Holdings Limited on June 1, 2026 for total consideration of $391.",
+      "quote": "On June 1, 2026, the Company effectively acquired 91.8% of the outstanding shares of DerbySoft Holdings Limited ('DerbySoft'), thereby obtaining control, for cash consideration of $363 plus cash holdbacks of $14 and contingent consideration with an estimated acquisition date fair value of $15. The total consideration was $392.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "DerbySoft is a software company that operates in the travel vertical",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "travel",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5615",
+          "title": "Travel Arrangement and Reservation Services",
+          "weight": 1,
+          "outlook": 0.021799063574313937
+        }
+      ],
+      "marketsNote": "travel",
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "2026-02-13",
+      "fiscalYear": 2026,
+      "counterparty": "Synchronoss Technologies, Inc.",
+      "summary": "Constellation Software completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. for cash proceeds of $309 million on February 13, 2026.",
+      "quote": "On February 13, 2026, the Company completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. ('Synchronoss') for cash proceeds of $309.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: no filing text or profile says what Synchronoss does.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "multiple",
+      "summary": "Subsequent to June 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $818 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $669 on closing plus total estimated deferred payments of $149 for total consideration of $818.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: deals agreed after June 30, 2026, not named. May overlap the Q3 2026 row.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "multiple software businesses",
+      "summary": "Subsequent to September 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $673 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $526 million on closing plus total estimated deferred payments of $148 million for total consideration of $673 million.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: deals agreed after September 30, 2026.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "Topicus completed the acquisition of 12,318,863 treasury shares of Asseco (14.84% of share capital) on October 1, 2025 for total purchase price of $289 million (EUR 246 million).",
+      "quote": "The acquisition of the treasury shares closed on October 1, 2025. On October 1, 2025, the restriction was released on the cash consideration and the total purchase price for the treasury shares was $289 (EUR 246).",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "minority share purchase, not a business acquisition",
+      "labelNote": "Treasury shares of Asseco Poland bought through Topicus.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Constellation Software Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quote": "On June 2, 2025, the Company completed the acquisition of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of $228 plus issued an estimated cash holdback payable of $23 and contingent consideration with an estimated acquisition date fair value of $7. The total consideration resulting from acquisition of CS is $258.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "a Belgium-based vertical market software provider",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Bought through Topicus, also listed under TOI.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software entered into a binding agreement on February 4, 2025 to acquire 12,318,863 treasury shares of Asseco Poland S.A. representing 14.84% of issued share capital at 85 PLN per share.",
+      "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "minority share purchase, not a business acquisition",
+      "labelNote": "Agreement for the October 2025 purchase.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "On February 4, 2025, Constellation Software entered into a binding agreement to acquire 14.84% of Asseco's share capital (12,318,863 treasury shares) at PLN 85 per share, subject to regulatory approvals.",
+      "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "minority share purchase, not a business acquisition",
+      "labelNote": "Same agreement as the row above.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software purchased 8,300,029 shares (approximately 9.99%) in Asseco Poland S.A. at 85 PLN per share for total consideration of $174 million on January 31, 2025.",
+      "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The shares were acquired at a price of 85 PLN per share for total consideration of $174.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "minority share purchase, not a business acquisition",
+      "labelNote": "About 9.99% of Asseco.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": 2025,
+      "counterparty": "",
+      "summary": "Subsequent to June 30, 2025, Constellation Software completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $210 million plus estimated deferred payments of $109 million, totalling $320 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $289 million on closing plus cash holdbacks of $44 million and contingent consideration with an estimated fair value of $23 million for total consideration of $357 million.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: deals agreed after June 30, 2025, not named.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "2024-04-30",
+      "fiscalYear": 2024,
+      "counterparty": "Conduent Incorporated",
+      "summary": "Constellation Software completed the acquisition of the Public Safety Businesses from Conduent Incorporated for total consideration of $280 million on April 30, 2024.",
+      "quote": "On April 30, 2024, the Company completed the acquisition of the Public Safety Businesses from Conduent Incorporated ('Conduent'). The Company paid cash of $174 plus issued an estimated cash holdback payable of $106. The total consideration resulting from acquisition of the Public Safety Business from Conduent is $280.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "public safety",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label: the filing says 'Public Safety Businesses' but not that they are software.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 1,
+          "outlook": 0.008420033575642805
+        }
+      ],
+      "marketsNote": "public safety is bought by governments",
+      "recent": true
+    },
+    {
+      "ticker": "CSU",
+      "date": "2023-02-22",
+      "fiscalYear": 2023,
+      "counterparty": "WideOrbit Inc.",
+      "summary": "Lumine issued 10,204,294 Lumine Special Shares to WideOrbit sellers for approximately $222 million as part of the WideOrbit acquisition completed February 22, 2023.",
+      "quote": "On February 22, 2023, the Company completed the acquisition of 100% of the shares of WideOrbit Inc. ('WideOrbit'). In conjunction with the acquisition of WideOrbit, Lumine issued 10,204,294 Lumine Special Shares to the sellers of WideOrbit for an initial subscription price of approximately $222",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Communications and media software group",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "communications and media",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "WideOrbit sellers were paid in Lumine shares; the profile describes Lumine as a communications and media software group.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "516",
+          "title": "Broadcasting and Content Providers",
+          "weight": 1,
+          "outlook": 0.017471450533642185
+        }
+      ],
+      "marketsNote": "broadcasters and media",
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": 2023,
+      "counterparty": "Optimal Blue",
+      "summary": "Constellation Software acquired Optimal Blue and entered into a promissory note agreement as part of the acquisition financing.",
+      "quote": "In conjunction with the acquisition of Optimal Blue, the Company had entered into a promissory note agreement ('Promissory Note').",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Mortgage-market software business",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "mortgage",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Bought in 2023 per the profile.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5222",
+          "title": "Nondepository Credit Intermediation",
+          "weight": 1,
+          "outlook": 0.030625710283383345
+        }
+      ],
+      "marketsNote": "mortgage lending",
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "2022-05-02",
+      "fiscalYear": 2022,
+      "counterparty": "Allscripts Healthcare Solutions",
+      "summary": "Constellation, through N. Harris Computer Corporation, completed the purchase of Allscripts' Hospitals and Large Physician Practices business segment from Allscripts Healthcare Solutions on May 2, 2022; the segment now operates as Altera.",
+      "quote": "On May 2, 2022, Constellation, through its wholly-owned subsidiary, N. Harris Computer Corporation, completed the purchase from Allscripts Healthcare Solutions ('Allscripts') of Allscripts' Hospitals and Large Physician Practices business segment.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "hospitals and large physician practices",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Company-level label; the business bought is Allscripts' Hospitals and Large Physician Practices segment (now Altera).",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "622",
+          "title": "Hospitals",
+          "weight": 1,
+          "outlook": 0.02927572477412621
+        }
+      ],
+      "marketsNote": "hospitals (and large physician practices)",
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "DerbySoft",
+      "summary": "Constellation Software acquired DerbySoft, a software company operating in the travel vertical, with results included from the acquisition date in the nine months ended September 30, 2026.",
+      "quote": "DerbySoft is a software company that operates in the travel vertical. The acquisition has been accounted for using the acquisition method with the results of operations included in the condensed consolidated interim financial statements for six months ended June 30, 2026 from the date of the acquisition.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "DerbySoft is a software company that operates in the travel vertical",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "travel",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as DerbySoft Holdings Limited (2026-06-01).",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "5615",
+          "title": "Travel Arrangement and Reservation Services",
+          "weight": 1,
+          "outlook": 0.021799063574313937
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Synchronoss",
+      "summary": "Constellation Software acquired Synchronoss, which contributed revenue of $107 and a net loss of $2 for the nine months ended September 30, 2026.",
+      "quote": "The impact of acquisition accounting applied on a provisional basis in connection with the acquisition of Synchronoss is as follows:",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as Synchronoss Technologies, Inc. (2026-02-13).",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Conduent",
+      "summary": "Constellation Software acquired the Public Safety Business from Conduent, contributing $105 million in revenue and $9 million in net income for the year ended December 31, 2024.",
+      "quote": "The acquisition of Public Safety Businesses contributed revenue of $105 and net income of $9 for the year ended December 31, 2024.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Constellation Software acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "public safety",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as the Conduent row (2024-04-30).",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 1,
+          "outlook": 0.008420033575642805
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "TFII",
+      "date": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "Triangle Warehouse",
+      "summary": "TFI International acquired Triangle Warehouse, which now operates as part of the Truckload segment.",
+      "quote": "During the first quarter, the Company acquired Triangle Warehouse which now operates as part of the Truckload segment.",
+      "naics": "484",
+      "naicsTitle": "Truck Transportation",
+      "naicsQuote": "Full-load trucking, including specialized and Canadian based conventional truckload",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "truckload",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Labelled from its segment: the filing says it 'now operates as part of the Truckload segment'. The name suggests warehousing.",
+      "outlook": 0.017001670773741484,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TFII",
+      "date": "2026-02-08",
+      "fiscalYear": 2026,
+      "counterparty": "",
+      "summary": "TFI International acquired a non-material business for a total purchase price of $48.9 million on February 8, 2026.",
+      "quote": "On February 8, 2026, the Group acquired a non-material business for a total purchase price of $48.9 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Filing calls it 'a non-material business' and gives no industry.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TFII",
+      "date": "Q4 2025",
+      "fiscalYear": 2025,
+      "counterparty": "four businesses",
+      "summary": "TFI International acquired four businesses during the year ended December 31, 2025 for a total of $201.3 million net of cash acquired.",
+      "quote": "cash used in business acquisitions, net of cash acquired, totaled $201.3 million to acquire four businesses",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Filing gives no industry. Probably includes Hearn (2025-12-15).",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TFII",
+      "date": "9M 2025",
+      "fiscalYear": 2025,
+      "counterparty": "",
+      "summary": "TFI International acquired three businesses during the nine months ended September 30, 2025 for $36.4 million net of cash acquired.",
+      "quote": "the Group acquired one business during 2026, which was not considered to be material. This transaction was concluded in order to add density in the Group's current network and further expand value-added services.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "contained in the full-year 2025 row (Q4 2025)",
+      "labelNote": "Filing gives no industry; the quote on this row is about a 2026 deal.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "TFII",
+      "date": "2025-12-15",
+      "fiscalYear": 2025,
+      "counterparty": "Hearn Industrial Services",
+      "summary": "TFI International completed the acquisition of Hearn Industrial Services on December 15, 2025, for a total purchase price of $304.3 million, reported in the Logistics segment.",
+      "quote": "On December 15, 2025, the Group completed the acquisition of Hearn. Hearn is reported in the Logistics segment. The purchase price for the business acquisition totaled $304.3 million, which includes $95.5 million of contingent consideration measured at fair value at acquisition date.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Reported in the Logistics segment (asset-light logistics, last-mile delivery, brokerage and warehousing); text doesn't say which.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TFII",
+      "date": "2024-04-01",
+      "fiscalYear": 2024,
+      "counterparty": "Daseke Inc.",
+      "summary": "TFI International completed the acquisition of Daseke, Inc. on April 1, 2024, for a total purchase price of $817.0 million, reported in the Truckload segment.",
+      "quote": "On April 1, 2024, the Group completed the acquisition of Daseke, Inc. Daseke is reported in the Truckload segment. The purchase price for the business acquisition totaled $817.0 million, which was funded by a $500.0 million term loan obtained and the remaining balance was drawn from cash on hand",
+      "naics": "484",
+      "naicsTitle": "Truck Transportation",
+      "naicsQuote": "Full-load trucking, including specialized and Canadian based conventional truckload",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "specialized truckload",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Labelled from its segment: the filing says 'Daseke is reported in the Truckload segment'.",
+      "outlook": 0.017001670773741484,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "",
+      "summary": "Topicus.com Inc. completed multiple acquisitions during Q1 2026 for total consideration of EUR 22,508 thousand.",
+      "quote": "acquisitions for an aggregate of €336.6 million (including payments for holdbacks relating to prior acquisitions) offset by €62.7 million of acquired cash",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "Topicus.com acquires, manages and builds vertical market software businesses",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "contained in the H1 2026 row",
+      "labelNote": "Company-level label.",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "TOI",
+      "date": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various software companies",
+      "summary": "Topicus.com Inc. completed multiple acquisitions of software companies across various verticals during the six-month period ended June 30, 2026.",
+      "quote": "None of the additional acquisitions completed during the year ended December 31, 2025 were deemed to be individually significant. All of the businesses acquired during the period were acquisitions of shares.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "acquisitions of software companies across various verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "various",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "multiple software companies",
+      "summary": "Subsequent to December 31, 2025, Topicus.com Inc. entered into agreements to acquire a number of businesses in automotive, planning, government, chemicals, healthcare, and legal verticals for total consideration of EUR 20,284 thousand.",
+      "quote": "Subsequent to December 31, 2025 the Company completed or have entered into agreements to acquire a number of additional businesses for aggregate cash consideration of EUR 13,299 on closing plus cash holdbacks of EUR 3,878 and contingent consideration with an estimated fair value of EUR 3,107 for total consideration of EUR 20,284.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "businesses in automotive, planning, government, chemicals, healthcare, and legal verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "automotive, planning, government, chemicals, healthcare, legal",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "441",
+          "title": "Motor Vehicle and Parts Dealers",
+          "weight": 0.16666666666666666,
+          "outlook": 0.016192022525814753
+        },
+        {
+          "code": null,
+          "title": null,
+          "weight": 0.16666666666666666,
+          "outlook": null
+        },
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.16666666666666666,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "325",
+          "title": "Chemical Manufacturing",
+          "weight": 0.16666666666666666,
+          "outlook": 0.016275949765731212
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.16666666666666666,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "5411",
+          "title": "Legal Services",
+          "weight": 0.16666666666666666,
+          "outlook": 0.007063782412386033
+        }
+      ],
+      "marketsNote": "automotive → dealers; planning: no clear market; government; chemicals; healthcare → practices and clinics; legal",
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "undisclosed fleet, healthcare and education software companies",
+      "summary": "Subsequent to June 30, 2026, Topicus.com Inc. completed or has open commitments to acquire a number of businesses in the fleet, healthcare, and education verticals for total consideration of €56.1 million.",
+      "quote": "Subsequent to June 30, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 43,384 on closing plus total estimated deferred payments of EUR 12,739 for total consideration of EUR 56,123.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "businesses in the fleet, healthcare, and education verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "fleet, healthcare, education",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "48-49",
+          "title": "Transportation and Warehousing",
+          "weight": 0.3333333333333333,
+          "outlook": 0.026951463903342687
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.3333333333333333,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "61",
+          "title": "Educational Services",
+          "weight": 0.3333333333333333,
+          "outlook": 0.005513166609362852
+        }
+      ],
+      "marketsNote": "fleet → transportation; healthcare; education",
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "undisclosed software companies",
+      "summary": "Subsequent to March 31, 2026, Topicus.com completed or has open commitments to acquire a number of businesses in local government, financial services, printing, and healthcare verticals for total consideration of EUR 37,678 thousand.",
+      "quote": "Subsequent to March 31, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 29,285 on closing plus total estimated deferred payments of EUR 8,393 for total consideration of EUR 37,678.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "businesses in local government, financial services, printing, and healthcare verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "local government, financial services, printing, healthcare",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.25,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "52",
+          "title": "Finance and Insurance",
+          "weight": 0.25,
+          "outlook": 0.0348340998989205
+        },
+        {
+          "code": "323",
+          "title": "Printing and Related Support Activities",
+          "weight": 0.25,
+          "outlook": -0.008093367318772526
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.25,
+          "outlook": 0.025383472044729904
+        }
+      ],
+      "marketsNote": "local government; financial services; printing; healthcare",
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": 2026,
+      "counterparty": "undisclosed healthcare and real estate software companies",
+      "summary": "Subsequent to September 30, 2026, Topicus.com Inc. completed or has open commitments to acquire additional businesses in healthcare and real estate verticals for total consideration of €16.5 million.",
+      "quote": "Subsequent to September 30, 2026 the Company completed or has open commitments to acquire businesses for aggregate cash consideration of EUR 11,011 on closing plus total estimated deferred payments of EUR 5,503 for total consideration of EUR 16,514.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "businesses in healthcare and real estate verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "healthcare, real estate",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.5,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": "531",
+          "title": "Real Estate",
+          "weight": 0.5,
+          "outlook": 0.019505174392315805
+        }
+      ],
+      "marketsNote": "healthcare; real estate",
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Topicus.com Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quote": "On June 2, 2025, the Company completed the acquisition of 100% of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of EUR 197,607 plus issued an estimated cash holdback payable of EUR 20,000 and contingent consideration with an estimated acquisition date fair value of EUR 6,022. The total consideration resulting from acquisition of CS is EUR 223,629.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "a Belgium-based vertical market software provider",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "TOI",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Cyfrowy Polsat S.A.",
+      "summary": "On January 31, 2025, Topicus purchased 8,300,029 shares in Asseco Poland from Cyfrowy Polsat S.A., representing approximately 9.99% of Asseco's issued shares, for total consideration of €168.0 million.",
+      "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of EUR 167,977.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "minority share purchase, not a business acquisition",
+      "labelNote": "About 9.99% of Asseco Poland, bought from Cyfrowy Polsat.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Cipal",
+      "summary": "Topicus.com acquired a 50% interest in Remmicom JV NV as part of the acquisition of Cipal, applying the equity method of accounting.",
+      "quote": "As a result of the acquisition of Cipal (note 4), the Company acquired a 50% interest in Remmicom JV NV.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "A joint-venture interest that came with Cipal (2025-06-02), not a separate deal.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "multiple businesses",
+      "summary": "Topicus.com completed or has open commitments to acquire several businesses in local government, financial services, printing, and healthcare verticals for total consideration of €37.7 million subsequent to March 31, 2026.",
+      "quote": "Subsequent to December 31, 2025 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €13.3 million on closing plus total estimated deferred payments of €7.0 million for total consideration of €20.3 million.",
+      "naics": "513210",
+      "naicsTitle": "Software Publishers",
+      "naicsQuote": "several businesses in local government, financial services, printing, and healthcare verticals",
+      "naicsQuoteSource": "Onesheet deal summary",
+      "serves": "local government, financial services, printing, healthcare",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as 'undisclosed software companies' (EUR 37.7 million, after March 31, 2026).",
+      "outlook": 0.04874219222205611,
+      "markets": [
+        {
+          "code": "91",
+          "title": "Public Administration",
+          "weight": 0.25,
+          "outlook": 0.008420033575642805
+        },
+        {
+          "code": "52",
+          "title": "Finance and Insurance",
+          "weight": 0.25,
+          "outlook": 0.0348340998989205
+        },
+        {
+          "code": "323",
+          "title": "Printing and Related Support Activities",
+          "weight": 0.25,
+          "outlook": -0.008093367318772526
+        },
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.25,
+          "outlook": 0.025383472044729904
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "WSP",
+      "date": "Q4 2026",
+      "fiscalYear": 2026,
+      "counterparty": "GCM Corpo Inc.",
+      "summary": "WSP entered into an agreement in October 2026 to acquire GCM Corpo Inc., a Canadian engineering consulting firm, with closing expected in Q4 2026.",
+      "quote": "In October 2026, WSP entered into an agreement to acquire GCM Corpo Inc. (\"GCM Corpo\"), a Canadian provider of engineering consulting and specialist services for the energy and industrial sectors, with approximately 600 professionals.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "a Canadian provider of engineering consulting and specialist services for the energy and industrial sectors",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "energy and industrial",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Agreed October 2026; closing expected Q4 2026.",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 0.5,
+          "outlook": 0.022201207704308223
+        },
+        {
+          "code": "31-33",
+          "title": "Manufacturing",
+          "weight": 0.5,
+          "outlook": -0.0020351963373062
+        }
+      ],
+      "marketsNote": "energy → power (WSP's energy work is its Power & Energy sector); industrial → manufacturing",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-09-01",
+      "fiscalYear": 2026,
+      "counterparty": "Hulley & Kirkwood",
+      "summary": "WSP acquired Hulley & Kirkwood, a UK-based building services consultancy, in September 2026.",
+      "quote": "In September 2026, WSP acquired Hulley & Kirkwood, a UK-based building services consultancy.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "a UK-based building services consultancy",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "buildings",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "Building services = mechanical and electrical engineering for buildings.",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2362",
+          "title": "Nonresidential Building Construction",
+          "weight": 1,
+          "outlook": 0.029441429970020527
+        }
+      ],
+      "marketsNote": "building services",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-07-24",
+      "fiscalYear": 2026,
+      "counterparty": "Arcadis N.V.",
+      "summary": "WSP submitted a revised non-binding indicative proposal to acquire all shares of Arcadis N.V. at €51.50 per share on July 24, 2026, which was unanimously rejected by Arcadis on July 30, 2026.",
+      "quote": "WSP announced that it had submitted a non-binding indicative proposal to acquire all issued and outstanding shares of Arcadis N.V. (\"Arcadis\") for €51.50 per share",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": "not completed: proposal rejected; WSP chose not to pursue (Sept 22, 2026)",
+      "labelNote": null,
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC Companies",
+      "summary": "WSP acquired TRC Companies on February 24, 2026 for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion).",
+      "quote": "on February 24, 2026, WSP acquired TRC Companies (\"TRC\") for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and consulting firm acquired in February 2026, strong in Power & Energy",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC on February 24, 2026 for a total cash purchase price of US$3.3 billion ($4.5 billion).",
+      "quote": "on February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and consulting firm acquired in February 2026, strong in Power & Energy",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as TRC Companies (2026-02-24).",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-01",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC in February 2026, adding approximately 7,800 employees to the Americas segment.",
+      "quote": "On February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and consulting firm acquired in February 2026, strong in Power & Energy",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as TRC Companies (2026-02-24).",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-01",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP completed the acquisition of TRC in February 2026, adding approximately 7,800 employees net of the underground storage business divestiture.",
+      "quote": "Acquisition growth was mainly due to the acquisition of TRC in February 2026",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and consulting firm acquired in February 2026, strong in Power & Energy",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Same as TRC Companies (2026-02-24).",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-12-01",
+      "fiscalYear": 2025,
+      "counterparty": "Harmonic Analytics",
+      "summary": "WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand, in December 2025.",
+      "quote": "In December 2025, WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand.",
+      "naics": "541690",
+      "naicsTitle": "Other Scientific and Technical Consulting Services",
+      "naicsQuote": "a data science and analytics consultancy",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Ricardo",
+      "summary": "WSP Global completed the acquisition of Ricardo in October 2025.",
+      "quote": "WSP purchased a 19.9% interest in Ricardo plc ('Ricardo') and reached an agreement to acquire the entire issued and to be issued share capital of Ricardo for 430 pence per share (the 'Ricardo Acquisition')",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and environmental consultancy acquired in October 2025",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "541620 (environmental consulting) is the alternative.",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-06-01",
+      "fiscalYear": 2025,
+      "counterparty": "Lexica Health and Life Sciences Consultancy Ltd.",
+      "summary": "WSP completed the acquisition of Lexica Health and Life Sciences Consultancy Ltd. in June 2025, contributing to EMEIA acquisition growth in the nine-month period ended September 25, 2026.",
+      "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees.",
+      "naics": "541611",
+      "naicsTitle": "Administrative Management and General Management Consulting Services",
+      "naicsQuote": "a UK-based consulting firm specializing in healthcare and life sciences",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "healthcare and life sciences",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": "621",
+          "title": "Ambulatory Health Care Services",
+          "weight": 0.5,
+          "outlook": 0.025383472044729904
+        },
+        {
+          "code": null,
+          "title": null,
+          "weight": 0.5,
+          "outlook": null
+        }
+      ],
+      "marketsNote": "healthcare; life sciences: no single market",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-10-01",
+      "fiscalYear": 2024,
+      "counterparty": "POWER Engineers, Incorporated",
+      "summary": "WSP acquired POWER Engineers, Incorporated on October 1, 2024 for US$1.75 billion ($2.36 billion).",
+      "quote": "on October 1, 2024, WSP acquired POWER Engineers, Incorporated ('POWER'), pursuant to an agreement and plan of merger announced on August 12, 2024 (the 'POWER Acquisition'), for a purchase price of US$1.78 billion (approximately $2.44 billion), subject to final adjustments.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Power and energy engineering firm acquired in 2024",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "1A Ingenieros, S.L.",
+      "summary": "WSP acquired 1A Ingenieros, S.L. in May 2024, a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector.",
+      "quote": "Also in May 2024, WSP acquired 1A Ingenieros, S.L. ('1A Ingenieros'), a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": "power and energy",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "AKF Group LLC",
+      "summary": "WSP acquired AKF Group LLC in May 2024, a specialized mechanical, electrical, and plumbing firm with 365 professionals operating in the eastern United States and Mexico.",
+      "quote": "In May 2024, WSP acquired AKF Group LLC ('AKF'), a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": "healthcare, science and technology, mission-critical facilities",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2362",
+          "title": "Nonresidential Building Construction",
+          "weight": 1,
+          "outlook": 0.029441429970020527
+        }
+      ],
+      "marketsNote": "designs healthcare, science and mission-critical facilities: buildings",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Proxion Oy",
+      "summary": "WSP acquired Proxion Plan Oy and Proxion Pro Oy (together Proxion) in March 2024, two Finnish rail consultancy firms with a combined workforce of 150 employees.",
+      "quote": "In March 2024, WSP acquired Proxion Plan Oy and Proxion Pro Oy, both Finnish companies and subsidiaries of Proxion Oy.",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering firms (Proxion Plan Oy and Proxion Pro Oy) acquired in March 2024",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "rail",
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "237",
+          "title": "Heavy and Civil Engineering Construction",
+          "weight": 1,
+          "outlook": 0.019283355672918945
+        }
+      ],
+      "marketsNote": "rail infrastructure: heavy and civil construction",
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Communica Public Affairs Inc.",
+      "summary": "WSP completed the acquisition of Communica Public Affairs Inc. in March 2024.",
+      "quote": "Also in March 2024, WSP acquired Communica Public Affairs Inc., a 50-employee Canadian firm specializing in Indigenous and stakeholder engagement and information management consulting.",
+      "naics": "541618",
+      "naicsTitle": "Other Management Consulting Services",
+      "naicsQuote": "a 50-employee Canadian firm specializing in Indigenous and stakeholder engagement and information management consulting",
+      "naicsQuoteSource": "SEDAR quote",
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": null,
+      "outlook": 0.008830159686253891,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024",
+      "fiscalYear": 2024,
+      "counterparty": "Calibre Professional Services One Pty Ltd",
+      "summary": "WSP's APAC segment acquired Calibre Professional Services One Pty Ltd during 2024.",
+      "quote": "Acquisition growth in the year stemmed from the acquisition of Calibre Professional Services One Pty Ltd",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "naicsQuoteSource": null,
+      "serves": null,
+      "labelStatus": "proposed",
+      "exclude": null,
+      "labelNote": "No filing text or profile says what Calibre does.",
+      "outlook": null,
+      "markets": [
+        {
+          "code": null,
+          "title": null,
+          "weight": 1,
+          "outlook": null
+        }
+      ],
+      "marketsNote": null,
+      "recent": true
+    },
+    {
+      "ticker": "WSP",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "TRC",
+      "summary": "WSP Global Inc. acquired TRC, financing it with long-term debt issuance, which increased the leverage ratio to 2.2x.",
+      "quote": "the issuance of long-term debt used to finance the acquisition of TRC",
+      "naics": "541330",
+      "naicsTitle": "Engineering Services",
+      "naicsQuote": "Engineering and consulting firm acquired in February 2026, strong in Power & Energy",
+      "naicsQuoteSource": "Onesheet company profile",
+      "serves": "power and energy",
+      "labelStatus": "proposed",
+      "exclude": "same deal as another row",
+      "labelNote": "Financing note for the TRC deal.",
+      "outlook": 0.025898396501788157,
+      "markets": [
+        {
+          "code": "2211",
+          "title": "Electric Power Generation, Transmission and Distribution",
+          "weight": 1,
+          "outlook": 0.022201207704308223
+        }
+      ],
+      "marketsNote": null,
+      "recent": false
+    }
+  ],
+  "industries": [
+    {
+      "naics": "513210",
+      "title": "Software Publishers",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Software publishers [5132]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.05721721774947186,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Information and Culture Industries [5121-5192]",
+          "value": 0.017471450533642185
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Software publishers [513200]",
+          "value": 0.040267166694640366
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 12 listed Canadian peers",
+          "value": 0.06220747804238047,
+          "nominal": 0.083451627603228,
+          "peers": [
+            {
+              "ticker": "CMG",
+              "name": "Computer Modelling Group Ltd.",
+              "growth": 0.019605008661946588
+            },
+            {
+              "ticker": "DCBO",
+              "name": "Docebo Inc.",
+              "growth": 0.10785762189249715
+            },
+            {
+              "ticker": "DSG",
+              "name": "The Descartes Systems Group Inc.",
+              "growth": 0.13243371269541915
+            },
+            {
+              "ticker": "DTOL",
+              "name": "D2L Inc.",
+              "growth": 0.08543444790424548
+            },
+            {
+              "ticker": "ENGH",
+              "name": "Enghouse Systems Limited",
+              "growth": 0.04554053590432483
+            },
+            {
+              "ticker": "KXS",
+              "name": "Kinaxis Inc.",
+              "growth": 0.07127241419698782
+            },
+            {
+              "ticker": "LSPD",
+              "name": "Lightspeed Commerce Inc.",
+              "growth": 0.07320085223221273
+            },
+            {
+              "ticker": "OTEX",
+              "name": "Open Text Corporation",
+              "growth": 0.0034403219340664037
+            },
+            {
+              "ticker": "SHOP",
+              "name": "Shopify Inc.",
+              "growth": 0.2586662850075283
+            },
+            {
+              "ticker": "TCS",
+              "name": "Tecsys Inc.",
+              "growth": 0.08146880730221051
+            },
+            {
+              "ticker": "BB",
+              "name": "BlackBerry Limited",
+              "growth": 0.137433590668403
+            },
+            {
+              "ticker": "CVO",
+              "name": "Coveo Solutions Inc.",
+              "growth": 0.11067768347241436
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.04874219222205611,
+      "trend": "growing",
+      "note": "COPS projects only Information and cultural industries as a whole (NAICS 51), so its figure is broader than software. Peers: every listed Canadian company Onesheet files under Software - Application or Software - Infrastructure, except the candidates."
+    },
+    {
+      "naics": "541330",
+      "title": "Engineering Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Architectural, engineering and related services [5413]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.023273479100428984,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Architecture, Engineering and Related Services [5413]",
+          "value": 0.03248251254373846
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Architectural, engineering, and related services [541300]",
+          "value": 0.022555787915348846
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.02852331390314733,
+          "nominal": 0.049093780181210356,
+          "peers": [
+            {
+              "ticker": "STN",
+              "name": "Stantec Inc.",
+              "growth": 0.05163837477519184
+            },
+            {
+              "ticker": "ATRL",
+              "name": "AtkinsRéalis Group Inc.",
+              "growth": 0.04654918558722887
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.025898396501788157,
+      "trend": "growing",
+      "note": "StatCan, COPS and BLS publish architectural, engineering and related services (5413) together. Peers: the Engineering & Construction companies whose Onesheet profile describes engineering services (Stantec, AtkinsRéalis), not contractors."
+    },
+    {
+      "naics": "541611",
+      "title": "Administrative Management and General Management Consulting Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Management, scientific and technical consulting services [5416]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.008234749674017383,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Advertising, Public Relations, Specialised Design, Management, Consulting and Other Scientific and Technical Services [5414, 5416, 5418, 5419]",
+          "value": 0.008830159686253891
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Management, scientific, and technical consulting services [541600]",
+          "value": 0.02837038245892831
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
+      "note": "Published as management, scientific and technical consulting (5416). COPS groups it with advertising, design and other professional services. No listed Canadian peer."
+    },
+    {
+      "naics": "541618",
+      "title": "Other Management Consulting Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Management, scientific and technical consulting services [5416]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.008234749674017383,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Advertising, Public Relations, Specialised Design, Management, Consulting and Other Scientific and Technical Services [5414, 5416, 5418, 5419]",
+          "value": 0.008830159686253891
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Management, scientific, and technical consulting services [541600]",
+          "value": 0.02837038245892831
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
+      "note": "Same series as 541611."
+    },
+    {
+      "naics": "541690",
+      "title": "Other Scientific and Technical Consulting Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Management, scientific and technical consulting services [5416]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.008234749674017383,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Advertising, Public Relations, Specialised Design, Management, Consulting and Other Scientific and Technical Services [5414, 5416, 5418, 5419]",
+          "value": 0.008830159686253891
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Management, scientific, and technical consulting services [541600]",
+          "value": 0.02837038245892831
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.008830159686253891,
+      "trend": "stable",
+      "note": "Same series as 541611."
+    },
+    {
+      "naics": "237",
+      "title": "Heavy and Civil Engineering Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Engineering and other construction activities [23X]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.012715159127916431,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.019283355672918945,
+      "trend": "growing",
+      "note": "StatCan splits construction by type of work, not by NAICS: 'Engineering and other construction activities' (23X) is the civil-engineering part. COPS and BLS publish construction (23) as a whole. Peers: the Engineering & Construction companies whose Onesheet profile describes construction work (Bird, Badger)."
+    },
+    {
+      "naics": "2371",
+      "title": "Utility System Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Engineering and other construction activities [23X]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.012715159127916431,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.019283355672918945,
+      "trend": "growing",
+      "note": "Same series as 237."
+    },
+    {
+      "naics": "237130",
+      "title": "Power and Communication Line and Related Structures Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Engineering and other construction activities [23X]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.012715159127916431,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.019283355672918945,
+      "trend": "growing",
+      "note": "Same series as 237."
+    },
+    {
+      "naics": "236210",
+      "title": "Industrial Building Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Non-residential building construction [23B]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.033031307722119596,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.029441429970020527,
+      "trend": "growing",
+      "note": "StatCan: non-residential building construction (23B). COPS and BLS: construction (23) as a whole."
+    },
+    {
+      "naics": "811310",
+      "title": "Commercial and Industrial Machinery and Equipment Repair and Maintenance",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Repair and maintenance (except automotive) [811A]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.04441033127299521,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Repair and Maintenance [8111-8114]",
+          "value": 0.013512495396466706
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Commercial and industrial machinery and equipment (except automotive and electronic) repair and maintenance [811300]",
+          "value": 0.0131798340751621
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.0131798340751621,
+      "trend": "stable",
+      "note": "StatCan publishes repair and maintenance except automotive (811A); COPS publishes repair and maintenance (811) as a whole. No listed Canadian peer."
+    },
+    {
+      "naics": "484",
+      "title": "Truck Transportation",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Truck transportation [484]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.017001670773741484,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Truck Transportation Services [4841-4842]",
+          "value": 0.01653795302572658
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Truck transportation [484000]",
+          "value": 0.021643492695380795
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 1 listed Canadian peer",
+          "value": null,
+          "nominal": null,
+          "peers": [
+            {
+              "ticker": "MTL",
+              "name": "Mullen Group Ltd.",
+              "growth": 0.054869571138101536
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "Only 1 listed Canadian peer with estimates (need 2)"
+        }
+      ],
+      "outlook": 0.017001670773741484,
+      "trend": "stable",
+      "note": "Peers: Onesheet's Trucking industry except TFI (only Mullen Group remains)."
+    },
+    {
+      "naics": "484122",
+      "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Truck transportation [484]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.017001670773741484,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Truck Transportation Services [4841-4842]",
+          "value": 0.01653795302572658
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Truck transportation [484000]",
+          "value": 0.021643492695380795
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 1 listed Canadian peer",
+          "value": null,
+          "nominal": null,
+          "peers": [
+            {
+              "ticker": "MTL",
+              "name": "Mullen Group Ltd.",
+              "growth": 0.054869571138101536
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "Only 1 listed Canadian peer with estimates (need 2)"
+        }
+      ],
+      "outlook": 0.017001670773741484,
+      "trend": "stable",
+      "note": "Same series as 484: no source publishes less-than-truckload on its own."
+    },
+    {
+      "naics": "492110",
+      "title": "Couriers and Express Delivery Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Couriers and messengers [492]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.050184727410061525,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Courier and Messengers [4921-4922]",
+          "value": 0.015640641538638533
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Couriers and messengers [492000]",
+          "value": 0.022336096878779355
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.022336096878779355,
+      "trend": "growing",
+      "note": "No listed Canadian peer."
+    },
+    {
+      "naics": "488510",
+      "title": "Freight Transportation Arrangement",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Support activities for transportation [488]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.03233793939723606,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Support Activities for Transportation [4881-4889]",
+          "value": 0.01826381322251236
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Scenic and sightseeing transportation and support activities for transportation [487-80]",
+          "value": 0.02390706760835415
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.02390706760835415,
+      "trend": "growing",
+      "note": "StatCan and COPS: support activities for transportation (488). BLS combines scenic and sightseeing transportation with support activities (487-488). No listed Canadian peer."
+    },
+    {
+      "naics": "4881",
+      "title": "Support Activities for Air Transportation",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Support activities for transportation [488]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.03233793939723606,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Support Activities for Transportation [4881-4889]",
+          "value": 0.01826381322251236
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Scenic and sightseeing transportation and support activities for transportation [487-80]",
+          "value": 0.02390706760835415
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.02390706760835415,
+      "trend": "growing",
+      "note": "Same series as 488510: no source publishes airport operations on its own."
+    },
+    {
+      "naics": "2211",
+      "title": "Electric Power Generation, Transmission and Distribution",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Electric power generation, transmission and distribution [2211]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.0036227239766901675,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Utilities [2211-2213]",
+          "value": 0.015605439602954796
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Electric power generation, transmission and distribution [221100]",
+          "value": 0.02879697580566165
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 8 listed Canadian peers",
+          "value": 0.04593862751454725,
+          "nominal": 0.0668574000648382,
+          "peers": [
+            {
+              "ticker": "BEP.UN",
+              "name": "Brookfield Renewable Partners L.P.",
+              "growth": 0.03959040283507975
+            },
+            {
+              "ticker": "CPX",
+              "name": "Capital Power Corporation",
+              "growth": 0.05739402038104746
+            },
+            {
+              "ticker": "EMA",
+              "name": "Emera Incorporated",
+              "growth": 0.06917306756527464
+            },
+            {
+              "ticker": "FTS",
+              "name": "Fortis Inc.",
+              "growth": 0.06454173256440177
+            },
+            {
+              "ticker": "H",
+              "name": "Hydro One Limited",
+              "growth": 0.0223016338621711
+            },
+            {
+              "ticker": "NPI",
+              "name": "Northland Power Inc.",
+              "growth": 0.07048766467681977
+            },
+            {
+              "ticker": "PIF",
+              "name": "Polaris Renewable Energy Inc.",
+              "growth": 0.18381547724377478
+            },
+            {
+              "ticker": "TA",
+              "name": "TransAlta Corporation",
+              "growth": 0.09135107188764513
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.022201207704308223,
+      "trend": "growing",
+      "note": "COPS publishes utilities (22) as a whole. Peers: every listed Canadian company Onesheet files under Regulated Electric, Independent Power Producers or Renewable Utilities."
+    },
+    {
+      "naics": "2362",
+      "title": "Nonresidential Building Construction",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Non-residential building construction [23B]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.033031307722119596,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Construction [2361-2362, 2371-2379, 2381-2389]",
+          "value": 0.02585155221792146
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Construction [230000]",
+          "value": 0.011747572553489904
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 2 listed Canadian peers",
+          "value": 0.10120052108769029,
+          "nominal": 0.1232245315094439,
+          "peers": [
+            {
+              "ticker": "BDT",
+              "name": "Bird Construction Inc.",
+              "growth": 0.14097651311540482
+            },
+            {
+              "ticker": "BDGI",
+              "name": "Badger Infrastructure Solutions Ltd.",
+              "growth": 0.10547254990348298
+            }
+          ],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ]
+        }
+      ],
+      "outlook": 0.029441429970020527,
+      "trend": "growing",
+      "note": "StatCan: non-residential building construction (23B). COPS and BLS publish construction (23) as a whole. Peers: the listed Canadian contractors (Bird, Badger)."
+    },
+    {
+      "naics": "31-33",
+      "title": "Manufacturing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Manufacturing [31-33]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.019251485621307518,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Manufacturing [31-330]",
+          "value": 0.015181092946695118
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": -0.0020351963373062,
+      "trend": "declining",
+      "note": "COPS publishes manufacturing only by sub-industry, with no total. No peer group: manufacturing is too broad."
+    },
+    {
+      "naics": "621",
+      "title": "Ambulatory Health Care Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Ambulatory health care services [621]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.025383472044729904,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Ambulatory Health Care [6211-6219]",
+          "value": 0.024197663433759953
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Ambulatory healthcare services [621000]",
+          "value": 0.035900716599637894
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.025383472044729904,
+      "trend": "growing",
+      "note": "Healthcare software and consulting mostly serve practices and clinics. No listed Canadian peer."
+    },
+    {
+      "naics": "622",
+      "title": "Hospitals",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Hospitals [622]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.030638884135864686,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Hospitals [6221-6223]",
+          "value": 0.02927572477412621
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Hospitals; private [6220P0]",
+          "value": 0.02818081328029698
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.02927572477412621,
+      "trend": "growing",
+      "note": "BLS splits private and state/local hospitals; the private series (the larger) is used. No listed Canadian peer."
+    },
+    {
+      "naics": "5615",
+      "title": "Travel Arrangement and Reservation Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Travel arrangement and reservation services [5615]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.021799063574313937,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Management, Administrative and Other Support Services [5511, 5611-5619, 5621-5629]",
+          "value": 0.012552013676298435
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Travel arrangement and reservation services [561500]",
+          "value": 0.024861066689476186
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.021799063574313937,
+      "trend": "growing",
+      "note": "COPS groups travel arrangement with all management, administrative and support services (55, 56). No listed Canadian peer."
+    },
+    {
+      "naics": "5222",
+      "title": "Nondepository Credit Intermediation",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Non-depository credit intermediation [5222]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.030625710283383345,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Finance, Banking and Financial Institution [5211-5239]",
+          "value": 0.0348340998989205
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Monetary authorities - central bank, and credit intermediation and related activities [521-20]",
+          "value": 0.01513940317666318
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.030625710283383345,
+      "trend": "growing",
+      "note": "Mortgage lending outside banks. COPS: finance and banking (521-523); BLS: credit intermediation (521-522). No peer group."
+    },
+    {
+      "naics": "52",
+      "title": "Finance and Insurance",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Finance and insurance [52]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.035946309674135035,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Finance, Banking and Financial Institution [5211-5239]",
+          "value": 0.0348340998989205
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Finance and insurance [520000]",
+          "value": 0.017701783894841894
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.0348340998989205,
+      "trend": "growing",
+      "note": "COPS publishes finance and banking (IN42) and insurance separately; finance and banking is used. No peer group."
+    },
+    {
+      "naics": "91",
+      "title": "Public Administration",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Public administration [91]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.017601481110803396,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Public Administration [9111-9191, 9110*]",
+          "value": 0.008420033575642805
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · State and local government, excluding education and hospitals [9992-3]",
+          "value": 0.0076684500488626295
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.008420033575642805,
+      "trend": "stable",
+      "note": "BLS: state and local government excluding education and hospitals, the level that buys local-government and public-safety software. No peer group."
+    },
+    {
+      "naics": "516",
+      "title": "Broadcasting and Content Providers",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Broadcasting and content providers [516]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.002377887906232834,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Information and Culture Industries [5121-5192]",
+          "value": 0.017471450533642185
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Publishing, broadcasting, and content providers [513-90]",
+          "value": 0.032578350572324055
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.017471450533642185,
+      "trend": "stable",
+      "note": "COPS and BLS publish broader groups (information and culture; publishing, broadcasting and content). No peer group."
+    },
+    {
+      "naics": "61",
+      "title": "Educational Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Educational services [61]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.0064806296211732395,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Educational services; state and local [6110Y0]",
+          "value": 0.004545703597552464
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.005513166609362852,
+      "trend": "stable",
+      "note": "COPS publishes schools, colleges and universities separately, with no total. BLS: state and local education, where school software is sold. No peer group."
+    },
+    {
+      "naics": "48-49",
+      "title": "Transportation and Warehousing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Transportation and warehousing [48-49]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.03172183746360857,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · no matching series",
+          "value": null,
+          "note": "COPS publishes no series for this industry (see the industry note)"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Transportation and warehousing [48-490]",
+          "value": 0.022181090343076804
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.026951463903342687,
+      "trend": "growing",
+      "note": "COPS publishes transportation by mode only, with no total. No peer group."
+    },
+    {
+      "naics": "441",
+      "title": "Motor Vehicle and Parts Dealers",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Motor vehicle and parts dealers [441]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.015530853064526173,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Retail Trade [4411-4599]",
+          "value": 0.016192022525814753
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Motor vehicle and parts dealers [441000]",
+          "value": 0.029941018756076687
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.016192022525814753,
+      "trend": "stable",
+      "note": "Automotive vertical software is sold mainly to dealers. COPS: retail trade as a whole. No peer group."
+    },
+    {
+      "naics": "325",
+      "title": "Chemical Manufacturing",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Chemical manufacturing [325]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.005288141494813048,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Chemical Manufacturing [3251-3259]",
+          "value": 0.016275949765731212
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Chemical manufacturing [325000]",
+          "value": 0.022278119676520047
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.016275949765731212,
+      "trend": "stable",
+      "note": null
+    },
+    {
+      "naics": "5411",
+      "title": "Legal Services",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Legal services [5411]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.007063782412386033,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Legal, Accounting, and Related Services [5411 + 5412]",
+          "value": 0.015904629273495896
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Legal services [541100]",
+          "value": 0.006610303615163016
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.007063782412386033,
+      "trend": "stable",
+      "note": "COPS: legal, accounting and related services (5411-5412). No peer group."
+    },
+    {
+      "naics": "323",
+      "title": "Printing and Related Support Activities",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Printing and related support activities [323]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": -0.08579595101989079,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Printing and Related Support Activities [3231]",
+          "value": -0.008093367318772526
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Printing and related support activities [323000]",
+          "value": 0.005910576771692488
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": -0.008093367318772526,
+      "trend": "declining",
+      "note": null
+    },
+    {
+      "naics": "531",
+      "title": "Real Estate",
+      "signals": [
+        {
+          "kind": "momentum",
+          "label": "Recent momentum",
+          "geo": "Canada",
+          "series": "StatCan 36-10-0434 · Real estate [531]",
+          "sourceIds": [
+            "statcan-36-10-0434"
+          ],
+          "value": 0.020704400128346734,
+          "period": "Sep 2022–Aug 2023 → Sep 2025–Aug 2026"
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "Canada",
+          "sourceIds": [
+            "esdc-cops-2026"
+          ],
+          "period": "2025 → 2035",
+          "series": "COPS 2026–2035 · Real Estate and Renta and Leasing [5311-5331]",
+          "value": 0.019505174392315805
+        },
+        {
+          "kind": "projection",
+          "label": "Official projection",
+          "geo": "United States",
+          "sourceIds": [
+            "bls-ep-2-11"
+          ],
+          "period": "2025 → 2035",
+          "series": "BLS Table 2.11 · Real estate [531000]",
+          "value": 0.01905368729421819
+        },
+        {
+          "kind": "street",
+          "label": "Street forecast",
+          "geo": "Canada",
+          "series": "Onesheet analyst estimates · median of 0 listed Canadian peers",
+          "value": null,
+          "nominal": null,
+          "peers": [],
+          "period": "FY2026 → FY2028",
+          "sourceIds": [
+            "onesheet-estimates",
+            "boc-inflation-target"
+          ],
+          "note": "No listed Canadian peer outside the candidates"
+        }
+      ],
+      "outlook": 0.019505174392315805,
+      "trend": "growing",
+      "note": "COPS: real estate and rental and leasing (53). No peer group."
+    }
+  ]
+}

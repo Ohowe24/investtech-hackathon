@@ -8,6 +8,7 @@ import CompanyTable from "./CompanyTable";
 import CompanyDashboard from "./CompanyDashboard";
 import ScatterMap from "./ScatterMap";
 import Recommendation from "./Recommendation";
+import OutlookEngine from "./OutlookEngine";
 import Jarvis from "./jarvis/Jarvis";
 import { Card } from "./ui";
 import EngineReplay from "./live/EngineReplay";
@@ -24,12 +25,13 @@ interface Props {
   query: AnalysisQuery;
 }
 
-type Tab = "ranking" | "recommendation" | "companies" | "map";
+type Tab = "ranking" | "recommendation" | "companies" | "map" | "outlook";
 const TABS: { id: Tab; label: string }[] = [
   { id: "ranking", label: "Ranking" },
   { id: "recommendation", label: "Recommendation" },
   { id: "companies", label: "Companies" },
   { id: "map", label: "Map" },
+  { id: "outlook", label: "Outlook engine" },
 ];
 
 /** The results. The address hash holds the view (none = ranking, #recommendation, #companies or #map) or the open company (#c/CSU), so Back works. */
@@ -89,7 +91,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
     window.location.assign(`/analyze?${toSearch({ ...query, more: more || undefined })}#companies`);
   };
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" ? hash : "companies";
+  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || hash === "outlook" ? hash : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -137,6 +139,8 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
           <CompanyDashboard key={company.ticker} dataset={dataset} company={company} onOpen={(t) => go(`c/${t}`)} onBack={() => go("companies")} />
         ) : tab === "recommendation" ? (
           <div><Recommendation dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} /></div>
+        ) : tab === "outlook" ? (
+          <OutlookEngine />
         ) : tab === "map" ? (
           <div>
             <Card title={dataset.mapTitle ?? "Map"}>
