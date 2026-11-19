@@ -81,13 +81,19 @@ function DirectionMark({ direction, big = false }: { direction: Direction | null
 
 type LensKey = "own" | "customer";
 
-const LENSES: { key: LensKey; label: string; explain: string }[] = [
-  { key: "own", label: "What they do", explain: "Read by the industry each business is in (its NAICS code): software, engineering, trucking, construction." },
+const LENSES: { key: LensKey; label: string; sub: string; explain: string }[] = [
+  {
+    key: "own",
+    label: "What they do",
+    sub: "their own industries",
+    explain: "Each business is read by the industry it is in: software, engineering, trucking, construction.",
+  },
   {
     key: "customer",
     label: "Who they sell to",
+    sub: "their clients’ markets",
     explain:
-      "Read by the markets their clients are in: power utilities, hospitals, governments… Where a company does not report revenue by client market, its base is the whole economy; for transport and construction both views are the same.",
+      "Each business is read by the markets its clients are in: utilities, hospitals, governments. No client split reported: the whole economy. Transport and construction: same as what they do.",
   },
 ];
 
@@ -113,7 +119,7 @@ function viewOf(c: OutlookCompany, lens: LensKey): OutlookLens {
 function dealLine(c: OutlookCompany, lens: LensKey): string {
   if (lens === "own") return `${c.dealsWithOutlook} of ${c.dealCount} with an industry`;
   if (c.customer.base === "same") return "same as “What they do”";
-  return `${pct(c.customer.dealCoverage, 0)} of deal weight names a client market`;
+  return `${pct(c.customer.dealCoverage, 0)} of deals name a market`;
 }
 
 /** one-line verdict, assembled only from computed fields */
@@ -131,21 +137,29 @@ function verdict(v: OutlookLens, lens: LensKey): string {
   return `${where}; recent deals point toward ${v.direction === "toward" ? "stronger" : "weaker"} ${what}.`;
 }
 
-function LensSwitch({ lens, onChange }: { lens: LensKey; onChange: (l: LensKey) => void }) {
+/** one control for everything below it: the table, the chart, the company detail and the signals */
+function LensBar({ lens, onChange }: { lens: LensKey; onChange: (l: LensKey) => void }) {
+  const active = LENSES.find((l) => l.key === lens)!;
   return (
-    <div className="inline-flex rounded-lg border border-line p-0.5" role="tablist" aria-label="Read companies by">
-      {LENSES.map((l) => (
-        <button
-          key={l.key}
-          role="tab"
-          aria-selected={lens === l.key}
-          onClick={() => onChange(l.key)}
-          className={`rounded-md px-3 py-1 text-[12.5px] font-medium transition-colors ${lens === l.key ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
-        >
-          {l.label}
-        </button>
-      ))}
-    </div>
+    <section className="panel grid items-center gap-4 px-5 py-4 md:grid-cols-[auto_minmax(0,1fr)] md:px-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="kicker">Read each company by</span>
+        <div className="inline-flex rounded-xl border border-line bg-soft p-1" role="tablist" aria-label="Read each company by">
+          {LENSES.map((l) => {
+            const on = lens === l.key;
+            return (
+              <button key={l.key} role="tab" aria-selected={on} onClick={() => onChange(l.key)}
+                className={`rounded-lg px-3.5 py-1.5 text-left transition-[background-color,color,box-shadow] duration-200 ${on ? "bg-[var(--panel-solid)] text-ink shadow-[0_1px_0_0_var(--color-line),0_0_0_1px_var(--color-line)]" : "text-muted hover:text-ink"}`}>
+                <span className="block text-[13px] font-semibold leading-tight">{l.label}</span>
+                <span className={`block text-[11px] leading-tight ${on ? "text-teal" : "text-faint"}`}>{l.sub}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+      {/* fixed height so switching never moves the page */}
+      <p key={lens} className="a-fade min-h-[36px] text-[12.5px] leading-snug text-muted md:border-l md:border-line md:pl-5">{active.explain}</p>
+    </section>
   );
 }
 
@@ -226,20 +240,30 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
 
       <FeaturedCards economy={economy} selected={company.ticker} onSelect={(t) => { setTicker(t); document.getElementById("outlook-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} />
 
-      <Card title="The answer, company by company" right={<LensSwitch lens={lens} onChange={setLens} />}>
-        <p className="mb-3 text-[12.5px] text-muted">{LENSES.find((l) => l.key === lens)!.explain}</p>
+      <AllCompanies economy={economy} focus={initial && !FEATURED.some((c) => c.ticker === initial) ? initial : null} />
+
+      <LensBar lens={lens} onChange={setLens} />
+
+      <Card title="The answer, company by company" right={<span className="text-[12px] text-faint">{LENSES.find((l) => l.key === lens)!.label} · {LENSES.find((l) => l.key === lens)!.sub}</span>}>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[620px] text-left text-[13px]">
+          <table className="w-full min-w-[620px] table-fixed text-left text-[13px]">
+            <colgroup>
+              <col className="w-[22%]" />
+              <col className="w-[22%]" />
+              <col className="w-[14%]" />
+              <col className="w-[20%]" />
+              <col className="w-[22%]" />
+            </colgroup>
             <thead className="text-[11px] uppercase tracking-wide text-faint">
               <tr>
                 <th className="py-2 pr-3 font-medium">Company</th>
                 <th className="py-2 pr-3 font-medium">Tailwind</th>
-                <th className="py-2 pr-3 font-medium">In declining industries</th>
+                <th className="py-2 pr-3 font-medium">In declining</th>
                 <th className="py-2 pr-3 font-medium">Recent deals</th>
                 <th className="py-2 pr-3 font-medium">Direction</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody key={lens} className="a-fade">
               {FEATURED.map((c) => {
                 const v = viewOf(c, lens);
                 return (
@@ -261,7 +285,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
                   </td>
                   <td className="py-2.5 pr-3">
                     <div className="font-mono text-ink">{pct(v.dealOutlook)}</div>
-                    <div className="text-[11.5px] text-faint">{dealLine(c, lens)}</div>
+                    <div className="truncate text-[11.5px] text-faint" title={dealLine(c, lens)}>{dealLine(c, lens)}</div>
                   </td>
                   <td className="py-2.5 pr-3">
                     <DirectionMark direction={v.direction} />
@@ -281,18 +305,15 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
       </Card>
 
       <Card title="Tailwind and direction at a glance" right={<span className="text-[12px] text-faint">{LENSES.find((l) => l.key === lens)!.label}</span>}>
-        <GapChart lens={lens} economy={economy} selected={company.ticker} onSelect={setTicker} />
+        <div key={lens} className="a-fade">
+          <GapChart lens={lens} economy={economy} selected={company.ticker} onSelect={setTicker} />
+        </div>
       </Card>
 
-      <div id="outlook-detail" className="scroll-mt-20">
+      <div id="outlook-detail" key={`${lens}-${company.ticker}`} className="a-fade scroll-mt-20 space-y-5">
         <CompanyDetail c={company} economy={economy} lens={lens} />
+        <SignalTable c={company} lens={lens} />
       </div>
-
-      <SignalTable c={company} lens={lens} />
-
-      <AllCompanies economy={economy} focus={initial && !FEATURED.some((c) => c.ticker === initial) ? initial : null} />
-
-      <HowItWorks />
 
       <Card title="Sources">
         <ul className="space-y-2 text-[13px]">
@@ -918,6 +939,7 @@ function FeaturedCards({ economy, selected, onSelect }: { economy: number | null
 // ---------------------------------------------------------------- every company the score reads
 
 function AllCompanies({ economy, focus }: { economy: number | null; focus: string | null }) {
+  const [open, setOpen] = useState(focus != null);
   const rows = [...outlook.companies].sort((a, b) => (b.tailwind ?? -1) - (a.tailwind ?? -1));
   const vals = rows.map((c) => c.tailwind ?? 0);
   const lo = Math.min(0, ...vals), hi = Math.max(...vals, economy ?? 0);
@@ -925,8 +947,25 @@ function AllCompanies({ economy, focus }: { economy: number | null; focus: strin
   useEffect(() => {
     if (focus) document.getElementById(`outlook-all-${focus}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [focus]);
+  const passing = rows.filter((c) => c.trend === "growing").length;
+  if (!open)
+    return (
+      <button onClick={() => setOpen(true)} aria-expanded={false}
+        className="panel group flex w-full flex-wrap items-center justify-between gap-3 px-5 py-3.5 text-left transition-colors hover:border-teal/50 md:px-6">
+        <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+          <span className="text-[14px] font-semibold text-ink">Every company the score reads</span>
+          <span className="text-[12.5px] text-muted">
+            {rows.length} candidates and holdings · {passing} pass the “growing ≥ economy” check
+          </span>
+        </span>
+        <span className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted transition-colors group-hover:border-teal group-hover:text-ink">
+          Show all {rows.length} <span aria-hidden>▾</span>
+        </span>
+      </button>
+    );
   return (
-    <Card title={`Every company the score reads · ${rows.length}`} right={<span className="text-[12px] text-faint">10 points + the “growing ≥ economy” check</span>}>
+    <Card title={`Every company the score reads · ${rows.length}`}
+      right={<button onClick={() => setOpen(false)} aria-expanded className="rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted hover:text-ink">Hide <span aria-hidden>▴</span></button>}>
       <p className="mb-3 text-[12.5px] text-muted">
         The tailwind of every candidate and index holding, read the same way: each reported revenue segment mapped to an industry, each industry’s outlook from the
         published sources. The five featured companies are also read on deals and client markets. Line = the whole economy, {pct(economy)} a year.
@@ -976,68 +1015,6 @@ function AllCompanies({ economy, focus }: { economy: number | null; focus: strin
         </table>
       </div>
       <p className="mt-3 text-[12px] text-faint">Industry labels for the companies beyond the five featured are proposed by Claude, with a quote from each Onesheet profile, and await approval.</p>
-    </Card>
-  );
-}
-
-function HowItWorks() {
-  return (
-    <Card title="How it works, and what it can't tell you">
-      <div className="grid gap-6 lg:grid-cols-2">
-        <ol className="space-y-3 text-[13px] leading-relaxed">
-          <li>
-            <span className="font-semibold text-ink">1. Industry map.</span>{" "}
-            <span className="text-muted">Each reported revenue segment and each disclosed deal gets an industry code (NAICS 2022), with the exact text that justifies it.</span>
-          </li>
-          <li>
-            <span className="font-semibold text-ink">2. Published signals.</span>{" "}
-            <span className="text-muted">
-              For each industry: recent real GDP growth (Statistics Canada), the official 10-year projections for Canada (ESDC) and the US (BLS), and analysts’ revenue
-              forecasts for listed Canadian peers. The outlook is their median; an industry is growing if it beats the whole economy, stable if it grows slower,
-              declining if it shrinks.
-            </span>
-          </li>
-          <li>
-            <span className="font-semibold text-ink">3. Tailwind.</span>{" "}
-            <span className="text-muted">The company’s revenue-weighted outlook. It rewards growing and stable industries and flags declining ones; it does not chase the fastest.</span>
-          </li>
-          <li>
-            <span className="font-semibold text-ink">4. Direction.</span>{" "}
-            <span className="text-muted">
-              The outlook of the last {R.dealYears.length} fiscal years’ deals against the tailwind. Within ±{(R.directionBand * 100).toFixed(0)} point it is steady.
-            </span>
-          </li>
-        </ol>
-        <ul className="space-y-2 text-[12.5px] leading-relaxed text-muted">
-          <li>· <span className="text-ink">Not backtested.</span> Whether these signals would have picked better stocks or faster growers is not tested, so the tailwind carries the smallest weight in the score (10 of 100). Direction is not scored.</li>
-          <li>· Industry codes describe what a business does. Software and engineering firms serve many client markets; those are listed (“serves”, “clients”) but not scored.</li>
-          <li>· The signals describe Canada and the US. Topicus earns in Europe and WSP partly abroad.</li>
-          <li>· Deals are those disclosed in filings. Constellation and Topicus disclose only material ones; each deal counts once whatever its size, because most prices are not disclosed.</li>
-          <li>· Analysts’ revenue forecasts include acquisitions, and some industries have one or two listed Canadian peers, or none.</li>
-          <li>· Deal industry labels are proposed by Claude with their quotes and still need a person’s approval.</li>
-          <li>· Management quotes are what executives chose to say on a call: they explain, they do not measure.</li>
-        </ul>
-      </div>
-      <details className="mt-5 border-t border-line pt-3">
-        <summary className="cursor-pointer text-[12.5px] font-medium text-ink">Build status</summary>
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
-          {outlook.layers.map((layer) => (
-            <div key={layer.id} className="rounded-lg border border-line p-3">
-              <div className="text-[12.5px] font-semibold text-ink">{layer.title}</div>
-              <ul className="mt-2 space-y-1.5">
-                {layer.steps.map((s) => (
-                  <li key={s.id} className="flex items-start gap-2 text-[12px]">
-                    <span className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 text-[9.5px] font-semibold uppercase ${STATUS[s.status].cls}`}>{STATUS[s.status].label}</span>
-                    <span>
-                      <span className="font-medium text-ink">{s.label}.</span> <span className="text-muted">{s.detail}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </details>
     </Card>
   );
 }
