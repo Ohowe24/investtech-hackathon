@@ -3,7 +3,8 @@
 // The Outlook engine tab (#outlook). Reads data/outlook.json (npm run outlook). Plan: docs/OUTLOOK_ENGINE.md.
 // Rules and formulas: engine/methodology.md ("Outlook engine"). This file only formats what the engine computed.
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 import type {
   Direction,
   OutlookCompany,
@@ -18,8 +19,13 @@ import type {
 } from "@contract/outlook";
 import outlookJson from "@data/outlook.json";
 import { Card } from "./ui";
+import OutlookReplay from "./live/OutlookReplay";
+import { primeSound } from "./live/sound";
+import { prefersReducedMotion } from "./live/motion";
 
 const outlook = outlookJson as unknown as OutlookData;
+/** the five companies read on every layer; the others are read for the stock score only */
+const FEATURED = outlook.companies.filter((c) => c.featured);
 const industryOf = new Map(outlook.industries.map((i) => [i.naics, i]));
 const sourceOf = new Map(outlook.sources.map((s) => [s.id, s]));
 const R = outlook.rules;
@@ -159,16 +165,48 @@ function TailwindCell({ v, lens }: { v: OutlookLens; lens: LensKey }) {
 // ---------------------------------------------------------------- page
 
 export default function OutlookEngine({ initial }: { initial?: string }) {
-  const [ticker, setTicker] = useState(initial && outlook.companies.some((c) => c.ticker === initial) ? initial : (outlook.companies[0]?.ticker ?? ""));
+  const [ticker, setTicker] = useState(initial && FEATURED.some((c) => c.ticker === initial) ? initial : (FEATURED[0]?.ticker ?? ""));
   const [lens, setLens] = useState<LensKey>("own");
-  const company = outlook.companies.find((c) => c.ticker === ticker) ?? outlook.companies[0];
+  const company = FEATURED.find((c) => c.ticker === ticker) ?? FEATURED[0];
   const economy = outlook.economy.outlook;
+  // The engine run: plays the first time the tab opens in a browser session, and on "Run the engine".
+  // Everything it shows is already in data/outlook.json (built by npm run outlook); only the pacing is staged.
+  const [runs, setRuns] = useState(0);
+  const [running, setRunning] = useState(false);
+  useEffect(() => {
+    const autoplay = () => {
+      let seen = false;
+      try {
+        seen = window.sessionStorage.getItem("outlook-run") === "1";
+        window.sessionStorage.setItem("outlook-run", "1");
+      } catch {}
+      if (!seen && !prefersReducedMotion()) {
+        setRuns(1);
+        setRunning(true);
+      }
+    };
+    autoplay();
+  }, []);
+  const runEngine = () => {
+    if (prefersReducedMotion()) return;
+    primeSound();
+    setRuns((n) => n + 1);
+    setRunning(true);
+  };
 
   return (
     <div className="enter space-y-5">
+      {/* portal: the tab's entrance animation makes a containing block, so a fixed overlay must sit on <body> */}
+      {running && createPortal(<OutlookReplay outlook={outlook} runNo={runs} onDone={() => setRunning(false)} />, document.body)}
       <section className="scan-once panel px-6 py-7 md:px-8">
-        <div className="kicker flex items-center gap-2">
-          <span className="live-dot" /> Outlook engine · serial acquirers
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="kicker flex items-center gap-2">
+            <span className="live-dot" /> Outlook engine · serial acquirers
+          </div>
+          <button onClick={runEngine} title="Replay the Outlook engine run"
+            className="group flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted transition-colors hover:border-teal hover:text-ink">
+            <span className="inline-block transition-transform duration-500 group-hover:rotate-180">⟳</span> Run the engine
+          </button>
         </div>
         <h1 className="mt-3 text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">Are they buying into the right industries?</h1>
         <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted">{outlook.thesis}</p>
@@ -196,7 +234,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
               </tr>
             </thead>
             <tbody>
-              {outlook.companies.map((c) => {
+              {FEATURED.map((c) => {
                 const v = viewOf(c, lens);
                 return (
                 <tr
@@ -724,7 +762,7 @@ function DealLabels({ deals }: { deals: OutlookDeal[] }) {
 /** one dot per company: tailwind (x) against the direction gap (y); the steady band and the economy bar drawn from the rules */
 function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; economy: number | null; selected: string; onSelect: (t: string) => void }) {
   const W = 980, H = 270, P = { l: 66, r: 16, t: 14, b: 34 };
-  const rows = outlook.companies.map((c) => ({ c, v: viewOf(c, lens) }));
+  const rows = FEATURED.map((c) => ({ c, v: viewOf(c, lens) }));
   const shown = rows.filter((r) => r.v.tailwind != null && r.v.directionGap != null) as { c: OutlookCompany; v: OutlookLens & { tailwind: number; directionGap: number } }[];
   const missing = rows.filter((r) => r.v.tailwind == null || r.v.directionGap == null);
   const band = R.directionBand;

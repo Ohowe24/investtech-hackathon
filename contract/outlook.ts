@@ -168,6 +168,8 @@ export interface OutlookIndustry {
 export interface OutlookCompany {
   ticker: string;
   name: string;
+  /** one of the five featured companies (every layer); false = read for the stock score only (mix and tailwind) */
+  featured: boolean;
   /** fiscal period of the revenue mix */
   mixPeriod: string | null;
   mix: OutlookMixRow[];

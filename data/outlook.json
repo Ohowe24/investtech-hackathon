@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T17:53:46.401Z",
+  "generatedAt": "2026-11-19T18:02:04.393Z",
   "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
@@ -405,6 +405,7 @@
           "Direction needs client markets for at least half of the recent deals: the filings name them for 2 of 8."
         ]
       },
+      "featured": true,
       "notes": [
         "Deal industry labels are proposed and awaiting approval.",
         "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
@@ -609,6 +610,7 @@
           "Deals are compared with the whole economy, the base for a company with clients in every sector."
         ]
       },
+      "featured": true,
       "notes": [
         "Deal industry labels are proposed and awaiting approval.",
         "All reported revenue is outside North America, while the signals describe Canada and the United States: read the outlook as indicative.",
@@ -907,6 +909,7 @@
           "Direction rests on the client markets named for 8 of 12 recent deals (63% of their weight)."
         ]
       },
+      "featured": true,
       "notes": [
         "Deal industry labels are proposed and awaiting approval.",
         "38% of revenue is earned outside Canada and the Americas; the signals describe Canada and the United States."
@@ -1201,6 +1204,7 @@
         ],
         "base": "same"
       },
+      "featured": true,
       "notes": [
         "Deal industry labels are proposed and awaiting approval.",
         "Revenue by region is not in the Onesheet segment data; the signals describe Canada and the United States."
@@ -1408,6 +1412,7 @@
         ],
         "base": "same"
       },
+      "featured": true,
       "notes": [
         "Deal industry labels are proposed and awaiting approval."
       ]

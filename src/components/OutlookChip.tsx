@@ -23,7 +23,7 @@ export default function OutlookChip({ ticker, size = "sm" }: { ticker: string; s
   const title =
     `Outlook engine. Tailwind (scored, 10 points + one check): ${pct(c.tailwind)} a year after inflation, its industries' outlook weighted by revenue` +
     `${c.trend ? ` (${c.trend} vs the whole economy at ${pct(outlook.economy.outlook)})` : ""}. ` +
-    `Direction of recent deals: ${c.direction ? WORD[c.direction] : "not enough deals to say"}. Click for the detail.`;
+    (c.featured ? `Direction of recent deals: ${c.direction ? WORD[c.direction] : "not enough deals to say"}. Click for the detail.` : "Read for the stock score: revenue mix and tailwind.");
   return (
     <a
       href={`#outlook/${encodeURIComponent(ticker)}`}
@@ -37,10 +37,14 @@ export default function OutlookChip({ ticker, size = "sm" }: { ticker: string; s
     >
       <span className="uppercase tracking-wide text-faint">Outlook</span>
       <span className={`font-mono font-semibold ${c.trend ? TREND_CLS[c.trend] : "text-ink"}`}>{pct(c.tailwind)}</span>
-      <span className="text-faint">·</span>
-      <span className="text-ink">
-        {c.direction ? <><span aria-hidden>{ARROW[c.direction]}</span> {WORD[c.direction]}</> : <span className="text-faint">no direction</span>}
-      </span>
+      {c.featured && (
+        <>
+          <span className="text-faint">·</span>
+          <span className="text-ink">
+            {c.direction ? <><span aria-hidden>{ARROW[c.direction]}</span> {WORD[c.direction]}</> : <span className="text-faint">no direction</span>}
+          </span>
+        </>
+      )}
     </a>
   );
 }
