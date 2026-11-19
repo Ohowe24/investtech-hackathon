@@ -36,7 +36,7 @@ export default function AnalyzeLoading() {
       setSteps(STEPS(name, mine));
     };
     read();
-    const t = setInterval(() => setI((n) => n + 1), 900);
+    const t = setInterval(() => setI((n) => n + 1), 500); // all six steps in 3 seconds
     return () => clearInterval(t);
   }, []);
 

@@ -6,7 +6,7 @@ import { setSoundEnabled, sfx, soundEnabled } from "./sound";
 import { panelsClass, usePanelTheme } from "../theme";
 
 /*
-  The Outlook engine run, replayed in at most 10 seconds. Same order as engine/outlook/build-outlook.ts:
+  The Outlook engine run, replayed in 3 seconds. Same order as engine/outlook/build-outlook.ts:
   revenue segments, industry labels, the three published signals, the median outlook, the revenue-weighted
   tailwind, the deals and direction, then the hand-off to the stock score. Every code, value, count and verdict
   is read from data/outlook.json, built ahead of time by npm run outlook. Only the pacing is made up.
@@ -14,6 +14,9 @@ import { panelsClass, usePanelTheme } from "../theme";
 
 const END = 10_000;
 const FADE = 450;
+const REAL = 3_000; // what the viewer waits, fade included
+// The timeline below is written on a 10-second clock and played faster, so the run lasts REAL ms.
+const SPEED = (END - FADE) / (REAL - FADE);
 const PH = [
   { at: 0, key: "segments", title: "Reading revenue segments" },
   { at: 1100, key: "labels", title: "Mapping revenue to industries" },
@@ -92,7 +95,7 @@ export default function OutlookReplay({ outlook, runNo, onDone }: { outlook: Out
     const t0 = performance.now();
     sfxAt.current = 0;
     const tick = (now: number) => {
-      const e = now - t0;
+      const e = (now - t0) * SPEED;
       setT(e);
       while (sfxAt.current < run.sounds.length && run.sounds[sfxAt.current].at <= e) run.sounds[sfxAt.current++].play();
       if (e >= END - FADE) return finish();
@@ -148,7 +151,7 @@ export default function OutlookReplay({ outlook, runNo, onDone }: { outlook: Out
           <span className="text-sm font-semibold tracking-tight text-white">Outlook engine</span>
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/50">Run #{runNo}</span>
           <div className="ml-auto flex items-center gap-2">
-            <span className="font-mono text-[12px] tabular-nums text-white/70"><span className="text-white">{(Math.min(t, END) / 1000).toFixed(2)}</span>s / 10.00s</span>
+            <span className="font-mono text-[12px] tabular-nums text-white/70"><span className="text-white">{(Math.min(t, END) / SPEED / 1000).toFixed(2)}</span>s / {(REAL / 1000).toFixed(2)}s</span>
             <button onClick={() => { setSoundEnabled(!sound); setSound(!sound); }} aria-pressed={sound}
               className="rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/75 hover:border-white/40 hover:text-white">
               {sound ? "Sound on" : "Sound off"}
@@ -187,7 +190,7 @@ export default function OutlookReplay({ outlook, runNo, onDone }: { outlook: Out
                     {done ? "✓" : i + 1}
                   </span>
                   <span className="min-w-0">{p.title}</span>
-                  {done && <span className="ml-auto font-mono text-[10.5px] text-faint">{((end - p.at) / 1000).toFixed(1)}s</span>}
+                  {done && <span className="ml-auto font-mono text-[10.5px] text-faint">{((end - p.at) / SPEED / 1000).toFixed(1)}s</span>}
                 </li>
               );
             })}

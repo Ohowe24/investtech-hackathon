@@ -7,7 +7,7 @@ import { setSoundEnabled, sfx, soundEnabled } from "./sound";
 import { panelsClass, usePanelTheme } from "../theme";
 
 /*
-  The engine run, replayed in at most 10 seconds once the result is in.
+  The engine run, replayed in 3 seconds once the result is in.
   Same order as engine/analyze.ts: the Canadian universe, the filings, the KPIs, the checks,
   the quality score and rank, then the weights. Every ticker, value, pass/fail, score, verdict
   and weight is read from the dataset. Only the pacing is made up.
@@ -15,6 +15,9 @@ import { panelsClass, usePanelTheme } from "../theme";
 
 const END = 10_000; // hard cap, fade included
 const FADE = 450;
+const REAL = 3_000; // what the viewer waits, fade included
+// The timeline below is written on a 10-second clock and played faster, so the run lasts REAL ms.
+const SPEED = (END - FADE) / (REAL - FADE);
 const PH = [
   { at: 0, key: "universe", title: "Loading the Canadian universe" },
   { at: 1200, key: "filings", title: "Pulling annual statements" },
@@ -117,7 +120,7 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
     const t0 = performance.now();
     sfxAt.current = 0;
     const tick = (now: number) => {
-      const e = now - t0;
+      const e = (now - t0) * SPEED;
       setT(e);
       while (sfxAt.current < run.sounds.length && run.sounds[sfxAt.current].at <= e) run.sounds[sfxAt.current++].play();
       if (e >= END - FADE) return finish();
@@ -187,7 +190,7 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
           <span className="text-sm font-semibold tracking-tight text-white">Index X-ray</span>
           <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-white/50">Engine run #{runNo}</span>
           <div className="ml-auto flex items-center gap-2">
-            <span className="font-mono text-[12px] tabular-nums text-white/70"><span className="text-white">{(Math.min(t, END) / 1000).toFixed(2)}</span>s / 10.00s</span>
+            <span className="font-mono text-[12px] tabular-nums text-white/70"><span className="text-white">{(Math.min(t, END) / SPEED / 1000).toFixed(2)}</span>s / {(REAL / 1000).toFixed(2)}s</span>
             <button onClick={() => { setSoundEnabled(!sound); setSound(!sound); }} aria-pressed={sound}
               className="rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/75 hover:border-white/40 hover:text-white">
               {sound ? "Sound on" : "Sound off"}
@@ -228,7 +231,7 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
                     {done ? "✓" : i + 1}
                   </span>
                   <span className="min-w-0">{p.title}</span>
-                  {done && <span className="ml-auto font-mono text-[10.5px] text-faint">{((end - p.at) / 1000).toFixed(1)}s</span>}
+                  {done && <span className="ml-auto font-mono text-[10.5px] text-faint">{((end - p.at) / SPEED / 1000).toFixed(1)}s</span>}
                 </li>
               );
             })}
