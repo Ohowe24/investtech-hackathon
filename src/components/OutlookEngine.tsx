@@ -17,7 +17,6 @@ import type {
   Trend,
 } from "@contract/outlook";
 import outlookJson from "@data/outlook.json";
-import { C, TrendChart } from "./charts";
 import { Card } from "./ui";
 
 const outlook = outlookJson as unknown as OutlookData;
@@ -179,7 +178,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
           </span>
           <span className="rounded-md border border-line px-2.5 py-1 text-muted">Context only: changes no recommendation</span>
           <span className="rounded-md border border-line px-2.5 py-1 text-muted">Published sources only, no forecast of ours</span>
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Signals reality-checked; no stock-price backtest · not investment advice</span>
+          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Not backtested · not investment advice</span>
         </div>
       </section>
 
@@ -244,8 +243,6 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
       <CompanyDetail c={company} economy={economy} lens={lens} />
 
       <SignalTable c={company} lens={lens} />
-
-      <RealityCheck />
 
       <HowItWorks />
 
@@ -724,156 +721,6 @@ function DealLabels({ deals }: { deals: OutlookDeal[] }) {
 
 // ---------------------------------------------------------------- method, limits, build status
 
-// ---------------------------------------------------------------- reality check
-
-const STRENGTH_WORD = { none: "almost no", weak: "a weak", moderate: "a moderate", strong: "a strong" } as const;
-const r2 = (v: number | null | undefined) => (v == null ? "—" : v.toFixed(2));
-
-function RealityCheck() {
-  const rc = outlook.reality;
-  const m = rc.momentum;
-  const p = m.persistence;
-  const first = m.anchors[0];
-  const lastA = m.anchors[m.anchors.length - 1];
-  return (
-    <Card title="Reality check · do these signals mean anything?">
-      <div className="grid gap-8 lg:grid-cols-2">
-        <section>
-          <h3 className="text-[14px] font-semibold text-ink">1. Does an industry’s recent past predict its next {m.years} years?</h3>
-          <p className="mt-2 text-[13px] leading-relaxed text-muted">
-            Tested on {m.industries} detailed Canadian industries every year from {first?.year} to {lastA?.year} ({m.anchors.length} tests, Statistics Canada real
-            GDP since 1997). Growth over the past {m.years} years ranked the next {m.years} with {m.strength ? STRENGTH_WORD[m.strength] : "an unknown"} link: median
-            rank correlation <span className="font-mono text-ink">{r2(m.medianSpearman)}</span>, positive in {m.positiveAnchors} of {m.anchors.length} years.
-            Industries that shrank kept growing slower than the economy <span className="font-mono text-ink">{pct(p.stillLagging, 0)}</span> of the time, against{" "}
-            <span className="font-mono text-ink">{pct(p.baseLagging, 0)}</span> for all industries; industries ahead of the economy stayed ahead{" "}
-            <span className="font-mono text-ink">{pct(p.stillAhead, 0)}</span> of the time, against <span className="font-mono text-ink">{pct(p.baseAhead, 0)}</span>.
-          </p>
-          <p className="mt-2 text-[13px] font-medium leading-relaxed text-ink">
-            {m.strength === "none" || m.strength === "weak"
-              ? "On its own, recent momentum is a weak guide. That is why an industry’s outlook is the median of four sources (two official projections and analysts as well), not momentum alone."
-              : "Recent momentum carries real information about the next years; the outlook still blends it with official projections and analysts."}
-          </p>
-          <div className="mt-4">
-            <div className="mb-1 text-[11.5px] font-medium text-faint">Rank correlation, past {m.years} years vs next {m.years}, by start year (above 0: the past pointed the right way)</div>
-            <YearBars bars={m.anchors.map((a) => ({ year: a.year, value: a.spearman, tip: `${a.label}: ${r2(a.spearman)} on ${a.n} industries` }))} median={m.medianSpearman} />
-          </div>
-          <div className="mt-5">
-            <div className="mb-1 text-[11.5px] font-medium text-faint">
-              Latest test, industry by industry: {m.latest.from}–{m.latest.anchor} (across) vs {m.latest.anchor}–{m.latest.to} (up), yearly real growth. Teal: industries
-              and client markets of the five companies. Rank correlation {r2(m.latest.spearman)}. The few industries beyond the axes sit on the edge.
-            </div>
-            <Scatter points={m.latest.points} />
-          </div>
-        </section>
-
-        <section>
-          <h3 className="text-[14px] font-semibold text-ink">2. Does industry growth show up in the companies?</h3>
-          <p className="mt-2 text-[13px] leading-relaxed text-muted">
-            In the years each company reports organic growth (growth without acquisitions), put after inflation with Statistics Canada’s consumer price index, and set
-            against its industry’s real GDP growth that year. All {rc.pooled.n} company-years together (each company’s own average removed):{" "}
-            {rc.pooled.strength ? STRENGTH_WORD[rc.pooled.strength] : "an unknown"} link, correlation <span className="font-mono text-ink">{r2(rc.pooled.correlation)}</span>.
-          </p>
-          <div className="mt-4 space-y-5">
-            {rc.companies.map((c) => (
-              <div key={c.ticker}>
-                <div className="flex flex-wrap items-baseline justify-between gap-2 text-[12.5px]">
-                  <span className="font-semibold text-ink">{c.ticker} <span className="font-normal text-muted">vs {c.industry}</span></span>
-                  <span className="text-muted">
-                    correlation <span className="font-mono text-ink">{r2(c.correlation)}</span> on {c.n} years{c.strength ? ` · ${c.strength === "none" ? "almost no link" : c.strength}` : ""}
-                  </span>
-                </div>
-                <TrendChart
-                  years={c.points.map((x) => x.year)}
-                  series={[
-                    { label: `${c.ticker} organic growth, after inflation`, values: c.points.map((x) => x.organicReal), kind: "bar", color: C.sea },
-                    { label: "Industry real GDP growth", values: c.points.map((x) => x.industry), kind: "line", color: C.teal },
-                  ]}
-                  fmtLeft={(v) => `${(v * 100).toFixed(1)}%`}
-                  height={150}
-                />
-                {c.note && <div className="mt-1 text-[11.5px] text-faint">{c.note}</div>}
-              </div>
-            ))}
-          </div>
-          <p className="mt-4 text-[12px] leading-relaxed text-faint">
-            Few years per company, so read these as direction, not proof. Organic growth is global while the industry figures are Canadian; Constellation and Topicus
-            report organic growth for few years. TFI and Aecon do not report organic growth.
-          </p>
-        </section>
-      </div>
-      <p className="mt-5 border-t border-line pt-3 text-[12px] leading-relaxed text-faint">
-        Not tested: whether a higher tailwind led to better share prices (five companies are too few), and how past official projections and analyst forecasts
-        turned out (earlier editions are not in the data). All figures from published sources; formulas in engine/metrics.ts.
-      </p>
-    </Card>
-  );
-}
-
-/** one bar per start year, labelled every few years, with the median as a dashed line */
-function YearBars({ bars, median }: { bars: { year: number; value: number | null; tip: string }[]; median: number | null }) {
-  const W = 520, H = 170, P = { l: 34, r: 8, t: 8, b: 22 };
-  const vals = bars.map((b) => b.value ?? 0);
-  const top = Math.max(0.1, ...vals), bot = Math.min(-0.1, ...vals);
-  const step = (W - P.l - P.r) / Math.max(bars.length, 1);
-  const y = (v: number) => P.t + ((top - v) / (top - bot)) * (H - P.t - P.b);
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Rank correlation by start year">
-      {[top, 0, bot].map((t) => (
-        <g key={t}>
-          <line x1={P.l} x2={W - P.r} y1={y(t)} y2={y(t)} stroke="var(--color-line)" />
-          <text x={P.l - 6} y={y(t) + 3} textAnchor="end" fontSize="10" fill="var(--color-faint)">{t.toFixed(1)}</text>
-        </g>
-      ))}
-      {bars.map((b, i) => {
-        const v = b.value ?? 0;
-        return (
-          <g key={b.year}>
-            <rect x={P.l + i * step + step * 0.15} width={step * 0.7} y={Math.min(y(v), y(0))} height={Math.abs(y(v) - y(0))} fill={v >= 0 ? "var(--color-teal)" : "var(--color-bad)"} fillOpacity={0.85}>
-              <title>{b.tip}</title>
-            </rect>
-            {i % 4 === 0 && <text x={P.l + i * step + step / 2} y={H - 6} textAnchor="middle" fontSize="10" fill="var(--color-faint)">{b.year}</text>}
-          </g>
-        );
-      })}
-      {median != null && (
-        <g>
-          <line x1={P.l} x2={W - P.r} y1={y(median)} y2={y(median)} stroke="var(--color-ink)" strokeDasharray="4 3" strokeOpacity={0.6} />
-          <text x={P.l + 4} y={y(median) - 4} textAnchor="start" fontSize="10" fill="var(--color-muted)">{`median ${median.toFixed(2)}`}</text>
-        </g>
-      )}
-    </svg>
-  );
-}
-
-/** past vs next growth, one dot per industry; axes in yearly %, both scales from the data */
-function Scatter({ points }: { points: { code: string; title: string; past: number; next: number; ours: boolean }[] }) {
-  const W = 520, H = 280, P = { l: 40, r: 12, t: 10, b: 26 };
-  const xs = points.map((p) => p.past), ys = points.map((p) => p.next);
-  // clip the axes to the bulk of the data so a few extreme industries don't squash the rest
-  const q = (v: number[], f: number) => [...v].sort((a, b) => a - b)[Math.floor(f * (v.length - 1))];
-  const x0 = Math.min(q(xs, 0.02), 0), x1 = Math.max(q(xs, 0.98), 0), y0 = Math.min(q(ys, 0.02), 0), y1 = Math.max(q(ys, 0.98), 0);
-  const sx = (v: number) => P.l + ((Math.min(Math.max(v, x0), x1) - x0) / (x1 - x0 || 1)) * (W - P.l - P.r);
-  const sy = (v: number) => H - P.b - ((Math.min(Math.max(v, y0), y1) - y0) / (y1 - y0 || 1)) * (H - P.t - P.b);
-  const ticks = (a: number, b: number) => [...new Set([a, 0, b])];
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Past growth against next growth for each industry">
-      <line x1={sx(0)} x2={sx(0)} y1={P.t} y2={H - P.b} stroke="var(--color-line)" />
-      <line x1={P.l} x2={W - P.r} y1={sy(0)} y2={sy(0)} stroke="var(--color-line)" />
-      {ticks(x0, x1).map((t) => (
-        <text key={`x${t}`} x={sx(t)} y={H - 8} textAnchor="middle" fontSize="10" fill="var(--color-faint)">{`${(t * 100).toFixed(0)}%`}</text>
-      ))}
-      {ticks(y0, y1).map((t) => (
-        <text key={`y${t}`} x={P.l - 6} y={sy(t) + 3} textAnchor="end" fontSize="10" fill="var(--color-faint)">{`${(t * 100).toFixed(0)}%`}</text>
-      ))}
-      {[...points].sort((a, b) => Number(a.ours) - Number(b.ours)).map((p) => (
-        <circle key={p.code} cx={sx(p.past)} cy={sy(p.next)} r={p.ours ? 4.5 : 3} fill={p.ours ? "var(--color-teal)" : "var(--color-faint)"} fillOpacity={p.ours ? 0.95 : 0.45}>
-          <title>{`${p.title} [${p.code}]: past ${pct(p.past)}, next ${pct(p.next)} a year`}</title>
-        </circle>
-      ))}
-    </svg>
-  );
-}
-
 /** one dot per company: tailwind (x) against the direction gap (y); the steady band and the economy bar drawn from the rules */
 function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; economy: number | null; selected: string; onSelect: (t: string) => void }) {
   const W = 980, H = 270, P = { l: 66, r: 16, t: 14, b: 34 };
@@ -974,7 +821,7 @@ function HowItWorks() {
           </li>
         </ol>
         <ul className="space-y-2 text-[12.5px] leading-relaxed text-muted">
-          <li>· <span className="text-ink">Partly tested.</span> The reality check above tests the momentum signal and whether industry growth shows up in organic growth; whether it would have picked better stocks is not tested, so it is context, not a check.</li>
+          <li>· <span className="text-ink">Not tested.</span> Whether these signals would have picked better stocks or faster growers is not tested, so it is context, not a check.</li>
           <li>· Industry codes describe what a business does. Software and engineering firms serve many client markets; those are listed (“serves”, “clients”) but not scored.</li>
           <li>· The signals describe Canada and the US. Topicus earns in Europe and WSP partly abroad.</li>
           <li>· Deals are those disclosed in filings. Constellation and Topicus disclose only material ones; each deal counts once whatever its size, because most prices are not disclosed.</li>

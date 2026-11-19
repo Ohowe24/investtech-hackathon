@@ -225,54 +225,6 @@ export interface OutlookRules {
   mixFrom: number;
 }
 
-export type Strength = "none" | "weak" | "moderate" | "strong";
-
-/** Reality check: do the signals mean anything? (engine/outlook/reality.ts) */
-export interface OutlookReality {
-  momentum: {
-    /** years in each window */
-    years: number;
-    /** detailed StatCan industries tested */
-    industries: number;
-    /** one per August: rank correlation between industries' past and next growth */
-    anchors: { anchor: string; label: string; year: number; spearman: number | null; n: number }[];
-    medianSpearman: number | null;
-    strength: Strength | null;
-    positiveAnchors: number;
-    persistence: {
-      n: number;
-      shrinking: number;
-      stillLagging: number | null;
-      baseLagging: number | null;
-      ahead: number;
-      stillAhead: number | null;
-      baseAhead: number | null;
-    };
-    /** the latest complete test, industry by industry */
-    latest: {
-      from: string;
-      anchor: string;
-      to: string;
-      spearman: number | null;
-      points: { code: string; title: string; past: number; next: number; ours: boolean }[];
-    };
-    sourceIds: string[];
-  };
-  companies: {
-    ticker: string;
-    naics: string;
-    industry: string;
-    note: string | null;
-    points: { year: number; organic: number | null; inflation: number | null; organicReal: number | null; industry: number | null }[];
-    correlation: number | null;
-    strength: Strength | null;
-    n: number;
-  }[];
-  /** all company-years together, each company's own average removed */
-  pooled: { correlation: number | null; strength: Strength | null; n: number };
-  sourceIds: string[];
-}
-
 export interface OutlookData {
   generatedAt: string;
   status: "planned" | "partial" | "complete";
@@ -285,5 +237,4 @@ export interface OutlookData {
   companies: OutlookCompany[];
   deals: OutlookDeal[];
   industries: OutlookIndustry[];
-  reality: OutlookReality;
 }

@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, correlationStrength, demean, persistence, directionOf, industryOutlook, marketWeights, mixShift, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
+import { cagr, directionOf, industryOutlook, marketWeights, mixShift, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -145,73 +145,6 @@ describe("marketWeights", () => {
   it("each deal still counts once in total", () => {
     const sum = (xs: { weight: number }[]) => xs.reduce((s, x) => s + x.weight, 0);
     expect(sum(marketWeights(["441", "?", "91", "325", "621", "5411"]))).toBeCloseTo(1, 12);
-  });
-});
-
-describe("pearson and spearman", () => {
-  it("are 1 for a perfect positive relation and -1 for a perfect negative one", () => {
-    expect(pearson([1, 2, 3, 4], [2, 4, 6, 8])).toBeCloseTo(1, 12);
-    expect(spearman([1, 2, 3, 4], [10, 9, 1, 0])).toBeCloseTo(-1, 12);
-  });
-  it("spearman only cares about order, so one huge value cannot dominate", () => {
-    expect(spearman([1, 2, 3, 4], [1, 2, 3, 1000])).toBeCloseTo(1, 12);
-    expect(pearson([1, 2, 3, 4], [1, 2, 3, 1000])).toBeLessThan(0.8);
-  });
-  it("ties share the average rank", () => {
-    // x ranks 1.5,1.5,3,4 vs y ranks 1,2,3,4
-    const r = spearman([5, 5, 6, 7], [1, 2, 3, 4]) as number;
-    expect(r).toBeCloseTo(pearson([1.5, 1.5, 3, 4], [1, 2, 3, 4]) as number, 12);
-  });
-  it("skip pairs with a missing value and need at least 3 pairs", () => {
-    expect(spearman([1, null, 3, 4], [1, 2, 3, 4])).toBeCloseTo(1, 12);
-    expect(spearman([1, 2], [1, 2])).toBeNull();
-    expect(pearson([1, 1, 1], [1, 2, 3])).toBeNull();
-  });
-});
-
-describe("demean", () => {
-  it("subtracts the mean of the values present", () => {
-    expect(demean([1, null, 3])).toEqual([-1, null, 1]);
-    expect(demean([null])).toEqual([null]);
-  });
-});
-
-describe("yearlyMeans", () => {
-  const months = (y: number, v: number) => Array.from({ length: 12 }, (_, m) => ({ period: `${y}-${String(m + 1).padStart(2, "0")}-01`, value: v }));
-  it("averages complete calendar years only", () => {
-    const pts = [...months(2020, 10), ...months(2021, 20).slice(0, 11)];
-    expect(yearlyMeans(pts)).toEqual({ 2020: 10, 2021: null });
-  });
-  it("a missing month makes the year null", () => {
-    const pts = months(2020, 10).map((p, i) => (i === 3 ? { ...p, value: null } : p));
-    expect(yearlyMeans(pts)[2020]).toBeNull();
-  });
-});
-
-describe("persistence", () => {
-  const r = (past: number, next: number) => ({ past, next, econPast: 0.02, econNext: 0.02 });
-  it("counts how often shrinking industries keep lagging, against the base rate", () => {
-    const p = persistence([r(-0.01, 0.0), r(-0.02, 0.03), r(0.03, 0.04), r(0.01, 0.0), { past: null, next: 0, econPast: 0, econNext: 0 }]);
-    expect(p.n).toBe(4);
-    expect(p.shrinking).toBe(2);
-    expect(p.stillLagging).toBeCloseTo(0.5, 12); // one of two kept lagging
-    expect(p.baseLagging).toBeCloseTo(0.5, 12); // two of four lagged overall
-    expect(p.ahead).toBe(1);
-    expect(p.stillAhead).toBe(1);
-    expect(p.baseAhead).toBeCloseTo(0.5, 12);
-  });
-  it("shares are null when a group is empty", () => {
-    expect(persistence([r(0.03, 0.03)]).stillLagging).toBeNull();
-  });
-});
-
-describe("correlationStrength", () => {
-  it("names the size of a correlation, either sign", () => {
-    expect(correlationStrength(0.05)).toBe("none");
-    expect(correlationStrength(-0.2)).toBe("weak");
-    expect(correlationStrength(0.3)).toBe("moderate");
-    expect(correlationStrength(-0.7)).toBe("strong");
-    expect(correlationStrength(null)).toBeNull();
   });
 });
 

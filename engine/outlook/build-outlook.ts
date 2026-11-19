@@ -25,7 +25,6 @@ import type {
 import { parseCsv } from "../csv";
 import { cagr, directionOf, industryOutlook, marketWeights, median, mixShift, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
 import { COMPANIES, LAYERS, SOURCES, THESIS } from "./plan";
-import { realityCheck } from "./reality";
 
 const read = (p: string) => readFileSync(p, "utf8");
 const need = (p: string) => {
@@ -532,14 +531,6 @@ const usedCodes = new Set(
   ].filter((x): x is string => !!x && industryOf.has(x)),
 );
 
-const reality = realityCheck({
-  statcanName,
-  statcanMember: new Map(statcanMembers.map((m) => [m.classificationCode, m.memberId])),
-  statcanOf: new Map(industryMap.map((m) => [m.naics, m.statcan])),
-  highlight: new Set(industryMap.filter((m) => usedCodes.has(m.naics)).map((m) => m.statcan)),
-  years: RULES.momentumYears,
-});
-
 const out: OutlookData = {
   generatedAt: new Date().toISOString(),
   status: "complete", // every layer computes; deal labels still await a person's approval (shown on the page)
@@ -553,20 +544,12 @@ const out: OutlookData = {
   companies,
   deals,
   industries: industries.filter((i) => usedCodes.has(i.naics)),
-  reality,
 };
 
 writeFileSync("data/outlook.json", JSON.stringify(out, null, 2) + "\n");
 
 const pct = (v: number | null) => (v == null ? "—" : `${(v * 100).toFixed(1)}%`);
 console.log(`data/outlook.json: ${deals.length} deals, ${out.industries.length} industries, economy ${pct(economyOutlook)}/yr`);
-const rm = reality.momentum;
-console.log(
-  `  reality: momentum ${rm.industries} industries × ${rm.anchors.length} years, median rank corr ${rm.medianSpearman?.toFixed(2)} (${rm.positiveAnchors} positive); ` +
-    `shrinking kept lagging ${pct(rm.persistence.stillLagging)} vs base ${pct(rm.persistence.baseLagging)}; ahead stayed ahead ${pct(rm.persistence.stillAhead)} vs base ${pct(rm.persistence.baseAhead)}`,
-);
-for (const c of reality.companies) console.log(`  reality: ${c.ticker} organic vs ${c.industry}: r ${c.correlation?.toFixed(2)} on ${c.n} years`);
-console.log(`  reality: pooled r ${reality.pooled.correlation?.toFixed(2)} on ${reality.pooled.n} company-years`);
 for (const c of companies)
   console.log(
     `  ${c.ticker.padEnd(5)} clients: base ${c.customer.base} ${pct(c.customer.tailwind)} (${c.customer.trend ?? "—"}, coverage ${pct(c.customer.coverage)}) · deals ${pct(c.customer.dealOutlook)} (coverage ${pct(c.customer.dealCoverage)}) · ${c.customer.direction ?? "—"}`,
