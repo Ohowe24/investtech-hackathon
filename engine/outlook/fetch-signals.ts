@@ -96,6 +96,47 @@ if (fresh(dataPath)) {
 }
 console.log(`StatCan 36-10-0434: ${statcanCodes.length} industries, data to ${meta.cubeEndDate}`);
 
+// ---------- 1b. Reality check: full monthly history (1997 on) of every detailed industry (no children) + all industries
+const historyPath = `${OUT}/statcan-36100434-history.json`;
+if (fresh(historyPath)) {
+  const all = members as (StatcanMember & { parentMemberId?: number | null })[];
+  const parents = new Set(all.map((m) => m.parentMemberId).filter((x) => x != null));
+  const wanted = all.filter((m) => m.classificationCode === "T001" || (!parents.has(m.memberId) && !m.classificationCode.startsWith("T")));
+  const series: Record<string, unknown> = {};
+  for (let i = 0; i < wanted.length; i += 40) {
+    const batch = wanted.slice(i, i + 40);
+    const body = await fetchText("https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(batch.map((m) => ({ productId: STATCAN_PID, coordinate: `1.1.1.${m.memberId}.0.0.0.0.0.0`, latestN: 360 }))),
+    });
+    const parsed = JSON.parse(body) as { status: string; object: { coordinate: string } }[];
+    // matched by the industry in each coordinate, never by position
+    const byMember = new Map(parsed.filter((p) => p.status === "SUCCESS").map((p) => [Number(p.object.coordinate.split(".")[3]), p.object]));
+    for (const m of batch) {
+      const o = byMember.get(m.memberId);
+      if (o) series[m.classificationCode] = o;
+    }
+  }
+  writeFileSync(historyPath, JSON.stringify({ productId: STATCAN_PID, fetchedAt: new Date().toISOString(), series }));
+}
+console.log("StatCan 36-10-0434 history: saved");
+
+// ---------- 1c. Consumer Price Index, annual average, Canada, all-items (18-10-0005), to put organic growth after inflation
+const cpiPath = `${OUT}/statcan-18100005-cpi.json`;
+if (fresh(cpiPath)) {
+  const body = await fetchText("https://www150.statcan.gc.ca/t1/wds/rest/getDataFromCubePidCoordAndLatestNPeriods", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    // Geography = Canada (2) . Products = All-items (2)
+    body: JSON.stringify([{ productId: 18100005, coordinate: "2.2.0.0.0.0.0.0.0.0", latestN: 40 }]),
+  });
+  const parsed = JSON.parse(body) as { status: string; object: { coordinate: string } }[];
+  if (parsed[0]?.status !== "SUCCESS" || parsed[0].object.coordinate !== "2.2.0.0.0.0.0.0.0.0") throw new Error("StatCan CPI: unexpected answer");
+  writeFileSync(cpiPath, JSON.stringify({ productId: 18100005, fetchedAt: new Date().toISOString(), series: parsed[0].object }));
+}
+console.log("StatCan 18-10-0005 CPI: saved");
+
 // ---------- 2. COPS 2026-2035 real GDP by industry
 const COPS_URL =
   "https://open.canada.ca/data/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890/resource/22ac3c9f-aa82-4bd4-9d4e-8d17074b2136/download/industrial_gdp_pib_par_secteur_2026_2035.csv";

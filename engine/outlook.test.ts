@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, directionOf, industryOutlook, marketWeights, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
+import { cagr, demean, directionOf, industryOutlook, marketWeights, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -145,5 +145,45 @@ describe("marketWeights", () => {
   it("each deal still counts once in total", () => {
     const sum = (xs: { weight: number }[]) => xs.reduce((s, x) => s + x.weight, 0);
     expect(sum(marketWeights(["441", "?", "91", "325", "621", "5411"]))).toBeCloseTo(1, 12);
+  });
+});
+
+describe("pearson and spearman", () => {
+  it("are 1 for a perfect positive relation and -1 for a perfect negative one", () => {
+    expect(pearson([1, 2, 3, 4], [2, 4, 6, 8])).toBeCloseTo(1, 12);
+    expect(spearman([1, 2, 3, 4], [10, 9, 1, 0])).toBeCloseTo(-1, 12);
+  });
+  it("spearman only cares about order, so one huge value cannot dominate", () => {
+    expect(spearman([1, 2, 3, 4], [1, 2, 3, 1000])).toBeCloseTo(1, 12);
+    expect(pearson([1, 2, 3, 4], [1, 2, 3, 1000])).toBeLessThan(0.8);
+  });
+  it("ties share the average rank", () => {
+    // x ranks 1.5,1.5,3,4 vs y ranks 1,2,3,4
+    const r = spearman([5, 5, 6, 7], [1, 2, 3, 4]) as number;
+    expect(r).toBeCloseTo(pearson([1.5, 1.5, 3, 4], [1, 2, 3, 4]) as number, 12);
+  });
+  it("skip pairs with a missing value and need at least 3 pairs", () => {
+    expect(spearman([1, null, 3, 4], [1, 2, 3, 4])).toBeCloseTo(1, 12);
+    expect(spearman([1, 2], [1, 2])).toBeNull();
+    expect(pearson([1, 1, 1], [1, 2, 3])).toBeNull();
+  });
+});
+
+describe("demean", () => {
+  it("subtracts the mean of the values present", () => {
+    expect(demean([1, null, 3])).toEqual([-1, null, 1]);
+    expect(demean([null])).toEqual([null]);
+  });
+});
+
+describe("yearlyMeans", () => {
+  const months = (y: number, v: number) => Array.from({ length: 12 }, (_, m) => ({ period: `${y}-${String(m + 1).padStart(2, "0")}-01`, value: v }));
+  it("averages complete calendar years only", () => {
+    const pts = [...months(2020, 10), ...months(2021, 20).slice(0, 11)];
+    expect(yearlyMeans(pts)).toEqual({ 2020: 10, 2021: null });
+  });
+  it("a missing month makes the year null", () => {
+    const pts = months(2020, 10).map((p, i) => (i === 3 ? { ...p, value: null } : p));
+    expect(yearlyMeans(pts)[2020]).toBeNull();
   });
 });
