@@ -1,7 +1,7 @@
 "use client";
 
 // A small Outlook engine chip (tailwind + direction) for the companies the engine reads (data/outlook.json).
-// Context only: it changes no verdict. It formats fields the engine computed; no math here.
+// The tailwind is scored (10-point score part and the "Industries growing ≥ the economy" check). Formats engine fields; no math.
 
 import type { Direction, OutlookCompany, OutlookData, Trend } from "@contract/outlook";
 import outlookJson from "@data/outlook.json";
@@ -21,7 +21,7 @@ export default function OutlookChip({ ticker, size = "sm" }: { ticker: string; s
   const c = outlookFor(ticker);
   if (!c) return null;
   const title =
-    `Outlook engine (context only, changes no verdict). Tailwind: ${pct(c.tailwind)} a year after inflation, its industries' outlook weighted by revenue` +
+    `Outlook engine. Tailwind (scored, 10 points + one check): ${pct(c.tailwind)} a year after inflation, its industries' outlook weighted by revenue` +
     `${c.trend ? ` (${c.trend} vs the whole economy at ${pct(outlook.economy.outlook)})` : ""}. ` +
     `Direction of recent deals: ${c.direction ? WORD[c.direction] : "not enough deals to say"}. Click for the detail.`;
   return (

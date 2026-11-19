@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-18T16:00:42.530Z",
+  "generatedAt": "2026-11-19T17:54:06.574Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -21,7 +21,7 @@
         "Frequent acquirers returned 10.1–11.0% a year, against 5.1% for 'selective large bets', the worst group (Bain).",
         "Big one-off deals are the danger: 2.1% of 1998–2001 deals lost $397bn while all the others gained $157bn (NBER w10200)."
       ],
-      "weight": 10
+      "weight": 9
     },
     {
       "id": "fcfPerShareCagr",
@@ -37,7 +37,7 @@
         "Reported profit misleads: in FY2025 Constellation's free cash flow rose 14% while net income fell about 30%.",
         "Topicus, same year: free cash flow up 23%, net income down 53%."
       ],
-      "weight": 30
+      "weight": 27
     },
     {
       "id": "revenueCagr",
@@ -67,7 +67,7 @@
         "Acquirers that paid in stock earned 25.0% less than the market over the next five years (Loughran & Vijh).",
         "Among companies making five or more deals, returns were negative when public targets were paid for in stock (Fuller, Netter & Stegemoller)."
       ],
-      "weight": 20
+      "weight": 18
     },
     {
       "id": "cashReturn",
@@ -83,7 +83,7 @@
         "Where goodwill is over 40% of assets, only 24% clear that bar (Aktagon).",
         "Skill persists: which company is buying explains about as much of acquirer returns as all deal and company traits combined (Golubov, Yawson & Zhang)."
       ],
-      "weight": 25
+      "weight": 22.5
     },
     {
       "id": "netDebtToEbitda",
@@ -98,7 +98,29 @@
         "3× is the cap Lifco, a model serial acquirer, sets for itself. WSP targets 1.0–2.0×.",
         "One date misleads: WSP showed 0.9× in December 2025 and 2.3× by June 2026. Hence the 3-year average."
       ],
-      "weight": 15
+      "weight": 13.5
+    },
+    {
+      "id": "industryTailwind",
+      "short": "Industry tailwind",
+      "label": "Industry tailwind (Outlook engine)",
+      "unit": "pct",
+      "higherIsBetter": true,
+      "description": "How fast the industries the company earns its revenue in are expected to grow, a year after inflation.",
+      "formula": "Each industry's outlook (median of StatCan momentum, the ESDC and BLS 10-year projections, and analysts' estimates for listed peers) weighted by the company's revenue in it. See the Outlook engine tab.",
+      "why": "An acquirer is only as good as the industries it buys into: the same skill compounds faster in growing markets. Scored lightly (10 points) because it is not backtested.",
+      "weight": 10
+    },
+    {
+      "id": "tailwindVsEconomy",
+      "short": "Tailwind vs economy",
+      "label": "Industry tailwind minus the whole economy's outlook",
+      "unit": "pct",
+      "higherIsBetter": true,
+      "description": "Whether the company's industries are expected to grow faster or slower than the whole economy.",
+      "formula": "Industry tailwind minus the whole economy's outlook, measured the same way (Outlook engine).",
+      "why": "The bar for “growing”: an acquirer earning in industries that lag the economy is swimming against the current.",
+      "weight": 0
     },
     {
       "id": "organicGrowth",
@@ -120,7 +142,7 @@
   "rules": {
     "result": "Passes: both must-pass checks pass, and at least 75% of the other checks with data pass (3 or more with data). Fails: a must-pass check fails, or fewer than 50% pass. Mixed: anything else. Every scored check counts the same toward the verdict. Missing data is never a fail. Within each verdict, companies are ranked by their quality score.",
     "weight": "15% of the index is split equally among the companies we add, at most 8.2% each. CSU and TOI share one slot (one controls the other).",
-    "score": "Out of 100. Each variable earns a share of its points: FCF per share 30, Return on capital 25, Share count 20, Net debt 15, Acquisition spend 10. Points rise in a straight line between two declared values per variable. A variable with no data drops out and the others are rescaled, if those with data carry at least 60% of the weight."
+    "score": "Out of 100. Each variable earns a share of its points: FCF per share 27, Return on capital 22.5, Share count 18, Net debt 13.5, Acquisition spend 9, Industry tailwind 10. Points rise in a straight line between two declared values per variable. A variable with no data drops out and the others are rescaled, if those with data carry at least 60% of the weight."
   },
   "map": {
     "x": "acqIntensity",
@@ -195,6 +217,32 @@
             "os-CSU-FY2023",
             "os-CSU-FY2024",
             "os-CSU-FY2025"
+          ]
+        },
+        "industryTailwind": {
+          "value": 0.04874219222205611,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
+        "tailwindVsEconomy": {
+          "value": 0.029557684124487782,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
           ]
         },
         "organicGrowth": {
@@ -277,46 +325,63 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
-        "total": 4,
+        "passed": 5,
+        "available": 5,
+        "total": 5,
         "recommendation": "pass",
         "rank": 1,
         "score": {
-          "value": 82,
+          "value": 84,
           "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.8523461918361203,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.959062144417809,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.6666666666666666,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.730351925262204,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.8654551742335871,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": 0.9748438444411223,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ]
         }
@@ -936,6 +1001,32 @@
             "os-TOI-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": 0.04874219222205612,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
+        "tailwindVsEconomy": {
+          "value": 0.02955768412448779,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
         "organicGrowth": {
           "value": 0.04,
           "period": "FY2025",
@@ -1016,46 +1107,63 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
-        "total": 4,
+        "passed": 4,
+        "available": 5,
+        "total": 5,
         "recommendation": "pass",
-        "rank": 10,
+        "rank": 6,
         "score": {
-          "value": 61,
+          "value": 65,
           "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.5577433786745872,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 1,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.6880980274998449,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.9418218210064891,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": 0.9748438444411224,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ]
         }
@@ -1459,6 +1567,32 @@
             "os-WSP-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": 0.025898396501788164,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
+        "tailwindVsEconomy": {
+          "value": 0.006713888404219832,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
         "organicGrowth": {
           "value": 0.035,
           "period": "FY2025",
@@ -1538,11 +1672,22 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
-        "total": 4,
+        "passed": 3,
+        "available": 5,
+        "total": 5,
         "recommendation": "mixed",
         "rank": 16,
         "score": {
@@ -1551,33 +1696,39 @@
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.6946849103462851,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.4186932977475403,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.2649603702037286,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.4545535592990083,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.5374886927212073,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": 0.5179679300357632,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ]
         }
@@ -2274,6 +2425,18 @@
             "os-STN-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -2285,7 +2448,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -2353,48 +2516,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
-        "rank": 7,
+        "rank": 8,
         "score": {
           "value": 63,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.8947402090912603,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.4641773615651912,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5934897206732823,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.29234246695769206,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.8774854562820179,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -2621,6 +2802,32 @@
             "os-TFII-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": 0.01883367934583086,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
+        "tailwindVsEconomy": {
+          "value": -0.00035082875173747183,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -2631,7 +2838,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -2699,46 +2906,63 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": false
           }
         ],
         "passed": 4,
-        "available": 4,
-        "total": 4,
+        "available": 5,
+        "total": 5,
         "recommendation": "fail",
-        "rank": 20,
+        "rank": 21,
         "score": {
-          "value": 68,
+          "value": 65,
           "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.772648761499394,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.4561437675956031,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 1,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.19530172722257522,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": 0.3766735869166172,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ]
         }
@@ -3076,6 +3300,18 @@
             "os-GFL-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -3086,7 +3322,7 @@
       "zone": "Light acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -3154,48 +3390,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 30,
         "score": {
           "value": 37,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.49322656620465183,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.07562470644890874,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5088051082560239,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -3422,6 +3676,18 @@
             "os-FSV-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -3433,7 +3699,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -3501,48 +3767,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
-        "rank": 6,
+        "rank": 7,
         "score": {
           "value": 63,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 1,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.33486510004076814,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5650783753936307,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.3531963545334864,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.7649484099549556,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -3769,6 +4053,18 @@
             "os-CIGI-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -3779,7 +4075,7 @@
       "zone": "Acquirer · weak per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Free cash flow per share ≥ 7%/yr, Return on capital ≥ 8%, Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Free cash flow per share ≥ 7%/yr, Return on capital ≥ 8%, Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow. No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -3847,48 +4143,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 0,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 34,
         "score": {
           "value": 10,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.029210087622511215,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.16074252163270702,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.03269648959304131,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.14605262607876235,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.1942878571298885,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -4115,6 +4429,18 @@
             "os-BYD-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -4126,7 +4452,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -4194,48 +4520,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 11,
         "score": {
           "value": 57,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.6542105700939951,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.3342885778273827,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5073222916422361,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.6522774987938316,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.8640212211003245,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -4462,6 +4806,18 @@
             "os-CCL.B-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -4472,7 +4828,7 @@
       "zone": "Light acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow. No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -4540,48 +4896,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
-        "rank": 21,
+        "rank": 20,
         "score": {
           "value": 65,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.65403019442582,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.36464174750924594,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7624838769117375,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.7637695355982012,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -4808,6 +5182,18 @@
             "os-RCH-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -4819,7 +5205,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -4887,48 +5273,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 2,
         "score": {
           "value": 74,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.8681787802868826,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.5035301892399345,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7305812347253212,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.7312343774682439,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -5155,6 +5559,18 @@
             "os-ATD-FY2026"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2026",
@@ -5166,7 +5582,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -5234,48 +5650,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 5,
         "score": {
           "value": 66,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.6534121720311002,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.36372408510290827,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 1,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.4640135376304323,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -5502,6 +5936,18 @@
             "os-DSG-FY2026"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2026",
@@ -5513,7 +5959,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -5581,48 +6027,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 4,
         "score": {
           "value": 67,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.5382034585125183,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.5938771734351647,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.6133410672853832,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 1,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.8376158443263756,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -5849,6 +6313,18 @@
             "os-ENGH-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -5860,7 +6336,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Free cash flow per share ≥ 7%/yr.",
+      "reason": "Failed: Free cash flow per share ≥ 7%/yr. No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -5928,48 +6404,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 13,
         "score": {
           "value": 56,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.08704326825374314,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.5602421171400523,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7100334049152947,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 1,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -6196,6 +6690,18 @@
             "os-GIB.A-FY2026"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2026",
@@ -6207,7 +6713,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Passed every check.",
+      "reason": "No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -6275,48 +6781,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 3,
         "score": {
           "value": 71,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.5926986265452574,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.505803168972126,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 1,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.7073952967419193,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -6544,6 +7068,18 @@
             "os-PBH-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -6554,7 +7090,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr, Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -6622,49 +7158,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 3,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 31,
         "score": {
           "value": 31,
-          "coverage": 0.7,
+          "coverage": 0.63,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": null,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5751334858886349,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ],
-          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+          "note": "Scored on the 63% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -6892,6 +7445,18 @@
             "os-EIF-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -6902,7 +7467,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr, Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -6970,49 +7535,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 1,
         "available": 3,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 33,
         "score": {
           "value": 16,
-          "coverage": 0.7,
+          "coverage": 0.63,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": null,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.10176153989556136,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ],
-          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+          "note": "Scored on the 63% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -7239,6 +7821,18 @@
             "os-MTY-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -7249,7 +7843,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Industries growing ≥ the economy.",
       "model": {
         "checks": [
           {
@@ -7317,48 +7911,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 26,
         "score": {
           "value": 47,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.44385542244493115,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.25645320887315937,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.9034155985407122,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.9338668426826203,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -7587,6 +8199,32 @@
             "os-ARE-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": 0.019289781609515066,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
+        "tailwindVsEconomy": {
+          "value": 0.00010527351194673448,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -7665,49 +8303,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 3,
-        "total": 4,
+        "passed": 3,
+        "available": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 24,
         "score": {
-          "value": 61,
-          "coverage": 0.7,
+          "value": 58,
+          "coverage": 0.73,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": null,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.1354051212047315,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 1,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.6437472042280357,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": 0.3857956321903013,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
           ],
-          "note": "Scored on the 70% of the weight that has data; the other weights were rescaled"
+          "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -8209,6 +8864,18 @@
             "os-BSP-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2023–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2023–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -8286,48 +8953,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 28,
         "score": {
           "value": 42,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 1,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.37409188752316724,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.15040212254373592,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -8493,6 +9178,18 @@
             "os-AME-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -8570,48 +9267,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
-        "rank": 8,
+        "rank": 9,
         "score": {
           "value": 63,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.583998254134245,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.44657679052108323,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.6889162833117853,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.7818469508460809,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.8419652732586678,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -8838,6 +9553,18 @@
             "os-WCN-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -8915,48 +9642,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 27,
         "score": {
           "value": 43,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.39594714372253914,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.24000670121697806,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7336433187162762,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.09399052439098088,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.9030661991721933,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -9182,6 +9927,18 @@
             "os-BRO-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -9259,48 +10016,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 32,
         "score": {
           "value": 30,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.5844178697714888,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.29715637262807076,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.23907469221692748,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.024300932090545846,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -9526,6 +10301,18 @@
             "os-IEX-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -9603,48 +10390,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 14,
         "score": {
           "value": 52,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.37221328344717575,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.3528038986889972,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7146596858638744,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.6511001100110011,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.7723788910149837,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -9870,6 +10675,18 @@
             "os-ETN-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -9947,48 +10764,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 19,
         "score": {
           "value": 72,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.9413905441214845,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.40153698366954854,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7670982735723771,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.5289835655591282,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -10214,6 +11049,18 @@
             "os-ROP-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -10291,48 +11138,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 29,
         "score": {
           "value": 39,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.36734517759019836,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.2982688822963198,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.6259780907668234,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.2379732550922531,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.41018620497987673,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -10558,6 +11423,18 @@
             "os-TDY-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -10635,48 +11512,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "mixed",
         "rank": 17,
         "score": {
           "value": 44,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.45160846616643086,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.2807821115128509,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.4334085778781036,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.5860691300889436,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.620316213094371,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -10902,6 +11797,18 @@
             "os-TDG-FY2026"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2022–FY2026",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2026",
@@ -10979,48 +11886,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 25,
         "score": {
           "value": 56,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.9523540898797528,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.281511893987889,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7010309278350514,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.6854416385430001,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -11246,6 +12171,18 @@
             "os-ACM-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -11323,48 +12260,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 4,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 23,
         "score": {
           "value": 61,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.4283119958620146,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.39857284076699995,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 1,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.5416964977787075,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -11590,6 +12545,18 @@
             "os-HEI-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -11667,48 +12634,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": false
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
-        "rank": 9,
+        "rank": 10,
         "score": {
           "value": 61,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.8306199807860425,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.4585567944613315,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.5961331070069302,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.5027175745885887,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.48975992068239566,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -11934,6 +12919,18 @@
             "os-J-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -12011,48 +13008,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "mixed",
         "rank": 15,
         "score": {
           "value": 51,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.20623409005118412,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.2611264724316292,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.9508051860993035,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.6520690250818378,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 0.9650103073044644,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -12278,6 +13293,18 @@
             "os-POOL-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -12355,48 +13382,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "pass",
         "rank": 12,
         "score": {
           "value": 56,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.33525326985767956,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.3918681993175389,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.9295125164690381,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.48464804696903374,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -12622,6 +13667,18 @@
             "os-WSO-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -12699,48 +13756,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 3,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "fail",
         "rank": 22,
         "score": {
           "value": 62,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0.5484636504950515,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.49456664656281996,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.43367657300901874,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.9856435826819847,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -12966,6 +14041,18 @@
             "os-DHR-FY2025"
           ]
         },
+        "industryTailwind": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
+        "tailwindVsEconomy": {
+          "value": null,
+          "period": "FY2021–FY2025",
+          "sourceIds": [],
+          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+        },
         "organicGrowth": {
           "value": null,
           "period": "FY2025",
@@ -13043,48 +14130,66 @@
             "kind": "score",
             "metricId": "acqIntensity",
             "pass": true
+          },
+          {
+            "id": "industryGrowth",
+            "label": "Industries growing ≥ the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
+            "target": "≥ 0%",
+            "threshold": 0,
+            "op": ">=",
+            "kind": "score",
+            "metricId": "tailwindVsEconomy",
+            "pass": null
           }
         ],
         "passed": 2,
         "available": 4,
-        "total": 4,
+        "total": 5,
         "recommendation": "mixed",
         "rank": 18,
         "score": {
           "value": 40,
-          "coverage": 1,
+          "coverage": 0.9,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
-              "weight": 30,
+              "weight": 27,
               "grade": 0,
               "scale": "No points at -5%, all points at 25%, a straight line between"
             },
             {
               "metricId": "cashReturn",
-              "weight": 25,
+              "weight": 22.5,
               "grade": 0.25474313803833254,
               "scale": "No points at 0%, all points at 30%, a straight line between"
             },
             {
               "metricId": "shareCountChange",
-              "weight": 20,
+              "weight": 18,
               "grade": 0.7833876221498371,
               "scale": "No points at 20%, all points at -10%, a straight line between"
             },
             {
               "metricId": "netDebtToEbitda",
-              "weight": 15,
+              "weight": 13.5,
               "grade": 0.5233770718232045,
               "scale": "No points at 4×, all points at 0×, a straight line between"
             },
             {
               "metricId": "acqIntensity",
-              "weight": 10,
+              "weight": 9,
               "grade": 1,
               "scale": "No points at 200%, all points at 50%, a straight line between"
+            },
+            {
+              "metricId": "industryTailwind",
+              "weight": 10,
+              "grade": null,
+              "scale": "No points at 0%, all points at 5%, a straight line between"
             }
-          ]
+          ],
+          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -13957,6 +15062,40 @@
     {
       "id": "os-STN-FY2025",
       "label": "Onesheet API · STN.TO annual statements, FY2025"
+    },
+    {
+      "id": "outlook-onesheet-segments",
+      "label": "Outlook engine · Onesheet API: reported segments and KPIs (/kpis/segments-and-kpis)",
+      "url": "https://api.onesheet.pro/v1/kpis/segments-and-kpis"
+    },
+    {
+      "id": "outlook-onesheet-profile",
+      "label": "Outlook engine · Onesheet data pack: company profiles (segment and subsidiary descriptions quoted for each industry label)"
+    },
+    {
+      "id": "outlook-statcan-36-10-0434",
+      "label": "Outlook engine · Statistics Canada, table 36-10-0434: GDP at basic prices by industry, monthly, chained 2017 dollars, seasonally adjusted",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401"
+    },
+    {
+      "id": "outlook-esdc-cops-2026",
+      "label": "Outlook engine · ESDC, Canadian Occupational Projection System 2026–2035: GDP by industry",
+      "url": "https://open.canada.ca/data/en/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890"
+    },
+    {
+      "id": "outlook-bls-ep-2-11",
+      "label": "Outlook engine · US Bureau of Labor Statistics, Employment Projections Table 2.11: employment and output by industry, 2025 and projected 2035",
+      "url": "https://www.bls.gov/emp/tables/industry-employment-and-output.htm"
+    },
+    {
+      "id": "outlook-onesheet-estimates",
+      "label": "Outlook engine · Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates)",
+      "url": "https://api.onesheet.pro/v1/stocks/fundamentals"
+    },
+    {
+      "id": "outlook-boc-inflation-target",
+      "label": "Outlook engine · Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation",
+      "url": "https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/"
     }
   ]
 }

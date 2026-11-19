@@ -142,3 +142,25 @@ describe("provided candidates", () => {
     expect(providedOnly(reits).universe.length).toBe(reits.universe.length);
   });
 });
+
+describe("acquirers: Outlook engine tailwind", () => {
+  const ctx = (row?: Record<string, string>) => ({ ticker: "X", lookup: (f: string) => (f === "outlook-tailwind.csv" ? row : undefined), facts: [], distributions: [] });
+  it("copies the tailwind and its gap to the economy, with their sources", () => {
+    const { metrics } = acquirers.computeMetrics([], ctx({ ticker: "X", period: "FY2025", tailwind: "0.03", vs_economy: "-0.001", source_ids: "outlook-a outlook-b", note: "" }));
+    expect(metrics.industryTailwind.value).toBe(0.03);
+    expect(metrics.tailwindVsEconomy.value).toBe(-0.001);
+    expect(metrics.industryTailwind.sourceIds).toEqual(["outlook-a", "outlook-b"]);
+    expect(metrics.industryTailwind.period).toBe("FY2025");
+  });
+  it("is missing (null + note), never 0, when the company has no outlook", () => {
+    const { metrics } = acquirers.computeMetrics([], ctx());
+    expect(metrics.industryTailwind.value).toBeNull();
+    expect(metrics.industryTailwind.note).toBeTruthy();
+    expect(metrics.tailwindVsEconomy.value).toBeNull();
+  });
+  it("scores 10 of 100 and fails the check below the economy", () => {
+    expect(acquirers.score!.components.find((c) => c.metricId === "industryTailwind")?.weight).toBe(10);
+    const k = acquirers.checks.find((c) => c.id === "industryGrowth")!;
+    expect([k.metricId, k.op, k.threshold, k.kind]).toEqual(["tailwindVsEconomy", ">=", 0, "score"]);
+  });
+});

@@ -176,7 +176,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
           <span className="rounded-md border border-line px-2.5 py-1 text-muted">
             Bar for “growing”: the whole economy, <span className="font-semibold text-ink">{pct(economy)}</span> a year after inflation
           </span>
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Context only: changes no recommendation</span>
+          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Tailwind scored: 10 points + the “growing ≥ economy” check</span>
           <span className="rounded-md border border-line px-2.5 py-1 text-muted">Published sources only, no forecast of ours</span>
           <span className="rounded-md border border-line px-2.5 py-1 text-muted">Not backtested · not investment advice</span>
         </div>
@@ -821,7 +821,7 @@ function HowItWorks() {
           </li>
         </ol>
         <ul className="space-y-2 text-[12.5px] leading-relaxed text-muted">
-          <li>· <span className="text-ink">Not tested.</span> Whether these signals would have picked better stocks or faster growers is not tested, so it is context, not a check.</li>
+          <li>· <span className="text-ink">Not backtested.</span> Whether these signals would have picked better stocks or faster growers is not tested, so the tailwind carries the smallest weight in the score (10 of 100). Direction is not scored.</li>
           <li>· Industry codes describe what a business does. Software and engineering firms serve many client markets; those are listed (“serves”, “clients”) but not scored.</li>
           <li>· The signals describe Canada and the US. Topicus earns in Europe and WSP partly abroad.</li>
           <li>· Deals are those disclosed in filings. Constellation and Topicus disclose only material ones; each deal counts once whatever its size, because most prices are not disclosed.</li>

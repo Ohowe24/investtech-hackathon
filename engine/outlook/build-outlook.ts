@@ -548,6 +548,41 @@ const out: OutlookData = {
 
 writeFileSync("data/outlook.json", JSON.stringify(out, null, 2) + "\n");
 
+// ---------------------------------------------------------------- hand-off to the stock scoring (npm run engine)
+// One row per company: the tailwind and its gap to the whole economy, read by engine/industries/acquirers.ts as the
+// "Industry tailwind" score part and the "Industries growing ≥ the economy" check. Values are copied from above.
+const csvCell = (v: string | number | null) => {
+  const t = v == null ? "" : String(v);
+  return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+};
+const csvOf = (head: string[], rows: (string | number | null)[][]) => [head.join(","), ...rows.map((r) => r.map(csvCell).join(","))].join("\n") + "\n";
+// sources the tailwind rests on, prefixed so they cannot collide with engine/input/sources.csv
+const TAILWIND_SOURCES = ["onesheet-segments", "onesheet-profile", "statcan-36-10-0434", "esdc-cops-2026", "bls-ep-2-11", "onesheet-estimates", "boc-inflation-target"];
+writeFileSync(
+  "engine/input/outlook-sources.csv",
+  csvOf(
+    ["id", "label", "url", "quote"],
+    out.sources.filter((s) => TAILWIND_SOURCES.includes(s.id)).map((s) => [`outlook-${s.id}`, `Outlook engine · ${s.label}`, s.url ?? "", ""]),
+  ),
+);
+writeFileSync(
+  "engine/input/outlook-tailwind.csv",
+  csvOf(
+    ["ticker", "period", "tailwind", "economy", "vs_economy", "coverage", "trend", "source_ids", "note"],
+    companies.map((c) => [
+      c.ticker,
+      c.mixPeriod,
+      c.tailwind,
+      economyOutlook,
+      c.tailwind != null && economyOutlook != null ? c.tailwind - economyOutlook : null,
+      c.coverage,
+      c.trend,
+      TAILWIND_SOURCES.map((id) => `outlook-${id}`).join(" "),
+      c.tailwind == null ? "Less than half of revenue is in industries with an outlook" : "",
+    ]),
+  ),
+);
+
 const pct = (v: number | null) => (v == null ? "—" : `${(v * 100).toFixed(1)}%`);
 console.log(`data/outlook.json: ${deals.length} deals, ${out.industries.length} industries, economy ${pct(economyOutlook)}/yr`);
 for (const c of companies)

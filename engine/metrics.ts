@@ -243,7 +243,7 @@ export function weightedScore(parts: { weight: number; grade: number | null }[],
   return { value: Math.round(value * 100), coverage };
 }
 
-// ---------------------------------------------------------------- outlook engine (context, never a scored check)
+// ---------------------------------------------------------------- outlook engine (tailwind is scored in engine/industries/acquirers.ts)
 // Plain-language rules: engine/methodology.md, "Outlook engine". All growth rates are decimals per year.
 
 /**

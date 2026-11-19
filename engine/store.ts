@@ -75,7 +75,8 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     return t == null ? [] : parseCsv(t);
   };
   const warnings: string[] = [];
-  const sources: Source[] = csv("sources.csv").map((s) => ({ id: s.id, label: s.label, url: s.url || undefined, ...(s.quote ? { quote: s.quote } : {}) }));
+  // outlook-sources.csv is written by npm run outlook, so npm run inputs (which rewrites sources.csv) cannot drop it
+  const sources: Source[] = [...csv("sources.csv"), ...csv("outlook-sources.csv")].map((s) => ({ id: s.id, label: s.label, url: s.url || undefined, ...(s.quote ? { quote: s.quote } : {}) }));
   const sourceIds = new Set(sources.map((s) => s.id));
   const quoteOf = new Map(sources.filter((s) => s.quote).map((s) => [s.id, s.quote!]));
   const companies: Record<string, StoredCompany> = {};
@@ -161,7 +162,7 @@ export function storeFromInputs(read: (file: string) => string | null, isFake: b
     company(r.ticker).distributions.push({ date: r.date, amount, currency: r.currency ?? "", sourceId: r.source_id });
   }
 
-  for (const file of ["organic.csv"]) {
+  for (const file of ["organic.csv", "outlook-tailwind.csv"]) {
     for (const r of csv(file)) company(r.ticker).extras[file] = r;
   }
 
