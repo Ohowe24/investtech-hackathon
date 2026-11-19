@@ -208,16 +208,20 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
             <span className="inline-block transition-transform duration-500 group-hover:rotate-180">⟳</span> Run the engine
           </button>
         </div>
-        <h1 className="mt-3 text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">Are they buying into the right industries?</h1>
-        <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted">{outlook.thesis}</p>
-        <div className="mt-4 flex flex-wrap gap-2 text-[12px]">
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">
-            Bar for “growing”: the whole economy, <span className="font-semibold text-ink">{pct(economy)}</span> a year after inflation
-          </span>
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Tailwind scored: 10 points + the “growing ≥ economy” check</span>
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Published sources only, no forecast of ours</span>
-          <span className="rounded-md border border-line px-2.5 py-1 text-muted">Not backtested · not investment advice</span>
+        <div className="mt-3 grid items-end gap-6 lg:grid-cols-[minmax(0,1fr)_auto]">
+          <div className="min-w-0">
+            <h1 className="text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">Are they buying into the right industries?</h1>
+            <p className="mt-2.5 max-w-2xl text-[15px] leading-relaxed text-muted">
+              Where each acquirer’s industries are heading, and whether its new deals lean toward stronger or weaker ones.
+            </p>
+          </div>
+          <dl className="grid grid-cols-3 divide-x divide-line rounded-xl border border-line">
+            <HeaderStat value={pct(economy)} label="economy: the bar for “growing”" />
+            <HeaderStat value="10 pts" label="+ 1 check in the stock score" />
+            <HeaderStat value={`${outlook.companies.length}`} label={`companies · ${outlook.industries.length} industries`} />
+          </dl>
         </div>
+        <p className="mt-4 text-[11.5px] text-faint">Published sources only · after inflation · not backtested · not investment advice</p>
       </section>
 
       <FeaturedCards economy={economy} selected={company.ticker} onSelect={(t) => { setTicker(t); document.getElementById("outlook-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} />
@@ -532,6 +536,15 @@ function MixShiftBlock({ m, lens }: { m: OutlookMixShift; lens: LensKey }) {
         {m.shift != null && <> · <span className="font-mono text-ink">{pts(m.shift)}</span> from the mix alone (today’s outlooks for both years)</>}.
       </div>
       {m.note && <div className="mt-1 text-faint">{m.note}</div>}
+    </div>
+  );
+}
+
+function HeaderStat({ value, label }: { value: string; label: string }) {
+  return (
+    <div className="flex min-w-0 flex-col px-3 py-3 sm:px-4">
+      <dt className="order-2 mt-1.5 max-w-[130px] text-[11px] leading-snug text-faint">{label}</dt>
+      <dd className="order-1 whitespace-nowrap font-mono text-[18px] font-semibold leading-none tracking-[-0.02em] text-ink sm:text-[20px]">{value}</dd>
     </div>
   );
 }
