@@ -49,6 +49,8 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
   const [epoch, setEpoch] = useState(0);
   // Generated index ("Choose your own" industries): play the build when the button is pressed; show its tab once built.
   const canIndex = dataset.industryId.startsWith("custom:");
+  // The Outlook engine is built for the serial acquirers only (data/outlook.json covers their five candidates)
+  const hasOutlook = dataset.industryId === "acquirers";
   const indexKey = `index-built:${toSearch(query)}`;
   const [indexFresh, setIndexFresh] = useState(false);
   const [indexBuilt, setIndexBuilt] = useState(false);
@@ -93,7 +95,8 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
 
   if (hash == null) return <div className="min-h-screen" />; // before the address is read
   const start = hash === "" || hash === "ranking";
-  const tabs = canIndex && (indexBuilt || hash === "index") ? [...TABS, { id: "index" as const, label: "Your index" }] : TABS;
+  const baseTabs = hasOutlook ? TABS : TABS.filter((t) => t.id !== "outlook");
+  const tabs = canIndex && (indexBuilt || hash === "index") ? [...baseTabs, { id: "index" as const, label: "Your index" }] : baseTabs;
   const generateIndex = () => {
     setIndexFresh(true);
     if (hash === "index") setEpoch((e) => e + 1);
@@ -111,7 +114,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
     window.location.assign(`/analyze?${toSearch({ ...query, more: more || undefined })}#companies`);
   };
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || (hash === "index" && canIndex) ? hash : hash === "outlook" || hash.startsWith("outlook/") ? "outlook" : "companies";
+  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || (hash === "index" && canIndex) ? hash : hasOutlook && (hash === "outlook" || hash.startsWith("outlook/")) ? "outlook" : "companies";
 
   return (
     <div className="min-h-screen w-full">

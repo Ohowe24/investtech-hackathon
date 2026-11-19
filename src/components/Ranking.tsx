@@ -297,7 +297,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                           <div className="min-w-0">
                             <div className="max-w-[170px] truncate font-semibold text-ink">{c.name}</div>
                             <div className="max-w-[170px] truncate text-xs text-faint">{[c.subSector, c.listedOn].filter(Boolean).join(" · ")}</div>
-                            {outlookFor(c.ticker) && <div className="mt-1"><OutlookChip ticker={c.ticker} /></div>}
+                            {dataset.industryId === "acquirers" && outlookFor(c.ticker) && <div className="mt-1"><OutlookChip ticker={c.ticker} /></div>}
                           </div>
                         </div>
                       </td>
