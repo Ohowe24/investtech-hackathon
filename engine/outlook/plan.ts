@@ -27,7 +27,7 @@ export const LAYERS: OutlookLayer[] = [
       { id: "momentum", label: "Recent momentum", status: "done", detail: "Statistics Canada real GDP by industry (36-10-0434): latest 12 months vs 3 years earlier, yearly rate." },
       { id: "projection", label: "Official projections", status: "done", detail: "Canada: ESDC COPS real GDP 2025 → 2035. United States: BLS real output 2025 → 2035 (Table 2.11)." },
       { id: "street", label: "Street forecast", status: "done", detail: "Median analyst revenue growth of listed Canadian peers (Onesheet estimates), after inflation." },
-      { id: "narrative", label: "Narrative", status: "planned", detail: "News and earnings-call quotes summarized by Claude. Shown as text, never scored." },
+      { id: "narrative", label: "Narrative", status: "done", detail: "Verbatim quotes from each company's latest earnings call, with a one-line summary by Claude (engine/input/outlook-narrative.csv). Shown as text, never scored." },
     ],
   },
   {
@@ -57,6 +57,7 @@ export const SOURCES: OutlookSource[] = [
   { id: "esdc-cops-2026", label: "ESDC, Canadian Occupational Projection System 2026–2035: GDP by industry", url: "https://open.canada.ca/data/en/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890", status: "fetched", detail: "Growth computed from the yearly GDP levels; the published growth-rate file is misaligned by one row, so it is not used." },
   { id: "bls-ep-2-11", label: "US Bureau of Labor Statistics, Employment Projections Table 2.11: employment and output by industry, 2025 and projected 2035", url: "https://www.bls.gov/emp/tables/industry-employment-and-output.htm", status: "fetched", detail: "Rows copied on 2026-11-19 (bls.gov refuses scripts); checked against the live table by fingerprint and by recomputing every published rate." },
   { id: "onesheet-estimates", label: "Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates)", url: "https://api.onesheet.pro/v1/stocks/fundamentals", status: "fetched" },
+  { id: "onesheet-transcripts", label: "Onesheet API: latest earnings-call transcripts (/financials/transcripts)", url: "https://api.onesheet.pro/v1/financials/transcripts", status: "fetched", detail: "Each quote is checked word for word against the transcript when the engine runs." },
   { id: "boc-inflation-target", label: "Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation", url: "https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/", status: "fetched" },
 ];
 

@@ -243,6 +243,7 @@ Passes / Mixed / Fails and no weight. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `np
 | Official projection, US | BLS Employment Projections Table 2.11, real output by industry, 2025 and projected 2035 | `engine/input/outlook-bls-ep.csv` |
 | Street forecast | Onesheet API analyst revenue estimates for listed Canadian peers named in the industry map | `engine/raw/outlook/estimates/` |
 | Which published series stands for each industry code, and which peers | Declared once, with the reason | `engine/input/outlook-industry-map.csv` |
+| Narrative: what management says about its markets | Onesheet API latest earnings-call transcripts; quotes chosen by Claude with a one-line summary each. The engine refuses to build if a quote is not word for word in the transcript, and reads the speaker from the transcript. Never scored. | `engine/raw/outlook/transcripts/` + `engine/input/outlook-narrative.csv` |
 
 Two data issues found and handled:
 - **COPS growth-rate file is misaligned.** In `industrial_aagr_tcam_par_secteur_2026_2035.csv`, each growth rate sits on the

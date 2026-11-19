@@ -117,6 +117,26 @@ for (const t of peers) {
   ok++;
 }
 console.log(`Onesheet: estimates and profiles for ${ok} peers`);
+
+// ---------- 4. latest earnings-call transcript of each candidate (narrative: quoted, never scored)
+mkdirSync(`${OUT}/transcripts`, { recursive: true });
+const CANDIDATES: Record<string, string> = { CSU: "CSU.TO", TOI: "TOI.V", WSP: "WSP.TO", TFII: "TFII.TO", ARE: "ARE.TO" };
+for (const [t, sym] of Object.entries(CANDIDATES)) {
+  const out = `${OUT}/transcripts/${t}.json`;
+  if (!fresh(out)) continue;
+  const dates = JSON.parse(await fetchText(`https://api.onesheet.pro/v1/financials/transcripts/${encodeURIComponent(sym)}/dates`, { headers: { "X-API-Key": key } }));
+  const rows: unknown[] = Array.isArray(dates) ? dates : (dates?.data ?? []);
+  const periods = rows
+    .map((r) => (Array.isArray(r) ? { quarter: Number(r[0]), year: Number(r[1]) } : { quarter: Number((r as { quarter?: number }).quarter), year: Number((r as { year?: number }).year) }))
+    .filter((p) => p.year && p.quarter)
+    .sort((a, b) => b.year - a.year || b.quarter - a.quarter);
+  if (!periods[0]) {
+    console.log(`${t}: no transcript`);
+    continue;
+  }
+  writeFileSync(out, await fetchText(`https://api.onesheet.pro/v1/financials/transcripts/${encodeURIComponent(sym)}/${periods[0].year}/${periods[0].quarter}`, { headers: { "X-API-Key": key } }));
+  console.log(`${t}: transcript ${periods[0].year} Q${periods[0].quarter}`);
+}
 }
 
 main().catch((e) => {

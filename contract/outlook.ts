@@ -146,6 +146,9 @@ export interface OutlookCompany {
   /** dealOutlook − tailwind, decimal */
   directionGap: number | null;
   direction: Direction | null;
+  /** what management said about its markets on the latest earnings call: verbatim quotes with a one-line
+   *  summary written by Claude. Shown as text, never scored. */
+  narrative: { speaker: string | null; quote: string; summary: string; call: string; sourceIds: string[] }[];
   notes: string[];
 }
 

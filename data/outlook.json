@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-19T16:24:34.036Z",
-  "status": "partial",
+  "generatedAt": "2026-11-19T16:26:36.761Z",
+  "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
     {
@@ -54,8 +54,8 @@
         {
           "id": "narrative",
           "label": "Narrative",
-          "status": "planned",
-          "detail": "News and earnings-call quotes summarized by Claude. Shown as text, never scored."
+          "status": "done",
+          "detail": "Verbatim quotes from each company's latest earnings call, with a one-line summary by Claude (engine/input/outlook-narrative.csv). Shown as text, never scored."
         }
       ]
     },
@@ -135,6 +135,13 @@
       "label": "Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates)",
       "url": "https://api.onesheet.pro/v1/stocks/fundamentals",
       "status": "fetched"
+    },
+    {
+      "id": "onesheet-transcripts",
+      "label": "Onesheet API: latest earnings-call transcripts (/financials/transcripts)",
+      "url": "https://api.onesheet.pro/v1/financials/transcripts",
+      "status": "fetched",
+      "detail": "Each quote is checked word for word against the transcript when the engine runs."
     },
     {
       "id": "boc-inflation-target",
@@ -294,6 +301,26 @@
       "dealsWithOutlook": 8,
       "directionGap": 0,
       "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Mark Miller",
+          "quote": "On AI, there is an enormous amount of work going on across our businesses and nearly all the learning is happening inside of them rather than at head office.",
+          "summary": "AI is the change management is watching; each software business works out its own response.",
+          "call": "Q3 2026 earnings call, 2026-11-09",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Jamal Baksh",
+          "quote": "And we just -- it's just a very difficult market because of the consolidation that happens because of Epic, et cetera.",
+          "summary": "Hospital software, where Altera (bought 2022) sits, is a hard market as hospitals consolidate onto Epic.",
+          "call": "Q3 2026 earnings call, 2026-11-09",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
       "notes": [
         "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal.",
         "Deal industry labels are proposed and awaiting approval.",
@@ -414,10 +441,12 @@
       "dealsWithOutlook": 6,
       "directionGap": 0,
       "direction": "steady",
+      "narrative": [],
       "notes": [
         "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal.",
         "Deal industry labels are proposed and awaiting approval.",
-        "All reported revenue is outside North America, while the signals describe Canada and the United States: read the outlook as indicative."
+        "All reported revenue is outside North America, while the signals describe Canada and the United States: read the outlook as indicative.",
+        "No narrative: the latest earnings-call transcript in Onesheet is from 2021 (Q1), too old to describe today's markets."
       ]
     },
     {
@@ -550,6 +579,26 @@
       "dealsWithOutlook": 11,
       "directionGap": -0.0005618847794354731,
       "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Alexandre L'Heureux",
+          "quote": "Looking ahead, demand remains healthy across transportation, defense, data center, water, aviation, energy and municipal infrastructure with additional opportunity from the federal push to accelerate nation-building projects.",
+          "summary": "Management sees healthy demand across most of WSP's client markets.",
+          "call": "Q3 2026 earnings call, 2026-11-05",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alexandre L'Heureux",
+          "quote": "At the same time, the structural drivers in Power & Energy continue to strengthen, fueled by electrification, energy capacity and the need to modernize aging grids.",
+          "summary": "Power & Energy, where the TRC and POWER Engineers deals sit, has long-term drivers: electrification and grid renewal.",
+          "call": "Q3 2026 earnings call, 2026-11-05",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
       "notes": [
         "Direction rests on 11 of 12 recent deals; the filings don't say what the other is.",
         "Deal industry labels are proposed and awaiting approval.",
@@ -674,6 +723,35 @@
       "dealsWithOutlook": 2,
       "directionGap": null,
       "direction": null,
+      "narrative": [
+        {
+          "speaker": "Alain Bédard",
+          "quote": "2023 was not so bad, but then 2024, 2025 with freight recession, increasing inflation on the cost, et cetera, et cetera.",
+          "summary": "Two years of freight recession: the same slump the Statistics Canada trucking figures show.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alain Bédard",
+          "quote": "I mean, we have done that before, but the market, the demand is still soft.",
+          "summary": "Freight demand is still soft.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Alain Bédard",
+          "quote": "So, we feel very good about 2027 because at one point, the demand will start, the supply will stay constrained, and us, like I said, during the course of 2027, we still have some tweaks to do.",
+          "summary": "Management expects demand to return while trucking capacity stays tight, which is the recovery the official projections assume.",
+          "call": "Q3 2026 earnings call, 2026-10-29",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
       "notes": [
         "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are.",
         "Deal industry labels are proposed and awaiting approval.",
@@ -773,6 +851,26 @@
       "dealsWithOutlook": 6,
       "directionGap": -0.0027934084532277234,
       "direction": "steady",
+      "narrative": [
+        {
+          "speaker": "Adam Borgatti",
+          "quote": "Aecon reinforces its positive outlook, supported by the expectation for double-digit revenue growth for the full-year 2026, based on our strategic positioning in sectors with attractive demand profiles, growing recurring revenue programs, and a healthy pipeline of project opportunities.",
+          "summary": "Management sees strong demand in the sectors it works in.",
+          "call": "Q3 2026 earnings call, 2026-10-30",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        },
+        {
+          "speaker": "Jean-Louis Servranckx",
+          "quote": "Yes, the new build is important, but the real strong market for the years to come is what we call EPU, Extended Power Uprate, or life extension of the reactor.",
+          "summary": "Nuclear refurbishment and life extension, more than new reactors, is the market management expects to be strongest.",
+          "call": "Q3 2026 earnings call, 2026-10-30",
+          "sourceIds": [
+            "onesheet-transcripts"
+          ]
+        }
+      ],
       "notes": [
         "Deal industry labels are proposed and awaiting approval."
       ]

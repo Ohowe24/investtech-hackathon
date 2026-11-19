@@ -319,6 +319,23 @@ function CompanyDetail({ c, economy }: { c: OutlookCompany; economy: number | nu
         </Card>
       </div>
 
+      {c.narrative.length > 0 && (
+        <Card title={`What management says about its markets · ${c.narrative[0].call}`}>
+          <ul className="grid gap-4 md:grid-cols-2">
+            {c.narrative.map((n) => (
+              <li key={n.quote} className="rounded-lg border border-line p-4">
+                <div className="text-[13.5px] font-medium leading-snug text-ink">{n.summary}</div>
+                <blockquote className="mt-2 border-l-2 border-line pl-3 text-[12.5px] italic leading-relaxed text-muted">“{n.quote}”</blockquote>
+                <div className="mt-2 text-[11.5px] text-faint">{n.speaker ?? "Speaker not marked"} · {n.call}</div>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-[12px] text-faint">
+            Quotes are verbatim from the transcript (checked by the engine on every run); the bold line is Claude’s one-line summary. Context only: never scored.
+          </p>
+        </Card>
+      )}
+
       {showAll && <DealLabels deals={deals} />}
     </div>
   );
@@ -579,6 +596,7 @@ function HowItWorks() {
           <li>· Deals are those disclosed in filings. Constellation and Topicus disclose only material ones; each deal counts once whatever its size, because most prices are not disclosed.</li>
           <li>· Analysts’ revenue forecasts include acquisitions, and some industries have one or two listed Canadian peers, or none.</li>
           <li>· Deal industry labels are proposed by Claude with their quotes and still need a person’s approval.</li>
+          <li>· Management quotes are what executives chose to say on a call: they explain, they do not measure.</li>
         </ul>
       </div>
       <details className="mt-5 border-t border-line pt-3">

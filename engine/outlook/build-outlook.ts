@@ -275,6 +275,40 @@ function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookG
   return { mix, geography, period, notes };
 }
 
+// ---------------------------------------------------------------- Layer 2: narrative (quoted, never scored)
+
+interface Transcript {
+  year: number;
+  quarter: number;
+  date: string;
+  content: string;
+}
+const narrativeRows = parseCsv(read("engine/input/outlook-narrative.csv"));
+function transcriptOf(ticker: string): Transcript | null {
+  const p = `engine/raw/outlook/transcripts/${ticker}.json`;
+  if (!existsSync(p)) return null;
+  const j = JSON.parse(read(p)) as { data?: Transcript | Transcript[] } & Transcript;
+  const d = j.data ?? j;
+  return Array.isArray(d) ? (d[0] ?? null) : d;
+}
+function narrativeOf(ticker: string): { items: OutlookCompany["narrative"]; note: string | null } {
+  const t = transcriptOf(ticker);
+  const rows = narrativeRows.filter((r) => r.ticker === ticker);
+  if (!t) return { items: [], note: "No earnings-call transcript fetched." };
+  const call = `Q${t.quarter} ${t.year} earnings call, ${t.date.slice(0, 10)}`;
+  if (rows.length === 0)
+    return { items: [], note: `No narrative: the latest earnings-call transcript in Onesheet is from ${t.year} (Q${t.quarter}), too old to describe today's markets.` };
+  const items = rows.map((r) => {
+    const at = t.content.indexOf(r.quote);
+    if (at < 0) throw new Error(`outlook-narrative.csv: quote for ${ticker} is not verbatim in its transcript: "${r.quote.slice(0, 60)}…"`);
+    // speaker = the last "Name:" turn marker before the quote
+    const before = t.content.slice(0, at);
+    const marks = [...before.matchAll(/(?:^|\n)(\p{Lu}[\p{L}.'\- ]{2,40}):\s/gu)];
+    return { speaker: marks.length ? marks[marks.length - 1][1].trim() : null, quote: r.quote, summary: r.summary, call, sourceIds: ["onesheet-transcripts"] };
+  });
+  return { items, note: null };
+}
+
 // ---------------------------------------------------------------- Layers 3 and 4: per company
 
 const companies: OutlookCompany[] = COMPANIES.map((c) => {
@@ -320,6 +354,9 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     })
     .sort((a, b) => (b.share ?? -1) - (a.share ?? -1));
 
+  const narrative = narrativeOf(c.ticker);
+  if (narrative.note) notes.push(narrative.note);
+
   return {
     ticker: c.ticker,
     name: c.name,
@@ -336,6 +373,7 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     dealsWithOutlook,
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
+    narrative: narrative.items,
     notes,
   };
 });
@@ -345,7 +383,7 @@ const usedCodes = new Set([...companies.flatMap((c) => c.mix.map((r) => r.naics)
 
 const out: OutlookData = {
   generatedAt: new Date().toISOString(),
-  status: "partial", // narrative (Layer 2, never scored) not built; labels awaiting approval
+  status: "complete", // every layer computes; deal labels still await a person's approval (shown on the page)
   thesis: THESIS,
   layers: LAYERS,
   sources: SOURCES.map((s) =>
