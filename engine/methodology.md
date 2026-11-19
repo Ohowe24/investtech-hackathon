@@ -236,7 +236,14 @@ and the industries its recent deals are in, growing or shrinking, according to p
 see the weights table) and the check **"Industries growing ≥ the economy"** (tailwind minus the whole economy's
 outlook ≥ 0) is one of the scored checks behind Passes / Mixed / Fails. `npm run outlook` writes
 `engine/input/outlook-tailwind.csv` and `engine/input/outlook-sources.csv`; `npm run engine` reads them. A company
-without an outlook has no value (missing, never a fail). Direction is not scored. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
+without an outlook has no value (missing, never a fail). Direction is not scored.
+
+**Coverage:** every company the ranking scores (candidates and index holdings) has its reported revenue segments
+mapped to industries, with a quote from its Onesheet profile; the five featured companies also get deals, direction
+and client markets. A company that reports no revenue split is read as one industry (a `*` row). A segment with a
+negative value (an eliminations line) is left out, since shares need positive parts. US companies are read with the
+same mostly Canadian signals (StatCan, ESDC) plus BLS where copied; their tailwind is indicative. Labels for the
+companies added after the first five are proposed by Claude and await a person's approval. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
 
 ### Inputs
 
