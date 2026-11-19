@@ -314,6 +314,17 @@ export function weightedOutlook(rows: { weight: N; outlook: N }[], minCoverage: 
   return { value: known.reduce((s, r) => s + r.weight * r.outlook, 0) / knownWeight, coverage };
 }
 
+/**
+ * Mix shift: how much the tailwind moved because the revenue mix changed, with every industry's outlook held fixed.
+ * Runs weightedOutlook on the earlier shares and on the later shares (same outlooks, same coverage rule) and
+ * subtracts. Null if either side is null. Positive = revenue moved toward industries with a better outlook.
+ */
+export function mixShift(rows: { from: N; to: N; outlook: N }[], minCoverage: number): { from: number | null; to: number | null; shift: number | null } {
+  const a = weightedOutlook(rows.map((r) => ({ weight: r.from, outlook: r.outlook })), minCoverage).value;
+  const b = weightedOutlook(rows.map((r) => ({ weight: r.to, outlook: r.outlook })), minCoverage).value;
+  return { from: a, to: b, shift: a != null && b != null ? b - a : null };
+}
+
 export type Direction = "toward" | "steady" | "away";
 
 /**

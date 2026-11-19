@@ -270,6 +270,7 @@ Two data issues found and handled:
 | Red flag | — | Share of revenue in declining industries. |
 | Deal outlook | `weightedOutlook(equal weights, 50%)` | Recent deals = fiscal 2024–2026 (the latest fiscal year with a deal and the two before), not excluded. Each counts once: most prices are undisclosed, and those disclosed are in three currencies. Null if fewer than half have an industry with an outlook. |
 | Direction | `directionOf(deal outlook, tailwind, 1 point)` | ↗ toward stronger industries if the deals' outlook is more than 1 point a year above the tailwind, ↘ away if more than 1 point below, → steady otherwise. One point is below what the sources can tell apart. |
+| Mix shift | `mixShift(FY2022 share, FY2025 share, industry outlook, 50%)` | The tailwind computed on the FY2022 segment shares and on the FY2025 shares, with today's industry outlooks for both, and the difference. It isolates how far the revenue mix itself moved toward stronger or weaker industries (organic growth and acquisitions together), labelled with the same ±1 point band as direction. Shown only if every segment is reported in FY2022; segments without an outlook drop out of both years. Where every segment is in one industry (CSU, TOI, WSP by what they do) the shift is zero by construction. |
 
 ### Two views: "What they do" and "Who they sell to"
 

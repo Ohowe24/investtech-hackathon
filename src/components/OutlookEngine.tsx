@@ -11,6 +11,7 @@ import type {
   OutlookDeal,
   OutlookIndustry,
   OutlookLens,
+  OutlookMixShift,
   OutlookSignal,
   StepStatus,
   Trend,
@@ -99,6 +100,7 @@ function viewOf(c: OutlookCompany, lens: LensKey): OutlookLens {
     directionGap: c.directionGap,
     direction: c.direction,
     industryMix: c.industryMix,
+    mixShift: c.mixShift,
     notes: c.directionNotes,
   };
 }
@@ -377,6 +379,7 @@ function CompanyDetail({ c, economy, lens }: { c: OutlookCompany; economy: numbe
               ))}
             </div>
           )}
+          {v.mixShift && <MixShiftBlock m={v.mixShift} lens={lens} />}
         </Card>
 
         <Card title={`Where the deals go · fiscal ${R.dealYears[0]}–${R.dealYears[2]}`}>
@@ -457,6 +460,37 @@ function CompanyDetail({ c, economy, lens }: { c: OutlookCompany; economy: numbe
       )}
 
       {showAll && <DealLabels deals={deals} />}
+    </div>
+  );
+}
+
+/** how the mix itself moved since rules.mixFrom; formats engine fields only */
+function MixShiftBlock({ m, lens }: { m: OutlookMixShift; lens: LensKey }) {
+  return (
+    <div className="mt-5 border-t border-line pt-3 text-[12px]">
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <span className="font-medium text-ink">Mix over time · {m.from} → {m.to}</span>
+        {m.direction && <DirectionMark direction={m.direction} />}
+      </div>
+      <table className="mt-2 w-full text-[12px]">
+        <tbody>
+          {m.rows.map((r) => (
+            <tr key={r.segment} className="border-t border-line/60">
+              <td className="py-1 pr-2 text-ink">{r.segment}</td>
+              <td className="py-1 pr-2 text-faint">{r.code ? (r.title ?? r.code) : lens === "customer" ? "no single market" : "—"}</td>
+              <td className="whitespace-nowrap py-1 text-right font-mono text-muted">
+                {pct(r.from, 0)} <span className="text-faint">→</span> <span className="text-ink">{pct(r.to, 0)}</span>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="mt-2 text-muted">
+        Tailwind on the {m.from} mix <span className="font-mono text-ink">{pct(m.tailwindFrom)}</span>, on the {m.to} mix{" "}
+        <span className="font-mono text-ink">{pct(m.tailwindTo)}</span>
+        {m.shift != null && <> · <span className="font-mono text-ink">{pts(m.shift)}</span> from the mix alone (today’s outlooks for both years)</>}.
+      </div>
+      {m.note && <div className="mt-1 text-faint">{m.note}</div>}
     </div>
   );
 }

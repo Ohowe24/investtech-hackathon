@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, correlationStrength, demean, persistence, directionOf, industryOutlook, marketWeights, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
+import { cagr, correlationStrength, demean, persistence, directionOf, industryOutlook, marketWeights, mixShift, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -212,5 +212,30 @@ describe("correlationStrength", () => {
     expect(correlationStrength(0.3)).toBe("moderate");
     expect(correlationStrength(-0.7)).toBe("strong");
     expect(correlationStrength(null)).toBeNull();
+  });
+});
+
+describe("mixShift", () => {
+  it("measures the tailwind change from the mix alone, outlooks fixed", () => {
+    // 50/50 -> 80/20 between a 4% and a 1% industry: 2.5% -> 3.4%, shift +0.9 pt
+    const r = mixShift([{ from: 0.5, to: 0.8, outlook: 0.04 }, { from: 0.5, to: 0.2, outlook: 0.01 }], 0.5);
+    expect(r.from).toBeCloseTo(0.025, 10);
+    expect(r.to).toBeCloseTo(0.034, 10);
+    expect(r.shift).toBeCloseTo(0.009, 10);
+  });
+  it("is zero when every segment is in one industry", () => {
+    expect(mixShift([{ from: 0.7, to: 0.2, outlook: 0.03 }, { from: 0.3, to: 0.8, outlook: 0.03 }], 0.5).shift).toBeCloseTo(0, 12);
+  });
+  it("is negative when revenue moves toward the weaker industry", () => {
+    expect(mixShift([{ from: 0.8, to: 0.5, outlook: 0.04 }, { from: 0.2, to: 0.5, outlook: 0.01 }], 0.5).shift).toBeCloseTo(-0.009, 10);
+  });
+  it("is null when either year lacks coverage", () => {
+    const r = mixShift([{ from: 0.6, to: 0.3, outlook: null }, { from: 0.4, to: 0.7, outlook: 0.02 }], 0.5);
+    expect(r.from).toBeNull();
+    expect(r.to).toBeCloseTo(0.02, 10);
+    expect(r.shift).toBeNull();
+  });
+  it("is null when a year has no shares", () => {
+    expect(mixShift([{ from: null, to: 1, outlook: 0.02 }], 0.5)).toEqual({ from: null, to: 0.02, shift: null });
   });
 });

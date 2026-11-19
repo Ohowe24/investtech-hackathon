@@ -18,11 +18,12 @@ import type {
   OutlookIndustry,
   OutlookLens,
   OutlookMixRow,
+  OutlookMixShift,
   OutlookRules,
   OutlookSignal,
 } from "../../contract/outlook";
 import { parseCsv } from "../csv";
-import { cagr, directionOf, industryOutlook, marketWeights, median, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
+import { cagr, directionOf, industryOutlook, marketWeights, median, mixShift, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
 import { COMPANIES, LAYERS, SOURCES, THESIS } from "./plan";
 import { realityCheck } from "./reality";
 
@@ -50,6 +51,7 @@ const RULES: OutlookRules = {
   streetTo: 2028, // … to two years later
   minPeers: 2,
   momentumYears: 3,
+  mixFrom: 2022, // mix shift: FY2022, three fiscal years before the latest mix
 };
 
 // ---------------------------------------------------------------- inputs
@@ -263,7 +265,9 @@ function latestComplete(file: SegFile, metricIds: string[]): SegPeriod | null {
   );
 }
 
-function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookGeoRow[]; period: string | null; notes: string[] } {
+type MixFrom = { period: string; shares: (number | null)[] } | null;
+
+function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookGeoRow[]; period: string | null; from: MixFrom; notes: string[] } {
   const notes: string[] = [];
   const file = JSON.parse(read(need(`engine/raw/segments/${ticker}.json`))) as SegFile;
   const rows = segmentMap.filter((r) => r.ticker === ticker && r.kind === "industry");
@@ -290,13 +294,49 @@ function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookG
   }));
   if (!p) notes.push("No annual period reports every revenue segment, so the mix is unknown.");
 
+  // the same segments in the earlier year (rules.mixFrom), only if every one is reported
+  const f = file.data.data.find(
+    (q) => q.periodType === "Annual" && q.reportDate.startsWith(String(RULES.mixFrom)) && rows.every((r) => typeof q.metricsValues[r.metric_id] === "number"),
+  );
+  const from: MixFrom = f ? { period: `FY${RULES.mixFrom}`, shares: shares(rows.map((r) => f.metricsValues[r.metric_id])) } : null;
+
   const geoRows = segmentMap.filter((r) => r.ticker === ticker && r.kind === "geography");
   const g = geoRows.length ? latestComplete(file, geoRows.map((r) => r.metric_id)) : null;
   const gs = shares(geoRows.map((r) => (g ? g.metricsValues[r.metric_id] : null)));
   const geography: OutlookGeoRow[] = g
     ? geoRows.map((r, i) => ({ region: r.segment, share: gs[i], period: `FY${g.reportDate.slice(0, 4)}`, sourceIds: ["onesheet-segments"] }))
     : [];
-  return { mix, geography, period, notes };
+  return { mix, geography, period, from, notes };
+}
+
+/** How the mix moved from rules.mixFrom to the latest mix, read by industry (naics) or by client market (market). */
+function mixShiftOf(mix: OutlookMixRow[], from: MixFrom, codeOf: (r: OutlookMixRow) => string | null): OutlookMixShift | null {
+  if (!mix.length || !mix[0].period) return null;
+  const outlookOf = (code: string | null) => (code && industryOf.has(code) ? industryOf.get(code)!.outlook : null);
+  const rows = mix.map((r, i) => {
+    const code = codeOf(r);
+    return { segment: r.segment, code, title: code ? (industryOf.get(code)?.title ?? null) : null, from: from ? from.shares[i] : null, to: r.share };
+  });
+  const m = mixShift(rows.map((r) => ({ from: r.from, to: r.to, outlook: outlookOf(r.code) })), RULES.minCoverage);
+  const read = new Set(rows.filter((r) => outlookOf(r.code) != null).map((r) => r.code));
+  const left = rows.filter((r) => outlookOf(r.code) == null).map((r) => r.segment);
+  const note = !from
+    ? `Not every segment is reported for FY${RULES.mixFrom}, so the mix cannot be compared.`
+    : read.size === 1
+      ? "All revenue is read as one industry, so the mix cannot shift between industries."
+      : left.length
+        ? `${left.join(", ")} has no outlook here and is left out of both years.`
+        : null;
+  return {
+    from: `FY${RULES.mixFrom}`,
+    to: mix[0].period,
+    rows,
+    tailwindFrom: m.from,
+    tailwindTo: m.to,
+    shift: m.shift,
+    direction: directionOf(m.to, m.from, RULES.directionBand),
+    note,
+  };
 }
 
 // ---------------------------------------------------------------- Layer 2: narrative (quoted, never scored)
@@ -336,7 +376,7 @@ function narrativeOf(ticker: string): { items: OutlookCompany["narrative"]; note
 // ---------------------------------------------------------------- Layers 3 and 4: per company
 
 /** "Who they sell to": the same tailwind and direction, read by the client markets of each segment and deal. */
-function customerLens(mix: OutlookMixRow[], recent: OutlookDeal[], own: Omit<OutlookLens, "base">): OutlookLens {
+function customerLens(mix: OutlookMixRow[], from: MixFrom, recent: OutlookDeal[], own: Omit<OutlookLens, "base">): OutlookLens {
   const bad = mix.filter((r) => r.market && !["economy", "same"].includes(r.market) && !industryOf.has(r.market));
   if (bad.length) throw new Error(`outlook-segments.csv: client market not in the industry map: ${bad.map((r) => r.market).join(", ")}`);
 
@@ -393,12 +433,14 @@ function customerLens(mix: OutlookMixRow[], recent: OutlookDeal[], own: Omit<Out
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction: directionOf(dw.value, tw.value, RULES.directionBand),
     industryMix,
+    mixShift: base === "economy" ? null : mixShiftOf(mix, from, (r) => r.market),
     notes,
   };
 }
 
 const companies: OutlookCompany[] = COMPANIES.map((c) => {
-  const { mix, geography, period, notes } = companyMix(c.ticker);
+  const { mix, geography, period, from, notes } = companyMix(c.ticker);
+  const shift = mixShiftOf(mix, from, (r) => r.naics);
   const outlookOf = (naics: string | null) => (naics ? (industryOf.get(naics)?.outlook ?? null) : null);
   const tw = weightedOutlook(mix.map((r) => ({ weight: r.share, outlook: outlookOf(r.naics) })), RULES.minCoverage);
 
@@ -454,6 +496,7 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
     industryMix,
+    mixShift: shift,
     notes: ownNotes,
   };
 
@@ -473,9 +516,10 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     dealsWithOutlook,
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
+    mixShift: shift,
     narrative: narrative.items,
     directionNotes: ownNotes,
-    customer: customerLens(mix, recent, own),
+    customer: customerLens(mix, from, recent, own),
     notes,
   };
 });

@@ -90,6 +90,23 @@ export interface OutlookMixRow {
   sourceIds: string[];
 }
 
+/** How the revenue mix moved between two fiscal years, read with today's industry outlooks (engine/metrics.ts mixShift). */
+export interface OutlookMixShift {
+  /** e.g. "FY2022" and "FY2025" */
+  from: string;
+  to: string;
+  /** each reported segment's share of revenue in both years, with the industry or client market it is read by */
+  rows: { segment: string; code: string | null; title: string | null; from: number | null; to: number | null }[];
+  /** tailwind on the earlier and on the later mix, same outlooks */
+  tailwindFrom: number | null;
+  tailwindTo: number | null;
+  /** tailwindTo − tailwindFrom, decimal */
+  shift: number | null;
+  /** labelled with the same band as direction */
+  direction: Direction | null;
+  note: string | null;
+}
+
 /** One way of reading a company: by the industry it is in ("what they do") or by its clients' markets ("who they sell to"). */
 export interface OutlookLens {
   /** client view only: where the base comes from */
@@ -104,6 +121,8 @@ export interface OutlookLens {
   directionGap: number | null;
   direction: Direction | null;
   industryMix: { naics: string; title: string; share: number | null; segments: string[] }[];
+  /** how the mix itself moved (rules.mixFrom to the mix period); null when it cannot be read this way */
+  mixShift: OutlookMixShift | null;
   notes: string[];
 }
 
@@ -171,6 +190,8 @@ export interface OutlookCompany {
   /** dealOutlook − tailwind, decimal */
   directionGap: number | null;
   direction: Direction | null;
+  /** how the revenue mix itself moved, by industry ("what they do") */
+  mixShift: OutlookMixShift | null;
   /** what management said about its markets on the latest earnings call: verbatim quotes with a one-line
    *  summary written by Claude. Shown as text, never scored. */
   narrative: { speaker: string | null; quote: string; summary: string; call: string; sourceIds: string[] }[];
@@ -200,6 +221,8 @@ export interface OutlookRules {
   minPeers: number;
   /** recent momentum: years between the two 12-month windows */
   momentumYears: number;
+  /** mix shift: the earlier fiscal year compared with the latest mix */
+  mixFrom: number;
 }
 
 export type Strength = "none" | "weak" | "moderate" | "strong";

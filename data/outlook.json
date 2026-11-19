@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T17:19:38.488Z",
+  "generatedAt": "2026-11-19T17:36:13.147Z",
   "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
@@ -169,7 +169,8 @@
     "streetFrom": 2026,
     "streetTo": 2028,
     "minPeers": 2,
-    "momentumYears": 3
+    "momentumYears": 3,
+    "mixFrom": 2022
   },
   "economy": {
     "signals": [
@@ -319,6 +320,45 @@
       "dealsWithOutlook": 8,
       "directionGap": 0,
       "direction": "steady",
+      "mixShift": {
+        "from": "FY2022",
+        "to": "FY2025",
+        "rows": [
+          {
+            "segment": "Maintenance and other recurring",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.7079432195711266,
+            "to": 0.7485158736987009
+          },
+          {
+            "segment": "Professional services",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.20854726668680157,
+            "to": 0.18291318936591242
+          },
+          {
+            "segment": "Licenses",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.048323769254001815,
+            "to": 0.03570506753850125
+          },
+          {
+            "segment": "Hardware and other",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.03518574448807007,
+            "to": 0.03286586939688549
+          }
+        ],
+        "tailwindFrom": 0.04874219222205612,
+        "tailwindTo": 0.04874219222205611,
+        "shift": -6.938893903907228e-18,
+        "direction": "steady",
+        "note": "All revenue is read as one industry, so the mix cannot shift between industries."
+      },
       "narrative": [
         {
           "speaker": "Mark Miller",
@@ -365,6 +405,7 @@
             ]
           }
         ],
+        "mixShift": null,
         "notes": [
           "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "Direction needs client markets for at least half of the recent deals: the filings name them for 2 of 8."
@@ -501,6 +542,45 @@
       "dealsWithOutlook": 6,
       "directionGap": -6.938893903907228e-18,
       "direction": "steady",
+      "mixShift": {
+        "from": "FY2022",
+        "to": "FY2025",
+        "rows": [
+          {
+            "segment": "Maintenance and other recurring",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.6923993271385278,
+            "to": 0.7067349008118265
+          },
+          {
+            "segment": "Professional services",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.2614581719723961,
+            "to": 0.23960221657899042
+          },
+          {
+            "segment": "Licenses",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.03463032981993756,
+            "to": 0.028274781582449806
+          },
+          {
+            "segment": "Hardware and other",
+            "code": "513210",
+            "title": "Software Publishers",
+            "from": 0.01151217106913848,
+            "to": 0.0253881010267332
+          }
+        ],
+        "tailwindFrom": 0.04874219222205612,
+        "tailwindTo": 0.04874219222205612,
+        "shift": 0,
+        "direction": "steady",
+        "note": "All revenue is read as one industry, so the mix cannot shift between industries."
+      },
       "narrative": [],
       "directionNotes": [
         "Every recent deal is in the same industry as the existing business, so direction can only be steady. The markets those businesses serve are listed with each deal."
@@ -528,6 +608,7 @@
             ]
           }
         ],
+        "mixShift": null,
         "notes": [
           "Vertical market software sold to public and private customers in 140+ verticals; revenue by vertical is not reported, so the client base is the whole economy.",
           "Direction rests on the client markets named for 4 of 6 recent deals (64% of their weight).",
@@ -682,6 +763,45 @@
       "dealsWithOutlook": 11,
       "directionGap": -0.004654973676963898,
       "direction": "steady",
+      "mixShift": {
+        "from": "FY2022",
+        "to": "FY2025",
+        "rows": [
+          {
+            "segment": "Transport & Infrastructure",
+            "code": "541330",
+            "title": "Engineering Services",
+            "from": 0.45167561950573626,
+            "to": 0.36880503144654087
+          },
+          {
+            "segment": "Earth & Environment",
+            "code": "541330",
+            "title": "Engineering Services",
+            "from": 0.27783690469206984,
+            "to": 0.2937599124965819
+          },
+          {
+            "segment": "Property & Buildings",
+            "code": "541330",
+            "title": "Engineering Services",
+            "from": 0.20873383670356746,
+            "to": 0.2206781514902926
+          },
+          {
+            "segment": "Power & Energy",
+            "code": "541330",
+            "title": "Engineering Services",
+            "from": 0.06175363909862649,
+            "to": 0.11675690456658464
+          }
+        ],
+        "tailwindFrom": 0.02589839650178816,
+        "tailwindTo": 0.025898396501788164,
+        "shift": 3.469446951953614e-18,
+        "direction": "steady",
+        "note": "All revenue is read as one industry, so the mix cannot shift between industries."
+      },
       "narrative": [
         {
           "speaker": "Alexandre L'Heureux",
@@ -749,6 +869,45 @@
             ]
           }
         ],
+        "mixShift": {
+          "from": "FY2022",
+          "to": "FY2025",
+          "rows": [
+            {
+              "segment": "Transport & Infrastructure",
+              "code": "237",
+              "title": "Heavy and Civil Engineering Construction",
+              "from": 0.45167561950573626,
+              "to": 0.36880503144654087
+            },
+            {
+              "segment": "Earth & Environment",
+              "code": null,
+              "title": null,
+              "from": 0.27783690469206984,
+              "to": 0.2937599124965819
+            },
+            {
+              "segment": "Property & Buildings",
+              "code": "2362",
+              "title": "Nonresidential Building Construction",
+              "from": 0.20873383670356746,
+              "to": 0.2206781514902926
+            },
+            {
+              "segment": "Power & Energy",
+              "code": "2211",
+              "title": "Electric Power Generation, Transmission and Distribution",
+              "from": 0.06175363909862649,
+              "to": 0.11675690456658464
+            }
+          ],
+          "tailwindFrom": 0.022468954352483944,
+          "tailwindTo": 0.022939823884575463,
+          "shift": 0.0004708695320915189,
+          "direction": "steady",
+          "note": "Earth & Environment has no outlook here and is left out of both years."
+        },
         "notes": [
           "Earth & Environment has no single client market and is left out of this view (29% of revenue).",
           "Direction rests on the client markets named for 8 of 12 recent deals (63% of their weight)."
@@ -889,6 +1048,45 @@
       "dealsWithOutlook": 2,
       "directionGap": null,
       "direction": null,
+      "mixShift": {
+        "from": "FY2022",
+        "to": "FY2025",
+        "rows": [
+          {
+            "segment": "Truckload",
+            "code": "484",
+            "title": "Truck Transportation",
+            "from": 0.2677724211247749,
+            "to": 0.39230688858277174
+          },
+          {
+            "segment": "Less-than-truckload",
+            "code": "484122",
+            "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+            "from": 0.4372559814785207,
+            "to": 0.32782820035369636
+          },
+          {
+            "segment": "Logistics",
+            "code": "488510",
+            "title": "Freight Transportation Arrangement",
+            "from": 0.22770640317002658,
+            "to": 0.21584736000762392
+          },
+          {
+            "segment": "Package and courier",
+            "code": "492110",
+            "title": "Couriers and Express Delivery Services",
+            "from": 0.06726519422667782,
+            "to": 0.06401755105590796
+          }
+        ],
+        "tailwindFrom": 0.018932895057456052,
+        "tailwindTo": 0.01883367934583086,
+        "shift": -0.00009921571162519252,
+        "direction": "steady",
+        "note": null
+      },
       "narrative": [
         {
           "speaker": "Alain Bédard",
@@ -964,6 +1162,45 @@
             ]
           }
         ],
+        "mixShift": {
+          "from": "FY2022",
+          "to": "FY2025",
+          "rows": [
+            {
+              "segment": "Truckload",
+              "code": "484",
+              "title": "Truck Transportation",
+              "from": 0.2677724211247749,
+              "to": 0.39230688858277174
+            },
+            {
+              "segment": "Less-than-truckload",
+              "code": "484122",
+              "title": "General Freight Trucking, Long-Distance, Less Than Truckload",
+              "from": 0.4372559814785207,
+              "to": 0.32782820035369636
+            },
+            {
+              "segment": "Logistics",
+              "code": "488510",
+              "title": "Freight Transportation Arrangement",
+              "from": 0.22770640317002658,
+              "to": 0.21584736000762392
+            },
+            {
+              "segment": "Package and courier",
+              "code": "492110",
+              "title": "Couriers and Express Delivery Services",
+              "from": 0.06726519422667782,
+              "to": 0.06401755105590796
+            }
+          ],
+          "tailwindFrom": 0.018932895057456052,
+          "tailwindTo": 0.01883367934583086,
+          "shift": -0.00009921571162519252,
+          "direction": "steady",
+          "note": null
+        },
         "notes": [
           "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”.",
           "Direction needs at least half of the recent deals to have an industry: 2 of 5 do. The filings don't say what the others are."
@@ -1074,6 +1311,31 @@
       "dealsWithOutlook": 6,
       "directionGap": 0.000669332846628002,
       "direction": "steady",
+      "mixShift": {
+        "from": "FY2022",
+        "to": "FY2025",
+        "rows": [
+          {
+            "segment": "Construction",
+            "code": "237",
+            "title": "Heavy and Civil Engineering Construction",
+            "from": 0.9838367277411662,
+            "to": 0.9986102212495386
+          },
+          {
+            "segment": "Concessions",
+            "code": "4881",
+            "title": "Support Activities for Air Transportation",
+            "from": 0.0161632722588338,
+            "to": 0.001389778750461389
+          }
+        ],
+        "tailwindFrom": 0.019358089987777802,
+        "tailwindTo": 0.019289781609515066,
+        "shift": -0.00006830837826273667,
+        "direction": "steady",
+        "note": null
+      },
       "narrative": [
         {
           "speaker": "Adam Borgatti",
@@ -1122,6 +1384,31 @@
             ]
           }
         ],
+        "mixShift": {
+          "from": "FY2022",
+          "to": "FY2025",
+          "rows": [
+            {
+              "segment": "Construction",
+              "code": "237",
+              "title": "Heavy and Civil Engineering Construction",
+              "from": 0.9838367277411662,
+              "to": 0.9986102212495386
+            },
+            {
+              "segment": "Concessions",
+              "code": "4881",
+              "title": "Support Activities for Air Transportation",
+              "from": 0.0161632722588338,
+              "to": 0.001389778750461389
+            }
+          ],
+          "tailwindFrom": 0.019358089987777802,
+          "tailwindTo": 0.019289781609515066,
+          "shift": -0.00006830837826273667,
+          "direction": "steady",
+          "note": null
+        },
         "notes": [
           "What it does is what its clients buy (freight hauled, projects built), so this view equals “What they do”."
         ],
