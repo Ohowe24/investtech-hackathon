@@ -40,6 +40,9 @@ const settings = {
       rule: "Diluted share count rose no more than 5% over the period" },
     { id: "selfFunded", kind: "score", label: "Acquisitions ≤ 100% of cash flow", metricId: "acqIntensity", op: "<=", threshold: 1,
       rule: "Cash spent on acquisitions did not exceed operating cash flow" },
+    // −1 point: the Outlook engine's noise band (rules.directionBand); smaller gaps are not held against a company
+    { id: "industryGrowth", kind: "score", label: "Industries not lagging the economy", metricId: "tailwindVsEconomy", op: ">=", threshold: -0.01,
+      rule: "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)" },
   ] satisfies CheckDef[],
 
   /**
@@ -48,17 +51,22 @@ const settings = {
    * Full points need an exceptional result, not just a good one, so a score near 100 is out of reach for real companies:
    * 25% a year FCF-per-share growth, 30% return on capital, a share count shrinking 10%, no net debt, and acquisitions
    * at half of cash flow or less. The pass lines of the checks above earn a quarter to two thirds of a variable's points.
+   * Industry tailwind (Outlook engine) carries 10 points by the team's choice, not by research evidence: it is not
+   * backtested. The other five keep their proportions on the remaining 90.
    * Not weighted: revenue growth (size alone does not predict returns) and organic growth (too few companies report it);
    * acquisition intensity above 20% is a fit test (gate), not quality.
    */
   score: {
     minCoverage: 0.6,
     components: [
-      { metricId: "fcfPerShareCagr", weight: 30, scale: { kind: "ramp", zero: -0.05, full: 0.25 } },
-      { metricId: "cashReturn", weight: 25, scale: { kind: "ramp", zero: 0, full: 0.3 } },
-      { metricId: "shareCountChange", weight: 20, scale: { kind: "ramp", zero: 0.2, full: -0.1 } },
-      { metricId: "netDebtToEbitda", weight: 15, scale: { kind: "ramp", zero: 4, full: 0 } },
-      { metricId: "acqIntensity", weight: 10, scale: { kind: "ramp", zero: 2, full: 0.5 } },
+      { metricId: "fcfPerShareCagr", weight: 27, scale: { kind: "ramp", zero: -0.05, full: 0.25 } },
+      { metricId: "cashReturn", weight: 22.5, scale: { kind: "ramp", zero: 0, full: 0.3 } },
+      { metricId: "shareCountChange", weight: 18, scale: { kind: "ramp", zero: 0.2, full: -0.1 } },
+      { metricId: "netDebtToEbitda", weight: 13.5, scale: { kind: "ramp", zero: 4, full: 0 } },
+      { metricId: "acqIntensity", weight: 9, scale: { kind: "ramp", zero: 2, full: 0.5 } },
+      // nothing for shrinking industries (0%); full points at 3% a year after inflation, about 1 point (the noise band)
+      // above the whole economy: beyond that the sources cannot tell industries apart well enough to pay for more
+      { metricId: "industryTailwind", weight: 10, scale: { kind: "ramp", zero: 0, full: 0.03 } },
     ],
   } satisfies NonNullable<IndustryProfile["score"]>,
 
@@ -148,6 +156,26 @@ const settings = {
         "3× is the cap Lifco, a model serial acquirer, sets for itself. WSP targets 1.0–2.0×.",
         "One date misleads: WSP showed 0.9× in December 2025 and 2.3× by June 2026. Hence the 3-year average.",
       ],
+    },
+    {
+      id: "industryTailwind",
+      short: "Industry tailwind",
+      label: "Industry tailwind (Outlook engine)",
+      unit: "pct",
+      higherIsBetter: true,
+      description: "How fast the industries the company earns its revenue in are expected to grow, a year after inflation.",
+      formula: "Each industry's outlook (median of StatCan momentum, the ESDC and BLS 10-year projections, and analysts' estimates for listed peers) weighted by the company's revenue in it. See the Outlook engine tab.",
+      why: "An acquirer is only as good as the industries it buys into: the same skill compounds faster in growing markets. Scored lightly (10 points) because it is not backtested.",
+    },
+    {
+      id: "tailwindVsEconomy",
+      short: "Tailwind vs economy",
+      label: "Industry tailwind minus the whole economy's outlook",
+      unit: "pct",
+      higherIsBetter: true,
+      description: "Whether the company's industries are expected to grow faster or slower than the whole economy.",
+      formula: "Industry tailwind minus the whole economy's outlook, measured the same way (Outlook engine).",
+      why: "The bar for “growing”: an acquirer earning in industries that lag the economy is swimming against the current.",
     },
     {
       id: "organicGrowth",
@@ -248,6 +276,17 @@ function computeMetrics(rows: FinRow[], ctx: MetricContext): { metrics: Record<s
             : undefined,
         last ? `FY${last.year} debt, FY${lastThree[0].year}–FY${last.year} EBITDA` : undefined,
       );
+    })(),
+    ...(() => {
+      // Outlook engine hand-off (npm run outlook writes engine/input/outlook-tailwind.csv)
+      const o = ctx.lookup("outlook-tailwind.csv");
+      const ids = o?.source_ids ? o.source_ids.split(" ").filter(Boolean) : [];
+      const why = "No Outlook engine reading: its revenue segments are not mapped to industries yet";
+      const tw = o ? num(o.tailwind) : null;
+      return {
+        industryTailwind: mv(tw, ids, tw == null ? (o?.note || why) : undefined, o?.period || undefined),
+        tailwindVsEconomy: mv(o ? num(o.vs_economy) : null, ids, tw == null ? (o?.note || why) : undefined, o?.period || undefined),
+      };
     })(),
     organicGrowth: (() => {
       const o = ctx.lookup("organic.csv");

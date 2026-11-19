@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, demean, directionOf, industryOutlook, marketWeights, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
+import { cagr, directionOf, industryOutlook, lagsEconomy, marketWeights, mixShift, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -148,42 +148,40 @@ describe("marketWeights", () => {
   });
 });
 
-describe("pearson and spearman", () => {
-  it("are 1 for a perfect positive relation and -1 for a perfect negative one", () => {
-    expect(pearson([1, 2, 3, 4], [2, 4, 6, 8])).toBeCloseTo(1, 12);
-    expect(spearman([1, 2, 3, 4], [10, 9, 1, 0])).toBeCloseTo(-1, 12);
+describe("mixShift", () => {
+  it("measures the tailwind change from the mix alone, outlooks fixed", () => {
+    // 50/50 -> 80/20 between a 4% and a 1% industry: 2.5% -> 3.4%, shift +0.9 pt
+    const r = mixShift([{ from: 0.5, to: 0.8, outlook: 0.04 }, { from: 0.5, to: 0.2, outlook: 0.01 }], 0.5);
+    expect(r.from).toBeCloseTo(0.025, 10);
+    expect(r.to).toBeCloseTo(0.034, 10);
+    expect(r.shift).toBeCloseTo(0.009, 10);
   });
-  it("spearman only cares about order, so one huge value cannot dominate", () => {
-    expect(spearman([1, 2, 3, 4], [1, 2, 3, 1000])).toBeCloseTo(1, 12);
-    expect(pearson([1, 2, 3, 4], [1, 2, 3, 1000])).toBeLessThan(0.8);
+  it("is zero when every segment is in one industry", () => {
+    expect(mixShift([{ from: 0.7, to: 0.2, outlook: 0.03 }, { from: 0.3, to: 0.8, outlook: 0.03 }], 0.5).shift).toBeCloseTo(0, 12);
   });
-  it("ties share the average rank", () => {
-    // x ranks 1.5,1.5,3,4 vs y ranks 1,2,3,4
-    const r = spearman([5, 5, 6, 7], [1, 2, 3, 4]) as number;
-    expect(r).toBeCloseTo(pearson([1.5, 1.5, 3, 4], [1, 2, 3, 4]) as number, 12);
+  it("is negative when revenue moves toward the weaker industry", () => {
+    expect(mixShift([{ from: 0.8, to: 0.5, outlook: 0.04 }, { from: 0.2, to: 0.5, outlook: 0.01 }], 0.5).shift).toBeCloseTo(-0.009, 10);
   });
-  it("skip pairs with a missing value and need at least 3 pairs", () => {
-    expect(spearman([1, null, 3, 4], [1, 2, 3, 4])).toBeCloseTo(1, 12);
-    expect(spearman([1, 2], [1, 2])).toBeNull();
-    expect(pearson([1, 1, 1], [1, 2, 3])).toBeNull();
+  it("is null when either year lacks coverage", () => {
+    const r = mixShift([{ from: 0.6, to: 0.3, outlook: null }, { from: 0.4, to: 0.7, outlook: 0.02 }], 0.5);
+    expect(r.from).toBeNull();
+    expect(r.to).toBeCloseTo(0.02, 10);
+    expect(r.shift).toBeNull();
   });
-});
-
-describe("demean", () => {
-  it("subtracts the mean of the values present", () => {
-    expect(demean([1, null, 3])).toEqual([-1, null, 1]);
-    expect(demean([null])).toEqual([null]);
+  it("is null when a year has no shares", () => {
+    expect(mixShift([{ from: null, to: 1, outlook: 0.02 }], 0.5)).toEqual({ from: null, to: 0.02, shift: null });
   });
 });
 
-describe("yearlyMeans", () => {
-  const months = (y: number, v: number) => Array.from({ length: 12 }, (_, m) => ({ period: `${y}-${String(m + 1).padStart(2, "0")}-01`, value: v }));
-  it("averages complete calendar years only", () => {
-    const pts = [...months(2020, 10), ...months(2021, 20).slice(0, 11)];
-    expect(yearlyMeans(pts)).toEqual({ 2020: 10, 2021: null });
+describe("lagsEconomy", () => {
+  it("only flags a tailwind more than the band below the economy", () => {
+    expect(lagsEconomy(0.0188, 0.0192, 0.01)).toBe(false); // 0.04 pt below: noise, not lagging
+    expect(lagsEconomy(0.0091, 0.0192, 0.01)).toBe(true); // 1.01 pt below
+    expect(lagsEconomy(0.0092, 0.0192, 0.01)).toBe(false); // exactly 1 pt below: within the band
+    expect(lagsEconomy(0.05, 0.0192, 0.01)).toBe(false);
   });
-  it("a missing month makes the year null", () => {
-    const pts = months(2020, 10).map((p, i) => (i === 3 ? { ...p, value: null } : p));
-    expect(yearlyMeans(pts)[2020]).toBeNull();
+  it("is null when a value is missing", () => {
+    expect(lagsEconomy(null, 0.02, 0.01)).toBeNull();
+    expect(lagsEconomy(0.02, null, 0.01)).toBeNull();
   });
 });

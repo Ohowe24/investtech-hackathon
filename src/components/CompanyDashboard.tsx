@@ -11,6 +11,7 @@ import { Pips, ScoreBreakdown } from "./Ranking";
 import { HeldBadge } from "./CompanyTable";
 import { C, ChartCard, SplitBar, TrendChart } from "./charts";
 import { Decode, DecodeInView } from "./live/motion";
+import OutlookChip from "./OutlookChip";
 
 interface Props {
   dataset: Dataset;
@@ -69,6 +70,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
             {!company.inIndex && (
               <span className={`a-stamp rounded-full px-3 py-1.5 font-medium ${verdictStyle[company.verdict].badge}`} style={{ animationDelay: "850ms" }}>{verdictStyle[company.verdict].label}</span>
             )}
+            <OutlookChip ticker={company.ticker} size="md" />
           </div>
         </div>
         {m && (

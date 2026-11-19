@@ -1,0 +1,8 @@
+id,label,url,quote
+outlook-onesheet-segments,Outlook engine · Onesheet API: reported segments and KPIs (/kpis/segments-and-kpis),https://api.onesheet.pro/v1/kpis/segments-and-kpis,
+outlook-onesheet-profile,Outlook engine · Onesheet data pack: company profiles (segment and subsidiary descriptions quoted for each industry label),,
+outlook-statcan-36-10-0434,"Outlook engine · Statistics Canada, table 36-10-0434: GDP at basic prices by industry, monthly, chained 2017 dollars, seasonally adjusted",https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401,
+outlook-esdc-cops-2026,"Outlook engine · ESDC, Canadian Occupational Projection System 2026–2035: GDP by industry",https://open.canada.ca/data/en/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890,
+outlook-bls-ep-2-11,"Outlook engine · US Bureau of Labor Statistics, Employment Projections Table 2.11: employment and output by industry, 2025 and projected 2035",https://www.bls.gov/emp/tables/industry-employment-and-output.htm,
+outlook-onesheet-estimates,Outlook engine · Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates),https://api.onesheet.pro/v1/stocks/fundamentals,
+outlook-boc-inflation-target,"Outlook engine · Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation",https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/,

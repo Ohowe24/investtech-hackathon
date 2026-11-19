@@ -18,11 +18,12 @@ import type {
   OutlookIndustry,
   OutlookLens,
   OutlookMixRow,
+  OutlookMixShift,
   OutlookRules,
   OutlookSignal,
 } from "../../contract/outlook";
 import { parseCsv } from "../csv";
-import { cagr, directionOf, industryOutlook, marketWeights, median, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
+import { cagr, directionOf, industryOutlook, lagsEconomy, marketWeights, median, mixShift, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
 import { COMPANIES, LAYERS, SOURCES, THESIS } from "./plan";
 
 const read = (p: string) => readFileSync(p, "utf8");
@@ -49,6 +50,7 @@ const RULES: OutlookRules = {
   streetTo: 2028, // … to two years later
   minPeers: 2,
   momentumYears: 3,
+  mixFrom: 2022, // mix shift: FY2022, three fiscal years before the latest mix
 };
 
 // ---------------------------------------------------------------- inputs
@@ -262,10 +264,46 @@ function latestComplete(file: SegFile, metricIds: string[]): SegPeriod | null {
   );
 }
 
-function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookGeoRow[]; period: string | null; notes: string[] } {
+type MixFrom = { period: string; shares: (number | null)[] } | null;
+
+/** latest fiscal year with statements in data/store.json (for a company read as one industry, with no segments) */
+const store = JSON.parse(read("data/store.json")) as { companies: Record<string, { financials: { year: number }[] }> };
+const lastYear = (t: string) => {
+  const ys = (store.companies[t]?.financials ?? []).map((r) => r.year);
+  return ys.length ? Math.max(...ys) : null;
+};
+
+function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookGeoRow[]; period: string | null; from: MixFrom; notes: string[] } {
   const notes: string[] = [];
-  const file = JSON.parse(read(need(`engine/raw/segments/${ticker}.json`))) as SegFile;
   const rows = segmentMap.filter((r) => r.ticker === ticker && r.kind === "industry");
+  // "*": the company reports no usable revenue split, so the whole company is read as one industry
+  if (rows.length === 1 && rows[0].metric_id === "*") {
+    const r = rows[0];
+    const fy = lastYear(ticker);
+    const period = fy ? `FY${fy}` : null;
+    notes.push("Reports no revenue split, so the whole company is read as one industry.");
+    const mix: OutlookMixRow[] = [
+      {
+        segment: r.segment,
+        naics: orNull(r.naics),
+        naicsTitle: r.naics ? (industryOf.get(r.naics)?.title ?? null) : null,
+        revenue: null,
+        currency: "",
+        share: 1,
+        period: period ?? "",
+        quote: orNull(r.quote),
+        quoteSource: orNull(r.quote_source),
+        serves: orNull(r.serves),
+        note: orNull(r.note),
+        market: orNull(r.market),
+        marketTitle: null,
+        marketNote: orNull(r.market_note),
+        sourceIds: ["onesheet-profile"],
+      },
+    ];
+    return { mix, geography: [], period, from: { period: `FY${RULES.mixFrom}`, shares: [1] }, notes };
+  }
+  const file = JSON.parse(read(need(`engine/raw/segments/${ticker}.json`))) as SegFile;
   const p = latestComplete(file, rows.map((r) => r.metric_id));
   const period = p ? `FY${p.reportDate.slice(0, 4)}` : null;
   const values = rows.map((r) => (p ? p.metricsValues[r.metric_id] : null));
@@ -289,13 +327,49 @@ function companyMix(ticker: string): { mix: OutlookMixRow[]; geography: OutlookG
   }));
   if (!p) notes.push("No annual period reports every revenue segment, so the mix is unknown.");
 
+  // the same segments in the earlier year (rules.mixFrom), only if every one is reported
+  const f = file.data.data.find(
+    (q) => q.periodType === "Annual" && q.reportDate.startsWith(String(RULES.mixFrom)) && rows.every((r) => typeof q.metricsValues[r.metric_id] === "number"),
+  );
+  const from: MixFrom = f ? { period: `FY${RULES.mixFrom}`, shares: shares(rows.map((r) => f.metricsValues[r.metric_id])) } : null;
+
   const geoRows = segmentMap.filter((r) => r.ticker === ticker && r.kind === "geography");
   const g = geoRows.length ? latestComplete(file, geoRows.map((r) => r.metric_id)) : null;
   const gs = shares(geoRows.map((r) => (g ? g.metricsValues[r.metric_id] : null)));
   const geography: OutlookGeoRow[] = g
     ? geoRows.map((r, i) => ({ region: r.segment, share: gs[i], period: `FY${g.reportDate.slice(0, 4)}`, sourceIds: ["onesheet-segments"] }))
     : [];
-  return { mix, geography, period, notes };
+  return { mix, geography, period, from, notes };
+}
+
+/** How the mix moved from rules.mixFrom to the latest mix, read by industry (naics) or by client market (market). */
+function mixShiftOf(mix: OutlookMixRow[], from: MixFrom, codeOf: (r: OutlookMixRow) => string | null): OutlookMixShift | null {
+  if (!mix.length || !mix[0].period) return null;
+  const outlookOf = (code: string | null) => (code && industryOf.has(code) ? industryOf.get(code)!.outlook : null);
+  const rows = mix.map((r, i) => {
+    const code = codeOf(r);
+    return { segment: r.segment, code, title: code ? (industryOf.get(code)?.title ?? null) : null, from: from ? from.shares[i] : null, to: r.share };
+  });
+  const m = mixShift(rows.map((r) => ({ from: r.from, to: r.to, outlook: outlookOf(r.code) })), RULES.minCoverage);
+  const read = new Set(rows.filter((r) => outlookOf(r.code) != null).map((r) => r.code));
+  const left = rows.filter((r) => outlookOf(r.code) == null).map((r) => r.segment);
+  const note = !from
+    ? `Not every segment is reported for FY${RULES.mixFrom}, so the mix cannot be compared.`
+    : read.size === 1
+      ? "All revenue is read as one industry, so the mix cannot shift between industries."
+      : left.length
+        ? `${left.join(", ")} has no outlook here and is left out of both years.`
+        : null;
+  return {
+    from: `FY${RULES.mixFrom}`,
+    to: mix[0].period,
+    rows,
+    tailwindFrom: m.from,
+    tailwindTo: m.to,
+    shift: m.shift,
+    direction: directionOf(m.to, m.from, RULES.directionBand),
+    note,
+  };
 }
 
 // ---------------------------------------------------------------- Layer 2: narrative (quoted, never scored)
@@ -335,7 +409,7 @@ function narrativeOf(ticker: string): { items: OutlookCompany["narrative"]; note
 // ---------------------------------------------------------------- Layers 3 and 4: per company
 
 /** "Who they sell to": the same tailwind and direction, read by the client markets of each segment and deal. */
-function customerLens(mix: OutlookMixRow[], recent: OutlookDeal[], own: Omit<OutlookLens, "base">): OutlookLens {
+function customerLens(mix: OutlookMixRow[], from: MixFrom, recent: OutlookDeal[], own: Omit<OutlookLens, "base">): OutlookLens {
   const bad = mix.filter((r) => r.market && !["economy", "same"].includes(r.market) && !industryOf.has(r.market));
   if (bad.length) throw new Error(`outlook-segments.csv: client market not in the industry map: ${bad.map((r) => r.market).join(", ")}`);
 
@@ -392,12 +466,26 @@ function customerLens(mix: OutlookMixRow[], recent: OutlookDeal[], own: Omit<Out
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction: directionOf(dw.value, tw.value, RULES.directionBand),
     industryMix,
+    mixShift: base === "economy" ? null : mixShiftOf(mix, from, (r) => r.market),
     notes,
   };
 }
 
-const companies: OutlookCompany[] = COMPANIES.map((c) => {
-  const { mix, geography, period, notes } = companyMix(c.ticker);
+// The 5 featured companies get every layer. Every other company with mapped segments (the rest of the acquirer
+// ranking: candidates and index holdings) gets the revenue mix and tailwind only, for the stock scoring.
+const featured = new Set(COMPANIES.map((c) => c.ticker));
+const rankedNames = existsSync("data/companies.json")
+  ? new Map((JSON.parse(read("data/companies.json")) as { companies: { ticker: string; name: string }[] }).companies.map((c) => [c.ticker, c.name]))
+  : new Map<string, string>();
+const EXTRA = [...new Set(segmentMap.filter((r) => r.kind === "industry" && !featured.has(r.ticker)).map((r) => r.ticker))].map((t) => ({
+  ticker: t,
+  name: rankedNames.get(t) ?? t,
+}));
+
+const companies: OutlookCompany[] = [...COMPANIES, ...EXTRA].map((c) => {
+  const isFeatured = featured.has(c.ticker);
+  const { mix, geography, period, from, notes } = companyMix(c.ticker);
+  const shift = mixShiftOf(mix, from, (r) => r.naics);
   const outlookOf = (naics: string | null) => (naics ? (industryOf.get(naics)?.outlook ?? null) : null);
   const tw = weightedOutlook(mix.map((r) => ({ weight: r.share, outlook: outlookOf(r.naics) })), RULES.minCoverage);
 
@@ -407,14 +495,15 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     ? withTrend.filter((r) => industryOf.get(r.naics!)!.trend === "declining").reduce((sum, r) => sum + (r.share as number), 0)
     : null;
 
-  const recent = deals.filter((d) => d.ticker === c.ticker && d.recent);
+  const recent = isFeatured ? deals.filter((d) => d.ticker === c.ticker && d.recent) : [];
   const dw = weightedOutlook(recent.map((d) => ({ weight: 1, outlook: d.outlook })), RULES.minCoverage);
   const dealsWithOutlook = recent.filter((d) => d.outlook != null).length;
   const direction = directionOf(dw.value, tw.value, RULES.directionBand);
 
   // plain notes, computed from the data (direction notes belong to the "what they do" view)
   const ownNotes: string[] = [];
-  if (recent.length === 0) notes.push(`No disclosed acquisition in fiscal ${RULES.dealYears[0]}–${RULES.dealYears[2]}.`);
+  if (!isFeatured) notes.push("Read for the stock score only: revenue mix and tailwind. Deals and direction are read for the five featured companies.");
+  else if (recent.length === 0) notes.push(`No disclosed acquisition in fiscal ${RULES.dealYears[0]}–${RULES.dealYears[2]}.`);
   else if (dw.value == null)
     ownNotes.push(`Direction needs at least half of the recent deals to have an industry: ${dealsWithOutlook} of ${recent.length} do. The filings don't say what the others are.`);
   else if (dealsWithOutlook < recent.length)
@@ -440,7 +529,7 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     })
     .sort((a, b) => (b.share ?? -1) - (a.share ?? -1));
 
-  const narrative = narrativeOf(c.ticker);
+  const narrative = isFeatured ? narrativeOf(c.ticker) : { items: [], note: null };
   if (narrative.note) notes.push(narrative.note);
 
   const own = {
@@ -453,6 +542,7 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
     industryMix,
+    mixShift: shift,
     notes: ownNotes,
   };
 
@@ -472,9 +562,27 @@ const companies: OutlookCompany[] = COMPANIES.map((c) => {
     dealsWithOutlook,
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
+    lagsEconomy: lagsEconomy(tw.value, economyOutlook, RULES.directionBand),
+    mixShift: shift,
     narrative: narrative.items,
     directionNotes: ownNotes,
-    customer: customerLens(mix, recent, own),
+    customer: isFeatured
+      ? customerLens(mix, from, recent, own)
+      : {
+          base: "segments",
+          tailwind: null,
+          coverage: null,
+          trend: null,
+          decliningShare: null,
+          dealOutlook: null,
+          dealCoverage: 0,
+          directionGap: null,
+          direction: null,
+          industryMix: [],
+          mixShift: null,
+          notes: ["Client markets are read for the five featured companies only."],
+        },
+    featured: isFeatured,
     notes,
   };
 });
@@ -503,6 +611,41 @@ const out: OutlookData = {
 };
 
 writeFileSync("data/outlook.json", JSON.stringify(out, null, 2) + "\n");
+
+// ---------------------------------------------------------------- hand-off to the stock scoring (npm run engine)
+// One row per company: the tailwind and its gap to the whole economy, read by engine/industries/acquirers.ts as the
+// "Industry tailwind" score part and the "Industries not lagging the economy" check. Values are copied from above.
+const csvCell = (v: string | number | null) => {
+  const t = v == null ? "" : String(v);
+  return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
+};
+const csvOf = (head: string[], rows: (string | number | null)[][]) => [head.join(","), ...rows.map((r) => r.map(csvCell).join(","))].join("\n") + "\n";
+// sources the tailwind rests on, prefixed so they cannot collide with engine/input/sources.csv
+const TAILWIND_SOURCES = ["onesheet-segments", "onesheet-profile", "statcan-36-10-0434", "esdc-cops-2026", "bls-ep-2-11", "onesheet-estimates", "boc-inflation-target"];
+writeFileSync(
+  "engine/input/outlook-sources.csv",
+  csvOf(
+    ["id", "label", "url", "quote"],
+    out.sources.filter((s) => TAILWIND_SOURCES.includes(s.id)).map((s) => [`outlook-${s.id}`, `Outlook engine · ${s.label}`, s.url ?? "", ""]),
+  ),
+);
+writeFileSync(
+  "engine/input/outlook-tailwind.csv",
+  csvOf(
+    ["ticker", "period", "tailwind", "economy", "vs_economy", "coverage", "trend", "source_ids", "note"],
+    companies.map((c) => [
+      c.ticker,
+      c.mixPeriod,
+      c.tailwind,
+      economyOutlook,
+      c.tailwind != null && economyOutlook != null ? c.tailwind - economyOutlook : null,
+      c.coverage,
+      c.trend,
+      TAILWIND_SOURCES.map((id) => `outlook-${id}`).join(" "),
+      c.tailwind == null ? "Less than half of revenue is in industries with an outlook" : "",
+    ]),
+  ),
+);
 
 const pct = (v: number | null) => (v == null ? "—" : `${(v * 100).toFixed(1)}%`);
 console.log(`data/outlook.json: ${deals.length} deals, ${out.industries.length} industries, economy ${pct(economyOutlook)}/yr`);

@@ -243,7 +243,7 @@ export function weightedScore(parts: { weight: number; grade: number | null }[],
   return { value: Math.round(value * 100), coverage };
 }
 
-// ---------------------------------------------------------------- outlook engine (context, never a scored check)
+// ---------------------------------------------------------------- outlook engine (tailwind is scored in engine/industries/acquirers.ts)
 // Plain-language rules: engine/methodology.md, "Outlook engine". All growth rates are decimals per year.
 
 /**
@@ -314,6 +314,26 @@ export function weightedOutlook(rows: { weight: N; outlook: N }[], minCoverage: 
   return { value: known.reduce((s, r) => s + r.weight * r.outlook, 0) / knownWeight, coverage };
 }
 
+/**
+ * Mix shift: how much the tailwind moved because the revenue mix changed, with every industry's outlook held fixed.
+ * Runs weightedOutlook on the earlier shares and on the later shares (same outlooks, same coverage rule) and
+ * subtracts. Null if either side is null. Positive = revenue moved toward industries with a better outlook.
+ */
+export function mixShift(rows: { from: N; to: N; outlook: N }[], minCoverage: number): { from: number | null; to: number | null; shift: number | null } {
+  const a = weightedOutlook(rows.map((r) => ({ weight: r.from, outlook: r.outlook })), minCoverage).value;
+  const b = weightedOutlook(rows.map((r) => ({ weight: r.to, outlook: r.outlook })), minCoverage).value;
+  return { from: a, to: b, shift: a != null && b != null ? b - a : null };
+}
+
+/**
+ * Does the company's tailwind trail the whole economy by more than `band`? The same band as direction: gaps smaller
+ * than that are within the noise of the sources, so they are not held against a company. Null if either is missing.
+ */
+export function lagsEconomy(tailwind: N, economy: N, band: number): boolean | null {
+  if (!isNum(tailwind) || !isNum(economy) || !(band >= 0)) return null;
+  return tailwind < economy - band;
+}
+
 export type Direction = "toward" | "steady" | "away";
 
 /**
@@ -337,76 +357,6 @@ export function marketWeights(markets: string[]): { market: string | null; weigh
   const named = markets.map((m) => m.trim()).filter(Boolean);
   if (named.length === 0) return [{ market: null, weight: 1 }];
   return named.map((m) => ({ market: m === "?" ? null : m, weight: 1 / named.length }));
-}
-
-// ---------------------------------------------------------------- outlook reality check (backtest of the signals)
-
-/** Pairs where both values exist. */
-function pairs(x: N[], y: N[]): [number, number][] {
-  const out: [number, number][] = [];
-  for (let i = 0; i < Math.min(x.length, y.length); i++) if (isNum(x[i]) && isNum(y[i])) out.push([x[i] as number, y[i] as number]);
-  return out;
-}
-
-/** Pearson correlation over the pairs where both values exist. Null with fewer than 3 pairs or no variation. */
-export function pearson(x: N[], y: N[]): number | null {
-  const p = pairs(x, y);
-  if (p.length < 3) return null;
-  const mx = p.reduce((s, [a]) => s + a, 0) / p.length;
-  const my = p.reduce((s, [, b]) => s + b, 0) / p.length;
-  let sxy = 0, sxx = 0, syy = 0;
-  for (const [a, b] of p) {
-    sxy += (a - mx) * (b - my);
-    sxx += (a - mx) ** 2;
-    syy += (b - my) ** 2;
-  }
-  if (sxx === 0 || syy === 0) return null;
-  return sxy / Math.sqrt(sxx * syy);
-}
-
-/** Average ranks (1-based); ties share the average of their positions. */
-function ranks(v: number[]): number[] {
-  const idx = v.map((x, i) => [x, i] as const).sort((a, b) => a[0] - b[0]);
-  const r = new Array<number>(v.length);
-  for (let i = 0; i < idx.length; ) {
-    let j = i;
-    while (j + 1 < idx.length && idx[j + 1][0] === idx[i][0]) j++;
-    for (let k = i; k <= j; k++) r[idx[k][1]] = (i + j) / 2 + 1;
-    i = j + 1;
-  }
-  return r;
-}
-
-/**
- * Spearman rank correlation over the pairs where both values exist: +1 means the order of x predicts the order of y
- * exactly, 0 means no relation. Robust to outliers (a few industries with huge swings cannot dominate).
- * Null with fewer than 3 pairs.
- */
-export function spearman(x: N[], y: N[]): number | null {
-  const p = pairs(x, y);
-  if (p.length < 3) return null;
-  return pearson(ranks(p.map(([a]) => a)), ranks(p.map(([, b]) => b)));
-}
-
-/** Each value minus the mean of the values present (missing stay missing). */
-export function demean(values: N[]): (number | null)[] {
-  const v = values.filter(isNum);
-  if (v.length === 0) return values.map(() => null);
-  const mean = v.reduce((s, x) => s + x, 0) / v.length;
-  return values.map((x) => (isNum(x) ? x - mean : null));
-}
-
-/** Calendar-year averages of a monthly series ("YYYY-MM-DD" periods). A year is null unless all 12 months exist. */
-export function yearlyMeans(points: { period: string; value: N }[]): Record<number, number | null> {
-  const byYear = new Map<number, N[]>();
-  for (const p of points) {
-    const y = Number(p.period.slice(0, 4));
-    if (!byYear.has(y)) byYear.set(y, []);
-    byYear.get(y)!.push(p.value);
-  }
-  const out: Record<number, number | null> = {};
-  for (const [y, vals] of byYear) out[y] = vals.length === 12 ? meanStrict(vals) : null;
-  return out;
 }
 
 export interface RatingCounts {

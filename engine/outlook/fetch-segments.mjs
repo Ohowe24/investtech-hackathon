@@ -1,4 +1,4 @@
-// Outlook engine, Layer 1: downloads reported segments and KPIs for the 5 serial acquirers from the Onesheet API
+// Outlook engine, Layer 1: downloads reported segments, KPIs and profiles for the 5 serial acquirers from the Onesheet API
 // into engine/raw/segments/ (git-ignored). Read-only. Run from the repo root:
 //   npm run outlook:fetch   (add -- --fresh to re-download)
 // The key is read from .env.local (ONESHEET_API_KEY) and never printed.
@@ -13,8 +13,10 @@ const FRESH = process.argv.includes("--fresh");
 const OUT = "engine/raw/segments";
 mkdirSync(OUT, { recursive: true });
 
-/** our ticker -> Onesheet symbol */
+/** our ticker -> Onesheet symbol: the 5 Outlook companies (the organizers' candidates) */
 const SYMBOLS = { CSU: "CSU.TO", TOI: "TOI.V", WSP: "WSP.TO", TFII: "TFII.TO", ARE: "ARE.TO" };
+const PROFILES = "engine/raw/outlook/profiles";
+mkdirSync(PROFILES, { recursive: true });
 
 async function get(path, out) {
   if (!FRESH && existsSync(out) && statSync(out).size > 50) return "cached";
@@ -37,5 +39,8 @@ async function get(path, out) {
 }
 
 for (const [ticker, sym] of Object.entries(SYMBOLS)) {
-  console.log(ticker, "segments", await get(`/kpis/segments-and-kpis/${sym}`, `${OUT}/${ticker}.json`));
+  const seg = await get(`/kpis/segments-and-kpis/${encodeURIComponent(sym)}`, `${OUT}/${ticker}.json`);
+  // company profile: the segment and business descriptions quoted for each industry label
+  const prof = await get(`/stocks/fundamentals/${encodeURIComponent(sym)}/profile`, `${PROFILES}/${ticker}.json`);
+  console.log(ticker, sym, "segments", seg, "· profile", prof);
 }

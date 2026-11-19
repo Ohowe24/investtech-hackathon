@@ -204,19 +204,20 @@ How well each variable measures quality was judged on three things: (1) the rese
 
 ### Serial acquirers: weights (`engine/industries/acquirers.ts`)
 
-Grade = a straight line between two declared points (`rampGrade()`). **Full points need an exceptional result, not a good one**, so no real company gets near 100: the best score is CSU's 82. The pass lines of the checks earn a quarter to two thirds of a variable's points: clearing the bar is the floor of quality, not the top. (A first version gave full points at good levels; CSU then scored 100, which said nothing about how much better it could be.)
+Grade = a straight line between two declared points (`rampGrade()`). **Full points need an exceptional result, not a good one**, so no real company gets near 100. The pass lines of the checks earn a quarter to two thirds of a variable's points: clearing the bar is the floor of quality, not the top. (A first version gave full points at good levels; CSU then scored 100, which said nothing about how much better it could be.)
 
 | Variable | Weight | No points at | All points at | Assessment |
 |---|---|---|---|---|
-| FCF per share growth | **30** | −5%/yr | 25%/yr | The best single measure of what an acquirer delivers to owners: it nets out deals paid in shares and interest. Leonard's own choice of "one measure". Weakness: two end points only (FY2021, FY2025), so one odd year moves it; capped at 25% so BSP's +113% (three years since IPO) cannot dominate. The 7% check line earns 40% of the points. |
-| Return on capital (FCF ÷ debt + equity) | **25** | 0% | 30% | Strongest evidence for acquirers: return on capital with goodwill included separates winners from losers (Aktagon: 59 of 187 clear 12%). Single year, so it moves with one year's cash flow. 8% (the check) earns about a quarter; Aktagon's 12% earns 40%; only TOI (31%) gets full points. |
-| Share count change | **20** | +20% | −10% (buybacks) | The most replicated finding in merger research (paying in stock destroys value: Loughran & Vijh; Fuller, Netter & Stegemoller). Nearly independent of the other variables (ρ ≤ 0.21 with all but acquisition spend), so it adds information. Caveat: TOI's +42% is mostly a share-structure change in FY2022 (91.5M → 129.8M shares, flat since), not deal dilution; the data is kept as reported. |
-| Net debt ÷ 3-yr EBITDA | **15** | 4.0× | 0× (no net debt) | Measures risk, not skill. No large study sets an optimal level, so it weighs less, and the 3× must-pass check already removes the worst. Overlaps with return on capital (ρ = −0.63: high-return acquirers carry less debt). 3× earns a quarter of the points. |
-| Acquisitions ÷ operating cash flow (self-funding) | **10** | 200% | 50% or less | Above 100%, outside money paid for the deals; that is the "big bets" pattern Bain and NBER w10200 link to losses. Weak on its own (ρ with the total score −0.17). The ≥ 20% part is a fit test (is it an acquirer at all?), not quality, so it stays a must-pass check and earns no points. |
+| FCF per share growth | **27** | −5%/yr | 25%/yr | The best single measure of what an acquirer delivers to owners: it nets out deals paid in shares and interest. Leonard's own choice of "one measure". Weakness: two end points only (FY2021, FY2025), so one odd year moves it; capped at 25% so BSP's +113% (three years since IPO) cannot dominate. The 7% check line earns 40% of the points. |
+| Return on capital (FCF ÷ debt + equity) | **22.5** | 0% | 30% | Strongest evidence for acquirers: return on capital with goodwill included separates winners from losers (Aktagon: 59 of 187 clear 12%). Single year, so it moves with one year's cash flow. 8% (the check) earns about a quarter; Aktagon's 12% earns 40%; only TOI (31%) gets full points. |
+| Share count change | **18** | +20% | −10% (buybacks) | The most replicated finding in merger research (paying in stock destroys value: Loughran & Vijh; Fuller, Netter & Stegemoller). Nearly independent of the other variables (ρ ≤ 0.21 with all but acquisition spend), so it adds information. Caveat: TOI's +42% is mostly a share-structure change in FY2022 (91.5M → 129.8M shares, flat since), not deal dilution; the data is kept as reported. |
+| Net debt ÷ 3-yr EBITDA | **13.5** | 4.0× | 0× (no net debt) | Measures risk, not skill. No large study sets an optimal level, so it weighs less, and the 3× must-pass check already removes the worst. Overlaps with return on capital (ρ = −0.63: high-return acquirers carry less debt). 3× earns a quarter of the points. |
+| Acquisitions ÷ operating cash flow (self-funding) | **9** | 200% | 50% or less | Above 100%, outside money paid for the deals; that is the "big bets" pattern Bain and NBER w10200 link to losses. Weak on its own (ρ with the total score −0.17). The ≥ 20% part is a fit test (is it an acquirer at all?), not quality, so it stays a must-pass check and earns no points. |
+| Industry tailwind (Outlook engine) | **10** | 0%/yr (shrinking industries) | 3%/yr after inflation | Revenue-weighted outlook of the industries the company earns in (see "Outlook engine" below). Full points at about 1 point (the noise band) above the whole economy: beyond that the sources cannot tell industries apart well enough to pay for more, so one hot industry series (software) cannot run away with the points. Weighted by the team's choice, not by research: it is **not backtested**, so it carries the least. The other five keep their proportions on the remaining 90. |
 | Revenue growth | 0 | | | Size alone. Fast asset growth predicts *lower* returns (Cooper, Gulen & Schill); Aktagon finds revenue growth does not separate winners. Shown, not scored. |
 | Organic growth | 0 | | | A good measure, but only CSU, TOI and WSP report it. Weighting it would score three companies on a variable the other 31 lack. Shown, not scored. |
 
-**How much the weights matter:** ranking by equal weights instead gives almost the same order (ρ = 0.94 across 34 companies). The result does not hinge on the exact weights; the variables chosen do the work.
+**How much the weights matter:** with the earlier five variables, ranking by equal weights instead gave almost the same order (ρ = 0.94 across 34 companies). The result does not hinge on the exact weights; the variables chosen do the work.
 
 **What the score shows that the checks did not:** TFII (68) and CCL.B (65) score like good adds but are rejected by must-pass checks (acquisitions only 18% of cash flow; net debt 3.2×). The score says "high quality"; the gate says "not this index" or "too much debt". Among the adds, TOI (61) sits well below CSU (82), because of the share-count jump; ENGH (56) passes the checks but earns almost nothing for FCF per share growth.
 
@@ -254,11 +255,22 @@ Grades are by **position among the companies tested** (`peerGrade()`): the best 
 - **Acquirers:** returns on each acquisition, and organic growth for 31 of 34 companies.
 - **No test against later returns:** the engine has no per-company price history, so whether a higher score predicted a better stock return is not tested here. Onesheet's price-history endpoint would allow it.
 
-## Outlook engine (serial acquirers, context only)
+## Outlook engine (serial acquirers)
 
 Shown on the **Outlook engine** tab (`/analyze#outlook`). It answers one question per company: *are its industries,
-and the industries its recent deals are in, growing or shrinking, according to published sources?* It changes no
-Passes / Mixed / Fails and no weight. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
+and the industries its recent deals are in, growing or shrinking, according to published sources?*
+
+**In the scoring** (`engine/industries/acquirers.ts`): the company tailwind is a quality-score variable (10 points,
+see the weights table) and the check **"Industries not lagging the economy"** (tailwind minus the whole economy's
+outlook ≥ −1 point, `lagsEconomy`). The 1 point is the same noise band as direction: the sources cannot tell a smaller
+gap from no gap, so a company is not marked down for one is one of the scored checks behind Passes / Mixed / Fails. `npm run outlook` writes
+`engine/input/outlook-tailwind.csv` and `engine/input/outlook-sources.csv`; `npm run engine` reads them. A company
+without an outlook has no value (missing, never a fail). Direction is not scored.
+
+**Coverage:** only the five organizer candidates (CSU, TOI, WSP, TFII, ARE) have an outlook. Every other company in
+the ranking has no tailwind (missing, never 0): it is scored on the other variables with their weights rescaled, and
+the check has no data. A company that reports no revenue split can be read as one industry (a `*` row in
+`engine/input/outlook-segments.csv`). Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
 
 ### Inputs
 
@@ -298,6 +310,7 @@ Two data issues found and handled:
 | Red flag | — | Share of revenue in declining industries. |
 | Deal outlook | `weightedOutlook(equal weights, 50%)` | Recent deals = fiscal 2024–2026 (the latest fiscal year with a deal and the two before), not excluded. Each counts once: most prices are undisclosed, and those disclosed are in three currencies. Null if fewer than half have an industry with an outlook. |
 | Direction | `directionOf(deal outlook, tailwind, 1 point)` | ↗ toward stronger industries if the deals' outlook is more than 1 point a year above the tailwind, ↘ away if more than 1 point below, → steady otherwise. One point is below what the sources can tell apart. |
+| Mix shift | `mixShift(FY2022 share, FY2025 share, industry outlook, 50%)` | The tailwind computed on the FY2022 segment shares and on the FY2025 shares, with today's industry outlooks for both, and the difference. It isolates how far the revenue mix itself moved toward stronger or weaker industries (organic growth and acquisitions together), labelled with the same ±1 point band as direction. Shown only if every segment is reported in FY2022; segments without an outlook drop out of both years. Where every segment is in one industry (CSU, TOI, WSP by what they do) the shift is zero by construction. |
 
 ### Two views: "What they do" and "Who they sell to"
 
@@ -318,7 +331,7 @@ The same tailwind and direction are computed twice.
 
 ### What it does not do
 
-- **No backtest.** We have not shown this would have separated good acquirers from bad ones, so it is not a check.
+- **Not backtested.** Neither the signals nor the direction are tested against later growth or share prices (five companies are too few). That is why the tailwind carries the smallest weight in the score.
 - It rewards growing and stable industries and flags declining ones; it does not reward the fastest growing.
 - Industry codes describe what a business does. Software and engineering firms serve many client markets; those are
   shown as text ("serves", "clients") and not scored.
