@@ -57,7 +57,7 @@ describe("company briefing", () => {
     const ds = run.dataset;
     const pxt = ds.companies.find((c) => c.ticker === "PXT")!;
     const b = buildBrief(ds, pxt)!;
-    expect(b.beats[0].text).toBe("Of course, Max and Oscar. Allow me to brief you on Parex Resources.");
+    expect(b.beats[0].text).toBe("Of course, Max and Oscar. Here is Parex Resources.");
     expect(b.beats.map((x) => x.id)).toEqual(["intro", "company", "strengths", "weak", "score", "analysts", "charts", "table"]);
     expect(b.beats.find((x) => x.id === "charts")!.steps!.length).toBe(5);
     for (const c of ds.companies.filter((x) => x.model)) expectGrounded(ds, c);

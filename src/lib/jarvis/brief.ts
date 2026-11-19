@@ -211,6 +211,8 @@ const CHARS_PER_SECOND = 13;
 const reach = (passage: string, phrase: string) => Math.max(0, Math.round((passage.indexOf(phrase) / CHARS_PER_SECOND) * 1000));
 
 const COUNTRY: Record<string, string> = { CA: "Canada", US: "the United States", GB: "the United Kingdom", AU: "Australia", BM: "Bermuda" };
+/** "a Canadian oil and gas producer": one word where we have it, "based in …" where we don't. */
+const DEMONYM: Record<string, string> = { CA: "Canadian", US: "American", GB: "British", AU: "Australian" };
 const CURRENCY: Record<string, string> = { USD: "US dollars", CAD: "Canadian dollars", EUR: "euros", GBP: "pounds" };
 const MAGNITUDE: Record<string, string> = { K: "thousand", M: "million", B: "billion", T: "trillion" };
 
@@ -258,7 +260,7 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
   beat({
     id: "intro",
     label: "Intro",
-    text: `Of course, ${addressee}. Allow me to brief you on ${name}.`,
+    text: `Of course, ${addressee}. Here is ${name}.`,
     target: { kind: "head" },
     callout: {
       kind: "intro",
@@ -271,9 +273,11 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
 
   // 2. What the company is, and its size in its latest year.
   {
-    const where = c.hqCountry ? ` based in ${COUNTRY[c.hqCountry] ?? c.hqCountry}` : "";
+    const demonym = c.hqCountry ? DEMONYM[c.hqCountry] : undefined;
+    const what = demonym ? `${/^[AEIOU]/.test(demonym) ? "an" : "a"} ${demonym} ${whatItIs(c).replace(/^an? /, "")}` : whatItIs(c);
+    const where = !demonym && c.hqCountry ? ` based in ${COUNTRY[c.hqCountry] ?? c.hqCountry}` : "";
     const revenue = money(last?.revenue);
-    const text = `${short} is ${whatItIs(c)}${where}${revenue ? `, with ${revenue} of revenue in FY${last!.fiscalYear}` : ""}.`;
+    const text = `${short} is ${what}${where}${revenue ? ` with ${revenue} in FY${last!.fiscalYear} revenue` : ""}.`;
     const figures = [
       { label: "Revenue", value: revenue, phrase: "with" },
       { label: "EBITDA", value: money(last?.ebitda), phrase: "" },
@@ -364,7 +368,7 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
     id: "score",
     label: "Score",
     text: score != null
-      ? `Its quality score is ${score} out of 100.`
+      ? `Its quality score: ${score} out of 100.`
       : `It passes ${countWord(m.passed)} of the ${countWord(m.available)} checks it could be tested on.`,
     target: { kind: "stats" },
     callout: { kind: "score", score, passed: m.passed, available: m.available, checks: scored.map((k) => k.pass) },
@@ -379,7 +383,8 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
     beat({
       id: "analysts",
       label: "Analysts",
-      text: `${lean}: ${tally(buys, "buy")}, ${tally(a.hold, "hold")}, ${tally(sells, "sell")}.`,
+      // Holds are in the callout; the sentence keeps to the two ends.
+      text: `${lean}: ${tally(buys, "buy")}, ${tally(sells, "sell")}.`,
       target: { kind: "find", text: "What analysts say" },
       callout: {
         kind: "analysts",
@@ -399,12 +404,12 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
 
   // 7. A light pass over the charts: each one lit as it's named, no figures read out.
   if (first && last && first !== last) {
-    const text = "Below, the charts trace its revenue, margins, cash flow, share count and debt.";
+    const text = "The charts cover revenue, margins, cash flow, shares and debt.";
     const tour = [
       { title: "Revenue and growth", phrase: "revenue" },
       { title: "Margins", phrase: "margins" },
       { title: "Cash in, cash out", phrase: "cash flow" },
-      { title: "Share count", phrase: "share count" },
+      { title: "Share count", phrase: "shares" },
       { title: "Debt load", phrase: "debt" },
     ];
     // Timed on the spoken words (FY2021 is read "fiscal 2021", which is longer).
@@ -422,7 +427,7 @@ export function buildBrief(ds: Dataset, c: Company, addressee = ADDRESSEE): Brie
     beat({
       id: "table",
       label: "By year",
-      text: `And at the bottom, every figure by year. That is ${short}, in brief. ${CLOSING_QUESTION}`,
+      text: `Below that, every figure by year. ${CLOSING_QUESTION}`,
       target: { kind: "find", text: "All figures by year" },
       callout: {
         kind: "note",
