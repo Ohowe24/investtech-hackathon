@@ -9,6 +9,7 @@
     "lint": "eslint",
     "engine": "tsx engine/build.ts",
     "outlook": "tsx engine/outlook/build-outlook.ts",
+    "outlook:fetch": "node engine/outlook/fetch-segments.mjs && tsx engine/outlook/fetch-signals.ts",
     "test": "vitest run",
     "refresh-index": "node scripts/refresh-index.mjs",
     "onesheet": "node engine/onesheet-try.mjs",

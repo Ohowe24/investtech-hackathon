@@ -1,0 +1,28 @@
+ticker,kind,metric_id,segment,naics,serves,quote,quote_source,note
+CSU,industry,maintenance_and_other_recurring_revenue,Maintenance and other recurring,513210,,"Constellation Software acquires, manages and builds vertical market software businesses",Onesheet company profile,"Revenue lines are types of software revenue, not industries; every line belongs to the software business."
+CSU,industry,professional_services_revenue,Professional services,513210,,"Constellation Software acquires, manages and builds vertical market software businesses",Onesheet company profile,
+CSU,industry,licenses_revenue,Licenses,513210,,"Constellation Software acquires, manages and builds vertical market software businesses",Onesheet company profile,
+CSU,industry,hardware_and_other_revenue,Hardware and other,513210,,"Constellation Software acquires, manages and builds vertical market software businesses",Onesheet company profile,"Hardware resold inside software solutions; counted with the software business it belongs to."
+TOI,industry,maintenance_and_other_recurring_revenue,Maintenance and other recurring,513210,,"Topicus.com acquires, manages and builds vertical market software businesses",Onesheet company profile,"Revenue lines are types of software revenue, not industries; every line belongs to the software business."
+TOI,industry,professional_services_revenue,Professional services,513210,,"Topicus.com acquires, manages and builds vertical market software businesses",Onesheet company profile,
+TOI,industry,licenses_revenue,Licenses,513210,,"Topicus.com acquires, manages and builds vertical market software businesses",Onesheet company profile,
+TOI,industry,hardware_and_other_revenue,Hardware and other,513210,,"Topicus.com acquires, manages and builds vertical market software businesses",Onesheet company profile,"Hardware resold inside software solutions; counted with the software business it belongs to."
+WSP,industry,transportation_and_infrastructure_revenue,Transport & Infrastructure,541330,"rail, transit, aviation, highways, bridges, tunnels, water, maritime and urban infrastructure","Advisory, planning, design and project management for rail, transit, aviation, highways, bridges, tunnels, water, maritime and urban infrastructure",Onesheet company profile,"WSP's sectors are its clients' markets; the work itself is engineering services."
+WSP,industry,earth_and_environment_revenue,Earth & Environment,541330,"permitting, remediation, mining, water","Earth-science and environmental services, including permitting, compliance, remediation, geotechnical and mining engineering, water resources and impact assessments",Onesheet company profile,"Mixes engineering with environmental consulting (541620); WSP reports it as one sector, so it stays with engineering."
+WSP,industry,property_and_buildings_revenue,Property & Buildings,541330,"commercial buildings, social and critical infrastructure","Technical and advisory services for commercial buildings and social and critical infrastructure",Onesheet company profile,
+WSP,industry,power_and_energy_revenue,Power & Energy,541330,"renewables, nuclear, natural gas, power plants, transmission, distribution","Engineering for energy projects, including renewables, nuclear, natural gas, power plants, transmission, substations, distribution and storage",Onesheet company profile,
+TFII,industry,truckload_revenue_before_fuel_surcharge,Truckload,484,"specialized and conventional truckload","Full-load trucking, including specialized and Canadian based conventional truckload",Onesheet company profile,"Revenue before fuel surcharge, as reported."
+TFII,industry,less_than_truckload_revenue_before_fuel_surcharge,Less-than-truckload,484122,,"Pickup, consolidation and delivery of smaller shipments",Onesheet company profile,"Revenue before fuel surcharge, as reported."
+TFII,industry,logistics_revenue_before_fuel_surcharge,Logistics,488510,"brokerage, last-mile delivery, warehousing","Asset-light logistics, last-mile delivery, brokerage and warehousing",Onesheet company profile,"Mixes brokerage (488510), last-mile delivery (492) and warehousing (493); labelled by brokerage, the asset-light core."
+TFII,industry,package_and_courier_revenue_before_fuel_surcharge,Package and courier,492110,,"Package and courier delivery operations within the Less-Than-Truckload segment",Onesheet company profile,"Revenue before fuel surcharge, as reported."
+ARE,industry,construction_revenue,Construction,237,"civil, urban transit, nuclear, utility and industrial projects","Construction of civil, urban transportation, nuclear, utility and industrial infrastructure",Onesheet company profile,"Mostly heavy and civil engineering construction; the industrial building part (236210) is not reported separately."
+ARE,industry,concessions_revenue,Concessions,4881,airports,"invests in and operates infrastructure such as airports",Onesheet company profile,
+WSP,geography,canada_revenue,Canada,,,,,
+WSP,geography,americas_revenue,Americas (US and Latin America),,,,,
+WSP,geography,emeia_revenue,"Europe, Middle East, India, Africa",,,,,
+WSP,geography,apac_revenue,"Australia, New Zealand, Asia",,,,,
+TOI,geography,the_netherlands_revenue,Netherlands,,,,,
+TOI,geography,rest_of_world_revenue,Rest of world,,,,,
+ARE,geography,canada_revenue,Canada,,,,,
+ARE,geography,usa_revenue,United States,,,,,
+ARE,geography,international_revenue,International,,,,,

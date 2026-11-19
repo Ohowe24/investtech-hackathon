@@ -225,3 +225,52 @@ Grades are by **position among the companies tested** (`peerGrade()`): the best 
 - **E&P:** reserve life, finding and development cost, recycle ratio, production per share and breakeven price are the industry's own quality measures. None is in the statements data. Return on capital and the five-year margin are the closest proxies.
 - **Acquirers:** returns on each acquisition, and organic growth for 31 of 34 companies.
 - **No test against later returns:** the engine has no per-company price history, so whether a higher score predicted a better stock return is not tested here. Onesheet's price-history endpoint would allow it.
+
+## Outlook engine (serial acquirers, context only)
+
+Shown on the **Outlook engine** tab (`/analyze#outlook`). It answers one question per company: *are its industries,
+and the industries its recent deals are in, growing or shrinking, according to published sources?* It changes no
+Passes / Mixed / Fails and no weight. Plan: `docs/OUTLOOK_ENGINE.md`. Build: `npm run outlook:fetch` then `npm run outlook`.
+
+### Inputs
+
+| Data | Source | File |
+|---|---|---|
+| Industry code per deal, with the verbatim text behind it | Claude-proposed from the deal's SEDAR quote, Onesheet deal summary or Onesheet company profile; approved by a person | `engine/input/outlook-labels.csv` |
+| Revenue by segment, latest fiscal year where every segment is reported (FY2025) | Onesheet API `/kpis/segments-and-kpis` | `engine/raw/segments/` (fetched) + `engine/input/outlook-segments.csv` (industry per segment, with quote) |
+| Recent momentum, Canada | Statistics Canada table 36-10-0434: GDP at basic prices by industry, monthly, chained 2017 dollars, seasonally adjusted at annual rates (Web Data Service) | `engine/raw/outlook/statcan-36100434-*.json` |
+| Official projection, Canada | ESDC Canadian Occupational Projection System 2026–2035, real GDP by industry, yearly levels (open.canada.ca) | `engine/raw/outlook/cops-gdp-2026-2035.csv` |
+| Official projection, US | BLS Employment Projections Table 2.11, real output by industry, 2025 and projected 2035 | `engine/input/outlook-bls-ep.csv` |
+| Street forecast | Onesheet API analyst revenue estimates for listed Canadian peers named in the industry map | `engine/raw/outlook/estimates/` |
+| Which published series stands for each industry code, and which peers | Declared once, with the reason | `engine/input/outlook-industry-map.csv` |
+
+Two data issues found and handled:
+- **COPS growth-rate file is misaligned.** In `industrial_aagr_tcam_par_secteur_2026_2035.csv`, each growth rate sits on the
+  row above its industry (e.g. the 5.0% shown for couriers is warehousing's), and the NAICS column is shifted too. We do
+  not use it. We compute growth from the same release's GDP-levels file, whose rows are consistent.
+- **bls.gov refuses scripts.** The 12 rows we use were copied from Table 2.11 on 2026-11-19. The copy was checked against the
+  live table by SHA-256 fingerprint (`c92d89f7…ab84`), and a test recomputes every published 10-year rate from the copied
+  levels (`engine/outlook.test.ts`).
+
+### Formulas (`engine/metrics.ts`, tests in `engine/outlook.test.ts`)
+
+| Step | Function | Rule |
+|---|---|---|
+| Momentum | `trailingMomentum(monthly, 3)` | Average of the latest 12 months vs the 12 months ending 3 years earlier, as a yearly rate. Averages smooth single-month noise. |
+| Projections | `cagr(level2025, level2035, 10)` | Yearly rate between the published 2025 and 2035 levels (COPS GDP, BLS output). |
+| Street | `median` of each peer's `cagr(estimate FY2026, estimate FY2028, 2)`, then `realGrowth(·, 2%)` | Needs at least 2 peers with estimates. Analysts' revenue is in dollars of the day, so the Bank of Canada 2% inflation target is removed exactly: (1 + g) / 1.02 − 1. The official figures are already after inflation. |
+| Industry outlook | `industryOutlook(signals, 2)` | Median of the signals that exist; at least 2. The median keeps one odd source (a small peer group, a cyclical trough) from deciding. |
+| Trend | `trendOf(outlook, economy)` | **Growing:** at least the whole economy's outlook, measured the same way (median of StatCan all industries, COPS all industries, BLS all industries; the value is shown on the page). **Stable:** 0 up to that. **Declining:** below 0. The bar is the economy rather than a fixed 2%, because the signals are after inflation; a fixed 2% inflation bar only fits figures that include inflation. |
+| Tailwind | `weightedOutlook(revenue share × industry outlook, 50%)` | Revenue-weighted outlook of the industries the company earns in. Shares come from the reported segments (`shares`). Null if less than half the revenue has an outlook; coverage is shown. |
+| Red flag | — | Share of revenue in declining industries. |
+| Deal outlook | `weightedOutlook(equal weights, 50%)` | Recent deals = fiscal 2024–2026 (the latest fiscal year with a deal and the two before), not excluded. Each counts once: most prices are undisclosed, and those disclosed are in three currencies. Null if fewer than half have an industry with an outlook. |
+| Direction | `directionOf(deal outlook, tailwind, 1 point)` | ↗ toward stronger industries if the deals' outlook is more than 1 point a year above the tailwind, ↘ away if more than 1 point below, → steady otherwise. One point is below what the sources can tell apart. |
+
+### What it does not do
+
+- **No backtest.** We have not shown this would have separated good acquirers from bad ones, so it is not a check.
+- It rewards growing and stable industries and flags declining ones; it does not reward the fastest growing.
+- Industry codes describe what a business does. Software and engineering firms serve many client markets; those are
+  shown as text ("serves", "clients") and not scored.
+- Signals describe Canada and the US; Topicus earns in Europe and WSP partly abroad (the page says so per company).
+- Constellation and Topicus disclose only material deals. Analysts' revenue estimates include acquisitions.

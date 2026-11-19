@@ -15,8 +15,8 @@ export const LAYERS: OutlookLayer[] = [
     question: "Which industries does each company own and buy?",
     steps: [
       { id: "deals", label: "Disclosed deals", status: "done", detail: "Acquisitions with SEDAR quotes, copied from engine/input/deals.json." },
-      { id: "deal-labels", label: "Deal industry labels", status: "in-progress", detail: "A NAICS code per deal, with the quote that justifies it, approved by a person (engine/input/outlook-labels.csv). Proposed; awaiting approval." },
-      { id: "segments", label: "Revenue by segment", status: "planned", detail: "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each segment mapped to NAICS." },
+      { id: "deal-labels", label: "Deal industry labels", status: "in-progress", detail: "A NAICS code per deal with the quote that justifies it (engine/input/outlook-labels.csv). Proposed; awaiting approval." },
+      { id: "segments", label: "Revenue by segment", status: "done", detail: "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each mapped to an industry with a quote (engine/input/outlook-segments.csv)." },
     ],
   },
   {
@@ -24,9 +24,9 @@ export const LAYERS: OutlookLayer[] = [
     title: "2 · Industry signals",
     question: "Where is each industry heading, according to published sources?",
     steps: [
-      { id: "momentum", label: "Recent momentum", status: "planned", detail: "Statistics Canada GDP by industry (table 36-10-0434), 3-year yearly rate." },
-      { id: "projection", label: "Official projection", status: "planned", detail: "US BLS Employment Projections and Canada COPS outlook by industry." },
-      { id: "street", label: "Street forecast", status: "planned", detail: "Median analyst revenue growth estimate of the public companies in that industry (Onesheet estimates)." },
+      { id: "momentum", label: "Recent momentum", status: "done", detail: "Statistics Canada real GDP by industry (36-10-0434): latest 12 months vs 3 years earlier, yearly rate." },
+      { id: "projection", label: "Official projections", status: "done", detail: "Canada: ESDC COPS real GDP 2025 → 2035. United States: BLS real output 2025 → 2035 (Table 2.11)." },
+      { id: "street", label: "Street forecast", status: "done", detail: "Median analyst revenue growth of listed Canadian peers (Onesheet estimates), after inflation." },
       { id: "narrative", label: "Narrative", status: "planned", detail: "News and earnings-call quotes summarized by Claude. Shown as text, never scored." },
     ],
   },
@@ -35,8 +35,8 @@ export const LAYERS: OutlookLayer[] = [
     title: "3 · Company tailwind",
     question: "How strong are the industries this company earns its money in?",
     steps: [
-      { id: "blend", label: "Industry outlook", status: "planned", detail: "One declared blend of the signals (start: median of the available ones), in engine/metrics.ts with tests." },
-      { id: "weighting", label: "Revenue-weighted tailwind", status: "planned", detail: "Share of revenue × industry outlook, with the share of revenue covered shown." },
+      { id: "blend", label: "Industry outlook", status: "done", detail: "Median of the available signals (at least 2), compared with the whole economy measured the same way." },
+      { id: "weighting", label: "Revenue-weighted tailwind", status: "done", detail: "Share of revenue × industry outlook, with the share of revenue covered shown." },
     ],
   },
   {
@@ -44,18 +44,20 @@ export const LAYERS: OutlookLayer[] = [
     title: "4 · Direction",
     question: "Are the new deals heading toward stronger or weaker industries than the existing business?",
     steps: [
-      { id: "compare", label: "Deals vs base", status: "planned", detail: "Outlook of the last 3 years' deals vs the existing revenue mix: toward ↗, steady →, or away ↘." },
+      { id: "compare", label: "Deals vs base", status: "done", detail: "Outlook of the last 3 fiscal years' deals vs the tailwind: toward ↗, steady →, or away ↘ (±1 point)." },
     ],
   },
 ];
 
 export const SOURCES: OutlookSource[] = [
-  { id: "deals", label: "Onesheet data pack deals with SEDAR quotes (engine/input/deals.json)", status: "fetched" },
-  { id: "onesheet-segments", label: "Onesheet segments and KPIs", url: "https://api.onesheet.pro/v1/kpis/segments-and-kpis", status: "planned" },
-  { id: "statcan-36-10-0434", label: "Statistics Canada, GDP at basic prices by industry (36-10-0434)", url: "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401", status: "planned" },
-  { id: "bls-ep", label: "US BLS Employment Projections, output and employment by industry", url: "https://www.bls.gov/emp/", status: "planned" },
-  { id: "esdc-cops", label: "Canadian Occupational Projection System (ESDC)", url: "https://occupations.esdc.gc.ca/sppc-cops/", status: "planned" },
-  { id: "onesheet-estimates", label: "Onesheet analyst estimates", url: "https://api.onesheet.pro/v1/stocks/fundamentals", status: "planned" },
+  { id: "deals", label: "Onesheet data pack: disclosed deals with SEDAR quotes (engine/input/deals.json), labelled in engine/input/outlook-labels.csv", status: "fetched" },
+  { id: "onesheet-segments", label: "Onesheet API: reported segments and KPIs (/kpis/segments-and-kpis)", url: "https://api.onesheet.pro/v1/kpis/segments-and-kpis", status: "fetched" },
+  { id: "onesheet-profile", label: "Onesheet data pack: company profiles (segment and subsidiary descriptions quoted for each industry label)", status: "fetched" },
+  { id: "statcan-36-10-0434", label: "Statistics Canada, table 36-10-0434: GDP at basic prices by industry, monthly, chained 2017 dollars, seasonally adjusted", url: "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401", status: "fetched" },
+  { id: "esdc-cops-2026", label: "ESDC, Canadian Occupational Projection System 2026–2035: GDP by industry", url: "https://open.canada.ca/data/en/dataset/e80851b8-de68-43bd-a85c-c72e1b3a3890", status: "fetched", detail: "Growth computed from the yearly GDP levels; the published growth-rate file is misaligned by one row, so it is not used." },
+  { id: "bls-ep-2-11", label: "US Bureau of Labor Statistics, Employment Projections Table 2.11: employment and output by industry, 2025 and projected 2035", url: "https://www.bls.gov/emp/tables/industry-employment-and-output.htm", status: "fetched", detail: "Rows copied on 2026-11-19 (bls.gov refuses scripts); checked against the live table by fingerprint and by recomputing every published rate." },
+  { id: "onesheet-estimates", label: "Onesheet API: analyst revenue estimates for listed Canadian peers (/stocks/fundamentals/{symbol}/estimates)", url: "https://api.onesheet.pro/v1/stocks/fundamentals", status: "fetched" },
+  { id: "boc-inflation-target", label: "Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation", url: "https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/", status: "fetched" },
 ];
 
 /** The serial-acquirer candidates the engine covers first. Names are labels, not data. */

@@ -242,3 +242,88 @@ export function weightedScore(parts: { weight: number; grade: number | null }[],
   const value = known.reduce((s, p) => s + p.weight * (p.grade as number), 0) / knownWeight;
   return { value: Math.round(value * 100), coverage };
 }
+
+// ---------------------------------------------------------------- outlook engine (context, never a scored check)
+// Plain-language rules: engine/methodology.md, "Outlook engine". All growth rates are decimals per year.
+
+/**
+ * Recent momentum of a monthly series: the average of the latest 12 months against the average of the 12 months
+ * ending `years` years earlier, as a yearly rate. Needs at least 12 × (years + 1) points, oldest first; null if any
+ * month in either window is missing or not positive. 12-month averages smooth out single-month noise.
+ */
+export function trailingMomentum(monthly: N[], years: number): number | null {
+  const need = 12 * (years + 1);
+  if (years <= 0 || monthly.length < need) return null;
+  const recent = monthly.slice(-12);
+  const earlier = monthly.slice(-need, -need + 12);
+  const a = meanStrict(earlier);
+  const b = meanStrict(recent);
+  if (a == null || b == null) return null;
+  return cagr(a, b, years);
+}
+
+/**
+ * Turn a growth rate that includes inflation into one that does not: (1 + nominal) / (1 + inflation) − 1.
+ * Used only for analyst revenue estimates (in dollars of the day), so they line up with the official
+ * figures, which are already after inflation (chained dollars).
+ */
+export function realGrowth(nominal: N, inflation: number): number | null {
+  if (!isNum(nominal) || !Number.isFinite(inflation) || inflation <= -1) return null;
+  return (1 + nominal) / (1 + inflation) - 1;
+}
+
+/** An industry's outlook: the median of the published signals that exist. Null if fewer than `minSignals` exist. */
+export function industryOutlook(signals: N[], minSignals: number): number | null {
+  if (signals.filter(isNum).length < Math.max(1, minSignals)) return null;
+  return median(signals);
+}
+
+export type Trend = "growing" | "stable" | "declining";
+
+/**
+ * Growing: at least as fast as the whole economy measured the same way. Stable: growing, but slower than the economy.
+ * Declining: shrinking (below 0). Null if either figure is missing.
+ */
+export function trendOf(outlook: N, economy: N): Trend | null {
+  if (!isNum(outlook) || !isNum(economy)) return null;
+  if (outlook < 0) return "declining";
+  return outlook >= economy ? "growing" : "stable";
+}
+
+/** Each value's share of the total. Null for all if any value is missing or negative, or the total is not positive. */
+export function shares(values: N[]): (number | null)[] {
+  if (values.length === 0 || values.some((v) => !isNum(v) || (v as number) < 0)) return values.map(() => null);
+  const total = (values as number[]).reduce((s, v) => s + v, 0);
+  if (total <= 0) return values.map(() => null);
+  return (values as number[]).map((v) => v / total);
+}
+
+/**
+ * Weighted average outlook. Rows without an outlook or a weight drop out and the remaining weights are rescaled,
+ * but only if the rows with data carry at least `minCoverage` of the total weight; otherwise the value is null.
+ * Coverage is the share of total weight that had an outlook (0-1). Used for the company tailwind (weights = revenue
+ * shares) and for the outlook of recent deals (equal weights).
+ */
+export function weightedOutlook(rows: { weight: N; outlook: N }[], minCoverage: number): { value: number | null; coverage: number } {
+  const total = rows.reduce((s, r) => s + (isNum(r.weight) && r.weight > 0 ? r.weight : 0), 0);
+  if (total <= 0) return { value: null, coverage: 0 };
+  const known = rows.filter((r) => isNum(r.weight) && r.weight > 0 && isNum(r.outlook)) as { weight: number; outlook: number }[];
+  const knownWeight = known.reduce((s, r) => s + r.weight, 0);
+  const coverage = knownWeight / total;
+  if (knownWeight <= 0 || coverage < minCoverage) return { value: null, coverage };
+  return { value: known.reduce((s, r) => s + r.weight * r.outlook, 0) / knownWeight, coverage };
+}
+
+export type Direction = "toward" | "steady" | "away";
+
+/**
+ * Are recent deals in stronger or weaker industries than the business already owned?
+ * toward: deals' outlook is more than `band` above the base; away: more than `band` below; else steady.
+ */
+export function directionOf(dealOutlook: N, baseOutlook: N, band: number): Direction | null {
+  if (!isNum(dealOutlook) || !isNum(baseOutlook) || !(band >= 0)) return null;
+  const gap = dealOutlook - baseOutlook;
+  if (gap > band) return "toward";
+  if (gap < -band) return "away";
+  return "steady";
+}

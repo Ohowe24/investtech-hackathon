@@ -1,6 +1,6 @@
 # Outlook engine (serial acquirers)
 
-**Status:** Layer 1 in progress. The tab, data shapes, deal list and **proposed** deal labels exist (awaiting Oscar's approval). No outlook numbers exist yet.
+**Status:** built (Nov 19). All four layers compute from published sources (`npm run outlook:fetch`, `npm run outlook`). Open: deal labels await Oscar's approval; the narrative (never scored) is not built. Rules and formulas: `engine/methodology.md`, "Outlook engine".
 **Owner:** Oscar. **Target:** the final on Nov 24.
 
 ## The idea in one line
@@ -62,8 +62,8 @@ how much of revenue is covered. The industry outlook is one declared blend of th
 start with the **median of the available signals**, simplest to defend). The formula goes in `engine/metrics.ts`
 with tests, and in `engine/methodology.md`.
 
-Classify each industry: **growing** (outlook ≥ 2%/yr, the inflation bar used elsewhere), **stable** (0 to 2%),
-**declining** (< 0). Thresholds are declared in code with the reason.
+Classify each industry: **growing** (outlook at least the whole economy's, measured the same way), **stable** (0 up to that),
+**declining** (< 0). The signals are after inflation, so the economy is the bar instead of a fixed 2% inflation bar (see methodology.md).
 
 ### Layer 4: Direction (the unique part)
 
