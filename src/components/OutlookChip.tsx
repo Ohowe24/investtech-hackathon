@@ -1,7 +1,7 @@
 "use client";
 
 // A small Outlook engine chip (tailwind + direction) for the companies the engine reads (data/outlook.json).
-// The tailwind is scored (10-point score part and the "Industries growing ≥ the economy" check). Formats engine fields; no math.
+// The tailwind is scored (10-point score part and the "Industries not lagging the economy" check). Formats engine fields; no math.
 
 import type { Direction, OutlookCompany, OutlookData, Trend } from "@contract/outlook";
 import outlookJson from "@data/outlook.json";

@@ -235,7 +235,7 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
             <HeaderStat value={`${outlook.companies.length}`} label={`companies · ${outlook.industries.length} industries`} />
           </dl>
         </div>
-        <p className="mt-4 text-[11.5px] text-faint">Published sources only · after inflation · not backtested · not investment advice</p>
+        <p className="mt-4 text-[11.5px] text-faint">Published sources only · after inflation · not backtested, so it carries only 10 of the 100 score points · not investment advice</p>
       </section>
 
       <FeaturedCards economy={economy} selected={company.ticker} onSelect={setTicker} />
@@ -800,6 +800,29 @@ function DealLabels({ deals }: { deals: OutlookDeal[] }) {
 // ---------------------------------------------------------------- method, limits, build status
 
 /** one dot per company: tailwind (x) against the direction gap (y); the steady band and the economy bar drawn from the rules */
+/** the direction result in one sentence, counted from the engine's calls (no math beyond counting) */
+function DirectionFinding({ lens }: { lens: LensKey }) {
+  const calls = FEATURED.map((c) => ({ c, d: viewOf(c, lens).direction }));
+  const called = calls.filter((x) => x.d != null);
+  const away = called.filter((x) => x.d === "away").map((x) => x.c.ticker);
+  const toward = called.filter((x) => x.d === "toward").map((x) => x.c.ticker);
+  const none = calls.filter((x) => x.d == null).map((x) => x.c.ticker);
+  const band = `±${(R.directionBand * 100).toFixed(0)} point`;
+  const head = !called.length
+    ? "Too few deals name an industry to call a direction."
+    : away.length
+      ? `${away.join(", ")} ${away.length === 1 ? "is" : "are"} buying into weaker ${lens === "own" ? "industries" : "markets"} than ${away.length === 1 ? "it owns" : "they own"}.`
+      : toward.length
+        ? `${toward.join(", ")} ${toward.length === 1 ? "is" : "are"} moving toward stronger ${lens === "own" ? "industries" : "markets"}; no one is drifting into weaker ones.`
+        : `No one is drifting: all ${called.length} with enough deals keep buying where they already earn, within ${band}.`;
+  return (
+    <div className="mb-4 rounded-lg border border-line bg-soft px-4 py-3">
+      <div className="text-[14px] font-semibold text-ink">{head}</div>
+      {none.length > 0 && <div className="mt-0.5 text-[12px] text-faint">{none.join(", ")}: too few recent deals name {lens === "own" ? "an industry" : "a client market"} to say.</div>}
+    </div>
+  );
+}
+
 function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; economy: number | null; selected: string; onSelect: (t: string) => void }) {
   const W = 980, H = 270, P = { l: 66, r: 16, t: 14, b: 34 };
   const rows = FEATURED.map((c) => ({ c, v: viewOf(c, lens) }));
@@ -823,6 +846,7 @@ function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; econom
   const xTicks = [...new Set([x0, x1].map((t) => Math.round(t * 1000) / 1000))];
   return (
     <div>
+      <DirectionFinding lens={lens} />
       <p className="mb-3 text-[12.5px] text-muted">
         Right = earns in faster-growing {lens === "own" ? "industries" : "markets"}. Up = recent deals head toward stronger ones, down = toward weaker ones.
         Inside the grey band (±{(band * 100).toFixed(0)} point) the direction reads “steady”.
@@ -891,14 +915,13 @@ function MixBar({ c }: { c: OutlookCompany }) {
   );
 }
 
-/** the scored check, read from the trend: "growing" means at least the whole economy, the check's own bar */
+/** the scored check, as the engine computed it: fails only more than the noise band below the whole economy */
 function CheckMark({ c }: { c: OutlookCompany }) {
-  if (!c.trend) return <span className="text-faint">no tailwind: check has no data</span>;
-  const pass = c.trend === "growing";
-  return (
-    <span className={pass ? "text-teal" : "text-bad"}>
-      {pass ? "✓ passes" : "✗ fails"} <span className="text-muted">growing ≥ economy</span>
-    </span>
+  if (c.lagsEconomy == null) return <span className="text-faint">no tailwind: check has no data</span>;
+  return c.lagsEconomy ? (
+    <span className="text-bad">✗ <span className="text-muted">lags the economy by over {(R.directionBand * 100).toFixed(0)} pt</span></span>
+  ) : (
+    <span className="text-teal">✓ <span className="text-muted">not lagging the economy</span></span>
   );
 }
 
@@ -947,7 +970,7 @@ function AllCompanies({ economy, focus }: { economy: number | null; focus: strin
   useEffect(() => {
     if (focus) document.getElementById(`outlook-all-${focus}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [focus]);
-  const passing = rows.filter((c) => c.trend === "growing").length;
+  const passing = rows.filter((c) => c.lagsEconomy === false).length;
   if (!open)
     return (
       <button onClick={() => setOpen(true)} aria-expanded={false}
@@ -955,7 +978,7 @@ function AllCompanies({ economy, focus }: { economy: number | null; focus: strin
         <span className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
           <span className="text-[14px] font-semibold text-ink">Every company the score reads</span>
           <span className="text-[12.5px] text-muted">
-            {rows.length} candidates and holdings · {passing} pass the “growing ≥ economy” check
+            {rows.length} candidates and holdings · {passing} pass the “not lagging the economy” check
           </span>
         </span>
         <span className="flex items-center gap-1.5 rounded-md border border-line px-2.5 py-1 text-[12px] font-medium text-muted transition-colors group-hover:border-teal group-hover:text-ink">

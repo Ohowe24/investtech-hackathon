@@ -40,8 +40,9 @@ const settings = {
       rule: "Diluted share count rose no more than 5% over the period" },
     { id: "selfFunded", kind: "score", label: "Acquisitions ≤ 100% of cash flow", metricId: "acqIntensity", op: "<=", threshold: 1,
       rule: "Cash spent on acquisitions did not exceed operating cash flow" },
-    { id: "industryGrowth", kind: "score", label: "Industries growing ≥ the economy", metricId: "tailwindVsEconomy", op: ">=", threshold: 0,
-      rule: "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)" },
+    // −1 point: the Outlook engine's noise band (rules.directionBand); smaller gaps are not held against a company
+    { id: "industryGrowth", kind: "score", label: "Industries not lagging the economy", metricId: "tailwindVsEconomy", op: ">=", threshold: -0.01,
+      rule: "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)" },
   ] satisfies CheckDef[],
 
   /**
@@ -63,8 +64,9 @@ const settings = {
       { metricId: "shareCountChange", weight: 18, scale: { kind: "ramp", zero: 0.2, full: -0.1 } },
       { metricId: "netDebtToEbitda", weight: 13.5, scale: { kind: "ramp", zero: 4, full: 0 } },
       { metricId: "acqIntensity", weight: 9, scale: { kind: "ramp", zero: 2, full: 0.5 } },
-      // nothing for shrinking industries (0%), full points at 5% a year after inflation (about 2.5× the whole economy)
-      { metricId: "industryTailwind", weight: 10, scale: { kind: "ramp", zero: 0, full: 0.05 } },
+      // nothing for shrinking industries (0%); full points at 3% a year after inflation, about 1 point (the noise band)
+      // above the whole economy: beyond that the sources cannot tell industries apart well enough to pay for more
+      { metricId: "industryTailwind", weight: 10, scale: { kind: "ramp", zero: 0, full: 0.03 } },
     ],
   } satisfies NonNullable<IndustryProfile["score"]>,
 

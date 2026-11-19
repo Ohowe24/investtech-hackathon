@@ -185,7 +185,7 @@ Grade = a straight line between two declared points (`rampGrade()`). **Full poin
 | Share count change | **18** | +20% | −10% (buybacks) | The most replicated finding in merger research (paying in stock destroys value: Loughran & Vijh; Fuller, Netter & Stegemoller). Nearly independent of the other variables (ρ ≤ 0.21 with all but acquisition spend), so it adds information. Caveat: TOI's +42% is mostly a share-structure change in FY2022 (91.5M → 129.8M shares, flat since), not deal dilution; the data is kept as reported. |
 | Net debt ÷ 3-yr EBITDA | **13.5** | 4.0× | 0× (no net debt) | Measures risk, not skill. No large study sets an optimal level, so it weighs less, and the 3× must-pass check already removes the worst. Overlaps with return on capital (ρ = −0.63: high-return acquirers carry less debt). 3× earns a quarter of the points. |
 | Acquisitions ÷ operating cash flow (self-funding) | **9** | 200% | 50% or less | Above 100%, outside money paid for the deals; that is the "big bets" pattern Bain and NBER w10200 link to losses. Weak on its own (ρ with the total score −0.17). The ≥ 20% part is a fit test (is it an acquirer at all?), not quality, so it stays a must-pass check and earns no points. |
-| Industry tailwind (Outlook engine) | **10** | 0%/yr (shrinking industries) | 5%/yr after inflation | Revenue-weighted outlook of the industries the company earns in (see "Outlook engine" below). Weighted by the team's choice, not by research: it is **not backtested**, so it carries the least. The other five keep their proportions on the remaining 90. The whole economy's outlook (the bar for "growing") earns a bit under 40% of the points. |
+| Industry tailwind (Outlook engine) | **10** | 0%/yr (shrinking industries) | 3%/yr after inflation | Revenue-weighted outlook of the industries the company earns in (see "Outlook engine" below). Full points at about 1 point (the noise band) above the whole economy: beyond that the sources cannot tell industries apart well enough to pay for more, so one hot industry series (software) cannot run away with the points. Weighted by the team's choice, not by research: it is **not backtested**, so it carries the least. The other five keep their proportions on the remaining 90. |
 | Revenue growth | 0 | | | Size alone. Fast asset growth predicts *lower* returns (Cooper, Gulen & Schill); Aktagon finds revenue growth does not separate winners. Shown, not scored. |
 | Organic growth | 0 | | | A good measure, but only CSU, TOI and WSP report it. Weighting it would score three companies on a variable the other 31 lack. Shown, not scored. |
 
@@ -233,8 +233,9 @@ Shown on the **Outlook engine** tab (`/analyze#outlook`). It answers one questio
 and the industries its recent deals are in, growing or shrinking, according to published sources?*
 
 **In the scoring** (`engine/industries/acquirers.ts`): the company tailwind is a quality-score variable (10 points,
-see the weights table) and the check **"Industries growing ≥ the economy"** (tailwind minus the whole economy's
-outlook ≥ 0) is one of the scored checks behind Passes / Mixed / Fails. `npm run outlook` writes
+see the weights table) and the check **"Industries not lagging the economy"** (tailwind minus the whole economy's
+outlook ≥ −1 point, `lagsEconomy`). The 1 point is the same noise band as direction: the sources cannot tell a smaller
+gap from no gap, so a company is not marked down for one is one of the scored checks behind Passes / Mixed / Fails. `npm run outlook` writes
 `engine/input/outlook-tailwind.csv` and `engine/input/outlook-sources.csv`; `npm run engine` reads them. A company
 without an outlook has no value (missing, never a fail). Direction is not scored.
 

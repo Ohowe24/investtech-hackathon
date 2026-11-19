@@ -192,6 +192,8 @@ export interface OutlookCompany {
   /** dealOutlook − tailwind, decimal */
   directionGap: number | null;
   direction: Direction | null;
+  /** the scored check, failed: tailwind more than rules.directionBand below the whole economy (null = no tailwind) */
+  lagsEconomy: boolean | null;
   /** how the revenue mix itself moved, by industry ("what they do") */
   mixShift: OutlookMixShift | null;
   /** what management said about its markets on the latest earnings call: verbatim quotes with a one-line

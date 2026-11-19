@@ -325,6 +325,15 @@ export function mixShift(rows: { from: N; to: N; outlook: N }[], minCoverage: nu
   return { from: a, to: b, shift: a != null && b != null ? b - a : null };
 }
 
+/**
+ * Does the company's tailwind trail the whole economy by more than `band`? The same band as direction: gaps smaller
+ * than that are within the noise of the sources, so they are not held against a company. Null if either is missing.
+ */
+export function lagsEconomy(tailwind: N, economy: N, band: number): boolean | null {
+  if (!isNum(tailwind) || !isNum(economy) || !(band >= 0)) return null;
+  return tailwind < economy - band;
+}
+
 export type Direction = "toward" | "steady" | "away";
 
 /**

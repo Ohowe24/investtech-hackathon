@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, directionOf, industryOutlook, marketWeights, mixShift, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
+import { cagr, directionOf, industryOutlook, lagsEconomy, marketWeights, mixShift, realGrowth, shares, trailingMomentum, trendOf, weightedOutlook } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -170,5 +170,18 @@ describe("mixShift", () => {
   });
   it("is null when a year has no shares", () => {
     expect(mixShift([{ from: null, to: 1, outlook: 0.02 }], 0.5)).toEqual({ from: null, to: 0.02, shift: null });
+  });
+});
+
+describe("lagsEconomy", () => {
+  it("only flags a tailwind more than the band below the economy", () => {
+    expect(lagsEconomy(0.0188, 0.0192, 0.01)).toBe(false); // 0.04 pt below: noise, not lagging
+    expect(lagsEconomy(0.0091, 0.0192, 0.01)).toBe(true); // 1.01 pt below
+    expect(lagsEconomy(0.0092, 0.0192, 0.01)).toBe(false); // exactly 1 pt below: within the band
+    expect(lagsEconomy(0.05, 0.0192, 0.01)).toBe(false);
+  });
+  it("is null when a value is missing", () => {
+    expect(lagsEconomy(null, 0.02, 0.01)).toBeNull();
+    expect(lagsEconomy(0.02, null, 0.01)).toBeNull();
   });
 });

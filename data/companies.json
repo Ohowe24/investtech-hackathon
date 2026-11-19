@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-19T18:06:06.195Z",
+  "generatedAt": "2026-11-19T18:33:58.435Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -328,10 +328,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -380,8 +380,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.9748438444411223,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -1110,10 +1110,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -1124,7 +1124,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 5,
+        "rank": 6,
         "score": {
           "value": 65,
           "coverage": 1,
@@ -1162,8 +1162,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.9748438444411224,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -1675,10 +1675,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -1691,7 +1691,7 @@
         "recommendation": "mixed",
         "rank": 15,
         "score": {
-          "value": 49,
+          "value": 53,
           "coverage": 1,
           "parts": [
             {
@@ -1727,8 +1727,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.5179679300357632,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.8632798833929388,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -2533,10 +2533,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -2547,9 +2547,9 @@
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 6,
+        "rank": 5,
         "score": {
-          "value": 62,
+          "value": 65,
           "coverage": 1,
           "parts": [
             {
@@ -2585,8 +2585,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.45902222704684376,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.765037045078073,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -2851,7 +2851,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Industries growing ≥ the economy.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA.",
       "model": {
         "checks": [
           {
@@ -2922,23 +2922,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 18,
+        "rank": 19,
         "score": {
-          "value": 65,
+          "value": 67,
           "coverage": 1,
           "parts": [
             {
@@ -2974,8 +2974,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.3766735869166172,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.6277893115276953,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -3420,10 +3420,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -3436,7 +3436,7 @@
         "recommendation": "fail",
         "rank": 29,
         "score": {
-          "value": 39,
+          "value": 43,
           "coverage": 1,
           "parts": [
             {
@@ -3472,8 +3472,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.564831977191127,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.9413866286518784,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -3739,7 +3739,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Industries growing ≥ the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -3810,23 +3810,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 9,
         "score": {
-          "value": 59,
+          "value": 61,
           "coverage": 1,
           "parts": [
             {
@@ -3862,8 +3862,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.2994844536777246,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.499140756129541,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -4199,10 +4199,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -4215,7 +4215,7 @@
         "recommendation": "fail",
         "rank": 34,
         "score": {
-          "value": 13,
+          "value": 16,
           "coverage": 1,
           "parts": [
             {
@@ -4251,8 +4251,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.45464409421903274,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.7577401570317213,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -4518,7 +4518,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Industries growing ≥ the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -4589,23 +4589,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 13,
         "score": {
-          "value": 54,
+          "value": 55,
           "coverage": 1,
           "parts": [
             {
@@ -4641,8 +4641,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.27024990792933407,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.4504165132155568,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -4907,7 +4907,7 @@
       "zone": "Light acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Industries growing ≥ the economy.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Industries not lagging the economy.",
       "model": {
         "checks": [
           {
@@ -4978,10 +4978,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -4992,7 +4992,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 21,
+        "rank": 24,
         "score": {
           "value": 59,
           "coverage": 1,
@@ -5031,7 +5031,7 @@
               "metricId": "industryTailwind",
               "weight": 10,
               "grade": 0,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -5297,7 +5297,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Industries growing ≥ the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -5368,23 +5368,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 3,
+        "rank": 2,
         "score": {
-          "value": 70,
+          "value": 72,
           "coverage": 1,
           "parts": [
             {
@@ -5420,8 +5420,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.327373146358938,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.5456219105982301,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -5687,7 +5687,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Industries growing ≥ the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -5758,23 +5758,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 7,
         "score": {
-          "value": 62,
+          "value": 64,
           "coverage": 1,
           "parts": [
             {
@@ -5810,8 +5810,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.29690276653095804,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.49483794421826344,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -6148,10 +6148,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -6162,7 +6162,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 2,
+        "rank": 3,
         "score": {
           "value": 70,
           "coverage": 1,
@@ -6200,8 +6200,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.9748438444411223,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -6538,10 +6538,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -6552,7 +6552,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 8,
+        "rank": 11,
         "score": {
           "value": 60,
           "coverage": 1,
@@ -6590,8 +6590,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.9748438444411223,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -6857,7 +6857,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Industries growing ≥ the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -6928,23 +6928,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 4,
         "score": {
-          "value": 67,
+          "value": 69,
           "coverage": 1,
           "parts": [
             {
@@ -6980,8 +6980,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.30351855405836625,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.5058642567639438,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -7247,7 +7247,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Industries growing ≥ the economy. No data: Free cash flow per share ≥ 7%/yr.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Industries not lagging the economy. No data: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
@@ -7318,10 +7318,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -7334,7 +7334,7 @@
         "recommendation": "fail",
         "rank": 32,
         "score": {
-          "value": 29,
+          "value": 30,
           "coverage": 0.73,
           "parts": [
             {
@@ -7370,8 +7370,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.154161067134556,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.25693511189092666,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ],
           "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
@@ -7638,7 +7638,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%, Industries growing ≥ the economy. No data: Free cash flow per share ≥ 7%/yr.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
@@ -7709,23 +7709,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 1,
+        "passed": 2,
         "available": 4,
         "total": 5,
         "recommendation": "fail",
         "rank": 33,
         "score": {
-          "value": 19,
+          "value": 21,
           "coverage": 0.73,
           "parts": [
             {
@@ -7761,8 +7761,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.3153320911565487,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.5255534852609146,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ],
           "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
@@ -8028,7 +8028,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Industries growing ≥ the economy.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Industries not lagging the economy.",
       "model": {
         "checks": [
           {
@@ -8099,10 +8099,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -8113,7 +8113,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 25,
+        "rank": 28,
         "score": {
           "value": 44,
           "coverage": 1,
@@ -8151,8 +8151,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.1245372267175604,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.20756204452926735,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -8490,10 +8490,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -8506,7 +8506,7 @@
         "recommendation": "fail",
         "rank": 22,
         "score": {
-          "value": 58,
+          "value": 62,
           "coverage": 0.73,
           "parts": [
             {
@@ -8542,8 +8542,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.3857956321903013,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.6429927203171689,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ],
           "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
@@ -9154,10 +9154,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -9168,7 +9168,7 @@
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 24,
+        "rank": 25,
         "score": {
           "value": 48,
           "coverage": 1,
@@ -9206,8 +9206,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.974843844441122,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -9481,23 +9481,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 11,
+        "rank": 10,
         "score": {
-          "value": 58,
+          "value": 60,
           "coverage": 1,
           "parts": [
             {
@@ -9533,8 +9533,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.19260410215855325,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.3210068369309221,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -9869,10 +9869,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -9885,7 +9885,7 @@
         "recommendation": "fail",
         "rank": 26,
         "score": {
-          "value": 44,
+          "value": 48,
           "coverage": 1,
           "parts": [
             {
@@ -9921,8 +9921,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.564831977191127,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.9413866286518784,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -10256,10 +10256,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -10272,7 +10272,7 @@
         "recommendation": "fail",
         "rank": 31,
         "score": {
-          "value": 34,
+          "value": 37,
           "coverage": 1,
           "parts": [
             {
@@ -10308,8 +10308,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.6625126663218548,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -10643,10 +10643,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -10695,8 +10695,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.10559688647255872,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.17599481078759788,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -11030,23 +11030,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 4,
+        "passed": 5,
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 17,
+        "rank": 18,
         "score": {
-          "value": 67,
+          "value": 69,
           "coverage": 1,
           "parts": [
             {
@@ -11082,8 +11082,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.28271580948677044,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.4711930158112841,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -11417,10 +11417,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -11433,7 +11433,7 @@
         "recommendation": "fail",
         "rank": 27,
         "score": {
-          "value": 43,
+          "value": 45,
           "coverage": 1,
           "parts": [
             {
@@ -11469,8 +11469,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.7859243627216445,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 1,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -11804,10 +11804,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -11818,9 +11818,9 @@
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 28,
+        "rank": 30,
         "score": {
-          "value": 42,
+          "value": 43,
           "coverage": 1,
           "parts": [
             {
@@ -11856,8 +11856,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.17989691836692348,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.2998281972782058,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -12191,10 +12191,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -12207,7 +12207,7 @@
         "recommendation": "fail",
         "rank": 23,
         "score": {
-          "value": 56,
+          "value": 60,
           "coverage": 1,
           "parts": [
             {
@@ -12243,8 +12243,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.562961432051271,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.9382690534187852,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -12578,10 +12578,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -12592,9 +12592,9 @@
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 19,
+        "rank": 20,
         "score": {
-          "value": 60,
+          "value": 63,
           "coverage": 1,
           "parts": [
             {
@@ -12630,8 +12630,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.5179662360631313,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.863277060105219,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -12965,10 +12965,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -12979,9 +12979,9 @@
         "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 10,
+        "rank": 8,
         "score": {
-          "value": 59,
+          "value": 62,
           "coverage": 1,
           "parts": [
             {
@@ -13017,8 +13017,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.44263249491160184,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.7377208248526698,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -13352,10 +13352,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -13368,7 +13368,7 @@
         "recommendation": "mixed",
         "rank": 14,
         "score": {
-          "value": 51,
+          "value": 54,
           "coverage": 1,
           "parts": [
             {
@@ -13404,8 +13404,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.4820551160734607,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.8034251934557678,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -13739,10 +13739,10 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
@@ -13755,7 +13755,7 @@
         "recommendation": "pass",
         "rank": 12,
         "score": {
-          "value": 55,
+          "value": 59,
           "coverage": 1,
           "parts": [
             {
@@ -13791,8 +13791,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.5178913607147839,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.8631522678579733,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -14126,23 +14126,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 3,
+        "passed": 4,
         "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 20,
+        "rank": 21,
         "score": {
-          "value": 60,
+          "value": 62,
           "coverage": 1,
           "parts": [
             {
@@ -14178,8 +14178,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.3570654220049252,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.5951090366748754,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }
@@ -14513,23 +14513,23 @@
           },
           {
             "id": "industryGrowth",
-            "label": "Industries growing ≥ the economy",
-            "rule": "The industries the company earns its revenue in are expected to grow at least as fast as the whole economy (Outlook engine)",
-            "target": "≥ 0%",
-            "threshold": 0,
+            "label": "Industries not lagging the economy",
+            "rule": "The industries the company earns its revenue in are expected to grow no more than 1 point a year slower than the whole economy (Outlook engine)",
+            "target": "≥ -1%",
+            "threshold": -0.01,
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": false
+            "pass": true
           }
         ],
-        "passed": 2,
+        "passed": 3,
         "available": 5,
         "total": 5,
-        "recommendation": "fail",
-        "rank": 30,
+        "recommendation": "mixed",
+        "rank": 17,
         "score": {
-          "value": 39,
+          "value": 41,
           "coverage": 1,
           "parts": [
             {
@@ -14565,8 +14565,8 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": 0.2992400637798256,
-              "scale": "No points at 0%, all points at 5%, a straight line between"
+              "grade": 0.49873343963304273,
+              "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ]
         }

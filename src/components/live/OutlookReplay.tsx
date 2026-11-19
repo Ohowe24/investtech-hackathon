@@ -129,7 +129,7 @@ export default function OutlookReplay({ outlook, runNo, onDone }: { outlook: Out
     `Each industry's outlook is the median of its signals; growing means at least the whole economy (${pct(o.economy.outlook)}).`,
     `Each company: its industries' outlooks weighted by its revenue in them.`,
     `${o.deals.length} disclosed deals with their quotes: are recent deals in stronger or weaker industries?`,
-    `${run.scored} companies get a tailwind: 10 points of the quality score and the "growing ≥ economy" check.`,
+    `${run.scored} companies get a tailwind: 10 points of the quality score and the "not lagging the economy" check.`,
   ];
   const caption =
     t >= DONE ? { k: "done", v: `${run.scored} companies scored · ${o.industries.length} industries · ${run.series} published series` }

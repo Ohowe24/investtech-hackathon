@@ -158,9 +158,14 @@ describe("acquirers: Outlook engine tailwind", () => {
     expect(metrics.industryTailwind.note).toBeTruthy();
     expect(metrics.tailwindVsEconomy.value).toBeNull();
   });
-  it("scores 10 of 100 and fails the check below the economy", () => {
+  it("scores 10 of 100 with a scored check on the gap to the economy", () => {
     expect(acquirers.score!.components.find((c) => c.metricId === "industryTailwind")?.weight).toBe(10);
     const k = acquirers.checks.find((c) => c.id === "industryGrowth")!;
-    expect([k.metricId, k.op, k.threshold, k.kind]).toEqual(["tailwindVsEconomy", ">=", 0, "score"]);
+    expect([k.metricId, k.op, k.kind]).toEqual(["tailwindVsEconomy", ">=", "score"]);
+  });
+  it("uses the Outlook engine's own noise band, so the check and direction agree", async () => {
+    const { readFileSync } = await import("node:fs");
+    const band = JSON.parse(readFileSync("data/outlook.json", "utf8")).rules.directionBand as number;
+    expect(acquirers.checks.find((c) => c.id === "industryGrowth")!.threshold).toBeCloseTo(-band, 12);
   });
 });

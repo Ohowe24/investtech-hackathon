@@ -13,7 +13,7 @@ and **whether its new deals point toward stronger or weaker industries than the 
 
 - **Not our own forecast.** We never type or invent an industry growth number. Every number is a published figure
   (government projection, official statistic, analyst estimate) with a source, combined by a formula declared in code.
-- **Scored lightly.** The tailwind is a 10-point quality-score variable and the check "Industries growing ≥ the economy" (engine/methodology.md). Direction is not scored.
+- **Scored lightly.** The tailwind is a 10-point quality-score variable and the check "Industries not lagging the economy" (more than 1 point below it fails; engine/methodology.md). Direction is not scored.
   It becomes a check only if we can show, on past data, that it would have told good acquirers from bad ones.
 - **Not "fastest-growing wins".** The best acquirers buy slow, durable niches on purpose (Constellation's model).
   The score rewards **growing or stable**, and flags **structural decline**. It does not reward hype.

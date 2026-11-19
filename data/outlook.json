@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T18:05:55.233Z",
+  "generatedAt": "2026-11-19T18:33:58.139Z",
   "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
@@ -24,7 +24,7 @@
           "id": "segments",
           "label": "Revenue by segment",
           "status": "done",
-          "detail": "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each mapped to an industry with a quote (engine/input/outlook-segments.csv)."
+          "detail": "Onesheet segments for the five featured companies and every other company the acquirer ranking scores (tailwind only), each mapped to an industry with a quote from its Onesheet profile (engine/input/outlook-segments.csv). Labels for the 29 added companies are proposed and await approval."
         }
       ]
     },
@@ -314,6 +314,7 @@
       "dealsWithOutlook": 8,
       "directionGap": 0,
       "direction": "steady",
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -537,6 +538,7 @@
       "dealsWithOutlook": 6,
       "directionGap": -6.938893903907228e-18,
       "direction": "steady",
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -759,6 +761,7 @@
       "dealsWithOutlook": 11,
       "directionGap": -0.004654973676963898,
       "direction": "steady",
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -1045,6 +1048,7 @@
       "dealsWithOutlook": 2,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -1309,6 +1313,7 @@
       "dealsWithOutlook": 6,
       "directionGap": 0.000669332846628002,
       "direction": "steady",
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -1554,6 +1559,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -1691,6 +1697,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -1856,6 +1863,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -2105,6 +2113,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -2256,6 +2265,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -2526,6 +2536,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2026",
@@ -2712,6 +2723,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2026",
@@ -2813,6 +2825,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -2901,6 +2914,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -2989,6 +3003,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": true,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3077,6 +3092,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2026",
@@ -3194,6 +3210,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": true,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3317,6 +3334,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3411,6 +3429,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": true,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3542,6 +3561,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3672,6 +3692,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3914,6 +3935,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -4114,6 +4136,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2024",
@@ -4265,6 +4288,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": true,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -4465,6 +4489,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -4630,6 +4655,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -4809,6 +4835,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": true,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -5051,6 +5078,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2026",
@@ -5230,6 +5258,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2026",
@@ -5444,6 +5473,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -5595,6 +5625,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -5711,6 +5742,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -5848,6 +5880,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -6006,6 +6039,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",

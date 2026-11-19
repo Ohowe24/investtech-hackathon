@@ -23,7 +23,7 @@ import type {
   OutlookSignal,
 } from "../../contract/outlook";
 import { parseCsv } from "../csv";
-import { cagr, directionOf, industryOutlook, marketWeights, median, mixShift, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
+import { cagr, directionOf, industryOutlook, lagsEconomy, marketWeights, median, mixShift, realGrowth, shares, sumStrict, trailingMomentum, trendOf, weightedOutlook } from "../metrics";
 import { COMPANIES, LAYERS, SOURCES, THESIS } from "./plan";
 
 const read = (p: string) => readFileSync(p, "utf8");
@@ -562,6 +562,7 @@ const companies: OutlookCompany[] = [...COMPANIES, ...EXTRA].map((c) => {
     dealsWithOutlook,
     directionGap: dw.value != null && tw.value != null ? dw.value - tw.value : null,
     direction,
+    lagsEconomy: lagsEconomy(tw.value, economyOutlook, RULES.directionBand),
     mixShift: shift,
     narrative: narrative.items,
     directionNotes: ownNotes,
@@ -613,7 +614,7 @@ writeFileSync("data/outlook.json", JSON.stringify(out, null, 2) + "\n");
 
 // ---------------------------------------------------------------- hand-off to the stock scoring (npm run engine)
 // One row per company: the tailwind and its gap to the whole economy, read by engine/industries/acquirers.ts as the
-// "Industry tailwind" score part and the "Industries growing ≥ the economy" check. Values are copied from above.
+// "Industry tailwind" score part and the "Industries not lagging the economy" check. Values are copied from above.
 const csvCell = (v: string | number | null) => {
   const t = v == null ? "" : String(v);
   return /[",\n]/.test(t) ? `"${t.replace(/"/g, '""')}"` : t;
