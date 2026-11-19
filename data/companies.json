@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-19T19:04:10.183Z",
+  "generatedAt": "2026-11-19T20:53:49.646Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -2471,16 +2471,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.02295111135234219,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.0037666032547738586,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -2493,7 +2507,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -2571,17 +2585,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 8,
+        "rank": 5,
         "score": {
-          "value": 63,
-          "coverage": 0.9,
+          "value": 65,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -2616,11 +2630,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.765037045078073,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -3376,16 +3389,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.023351573363324052,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.0041670652657557206,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -3397,7 +3424,7 @@
       "zone": "Light acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Industries not lagging the economy.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
       "model": {
         "checks": [
           {
@@ -3475,17 +3502,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
         "rank": 30,
         "score": {
-          "value": 37,
-          "coverage": 0.9,
+          "value": 41,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -3520,11 +3547,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.7783857787774684,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -3767,16 +3793,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01497422268388623,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.004210285413682102,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -3789,7 +3829,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -3867,17 +3907,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 7,
+        "rank": 9,
         "score": {
-          "value": 63,
-          "coverage": 0.9,
+          "value": 61,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -3912,11 +3952,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.499140756129541,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -4159,16 +4198,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.022732204710951637,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.0035476966133833054,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -4180,7 +4233,7 @@
       "zone": "Acquirer · weak per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Free cash flow per share ≥ 7%/yr, Return on capital ≥ 8%, Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow. No data: Industries not lagging the economy.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Free cash flow per share ≥ 7%/yr, Return on capital ≥ 8%, Share count up ≤ 5%, Acquisitions ≤ 100% of cash flow.",
       "model": {
         "checks": [
           {
@@ -4258,17 +4311,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 0,
-        "available": 4,
+        "passed": 1,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
         "rank": 34,
         "score": {
-          "value": 10,
-          "coverage": 0.9,
+          "value": 16,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -4303,11 +4356,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.7577401570317213,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -4550,16 +4602,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.013512495396466704,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.005672012701101627,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -4572,7 +4638,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -4650,17 +4716,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 11,
+        "rank": 13,
         "score": {
-          "value": 57,
-          "coverage": 0.9,
+          "value": 55,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -4695,11 +4761,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.4504165132155568,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -4942,16 +5007,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.008093367318772526,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.027277875416340858,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -4963,7 +5042,7 @@
       "zone": "Light acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow. No data: Industries not lagging the economy.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Industries not lagging the economy.",
       "model": {
         "checks": [
           {
@@ -5041,17 +5120,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": false
           }
         ],
         "passed": 4,
-        "available": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 21,
+        "rank": 25,
         "score": {
-          "value": 65,
-          "coverage": 0.9,
+          "value": 59,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -5086,11 +5165,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -5333,16 +5411,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01785327110024626,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.0013312369973220717,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -5355,7 +5447,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -5433,17 +5525,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 2,
         "score": {
-          "value": 74,
-          "coverage": 0.9,
+          "value": 73,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -5478,11 +5570,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.5951090366748754,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -5726,16 +5817,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01591146318510378,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.003273044912464551,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -5748,7 +5853,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -5826,17 +5931,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 5,
+        "rank": 7,
         "score": {
-          "value": 66,
-          "coverage": 0.9,
+          "value": 64,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -5871,11 +5976,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.530382106170126,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -6118,16 +6222,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.04874219222205611,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.029557684124487782,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -6140,7 +6258,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -6218,17 +6336,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 4,
         "score": {
-          "value": 67,
-          "coverage": 0.9,
+          "value": 70,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -6263,11 +6381,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 1,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -6510,16 +6627,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.04874219222205611,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.029557684124487782,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -6532,7 +6663,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "Failed: Free cash flow per share ≥ 7%/yr. No data: Industries not lagging the economy.",
+      "reason": "Failed: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
@@ -6610,17 +6741,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 13,
+        "rank": 11,
         "score": {
-          "value": 56,
-          "coverage": 0.9,
+          "value": 60,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -6655,11 +6786,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 1,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -6902,16 +7032,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.027840029422639745,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.008655521325071414,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -6924,7 +7068,7 @@
       "verdict": "add",
       "verdictSource": "model",
       "proposedWeightPct": 1.66,
-      "reason": "No data: Industries not lagging the economy.",
+      "reason": "Passed every check.",
       "model": {
         "checks": [
           {
@@ -7002,17 +7146,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 3,
         "score": {
-          "value": 71,
-          "coverage": 0.9,
+          "value": 73,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -7047,11 +7191,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.9280009807546582,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -7295,16 +7438,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01082777648622366,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.008356731611344672,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -7316,7 +7473,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr, Industries not lagging the economy.",
+      "reason": "Failed: Acquisitions ≥ 20% of cash flow, Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
@@ -7394,17 +7551,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 3,
+        "passed": 3,
+        "available": 4,
         "total": 5,
         "recommendation": "fail",
-        "rank": 31,
+        "rank": 32,
         "score": {
           "value": 31,
-          "coverage": 0.63,
+          "coverage": 0.73,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -7439,11 +7596,11 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.360925882874122,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ],
-          "note": "Scored on the 63% of the weight that has data; the other weights were rescaled"
+          "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -7687,16 +7844,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01960970682322489,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.0004251987256565573,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -7708,7 +7879,7 @@
       "zone": "Not enough data",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr, Industries not lagging the economy.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%, Share count up ≤ 5%. No data: Free cash flow per share ≥ 7%/yr.",
       "model": {
         "checks": [
           {
@@ -7786,17 +7957,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 1,
-        "available": 3,
+        "passed": 2,
+        "available": 4,
         "total": 5,
         "recommendation": "fail",
         "rank": 33,
         "score": {
-          "value": 16,
-          "coverage": 0.63,
+          "value": 23,
+          "coverage": 0.73,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -7831,11 +8002,11 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.6536568941074963,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
           ],
-          "note": "Scored on the 63% of the weight that has data; the other weights were rescaled"
+          "note": "Scored on the 73% of the weight that has data; the other weights were rescaled"
         }
       },
       "history": [
@@ -8078,16 +8249,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.012781108078192216,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.006403400019376115,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -8099,7 +8284,7 @@
       "zone": "Acquirer · strong per-share growth",
       "verdict": "reject",
       "verdictSource": "model",
-      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%. No data: Industries not lagging the economy.",
+      "reason": "Failed: Net debt ≤ 3× EBITDA, Return on capital ≥ 8%.",
       "model": {
         "checks": [
           {
@@ -8177,17 +8362,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 26,
+        "rank": 27,
         "score": {
           "value": 47,
-          "coverage": 0.9,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -8222,11 +8407,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.42603693593974057,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -9151,16 +9335,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2023–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.048742192222056106,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2023–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.029557684124487775,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -9249,17 +9447,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 28,
+        "rank": 26,
         "score": {
-          "value": 42,
-          "coverage": 0.9,
+          "value": 48,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -9294,11 +9492,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 1,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -9480,16 +9677,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01238995202053014,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.006794556077038192,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -9578,17 +9789,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 9,
+        "rank": 10,
         "score": {
-          "value": 63,
-          "coverage": 0.9,
+          "value": 60,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -9623,11 +9834,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.412998400684338,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -9870,16 +10080,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.02335157336332405,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.004167065265755717,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -9968,17 +10192,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 27,
+        "rank": 28,
         "score": {
-          "value": 43,
-          "coverage": 0.9,
+          "value": 46,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -10013,11 +10237,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.7783857787774683,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -10259,16 +10482,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.030304956958050463,
+          "period": "FY2024",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.011120448860482132,
+          "period": "FY2024",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -10357,17 +10594,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 32,
+        "rank": 31,
         "score": {
-          "value": 30,
-          "coverage": 0.9,
+          "value": 37,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -10402,11 +10639,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 1,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -10648,16 +10884,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.007262953311308107,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.011921554786260224,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -10746,17 +10996,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": false
           }
         ],
         "passed": 3,
-        "available": 4,
+        "available": 5,
         "total": 5,
-        "recommendation": "pass",
-        "rank": 14,
+        "recommendation": "mixed",
+        "rank": 16,
         "score": {
-          "value": 52,
-          "coverage": 0.9,
+          "value": 49,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -10791,11 +11041,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.24209844371027023,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -11037,16 +11286,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.010727758502797134,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.008456749594771197,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -11135,17 +11398,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
         "rank": 19,
         "score": {
-          "value": 72,
-          "coverage": 0.9,
+          "value": 68,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -11180,11 +11443,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.3575919500932378,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -11426,16 +11688,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.040114142837035065,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.020929634739466733,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -11524,17 +11800,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
         "rank": 29,
         "score": {
-          "value": 39,
-          "coverage": 0.9,
+          "value": 45,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -11569,11 +11845,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 1,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -11815,16 +12090,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01745633590869482,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.0017281721888735106,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -11913,17 +12202,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "mixed",
         "rank": 17,
         "score": {
-          "value": 44,
-          "coverage": 0.9,
+          "value": 46,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -11958,11 +12247,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.5818778636231607,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -12204,16 +12492,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.02353428969663782,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2022–FY2026",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.004349781599069489,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -12302,17 +12604,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 25,
+        "rank": 24,
         "score": {
-          "value": 56,
-          "coverage": 0.9,
+          "value": 59,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -12347,11 +12649,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.7844763232212607,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -12593,16 +12894,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.02589831180315657,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.006713803705588238,
+          "period": "FY2026",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -12691,17 +13006,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 4,
-        "available": 4,
+        "passed": 5,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
-        "rank": 24,
+        "rank": 21,
         "score": {
-          "value": 61,
-          "coverage": 0.9,
+          "value": 63,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -12736,11 +13051,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.863277060105219,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -12982,16 +13296,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.022341446321172825,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.003156938223604494,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -13080,17 +13408,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
-        "rank": 10,
+        "rank": 8,
         "score": {
-          "value": 61,
-          "coverage": 0.9,
+          "value": 62,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -13125,11 +13453,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.7447148773724276,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -13371,16 +13698,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.024102755803673034,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.004918247706104703,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -13469,17 +13810,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "mixed",
-        "rank": 16,
+        "rank": 14,
         "score": {
-          "value": 51,
-          "coverage": 0.9,
+          "value": 54,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -13514,11 +13855,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.8034251934557678,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -13760,16 +14100,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.02407752842849642,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.004893020330928088,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -13858,17 +14212,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "pass",
         "rank": 12,
         "score": {
-          "value": 56,
-          "coverage": 0.9,
+          "value": 58,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -13903,11 +14257,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.8025842809498807,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -14149,16 +14502,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.01933788488254562,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.00015337678497728824,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -14247,17 +14614,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 3,
-        "available": 4,
+        "passed": 4,
+        "available": 5,
         "total": 5,
         "recommendation": "fail",
         "rank": 22,
         "score": {
           "value": 62,
-          "coverage": 0.9,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -14292,11 +14659,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.6445961627515207,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
@@ -14538,16 +14904,30 @@
           ]
         },
         "industryTailwind": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": 0.016022935958303855,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "tailwindVsEconomy": {
-          "value": null,
-          "period": "FY2021–FY2025",
-          "sourceIds": [],
-          "note": "No Outlook engine reading: its revenue segments are not mapped to industries yet"
+          "value": -0.0031615721392644763,
+          "period": "FY2025",
+          "sourceIds": [
+            "outlook-onesheet-segments",
+            "outlook-onesheet-profile",
+            "outlook-statcan-36-10-0434",
+            "outlook-esdc-cops-2026",
+            "outlook-bls-ep-2-11",
+            "outlook-onesheet-estimates",
+            "outlook-boc-inflation-target"
+          ]
         },
         "organicGrowth": {
           "value": null,
@@ -14636,17 +15016,17 @@
             "op": ">=",
             "kind": "score",
             "metricId": "tailwindVsEconomy",
-            "pass": null
+            "pass": true
           }
         ],
-        "passed": 2,
-        "available": 4,
+        "passed": 3,
+        "available": 5,
         "total": 5,
         "recommendation": "mixed",
         "rank": 18,
         "score": {
-          "value": 40,
-          "coverage": 0.9,
+          "value": 41,
+          "coverage": 1,
           "parts": [
             {
               "metricId": "fcfPerShareCagr",
@@ -14681,11 +15061,10 @@
             {
               "metricId": "industryTailwind",
               "weight": 10,
-              "grade": null,
+              "grade": 0.5340978652767951,
               "scale": "No points at 0%, all points at 3%, a straight line between"
             }
-          ],
-          "note": "Scored on the 90% of the weight that has data; the other weights were rescaled"
+          ]
         }
       },
       "history": [
