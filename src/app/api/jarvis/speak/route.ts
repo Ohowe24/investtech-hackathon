@@ -17,14 +17,17 @@ export async function POST(request: Request) {
   if (!sameSite(request)) return Response.json({ error: "Not allowed" }, { status: 403 });
 
   let text = "";
+  let speed = 1;
   try {
-    const body = (await request.json()) as { text?: unknown };
+    const body = (await request.json()) as { text?: unknown; speed?: unknown };
     text = typeof body.text === "string" ? body.text.trim().slice(0, 600) : "";
+    // ElevenLabs accepts 0.7 to 1.2.
+    if (typeof body.speed === "number" && Number.isFinite(body.speed)) speed = Math.min(1.2, Math.max(0.7, body.speed));
   } catch {}
   if (!text) return Response.json({ error: "Send { text }" }, { status: 400 });
 
   const model = process.env.ELEVENLABS_MODEL || "eleven_flash_v2_5";
-  const cacheKey = `${voice}|${model}|${text}`;
+  const cacheKey = `${voice}|${model}|${speed}|${text}`;
   const hit = cachedAudio(cacheKey);
   if (hit) return mp3(hit); // free: already paid for
 
@@ -38,7 +41,7 @@ export async function POST(request: Request) {
       text,
       model_id: model,
       // High stability and little style: an even, composed, dry delivery rather than an expressive one.
-      voice_settings: { stability: 0.72, similarity_boost: 0.8, style: 0.05, use_speaker_boost: true, speed: 1.0 },
+      voice_settings: { stability: 0.72, similarity_boost: 0.8, style: 0.05, use_speaker_boost: true, speed },
     }),
     signal: request.signal,
   });

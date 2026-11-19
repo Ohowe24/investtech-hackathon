@@ -9,9 +9,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Dataset } from "@contract/types";
 import type { AnalysisQuery } from "@/lib/query";
+import { briefRequest, buildBrief, FAREWELL, isSignOff } from "@/lib/jarvis/brief";
 import { findCompany, runDataTool } from "@/lib/jarvis/data";
 import type { Cue } from "@/lib/jarvis/cues";
 import type { Message, StepEvent, ToolCall } from "@/lib/jarvis/types";
+import Briefing, { type BriefState } from "./Briefing";
 import Graphic, { toSpec, type GraphicSpec } from "./Graphic";
 import { findByText, findTicker, goTo, hover, onSpot, readScreen, scrollPage, spotlight, type Spot } from "./screen";
 import { chime, Listener, Speaker } from "./voice";
@@ -30,11 +32,22 @@ interface Props {
 }
 
 const MAX_STEPS = 6;
+/** The briefing is read at an unhurried, normal pace. */
+const BRIEF_SPEED = 1;
 
-function greeting(ds: Dataset): string {
-  const h = new Date().getHours();
-  const part = h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening";
-  return `${part}. I have the engine's results for ${ds.industryName ?? ds.industryId} in front of me. What would you like to know?`;
+/**
+ * Practice voice: the browser's own voice and speech recogniser instead of ElevenLabs, so rehearsals spend no
+ * credits. Add ?voice=practice to the address to turn it on (this browser remembers it), ?voice=live to turn it off.
+ */
+function practiceMode(): boolean {
+  try {
+    const q = new URLSearchParams(window.location.search).get("voice");
+    if (q === "practice") localStorage.setItem("jarvis-voice", "practice");
+    if (q === "live") localStorage.removeItem("jarvis-voice");
+    return localStorage.getItem("jarvis-voice") === "practice";
+  } catch {
+    return false;
+  }
 }
 
 /** Where the person is: the page, every panel heading on it, and what's visible. Sent with each turn. */
@@ -54,7 +67,17 @@ export default function Jarvis({ dataset, query }: Props) {
   const [micOff, setMicOff] = useState(false);
   const [error, setError] = useState("");
   const [graphic, setGraphic] = useState<GraphicSpec | null>(null);
+  const [brief, setBrief] = useState<BriefState | null>(null);
+  /** the briefing is fading out */
+  const [briefLeaving, setBriefLeaving] = useState(false);
+  /** the briefing ended by asking "anything else?": a sign-off now gets the farewell */
+  const askedAnythingElse = useRef(false);
+  /** set once end() exists, so the farewell can close the conversation */
+  const endRef = useRef<() => void>(() => {});
+  /** bumped by each new briefing, so a fade from an older one never removes it */
+  const briefGen = useRef(0);
   const [status, setStatus] = useState<Status | null>(null);
+  const [practice, setPractice] = useState(false);
 
   const speaker = useRef<Speaker | null>(null);
   const listener = useRef<Listener | null>(null);
@@ -80,6 +103,11 @@ export default function Jarvis({ dataset, query }: Props) {
     fetch("/api/jarvis/status").then((r) => r.json()).then(setStatus).catch(() => {});
     speaker.current = new Speaker();
     listener.current = new Listener();
+    const p = practiceMode();
+    if (p) speaker.current.mode = "browser";
+    // Read from the address and storage after mount, so the server render and the first client render agree.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPractice(p);
     return () => {
       speaker.current?.stop();
       void listener.current?.stop();
@@ -171,8 +199,89 @@ export default function Jarvis({ dataset, query }: Props) {
     return () => { delete w.__jarvisTool; delete w.__jarvisCue; delete w.__jarvisLook; };
   }, [runTool, runCue, go]);
 
+  // ── A company briefing: "explain Parex Resources" gets a choreographed answer, every figure from the data ──
+  const runBrief = useCallback((ticker: string, words: string): boolean => {
+    const ds = live.current.dataset;
+    const company = findCompany(ds, ticker);
+    const b = company ? buildBrief(ds, company) : null;
+    if (!b) return false;
+    const sp = speaker.current!;
+    turn.current?.abort();
+    const ac = new AbortController();
+    turn.current = ac;
+    setHeard(words);
+    setCaption("");
+    setHeld(0);
+    setGraphic(null);
+    spotlight(null);
+    setActivity("Preparing the briefing");
+    go("thinking");
+    briefGen.current++;
+    setBrief({ brief: b, at: -1 });
+    setBriefLeaving(false);
+    void goTo(undefined, b.ticker);
+
+    const now = { words, spoken: [] as string[] };
+    current.current = now;
+    sp.begin();
+    sp.onIdle = () => {
+      if (ac.signal.aborted) return;
+      session.current = [...session.current, { role: "user", content: words }, { role: "assistant", content: b.beats.map((x) => x.text).join(" ") }];
+      if (current.current === now) current.current = null;
+      setActivity("");
+      askedAnythingElse.current = true;
+      go("listening");
+      // Leave the last callout up a moment, then fade the page back in.
+      setTimeout(() => {
+        if (ac.signal.aborted) return;
+        setBriefLeaving(true);
+        setTimeout(() => { if (!ac.signal.aborted) { setBrief((s) => (s?.brief === b ? null : s)); setBriefLeaving(false); } }, 800);
+      }, 3500);
+    };
+    b.beats.forEach((beat, i) => {
+      sp.enqueue(beat.speech, () => {
+        if (ac.signal.aborted) return;
+        now.spoken.push(beat.text);
+        go("speaking");
+        setCaption(beat.text);
+        setBrief({ brief: b, at: i });
+      }, { speed: BRIEF_SPEED, tight: true });
+    });
+    sp.finish();
+    return true;
+  }, [go]);
+
+  // ── The sign-off: "No, that's all, Jarvis. Thank you." → the farewell, then the conversation closes ──
+  const farewell = useCallback((words: string) => {
+    const sp = speaker.current!;
+    turn.current?.abort();
+    const ac = new AbortController();
+    turn.current = ac;
+    setHeard(words);
+    setHeld(0);
+    setActivity("");
+    session.current = [...session.current, { role: "user", content: words }, { role: "assistant", content: FAREWELL }];
+    sp.begin();
+    sp.onIdle = () => {
+      if (ac.signal.aborted) return;
+      // A beat of quiet after the last word, then Jarvis signs off.
+      setTimeout(() => { if (!ac.signal.aborted) endRef.current(); }, 1200);
+    };
+    sp.enqueue(FAREWELL, () => {
+      if (ac.signal.aborted) return;
+      go("speaking");
+      setCaption(FAREWELL);
+    }, { speed: BRIEF_SPEED, tight: true });
+    sp.finish();
+  }, [go]);
+
   // ── One spoken turn: Claude, tools, Claude… until it's said its piece ──
   const respond = useCallback(async (words: string) => {
+    const afterBrief = askedAnythingElse.current;
+    askedAnythingElse.current = false;
+    if (afterBrief && isSignOff(words)) return farewell(words);
+    const asked = briefRequest(words, live.current.dataset);
+    if (asked && runBrief(asked.ticker, words)) return;
     const sp = speaker.current!;
     turn.current?.abort();
     const ac = new AbortController();
@@ -285,7 +394,7 @@ export default function Jarvis({ dataset, query }: Props) {
         sp.finish();
       }
     }
-  }, [go, runTool, queueCues]);
+  }, [go, runTool, queueCues, runBrief, farewell]);
 
   // Development only: ask as if spoken, to test the whole loop without a microphone.
   useEffect(() => {
@@ -294,6 +403,23 @@ export default function Jarvis({ dataset, query }: Props) {
     w.__jarvisAsk = (words) => { speaker.current?.prime(); return respond(words); };
     return () => { delete w.__jarvisAsk; };
   }, [respond]);
+
+  // The briefing from the keyboard, for a recording: B briefs on the company page that's open.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.tagName === "SELECT" || t.isContentEditable)) return;
+      if (e.key !== "b" && e.key !== "B") return;
+      if (e.metaKey || e.ctrlKey || e.altKey || phaseRef.current === "off") return;
+      const m = decodeURIComponent(window.location.hash).match(/^#c\/(.+)$/);
+      if (!m) return;
+      e.preventDefault();
+      speaker.current?.stop();
+      runBrief(m[1], `Explain ${m[1]}`);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [runBrief]);
 
   /** You started talking over Jarvis: stop everything, keep what it had already said. */
   const interrupt = useCallback(() => {
@@ -311,6 +437,10 @@ export default function Jarvis({ dataset, query }: Props) {
     turn.current = null;
     current.current = null;
     setActivity("");
+    // Fade the briefing out rather than cutting it.
+    const gen = briefGen.current;
+    setBriefLeaving(true);
+    setTimeout(() => { if (briefGen.current === gen) { setBrief(null); setBriefLeaving(false); } }, 800);
   }, []);
 
   // ── Session ──
@@ -319,7 +449,7 @@ export default function Jarvis({ dataset, query }: Props) {
     setError("");
     const sp = speaker.current!;
     sp.prime();
-    if (status && !status.voice) sp.mode = "browser";
+    if (practice || (status && !status.voice)) sp.mode = "browser";
     sp.onLimited = () => setError("Voice limit reached: using the browser's voice for now.");
     go("starting");
     chime("start");
@@ -357,17 +487,11 @@ export default function Jarvis({ dataset, query }: Props) {
         setError(m);
         go("off");
       },
-    }, !!status?.ears);
+    }, !!status?.ears && !practice);
     if (phaseRef.current === "off") return;
-    // A short hello, then it listens.
-    const hello = greeting(live.current.dataset);
-    go("speaking");
-    setCaption(hello);
-    sp.begin();
-    sp.onIdle = () => { if (phaseRef.current === "speaking") go("listening"); };
-    sp.enqueue(hello, () => {});
-    sp.finish();
-  }, [go, interrupt, respond, status]);
+    // No hello: it listens first and speaks only when spoken to.
+    go("listening");
+  }, [go, interrupt, respond, status, practice]);
 
   const end = useCallback(() => {
     turn.current?.abort();
@@ -375,6 +499,7 @@ export default function Jarvis({ dataset, query }: Props) {
     void listener.current?.stop();
     spotlight(null);
     setGraphic(null);
+    setBrief(null);
     setCaption("");
     setHeard("");
     setActivity("");
@@ -383,6 +508,9 @@ export default function Jarvis({ dataset, query }: Props) {
     if (phaseRef.current !== "off") chime("end");
     go("off");
   }, [go]);
+  useEffect(() => {
+    endRef.current = end;
+  }, [end]);
 
   useEffect(() => {
     if (listener.current) listener.current.muted = micOff;
@@ -418,6 +546,7 @@ export default function Jarvis({ dataset, query }: Props) {
   return (
     <div data-jarvis-ui>
       <SpotlightLayer />
+      {brief && <Briefing state={brief} leaving={briefLeaving} />}
 
       {graphic && (
         <div className="jarvis-graphic-wrap fixed right-5 top-20 z-[70]">
@@ -447,6 +576,11 @@ export default function Jarvis({ dataset, query }: Props) {
           <div className="min-w-0 flex-1 py-0.5">
             <div className="flex items-center gap-2">
               <span className={`text-[11px] font-medium uppercase tracking-[0.14em] ${phase === "thinking" ? "jarvis-shimmer" : phase === "hearing" ? "text-signal" : "text-white/45"}`}>{statusLine}</span>
+              {practice && (
+                <span title="Rehearsal: the browser's voice and recogniser, no ElevenLabs credits. Add ?voice=live to the address to switch back." className="rounded bg-amber-300/15 px-1.5 py-px font-mono text-[9.5px] uppercase tracking-wider text-amber-200">
+                  Practice voice
+                </span>
+              )}
               {held > 0 && (
                 <span title="Jarvis held back a sentence because a number in it didn't match the data." className="rounded bg-red-500/15 px-1.5 py-px font-mono text-[9.5px] uppercase tracking-wider text-red-300">
                   {held} held back · unverified number

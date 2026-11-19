@@ -412,7 +412,7 @@ export function ScoreBreakdown({ dataset, company: c }: { dataset: Dataset; comp
           const d = dataset.metricDefs.find((m) => m.id === p.metricId);
           const earned = p.grade == null ? null : Math.round(p.grade * p.weight * 10) / 10;
           return (
-            <div key={p.metricId} title={p.scale} className="flex items-center gap-2 text-xs">
+            <div key={p.metricId} title={p.scale} className="flex items-center gap-2 rounded-md text-xs" data-jv-part={p.metricId}>
               <span className="w-40 truncate text-muted">{d?.short ?? d?.label ?? p.metricId}</span>
               <span className="w-16 text-right font-mono tabular-nums text-ink">{formatMetric(c.metrics[p.metricId], d?.unit ?? "pct")}</span>
               <span className="h-1.5 w-16 overflow-hidden rounded-full bg-line"><span className="block h-full bg-teal" style={{ width: `${(p.grade ?? 0) * 100}%` }} /></span>

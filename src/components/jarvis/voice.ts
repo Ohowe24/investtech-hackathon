@@ -69,10 +69,48 @@ export function toWav(samples: Float32Array, rate = 16000): Blob {
 
 // ───────────────────────── Speaker ─────────────────────────
 
+/** How one sentence is voiced. Used by the briefing; conversation uses the defaults. */
+export interface VoiceOpts {
+  /** voice speed, 1 = normal (ElevenLabs takes 0.7 to 1.2) */
+  speed?: number;
+  /** cut the silence at both ends of the clip, so sentences follow each other closely */
+  tight?: boolean;
+}
+
+/** A voiced sentence, and the silence to skip at its start and end (seconds). */
+interface Clip {
+  url: string;
+  lead: number;
+  tail: number;
+}
+
 interface Item {
   speech: string;
-  audio: Promise<string | null>;
+  opts: VoiceOpts;
+  audio: Promise<Clip | null>;
   onStart: () => void;
+}
+
+/** Leading and trailing silence of an mp3, measured from its decoded samples. Zero when it can't be decoded. */
+async function silences(blob: Blob): Promise<{ lead: number; tail: number }> {
+  const ctx = audioContext();
+  if (!ctx) return { lead: 0, tail: 0 };
+  try {
+    const buf = await ctx.decodeAudioData(await blob.arrayBuffer());
+    const d = buf.getChannelData(0);
+    const quiet = 0.012;
+    let a = 0;
+    while (a < d.length && Math.abs(d[a]) < quiet) a++;
+    let b = d.length - 1;
+    while (b > a && Math.abs(d[b]) < quiet) b--;
+    // Keep a breath either side so words aren't clipped.
+    const lead = Math.max(0, a / buf.sampleRate - 0.04);
+    // A short, natural pause after each sentence; only the dead air beyond it goes.
+    const tail = Math.max(0, (d.length - 1 - b) / buf.sampleRate - 0.3);
+    return { lead, tail };
+  } catch {
+    return { lead: 0, tail: 0 };
+  }
 }
 
 function pickBrowserVoice(): SpeechSynthesisVoice | null {
@@ -135,8 +173,8 @@ export class Speaker {
     this.more = true;
   }
 
-  enqueue(speech: string, onStart: () => void) {
-    this.queue.push({ speech, onStart, audio: this.fetchAudio(speech) });
+  enqueue(speech: string, onStart: () => void, opts: VoiceOpts = {}) {
+    this.queue.push({ speech, opts, onStart, audio: this.fetchAudio(speech, opts) });
     void this.next();
   }
 
@@ -150,7 +188,7 @@ export class Speaker {
     this.gen++;
     this.ctrl.abort();
     this.ctrl = new AbortController();
-    for (const it of this.queue) void it.audio.then((u) => u && URL.revokeObjectURL(u));
+    for (const it of this.queue) void it.audio.then((c) => c && URL.revokeObjectURL(c.url));
     this.queue = [];
     this.more = false;
     this.playing = false;
@@ -181,13 +219,13 @@ export class Speaker {
     return this.fake;
   }
 
-  private async fetchAudio(speech: string): Promise<string | null> {
+  private async fetchAudio(speech: string, opts: VoiceOpts): Promise<Clip | null> {
     if (this.mode === "browser") return null;
     try {
       const res = await fetch("/api/jarvis/speak", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: speech }),
+        body: JSON.stringify({ text: speech, speed: opts.speed }),
         signal: this.ctrl.signal,
       });
       // Not set up (501) or over a limit (429): use the browser's own voice from here on, without asking again.
@@ -197,7 +235,9 @@ export class Speaker {
         return null;
       }
       if (!res.ok) return null;
-      return URL.createObjectURL(await res.blob());
+      const blob = await res.blob();
+      const cut = opts.tight ? await silences(blob) : { lead: 0, tail: 0 };
+      return { url: URL.createObjectURL(blob), ...cut };
     } catch {
       return null;
     }
@@ -212,39 +252,52 @@ export class Speaker {
     }
     this.playing = true;
     const gen = this.gen;
-    const url = await it.audio;
+    const clip = await it.audio;
     if (gen !== this.gen) return;
     it.onStart();
-    if (url && this.el) await this.playUrl(url);
-    else await this.speakBrowser(it.speech);
-    if (url) URL.revokeObjectURL(url);
+    if (clip && this.el) await this.playUrl(clip);
+    else await this.speakBrowser(it.speech, it.opts.speed);
+    if (clip) URL.revokeObjectURL(clip.url);
     if (gen !== this.gen) return;
     this.playing = false;
     void this.next();
   }
 
-  private playUrl(url: string): Promise<void> {
+  private playUrl(clip: Clip): Promise<void> {
     const el = this.el!;
     return new Promise((resolve) => {
+      let timer = 0;
+      let over = false;
       const done = () => {
-        el.onended = el.onerror = null;
+        if (over) return;
+        over = true;
+        clearTimeout(timer);
+        el.onended = el.onerror = el.onplaying = null;
         resolve();
       };
       el.onended = done;
       el.onerror = done;
-      el.src = url;
+      // Trimmed clips: start past the silence, and move on as the last word ends instead of waiting out the tail.
+      el.onplaying = () => {
+        el.onplaying = null;
+        if (!clip.tail || !Number.isFinite(el.duration)) return;
+        const left = (el.duration - clip.tail - el.currentTime) / (el.playbackRate || 1);
+        if (left > 0) timer = window.setTimeout(done, left * 1000);
+      };
+      el.src = clip.url;
+      if (clip.lead) el.currentTime = clip.lead;
       el.play().catch(done);
     });
   }
 
-  private speakBrowser(text: string): Promise<void> {
+  private speakBrowser(text: string, speed = 1): Promise<void> {
     if (typeof speechSynthesis === "undefined") return Promise.resolve();
     return new Promise((resolve) => {
       const u = new SpeechSynthesisUtterance(text);
       const v = pickBrowserVoice();
       if (v) u.voice = v;
       // Measured and slightly low: unhurried, dry, composed.
-      u.rate = 1.0;
+      u.rate = speed;
       u.pitch = 0.86;
       u.onboundary = () => { this.fake = 0.55 + Math.random() * 0.35; };
       u.onend = () => resolve();

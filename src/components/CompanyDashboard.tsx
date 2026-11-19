@@ -54,7 +54,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
 
       <section className="spot scan-once panel">
         <div className="flex flex-wrap items-center justify-between gap-4 px-6 py-6 md:px-8">
-          <div className="flex items-center gap-5">
+          <div className="flex items-center gap-5" data-jv-brief="head">
             <span className="logo-scan grid h-16 w-16 shrink-0 place-items-center rounded-2xl border border-line bg-gradient-to-b from-[#1b1b1b] to-[#050505] font-mono text-sm font-bold text-white">{company.ticker}</span>
             <div>
               <h1 className="text-[28px] font-bold leading-tight tracking-[-0.03em] text-ink"><Decode text={company.name} letters duration={700} /></h1>
@@ -74,7 +74,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
           </div>
         </div>
         {m && (
-          <div className="grid grid-cols-2 divide-line border-t border-line sm:grid-cols-4 sm:divide-x">
+          <div className="grid grid-cols-2 divide-line border-t border-line sm:grid-cols-4 sm:divide-x" data-jv-brief="stats">
             {m.score
               ? <Stat label="Quality score" value={m.score.value == null ? "—" : `${m.score.value}`} unit={`/ 100 · rank ${m.rank} of ${tested.length}`} />
               : <Stat label="Rank" value={`${m.rank}`} unit={`of ${tested.length}`} />}
@@ -104,7 +104,7 @@ export default function CompanyDashboard({ dataset, company, onOpen, onBack }: P
             </div>
           </div>
         )}
-        {m?.score && <div className="border-t border-line px-6 pb-4 pt-1"><ScoreBreakdown dataset={dataset} company={company} /></div>}
+        {m?.score && <div className="border-t border-line px-6 pb-4 pt-1" data-jv-brief="breakdown"><ScoreBreakdown dataset={dataset} company={company} /></div>}
       </section>
 
       <ChecksPanel dataset={dataset} company={company} scored={scored} context={context} onOpen={onOpen} />
@@ -455,7 +455,7 @@ function MetricRow({ dataset, company, def, onOpen, i }: { dataset: Dataset; com
   const gate = checks.some((k) => k.kind === "gate");
 
   return (
-    <div className="grid items-center gap-x-6 gap-y-2 border-t border-line px-6 py-4 md:grid-cols-[230px_120px_150px_1fr_90px]">
+    <div className="grid items-center gap-x-6 gap-y-2 border-t border-line px-6 py-4 md:grid-cols-[230px_120px_150px_1fr_90px]" data-jv-metric={def.id}>
       <div className="min-w-0">
         <Explain info={scoredMetricInfo(dataset, def.id)} className="text-left text-[14px] font-medium text-ink">{def.short ?? def.label}</Explain>
         {gate && <span className="kicker mt-0.5 block !text-[9.5px] !text-warn">Must pass</span>}
