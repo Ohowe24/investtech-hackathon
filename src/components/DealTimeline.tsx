@@ -53,7 +53,7 @@ export default function DealTimeline({ dataset, company }: { dataset: Dataset; c
               return (
                 <g key={h.fiscalYear} className="cursor-pointer" onMouseEnter={() => setHover(h.fiscalYear)}
                   onClick={() => setPicked(picked === h.fiscalYear ? null : h.fiscalYear)}>
-                  <rect x={cx(i) - band / 2} y={PAD.top - 20} width={band} height={H - PAD.top + 20} fill={active ? "#f5f5f5" : "transparent"} />
+                  <rect x={cx(i) - band / 2} y={PAD.top - 20} width={band} height={H - PAD.top + 20} fill="transparent" />
                   <rect x={cx(i) - band * 0.26} y={base - hgt} width={band * 0.52} height={hgt} rx={3}
                     fill={negative ? "var(--color-bad)" : "var(--color-teal)"} opacity={active ? 1 : 0.55}
                     className="a-grow-y" style={{ transition: "opacity 120ms", transformOrigin: "center bottom", animationDelay: `${150 + i * 90}ms` }} />

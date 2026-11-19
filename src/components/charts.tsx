@@ -95,7 +95,7 @@ export function TrendChart({ years, series, fmtLeft, fmtRight, refs = [], height
         ))}
         {years.map((yr, i) => (
           <g key={yr} onMouseEnter={() => setHover(i)}>
-            <rect x={cx(i) - band / 2} y={0} width={band} height={H} fill={hover === i ? "#f5f5f5" : "transparent"} />
+            <rect x={cx(i) - band / 2} y={0} width={band} height={H} fill="transparent" />
             <text x={cx(i)} y={H - 7} textAnchor="middle" className={`text-[10px] ${at === i ? "fill-ink font-semibold" : "fill-muted"}`}>FY{yr}</text>
           </g>
         ))}

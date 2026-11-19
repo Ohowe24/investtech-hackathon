@@ -128,20 +128,12 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
   }, [run, finish]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        finish();
-      }
-    };
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
     };
-  }, [finish]);
+  }, []);
 
   const industry = dataset.industryName ?? "this industry";
   const phase = t >= DONE ? -1 : PH.reduce((p, x, i) => (t >= x.at ? i : p), 0);
@@ -200,7 +192,6 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
               className="rounded-md border border-white/15 px-2.5 py-1 text-[12px] font-medium text-white/75 hover:border-white/40 hover:text-white">
               {sound ? "Sound on" : "Sound off"}
             </button>
-            <button onClick={finish} className="rounded-md bg-[#fff] px-3 py-1 text-[12px] font-semibold text-[#050505] hover:opacity-85">Skip ⏎</button>
           </div>
         </div>
         <div className="h-[2px] bg-white/10">
@@ -299,7 +290,7 @@ export default function EngineReplay({ dataset, runNo, onDone }: { dataset: Data
                 {run.all.length > run.az.length && <> · top {run.az.length} of {run.all.length} shown</>}
               </span>
             ) : (
-              <span>Every value is read from this run. Press Enter to skip.</span>
+              <span>Every value is read from this run.</span>
             )}
           </div>
         </section>
