@@ -220,6 +220,8 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
         </div>
       </section>
 
+      <FeaturedCards economy={economy} selected={company.ticker} onSelect={(t) => { setTicker(t); document.getElementById("outlook-detail")?.scrollIntoView({ behavior: "smooth", block: "start" }); }} />
+
       <Card title="The answer, company by company" right={<LensSwitch lens={lens} onChange={setLens} />}>
         <p className="mb-3 text-[12.5px] text-muted">{LENSES.find((l) => l.key === lens)!.explain}</p>
         <div className="overflow-x-auto">
@@ -278,9 +280,13 @@ export default function OutlookEngine({ initial }: { initial?: string }) {
         <GapChart lens={lens} economy={economy} selected={company.ticker} onSelect={setTicker} />
       </Card>
 
-      <CompanyDetail c={company} economy={economy} lens={lens} />
+      <div id="outlook-detail" className="scroll-mt-20">
+        <CompanyDetail c={company} economy={economy} lens={lens} />
+      </div>
 
       <SignalTable c={company} lens={lens} />
+
+      <AllCompanies economy={economy} focus={initial && !FEATURED.some((c) => c.ticker === initial) ? initial : null} />
 
       <HowItWorks />
 
@@ -827,6 +833,137 @@ function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; econom
         </p>
       )}
     </div>
+  );
+}
+
+// ---------------------------------------------------------------- hero: the five featured companies
+
+const TREND_TEXT: Record<Trend, string> = { growing: "text-teal", stable: "text-warn", declining: "text-bad" };
+const TREND_FILL: Record<Trend, string> = { growing: "bg-teal", stable: "bg-warn", declining: "bg-bad" };
+
+/** a company's revenue split by industry, each part coloured by its industry's trend; widths are the engine's shares */
+function MixBar({ c }: { c: OutlookCompany }) {
+  const parts = c.industryMix.filter((m) => m.share != null && m.share > 0);
+  return (
+    <div className="flex h-2 gap-[2px] overflow-hidden rounded-full" aria-label="Revenue by industry">
+      {parts.map((m) => {
+        const ind = industryOf.get(m.naics);
+        return (
+          <span key={m.naics} title={`${m.title}: ${pct(m.share, 0)} of revenue · outlook ${pct(ind?.outlook)}`}
+            className={`h-full first:rounded-l-full last:rounded-r-full ${ind?.trend ? TREND_FILL[ind.trend] : "bg-faint"}`} style={{ width: `${(m.share as number) * 100}%`, opacity: 0.85 }} />
+        );
+      })}
+    </div>
+  );
+}
+
+/** the scored check, read from the trend: "growing" means at least the whole economy, the check's own bar */
+function CheckMark({ c }: { c: OutlookCompany }) {
+  if (!c.trend) return <span className="text-faint">no tailwind: check has no data</span>;
+  const pass = c.trend === "growing";
+  return (
+    <span className={pass ? "text-teal" : "text-bad"}>
+      {pass ? "✓ passes" : "✗ fails"} <span className="text-muted">growing ≥ economy</span>
+    </span>
+  );
+}
+
+function FeaturedCards({ economy, selected, onSelect }: { economy: number | null; selected: string; onSelect: (t: string) => void }) {
+  return (
+    <section aria-label="The five featured companies" className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      {FEATURED.map((c, i) => {
+        const on = c.ticker === selected;
+        return (
+          <button key={c.ticker} onClick={() => onSelect(c.ticker)} aria-pressed={on}
+            style={{ animationDelay: `${120 + i * 70}ms` }}
+            className={`a-rise panel group flex flex-col gap-3 px-4 py-4 text-left transition-[border-color,transform] duration-200 hover:-translate-y-0.5 ${on ? "!border-teal/60" : ""}`}>
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="font-mono text-[13px] font-semibold text-ink">{c.ticker}</span>
+              <TrendPill trend={c.trend} />
+            </div>
+            <div className="-mt-2 truncate text-[12px] text-muted">{c.name}</div>
+            <div>
+              <div className={`font-mono text-[30px] font-semibold leading-none tracking-[-0.03em] ${c.trend ? TREND_TEXT[c.trend] : "text-ink"}`}>{pct(c.tailwind)}</div>
+              <div className="mt-1 text-[11px] text-faint">tailwind a year · economy {pct(economy)}</div>
+            </div>
+            <MixBar c={c} />
+            <div className="truncate text-[11.5px] text-muted" title={c.industryMix.map((m) => `${m.title} ${pct(m.share, 0)}`).join(" · ")}>
+              {c.industryMix.slice(0, 2).map((m) => `${m.title} ${pct(m.share, 0)}`).join(" · ")}
+              {c.industryMix.length > 2 ? ` · +${c.industryMix.length - 2}` : ""}
+            </div>
+            <div className="mt-auto space-y-1 border-t border-line pt-2.5 text-[11.5px]">
+              {c.direction ? <DirectionMark direction={c.direction} /> : <span className="text-faint">No direction call: too few deals with an industry</span>}
+              <div><CheckMark c={c} /></div>
+            </div>
+          </button>
+        );
+      })}
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------- every company the score reads
+
+function AllCompanies({ economy, focus }: { economy: number | null; focus: string | null }) {
+  const rows = [...outlook.companies].sort((a, b) => (b.tailwind ?? -1) - (a.tailwind ?? -1));
+  const vals = rows.map((c) => c.tailwind ?? 0);
+  const lo = Math.min(0, ...vals), hi = Math.max(...vals, economy ?? 0);
+  const x = (v: number) => ((v - lo) / (hi - lo || 1)) * 100;
+  useEffect(() => {
+    if (focus) document.getElementById(`outlook-all-${focus}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [focus]);
+  return (
+    <Card title={`Every company the score reads · ${rows.length}`} right={<span className="text-[12px] text-faint">10 points + the “growing ≥ economy” check</span>}>
+      <p className="mb-3 text-[12.5px] text-muted">
+        The tailwind of every candidate and index holding, read the same way: each reported revenue segment mapped to an industry, each industry’s outlook from the
+        published sources. The five featured companies are also read on deals and client markets. Line = the whole economy, {pct(economy)} a year.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[640px] text-left text-[12.5px]">
+          <thead className="text-[10.5px] uppercase tracking-wide text-faint">
+            <tr>
+              <th className="py-2 pr-2 font-medium">#</th>
+              <th className="py-2 pr-3 font-medium">Company</th>
+              <th className="w-[38%] py-2 pr-3 font-medium">Tailwind</th>
+              <th className="py-2 pr-3 font-medium">Check</th>
+              <th className="py-2 font-medium">Main industry</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((c, i) => {
+              const top = c.industryMix[0];
+              return (
+                <tr key={c.ticker} id={`outlook-all-${c.ticker}`} className={`border-t border-line align-middle transition-colors ${focus === c.ticker ? "bg-tealsoft" : "hover:bg-soft"}`}>
+                  <td className="py-2 pr-2 font-mono text-[11px] text-faint">{i + 1}</td>
+                  <td className="py-2 pr-3">
+                    <a href={`#c/${encodeURIComponent(c.ticker)}`} className="font-mono font-semibold text-ink hover:underline">{c.ticker}</a>
+                    {c.featured && <span className="ml-1.5 rounded bg-soft px-1 py-px text-[9.5px] font-semibold uppercase tracking-wide text-muted">featured</span>}
+                    <div className="max-w-[180px] truncate text-[11.5px] text-muted">{c.name}</div>
+                  </td>
+                  <td className="py-2 pr-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="relative h-2 flex-1 rounded-full bg-line">
+                        {c.tailwind != null && (
+                          <span className={`absolute inset-y-0 rounded-full ${c.trend ? TREND_FILL[c.trend] : "bg-faint"}`}
+                            style={{ left: `${Math.min(x(0), x(c.tailwind))}%`, width: `${Math.abs(x(c.tailwind) - x(0))}%` }} />
+                        )}
+                        {economy != null && <span className="absolute -inset-y-1 w-px bg-ink/50" style={{ left: `${x(economy)}%` }} />}
+                      </div>
+                      <span className="w-12 text-right font-mono tabular-nums text-ink">{pct(c.tailwind)}</span>
+                    </div>
+                  </td>
+                  <td className="whitespace-nowrap py-2 pr-3 text-[11.5px]"><CheckMark c={c} /></td>
+                  <td className="py-2 text-[11.5px] text-muted">
+                    {top ? <>{top.title} <span className="font-mono text-faint">{pct(top.share, 0)}</span></> : "—"}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+      <p className="mt-3 text-[12px] text-faint">Industry labels for the companies beyond the five featured are proposed by Claude, with a quote from each Onesheet profile, and await approval.</p>
+    </Card>
   );
 }
 
