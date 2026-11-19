@@ -1,6 +1,6 @@
 // Tests for the Outlook engine formulas in engine/metrics.ts (rules: engine/methodology.md, "Outlook engine").
 import { describe, expect, it } from "vitest";
-import { cagr, demean, directionOf, industryOutlook, marketWeights, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
+import { cagr, correlationStrength, demean, persistence, directionOf, industryOutlook, marketWeights, pearson, realGrowth, shares, spearman, trailingMomentum, trendOf, weightedOutlook, yearlyMeans } from "./metrics";
 
 describe("trailingMomentum", () => {
   const flat = (v: number, n: number) => Array.from({ length: n }, () => v);
@@ -185,5 +185,32 @@ describe("yearlyMeans", () => {
   it("a missing month makes the year null", () => {
     const pts = months(2020, 10).map((p, i) => (i === 3 ? { ...p, value: null } : p));
     expect(yearlyMeans(pts)[2020]).toBeNull();
+  });
+});
+
+describe("persistence", () => {
+  const r = (past: number, next: number) => ({ past, next, econPast: 0.02, econNext: 0.02 });
+  it("counts how often shrinking industries keep lagging, against the base rate", () => {
+    const p = persistence([r(-0.01, 0.0), r(-0.02, 0.03), r(0.03, 0.04), r(0.01, 0.0), { past: null, next: 0, econPast: 0, econNext: 0 }]);
+    expect(p.n).toBe(4);
+    expect(p.shrinking).toBe(2);
+    expect(p.stillLagging).toBeCloseTo(0.5, 12); // one of two kept lagging
+    expect(p.baseLagging).toBeCloseTo(0.5, 12); // two of four lagged overall
+    expect(p.ahead).toBe(1);
+    expect(p.stillAhead).toBe(1);
+    expect(p.baseAhead).toBeCloseTo(0.5, 12);
+  });
+  it("shares are null when a group is empty", () => {
+    expect(persistence([r(0.03, 0.03)]).stillLagging).toBeNull();
+  });
+});
+
+describe("correlationStrength", () => {
+  it("names the size of a correlation, either sign", () => {
+    expect(correlationStrength(0.05)).toBe("none");
+    expect(correlationStrength(-0.2)).toBe("weak");
+    expect(correlationStrength(0.3)).toBe("moderate");
+    expect(correlationStrength(-0.7)).toBe("strong");
+    expect(correlationStrength(null)).toBeNull();
   });
 });

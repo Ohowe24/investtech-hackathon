@@ -288,9 +288,33 @@ The same tailwind and direction are computed twice.
     placeable (`?`) keeps its share with no outlook and lowers coverage.
   - Client markets get the same four published signals as industries (`outlook-industry-map.csv`).
 
+### Reality check (`engine/outlook/reality.ts`, shown on the tab)
+
+Two tests of whether the signals mean anything. Results are computed on every build and shown with their sample sizes;
+none is typed here.
+
+1. **Does recent momentum predict the next years?** Statistics Canada monthly real GDP since 1997 for every detailed
+   industry in table 36-10-0434 (the members with no sub-industries) and for all industries. One test per August from the
+   first with 4 years of history to the last with 3 years ahead. In each test, every industry's past growth
+   (`trailingMomentum`, the same formula the outlook uses) is set against its next 3 years (same formula, 3 years later).
+   Reported: the rank correlation across industries per test (`spearman`) and its median; and, pooled over all tests,
+   how often industries that shrank kept growing slower than the economy, and how often industries ahead of the economy
+   stayed ahead, each against the base rate for all industries (`persistence`). Words for sizes come from
+   `correlationStrength` (under 0.1 almost none, under 0.3 weak, under 0.5 moderate, else strong).
+2. **Does industry growth show up in the companies?** For the companies that report organic growth every year
+   (`engine/input/outlook-organic.csv`: CSU from 2020, FX-adjusted; TOI; WSP), organic growth is put after inflation with
+   Statistics Canada's annual CPI (table 18-10-0005, Canada, all-items; `realGrowth`) and set against the same calendar
+   year's growth in its industry's average real GDP (`yearlyMeans`, `pctChange`). Reported: the correlation per company
+   (`pearson`) and over all company-years with each company's own average removed (`demean`), so a company that always
+   grows fast cannot create a link on its own.
+
+Limits: few years per company; organic growth is global while the industry series are Canadian; TFI and Aecon do not
+report organic growth. Not tested: share prices (five companies are too few) and past editions of the projections and
+analyst forecasts (not in the data).
+
 ### What it does not do
 
-- **No backtest.** We have not shown this would have separated good acquirers from bad ones, so it is not a check.
+- **No stock-price backtest.** The reality check tests the signals, not whether they would have picked better stocks, so it is not a check.
 - It rewards growing and stable industries and flags declining ones; it does not reward the fastest growing.
 - Industry codes describe what a business does. Software and engineering firms serve many client markets; those are
   shown as text ("serves", "clients") and not scored.

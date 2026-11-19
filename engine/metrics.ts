@@ -408,3 +408,40 @@ export function yearlyMeans(points: { period: string; value: N }[]): Record<numb
   for (const [y, vals] of byYear) out[y] = vals.length === 12 ? meanStrict(vals) : null;
   return out;
 }
+
+/**
+ * Does an industry's past tell its future, relative to the economy? Over industry-periods with all four values:
+ * - shrinking: past < 0. stillLagging: share of those whose next growth was below the economy's next growth.
+ * - ahead: past ≥ the economy's past. stillAhead: share of those whose next growth was at or above the economy's next.
+ * - baseLagging / baseAhead: the same shares over every industry-period, the bar a signal has to beat.
+ */
+export function persistence(rows: { past: N; next: N; econPast: N; econNext: N }[]) {
+  const ok = rows.filter((r) => isNum(r.past) && isNum(r.next) && isNum(r.econPast) && isNum(r.econNext)) as {
+    past: number;
+    next: number;
+    econPast: number;
+    econNext: number;
+  }[];
+  const share = (xs: typeof ok, f: (r: (typeof ok)[number]) => boolean) => (xs.length ? xs.filter(f).length / xs.length : null);
+  const shrinking = ok.filter((r) => r.past < 0);
+  const ahead = ok.filter((r) => r.past >= r.econPast);
+  const lag = (r: (typeof ok)[number]) => r.next < r.econNext;
+  return {
+    n: ok.length,
+    shrinking: shrinking.length,
+    stillLagging: share(shrinking, lag),
+    baseLagging: share(ok, lag),
+    ahead: ahead.length,
+    stillAhead: share(ahead, (r) => !lag(r)),
+    baseAhead: share(ok, (r) => !lag(r)),
+  };
+}
+
+export type Strength = "none" | "weak" | "moderate" | "strong";
+
+/** Plain words for a correlation's size (sign shown separately): under 0.1 none, under 0.3 weak, under 0.5 moderate. */
+export function correlationStrength(r: N): Strength | null {
+  if (!isNum(r)) return null;
+  const a = Math.abs(r);
+  return a < 0.1 ? "none" : a < 0.3 ? "weak" : a < 0.5 ? "moderate" : "strong";
+}

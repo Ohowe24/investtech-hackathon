@@ -1,0 +1,4 @@
+ticker,metric_id,naics,note
+CSU,total_organic_growth_fx_adjusted,513210,"Organic growth after currency effects, as Constellation reports it (2020 on). The nominal series in the same data shows 36% and 38% 'organic' growth for 2013-2014, which cannot be organic, so it is not used."
+TOI,total_organic_growth,513210,
+WSP,organic_net_revenue_growth,541330,"Organic growth of net revenues."
