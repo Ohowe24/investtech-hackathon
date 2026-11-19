@@ -263,9 +263,12 @@ Two data issues found and handled:
 - **COPS growth-rate file is misaligned.** In `industrial_aagr_tcam_par_secteur_2026_2035.csv`, each growth rate sits on the
   row above its industry (e.g. the 5.0% shown for couriers is warehousing's), and the NAICS column is shifted too. We do
   not use it. We compute growth from the same release's GDP-levels file, whose rows are consistent.
-- **bls.gov refuses scripts.** The 27 rows we use were copied from Table 2.11 on 2026-11-19. The copy was checked against the
-  live table by SHA-256 fingerprint (`74f50372…5486`), and a test recomputes every published 10-year rate from the copied
-  levels (`engine/outlook.test.ts`).
+- **bls.gov refuses scripts.** The first 27 rows were copied from Table 2.11 on 2026-11-19 and checked against the live
+  table by SHA-256 fingerprint (`74f50372…5486`). 16 more rows, for the industries added when every scored company got a
+  tailwind, were read from the same live table in the browser later that day; the table body (every row's cells joined
+  by tabs, rows by new lines) had fingerprint `c9f628fb…c0a8`. Where BLS does not split an industry, its parent is used
+  (wholesale: Wholesale trade 420000); gasoline stations (457) have no BLS row of their own and get none. A test
+  recomputes every published 10-year rate from the copied levels (`engine/outlook.test.ts`).
 - **StatCan answers out of order.** The Web Data Service does not return series in the order requested. The fetcher matches
   each series by the industry in its coordinate, and the build refuses to run if any stored series is filed under the wrong
   industry. (The first version matched by position; every momentum figure published before this fix was attached to the

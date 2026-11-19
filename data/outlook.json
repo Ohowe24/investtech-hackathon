@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-19T18:33:58.139Z",
+  "generatedAt": "2026-11-19T18:35:44.303Z",
   "status": "complete",
   "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
   "layers": [
@@ -1688,7 +1688,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.02824159885955635,
+      "tailwind": 0.023351573363324052,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -1717,8 +1717,8 @@
             "to": 0.6731208150062727
           }
         ],
-        "tailwindFrom": 0.02824159885955635,
-        "tailwindTo": 0.02824159885955635,
+        "tailwindFrom": 0.023351573363324052,
+        "tailwindTo": 0.023351573363324052,
         "shift": 0,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -2527,7 +2527,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.014845138326547902,
+      "tailwind": 0.01591146318510378,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -2605,9 +2605,9 @@
             "to": 0.0004287211822248015
           }
         ],
-        "tailwindFrom": 0.014764030912024183,
-        "tailwindTo": 0.014845138326547902,
-        "shift": 0.00008110741452371957,
+        "tailwindFrom": 0.015862645383232316,
+        "tailwindTo": 0.01591146318510378,
+        "shift": 0.00004881780187146467,
         "direction": "steady",
         "note": null
       },
@@ -2905,7 +2905,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.0163686573179469,
+      "tailwind": 0.01785327110024626,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -2927,8 +2927,8 @@
             "to": 1
           }
         ],
-        "tailwindFrom": 0.0163686573179469,
-        "tailwindTo": 0.0163686573179469,
+        "tailwindFrom": 0.01785327110024626,
+        "tailwindTo": 0.01785327110024626,
         "shift": 0,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -3083,9 +3083,9 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.015175927702918313,
+      "tailwind": 0.027840029422639745,
       "coverage": 1,
-      "trend": "stable",
+      "trend": "growing",
       "decliningShare": 0,
       "dealOutlook": null,
       "dealCount": 0,
@@ -3105,8 +3105,8 @@
             "to": 1
           }
         ],
-        "tailwindFrom": 0.015175927702918313,
-        "tailwindTo": 0.015175927702918313,
+        "tailwindFrom": 0.027840029422639745,
+        "tailwindTo": 0.027840029422639745,
         "shift": 0,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -3201,7 +3201,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.0077080533567277995,
+      "tailwind": 0.01082777648622366,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -3210,7 +3210,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
-      "lagsEconomy": true,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3230,9 +3230,9 @@
             "to": 0.31921039961482905
           }
         ],
-        "tailwindFrom": 0.008246338975742767,
-        "tailwindTo": 0.0077080533567277995,
-        "shift": -0.0005382856190149672,
+        "tailwindFrom": 0.011238008552067896,
+        "tailwindTo": 0.01082777648622366,
+        "shift": -0.00041023206584423627,
         "direction": "steady",
         "note": null
       },
@@ -3325,10 +3325,10 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.015766604557827437,
+      "tailwind": 0.01960970682322489,
       "coverage": 1,
-      "trend": "stable",
-      "decliningShare": 0.346390459787124,
+      "trend": "growing",
+      "decliningShare": 0,
       "dealOutlook": null,
       "dealCount": 0,
       "dealsWithOutlook": 0,
@@ -3354,9 +3354,9 @@
             "to": 0.346390459787124
           }
         ],
-        "tailwindFrom": 0.015608065980803026,
-        "tailwindTo": 0.015766604557827437,
-        "shift": 0.00015853857702441063,
+        "tailwindFrom": 0.019519096605933234,
+        "tailwindTo": 0.01960970682322489,
+        "shift": 0.0000906102172916548,
         "direction": "steady",
         "note": null
       },
@@ -3420,7 +3420,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.00622686133587802,
+      "tailwind": 0.012781108078192216,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -3429,7 +3429,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
-      "lagsEconomy": true,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -3442,8 +3442,8 @@
             "to": 1
           }
         ],
-        "tailwindFrom": 0.00622686133587802,
-        "tailwindTo": 0.00622686133587802,
+        "tailwindFrom": 0.012781108078192216,
+        "tailwindTo": 0.012781108078192216,
         "shift": 0,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -3683,7 +3683,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.009630205107927663,
+      "tailwind": 0.01238995202053014,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -3712,9 +3712,9 @@
             "to": 0.3353569921076767
           }
         ],
-        "tailwindFrom": 0.009497712293561646,
-        "tailwindTo": 0.009630205107927663,
-        "shift": 0.000132492814366017,
+        "tailwindFrom": 0.012311925453326295,
+        "tailwindTo": 0.01238995202053014,
+        "shift": 0.0000780265672038448,
         "direction": "steady",
         "note": null
       },
@@ -3926,7 +3926,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.02824159885955635,
+      "tailwind": 0.02335157336332405,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -3997,8 +3997,8 @@
             "to": 0.016163071961019605
           }
         ],
-        "tailwindFrom": 0.028241598859556353,
-        "tailwindTo": 0.02824159885955635,
+        "tailwindFrom": 0.023351573363324052,
+        "tailwindTo": 0.02335157336332405,
         "shift": -3.469446951953614e-18,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -4127,7 +4127,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.033125633316092744,
+      "tailwind": 0.030304956958050463,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -4170,9 +4170,9 @@
             "to": 0.012486992715920915
           }
         ],
-        "tailwindFrom": 0.03312563331609275,
-        "tailwindTo": 0.033125633316092744,
-        "shift": -6.938893903907228e-18,
+        "tailwindFrom": 0.030304956958050466,
+        "tailwindTo": 0.030304956958050463,
+        "shift": -3.469446951953614e-18,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
       },
@@ -4279,7 +4279,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.005279844323627936,
+      "tailwind": 0.007262953311308107,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -4315,9 +4315,9 @@
             "to": 0.21510621103671207
           }
         ],
-        "tailwindFrom": 0.005279844323627936,
-        "tailwindTo": 0.005279844323627936,
-        "shift": 0,
+        "tailwindFrom": 0.007262953311308108,
+        "tailwindTo": 0.007262953311308107,
+        "shift": -8.673617379884035e-19,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
       },
@@ -4480,10 +4480,10 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.014135790474338522,
+      "tailwind": 0.010727758502797134,
       "coverage": 1,
       "trend": "stable",
-      "decliningShare": 0,
+      "decliningShare": 0.11326459980327153,
       "dealOutlook": null,
       "dealCount": 0,
       "dealsWithOutlook": 0,
@@ -4530,9 +4530,9 @@
             "to": 0.022004444606360887
           }
         ],
-        "tailwindFrom": 0.01366669172454574,
-        "tailwindTo": 0.014135790474338522,
-        "shift": 0.0004690987497927828,
+        "tailwindFrom": 0.009521840755351058,
+        "tailwindTo": 0.010727758502797134,
+        "shift": 0.0012059177474460763,
         "direction": "steady",
         "note": null
       },
@@ -4646,7 +4646,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.03929621813608222,
+      "tailwind": 0.040114142837035065,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -4682,9 +4682,9 @@
             "to": 0.23014236001265423
           }
         ],
-        "tailwindFrom": 0.03839827914462401,
-        "tailwindTo": 0.03929621813608222,
-        "shift": 0.000897938991458215,
+        "tailwindFrom": 0.03929395617417501,
+        "tailwindTo": 0.040114142837035065,
+        "shift": 0.0008201866628600521,
         "direction": "steady",
         "note": null
       },
@@ -4826,7 +4826,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.008994845918346175,
+      "tailwind": 0.01745633590869482,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -4835,7 +4835,7 @@
       "dealsWithOutlook": 0,
       "directionGap": null,
       "direction": null,
-      "lagsEconomy": true,
+      "lagsEconomy": false,
       "mixShift": {
         "from": "FY2022",
         "to": "FY2025",
@@ -4869,9 +4869,9 @@
             "to": 0.07124636164437322
           }
         ],
-        "tailwindFrom": 0.009298747153122195,
-        "tailwindTo": 0.008994845918346175,
-        "shift": -0.0003039012347760203,
+        "tailwindFrom": 0.01746682208289735,
+        "tailwindTo": 0.01745633590869482,
+        "shift": -0.000010486174202527926,
         "direction": "steady",
         "note": null
       },
@@ -5069,7 +5069,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.028148071602563555,
+      "tailwind": 0.02353428969663782,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0.017145022260111775,
@@ -5133,9 +5133,9 @@
             "to": 0.017145022260111775
           }
         ],
-        "tailwindFrom": 0.027741249362429478,
-        "tailwindTo": 0.028148071602563555,
-        "shift": 0.00040682224013407695,
+        "tailwindFrom": 0.023189653867007668,
+        "tailwindTo": 0.02353428969663782,
+        "shift": 0.00034463582963015216,
         "direction": "steady",
         "note": null
       },
@@ -5464,7 +5464,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.022131624745580093,
+      "tailwind": 0.022341446321172825,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -5521,9 +5521,9 @@
             "to": 0.09293026637621384
           }
         ],
-        "tailwindFrom": 0.019517528365409553,
-        "tailwindTo": 0.022131624745580093,
-        "shift": 0.0026140963801705407,
+        "tailwindFrom": 0.0216866683570679,
+        "tailwindTo": 0.022341446321172825,
+        "shift": 0.0006547779641049266,
         "direction": "steady",
         "note": null
       },
@@ -5733,7 +5733,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.025894568035739196,
+      "tailwind": 0.02407752842849642,
       "coverage": 1,
       "trend": "growing",
       "decliningShare": 0,
@@ -5762,8 +5762,8 @@
             "to": 0.073530323689132
           }
         ],
-        "tailwindFrom": 0.025894568035739196,
-        "tailwindTo": 0.025894568035739196,
+        "tailwindFrom": 0.02407752842849642,
+        "tailwindTo": 0.02407752842849642,
         "shift": 0,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
@@ -5871,9 +5871,9 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.01785327110024626,
+      "tailwind": 0.01933788488254562,
       "coverage": 1,
-      "trend": "stable",
+      "trend": "growing",
       "decliningShare": 0,
       "dealOutlook": null,
       "dealCount": 0,
@@ -5907,9 +5907,9 @@
             "to": 0.04755383469925918
           }
         ],
-        "tailwindFrom": 0.01785327110024626,
-        "tailwindTo": 0.01785327110024626,
-        "shift": 0,
+        "tailwindFrom": 0.019337884882545616,
+        "tailwindTo": 0.01933788488254562,
+        "shift": 3.469446951953614e-18,
         "direction": "steady",
         "note": "All revenue is read as one industry, so the mix cannot shift between industries."
       },
@@ -6030,7 +6030,7 @@
         }
       ],
       "geography": [],
-      "tailwind": 0.01496200318899128,
+      "tailwind": 0.016022935958303855,
       "coverage": 1,
       "trend": "stable",
       "decliningShare": 0,
@@ -6066,9 +6066,9 @@
             "to": 0.4046320416802345
           }
         ],
-        "tailwindFrom": 0.015265280095964643,
-        "tailwindTo": 0.01496200318899128,
-        "shift": -0.0003032769069733626,
+        "tailwindFrom": 0.016203834533923746,
+        "tailwindTo": 0.016022935958303855,
+        "shift": -0.0001808985756198908,
         "direction": "steady",
         "note": null
       },
@@ -9933,9 +9933,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Waste management and remediation services [562000]",
+          "value": 0.023351573363324052
         },
         {
           "kind": "street",
@@ -9953,7 +9952,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.02824159885955635,
+      "outlook": 0.023351573363324052,
       "trend": "growing",
       "note": "StatCan publishes 562 as a whole; COPS groups it with management, administrative and support services (55, 56); BLS has no series in the file. Onesheet's Waste Management industry holds only candidates (GFL, Waste Connections), so no peer."
     },
@@ -10105,9 +10104,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Food and beverage retailers [445000]",
+          "value": 0.011240405071974102
         },
         {
           "kind": "street",
@@ -10125,7 +10123,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.007084497082529784,
+      "outlook": 0.011240405071974102,
       "trend": "stable",
       "note": "StatCan publishes food and beverage retailers (445); COPS publishes retail trade as a whole; BLS has no retail series in the file. No listed Canadian convenience-store peer; the grocers are a different format."
     },
@@ -10221,9 +10219,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Wholesale trade [420000]",
+          "value": 0.02407752842849642
         },
         {
           "kind": "street",
@@ -10251,7 +10248,7 @@
           ]
         }
       ],
-      "outlook": 0.0163686573179469,
+      "outlook": 0.01785327110024626,
       "trend": "stable",
       "note": "StatCan uses Canadian NAICS, where hardware wholesale sits in building material and supplies merchant wholesalers (416); COPS publishes wholesale trade as a whole; BLS has no wholesale series in the file. Peers: the Industrial - Distribution companies that wholesale building products (ADENTRA, Doman)."
     },
@@ -10289,9 +10286,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Computer systems design and related services [541500]",
+          "value": 0.03400848351015484
         },
         {
           "kind": "street",
@@ -10309,8 +10305,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.015175927702918313,
-      "trend": "stable",
+      "outlook": 0.027840029422639745,
+      "trend": "growing",
       "note": "StatCan and COPS publish computer systems design and related services (5415) on its own. No listed Canadian peer outside the candidates."
     },
     {
@@ -10347,9 +10343,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Food services and drinking places [722000]",
+          "value": 0.02208431683977352
         },
         {
           "kind": "street",
@@ -10387,7 +10382,7 @@
           ]
         }
       ],
-      "outlook": 0.00622686133587802,
+      "outlook": 0.012781108078192216,
       "trend": "stable",
       "note": "StatCan publishes food services and drinking places (722); COPS groups 7223-7225. Peers: every listed Canadian company Onesheet files under Restaurants, except the candidates."
     },
@@ -10425,9 +10420,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Food manufacturing [311000]",
+          "value": 0.019288073993146915
         },
         {
           "kind": "street",
@@ -10465,7 +10459,7 @@
           ]
         }
       ],
-      "outlook": 0.004299060415344336,
+      "outlook": 0.008229753861448197,
       "trend": "stable",
       "note": "COPS groups food with beverage and tobacco manufacturing (3111-3123). Peers: Onesheet's Packaged Foods except Jamieson Wellness (supplements), plus Rogers Sugar (Food Confectioners)."
     },
@@ -10503,9 +10497,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Wholesale trade [420000]",
+          "value": 0.02407752842849642
         },
         {
           "kind": "street",
@@ -10523,7 +10516,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.014978514924022246,
+      "outlook": 0.0163686573179469,
       "trend": "stable",
       "note": "NAICS Canada code (US NAICS 4244). StatCan publishes food, beverage and tobacco merchant wholesalers (413); COPS publishes wholesale trade (41) as a whole. No listed Canadian peer."
     },
@@ -10561,9 +10554,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Air transportation [481000]",
+          "value": 0.02533731186618282
         },
         {
           "kind": "street",
@@ -10596,7 +10588,7 @@
           ]
         }
       ],
-      "outlook": 0.028938646925925626,
+      "outlook": 0.027137979396054224,
       "trend": "growing",
       "note": "Peers: Onesheet's Airlines, Airports & Air Services except Exchange Income."
     },
@@ -10634,9 +10626,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Fabricated metal product manufacturing [332000]",
+          "value": 0.007125723710842635
         },
         {
           "kind": "street",
@@ -10654,8 +10645,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": -0.009087926831888415,
-      "trend": "declining",
+      "outlook": 0.0054044923437379655,
+      "trend": "stable",
       "note": "StatCan and COPS publish fabricated metal product manufacturing (332) as a whole. No listed Canadian peer."
     },
     {
@@ -10692,9 +10683,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Navigational, measuring, electromedical, and control instruments manufacturing [334500]",
+          "value": 0.011252138741477236
         },
         {
           "kind": "street",
@@ -10712,7 +10702,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.007698144157829656,
+      "outlook": 0.011252138741477236,
       "trend": "stable",
       "note": "StatCan and COPS publish computer and electronic product manufacturing (334) as a whole, so the series is broader than instruments. No listed Canadian peer."
     },
@@ -10750,9 +10740,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Electrical equipment, appliance, and component manufacturing [335000]",
+          "value": 0.015830610572038717
         },
         {
           "kind": "street",
@@ -10785,7 +10774,7 @@
           ]
         }
       ],
-      "outlook": 0.01345935085865091,
+      "outlook": 0.014644980715344813,
       "trend": "stable",
       "note": "Peers: every listed Canadian company Onesheet files under Electrical Equipment & Parts (Ballard, Electrovaya, Hammond Power)."
     },
@@ -10823,9 +10812,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Electrical equipment manufacturing [335300]",
+          "value": 0.009075806261886532
         },
         {
           "kind": "street",
@@ -10849,7 +10837,7 @@
           "note": "Only 1 listed Canadian peer with estimates (need 2)"
         }
       ],
-      "outlook": 0.012383228601627216,
+      "outlook": 0.011307106344603524,
       "trend": "stable",
       "note": "StatCan and COPS publish electrical equipment, appliance and component manufacturing (335) as a whole. Peer: Hammond Power (transformers), the only Electrical Equipment & Parts company making this kind of equipment."
     },
@@ -10887,9 +10875,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Aerospace product and parts manufacturing [336400]",
+          "value": 0.01928606122625287
         },
         {
           "kind": "street",
@@ -10922,7 +10909,7 @@
           ]
         }
       ],
-      "outlook": 0.028674591600358124,
+      "outlook": 0.023980326413305497,
       "trend": "growing",
       "note": "Peers: the Aerospace & Defense companies whose Onesheet profile describes aircraft, aerostructures or spacecraft (Bombardier, Magellan, MDA Space), not simulators (CAE) or circuit boards (Firan)."
     },
@@ -10960,9 +10947,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Motor vehicle parts manufacturing [336300]",
+          "value": -0.02784754001205403
         },
         {
           "kind": "street",
@@ -10995,8 +10981,8 @@
           ]
         }
       ],
-      "outlook": 0.00559135644416342,
-      "trend": "stable",
+      "outlook": -0.011128091783945304,
+      "trend": "declining",
       "note": "COPS groups motor vehicles, bodies and parts (3361-3363). Peers: Onesheet's Auto - Parts."
     },
     {
@@ -11033,9 +11019,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Machinery manufacturing [333000]",
+          "value": 0.013245459640066848
         },
         {
           "kind": "street",
@@ -11068,7 +11053,7 @@
           ]
         }
       ],
-      "outlook": 0.005279844323627936,
+      "outlook": 0.007262953311308107,
       "trend": "stable",
       "note": "Peers: Onesheet's Industrial - Machinery and Agricultural - Machinery (ATS, Savaria, Ag Growth)."
     },
@@ -11106,9 +11091,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Agencies, brokerages, and other insurance related activities [524200]",
+          "value": 0.019961539817625606
         },
         {
           "kind": "street",
@@ -11126,7 +11110,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.03312563331609275,
+      "outlook": 0.030304956958050466,
       "trend": "growing",
       "note": "StatCan publishes no insurance-brokerage series, so finance and insurance (52) is used; its 'Other finance and insurance' (52E) aggregate may be closer. COPS: insurance and funds (5241-5269). No listed Canadian peer."
     },
@@ -11164,9 +11148,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Computer and electronic product manufacturing [334000]",
+          "value": 0.018726153057357253
         },
         {
           "kind": "street",
@@ -11190,7 +11173,7 @@
           "note": "Only 1 listed Canadian peer with estimates (need 2)"
         }
       ],
-      "outlook": 0.007698144157829656,
+      "outlook": 0.018726153057357253,
       "trend": "stable",
       "note": "StatCan and COPS publish 334 as a whole; no BLS series in the file. Peers: Celestica, the only listed Canadian company Onesheet files under Hardware, Equipment & Parts."
     },
@@ -11228,9 +11211,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Aerospace product and parts manufacturing [336400]",
+          "value": 0.01928606122625287
         },
         {
           "kind": "street",
@@ -11258,7 +11240,7 @@
           ]
         }
       ],
-      "outlook": 0.028674591600358124,
+      "outlook": 0.023980326413305497,
       "trend": "growing",
       "note": "StatCan and COPS publish aerospace product and parts manufacturing (3364) as a whole; no BLS series in the file. Peers: the Aerospace & Defense companies that make aircraft parts (Magellan, Firan); Bombardier (aircraft), CAE (training) and MDA (space) are left out."
     },
@@ -11296,9 +11278,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Wholesale trade [420000]",
+          "value": 0.02407752842849642
         },
         {
           "kind": "street",
@@ -11316,7 +11297,7 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.025894568035739196,
+      "outlook": 0.02407752842849642,
       "trend": "growing",
       "note": "StatCan and COPS use Canadian NAICS, where wholesale trade is 41 and recreational goods wholesalers sit in personal and household goods (414); COPS publishes wholesale trade as a whole. No listed Canadian peer."
     },
@@ -11354,9 +11335,8 @@
             "bls-ep-2-11"
           ],
           "period": "2025 → 2035",
-          "series": "BLS Table 2.11 · ",
-          "value": null,
-          "note": "Industry not in BLS Table 2.11"
+          "series": "BLS Table 2.11 · Wholesale trade [420000]",
+          "value": 0.02407752842849642
         },
         {
           "kind": "street",
@@ -11374,8 +11354,8 @@
           "note": "No listed Canadian peer outside the candidates"
         }
       ],
-      "outlook": 0.01785327110024626,
-      "trend": "stable",
+      "outlook": 0.01933788488254562,
+      "trend": "growing",
       "note": "StatCan and COPS use Canadian NAICS, where wholesale trade is 41 and heating and air-conditioning wholesalers sit in building material and supplies (416); COPS publishes wholesale trade as a whole. No listed Canadian peer."
     },
     {
