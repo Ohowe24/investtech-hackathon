@@ -230,7 +230,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
               <tr className="bg-[var(--panel-hi)]">
                 <th colSpan={2} className="border-t border-line" />
                 {runs.map((r, i) => (
-                  <th key={i} colSpan={r.n} className="border-t border-line px-2 pb-0 pt-3 text-left font-medium">
+                  <th key={i} colSpan={r.n} className="border-t border-line px-2 pb-0 pt-3 text-center font-medium">
                     <span className={`block whitespace-nowrap border-b pb-1.5 text-[10px] font-semibold uppercase tracking-[0.1em] ${r.gate ? "border-warn/50 text-warn" : "border-line text-faint"}`}>
                       {r.gate ? "Must pass" : "Scored checks"}
                     </span>
@@ -244,8 +244,8 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                 <th className={`${HEAD} w-10 pl-5 text-left`}>#</th>
                 <th className={`${HEAD} text-left`}>Company</th>
                 {metrics.map((d) => (
-                  <th key={d.id} className={`${HEAD} px-2 text-right leading-[1.35]`}>
-                    <Explain info={scoredMetricInfo(dataset, d.id)} className="inline-block max-w-[92px] text-balance text-right">{d.short ?? d.label}</Explain>
+                  <th key={d.id} className={`${HEAD} px-2 text-center leading-[1.35]`}>
+                    <Explain info={scoredMetricInfo(dataset, d.id)} className="inline-block max-w-[92px] text-balance text-center">{d.short ?? d.label}</Explain>
                   </th>
                 ))}
                 {hasScore && (
@@ -304,7 +304,7 @@ function RankTable({ title, subtitle, dataset, rows, metrics, medians, medianLab
                         const mv = c.metrics[d.id];
                         return (
                           <td key={d.id} title={mv?.period ? `${mv.period}${mv.note ? ` · ${mv.note}` : ""}` : mv?.note}
-                            className="whitespace-nowrap px-1.5 py-3.5 text-right font-mono text-[13px] tabular-nums">
+                            className="whitespace-nowrap px-1.5 py-3.5 text-center font-mono text-[13px] tabular-nums">
                             <span className="inline-flex items-center gap-1.5">
                               <span className={st === "none" ? "text-faint" : st === "fail" ? "rounded-md bg-badsoft px-1.5 py-0.5 text-bad" : "text-ink"}>
                                 {st === "none" ? "—" : formatMetric(mv, d.unit)}
