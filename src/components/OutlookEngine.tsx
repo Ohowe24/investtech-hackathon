@@ -27,7 +27,9 @@ const R = outlook.rules;
 // ---------------------------------------------------------------- formatting (no math beyond display rounding)
 
 const pct = (v: number | null | undefined, digits = 1) => (v == null ? "—" : `${(v * 100).toFixed(digits)}%`);
-const pts = (v: number | null | undefined) => (v == null ? "—" : `${v >= 0 ? "+" : "−"}${Math.abs(v * 100).toFixed(1)} pt`);
+// display rounding only: a gap that rounds to 0.0 shows without a sign
+const pts = (v: number | null | undefined) =>
+  v == null ? "—" : Math.abs(v) < 0.0005 ? "0.0 pt" : `${v > 0 ? "+" : "−"}${Math.abs(v * 100).toFixed(1)} pt`;
 
 const TREND: Record<Trend, { label: string; cls: string }> = {
   growing: { label: "Growing", cls: "bg-tealsoft text-teal" },
@@ -155,8 +157,8 @@ function TailwindCell({ v, lens }: { v: OutlookLens; lens: LensKey }) {
 
 // ---------------------------------------------------------------- page
 
-export default function OutlookEngine() {
-  const [ticker, setTicker] = useState(outlook.companies[0]?.ticker ?? "");
+export default function OutlookEngine({ initial }: { initial?: string }) {
+  const [ticker, setTicker] = useState(initial && outlook.companies.some((c) => c.ticker === initial) ? initial : (outlook.companies[0]?.ticker ?? ""));
   const [lens, setLens] = useState<LensKey>("own");
   const company = outlook.companies.find((c) => c.ticker === ticker) ?? outlook.companies[0];
   const economy = outlook.economy.outlook;
@@ -231,6 +233,10 @@ export default function OutlookEngine() {
           fiscal {R.dealYears[0]}–{R.dealYears[2]}, each deal counted once. Direction is steady within ±{(R.directionBand * 100).toFixed(0)} point.
           Click a company for the detail.
         </p>
+      </Card>
+
+      <Card title="Tailwind and direction at a glance" right={<span className="text-[12px] text-faint">{LENSES.find((l) => l.key === lens)!.label}</span>}>
+        <GapChart lens={lens} economy={economy} selected={company.ticker} onSelect={setTicker} />
       </Card>
 
       <CompanyDetail c={company} economy={economy} lens={lens} />
@@ -831,6 +837,77 @@ function Scatter({ points }: { points: { code: string; title: string; past: numb
         </circle>
       ))}
     </svg>
+  );
+}
+
+/** one dot per company: tailwind (x) against the direction gap (y); the steady band and the economy bar drawn from the rules */
+function GapChart({ lens, economy, selected, onSelect }: { lens: LensKey; economy: number | null; selected: string; onSelect: (t: string) => void }) {
+  const W = 980, H = 270, P = { l: 66, r: 16, t: 14, b: 34 };
+  const rows = outlook.companies.map((c) => ({ c, v: viewOf(c, lens) }));
+  const shown = rows.filter((r) => r.v.tailwind != null && r.v.directionGap != null) as { c: OutlookCompany; v: OutlookLens & { tailwind: number; directionGap: number } }[];
+  const missing = rows.filter((r) => r.v.tailwind == null || r.v.directionGap == null);
+  const band = R.directionBand;
+  const xsAll = [...shown.map((r) => r.v.tailwind), ...(economy != null ? [economy] : []), 0];
+  const xPad = (Math.max(...xsAll) - Math.min(...xsAll)) * 0.12 || 0.01;
+  const x0 = Math.min(...xsAll), x1 = Math.max(...xsAll) + xPad;
+  const yMax = Math.max(band * 2, ...shown.map((r) => Math.abs(r.v.directionGap)) ) * 1.1;
+  const sx = (v: number) => P.l + ((v - x0) / (x1 - x0 || 1)) * (W - P.l - P.r);
+  const sy = (v: number) => P.t + ((yMax - v) / (2 * yMax)) * (H - P.t - P.b);
+  // dots that land on the same spot share one label
+  const groups: { x: number; y: number; tickers: string[] }[] = [];
+  for (const r of [...shown].sort((a, b) => a.v.tailwind - b.v.tailwind)) {
+    const x = sx(r.v.tailwind), y = sy(r.v.directionGap);
+    const g = groups.find((g) => Math.abs(g.x - x) < 6 && Math.abs(g.y - y) < 6);
+    if (g) g.tickers.push(r.c.ticker);
+    else groups.push({ x, y, tickers: [r.c.ticker] });
+  }
+  const xTicks = [...new Set([x0, x1].map((t) => Math.round(t * 1000) / 1000))];
+  return (
+    <div>
+      <p className="mb-3 text-[12.5px] text-muted">
+        Right = earns in faster-growing {lens === "own" ? "industries" : "markets"}. Up = recent deals head toward stronger ones, down = toward weaker ones.
+        Inside the grey band (±{(band * 100).toFixed(0)} point) the direction reads “steady”.
+      </p>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full" role="img" aria-label="Tailwind against direction gap, one dot per company">
+        <rect x={P.l} width={W - P.l - P.r} y={sy(band)} height={sy(-band) - sy(band)} fill="var(--color-line)" fillOpacity={0.45} />
+        <text x={W - P.r - 4} y={sy(band) + 12} textAnchor="end" fontSize="10" fill="var(--color-faint)">steady</text>
+        <line x1={P.l} x2={W - P.r} y1={sy(0)} y2={sy(0)} stroke="var(--color-line)" />
+        <line x1={sx(0)} x2={sx(0)} y1={P.t} y2={H - P.b} stroke="var(--color-line)" />
+        {[yMax, band, 0, -band, -yMax].map((t) => (
+          <text key={`y${t}`} x={P.l - 6} y={sy(t) + 3} textAnchor="end" fontSize="10" fill="var(--color-faint)">{pts(t)}</text>
+        ))}
+        {xTicks.map((t) => (
+          <text key={`x${t}`} x={sx(t)} y={H - P.b + 14} textAnchor="middle" fontSize="10" fill="var(--color-faint)">{pct(t)}</text>
+        ))}
+        <text x={(P.l + W - P.r) / 2} y={H - 4} textAnchor="middle" fontSize="10" fill="var(--color-muted)">Tailwind, yearly after inflation</text>
+        <text x={12} y={(P.t + H - P.b) / 2} textAnchor="middle" fontSize="10" fill="var(--color-muted)" transform={`rotate(-90 12 ${(P.t + H - P.b) / 2})`}>Deals vs tailwind</text>
+        {economy != null && (
+          <g>
+            <line x1={sx(economy)} x2={sx(economy)} y1={P.t} y2={H - P.b} stroke="var(--color-ink)" strokeDasharray="4 3" strokeOpacity={0.5} />
+            <text x={sx(economy) + 4} y={P.t + 9} fontSize="10" fill="var(--color-muted)">{`whole economy ${pct(economy)}`}</text>
+          </g>
+        )}
+        {shown.map((r) => {
+          const on = r.c.ticker === selected;
+          return (
+            <g key={r.c.ticker} className="cursor-pointer" onClick={() => onSelect(r.c.ticker)}>
+              <circle cx={sx(r.v.tailwind)} cy={sy(r.v.directionGap)} r={14} fill="transparent" />
+              <circle cx={sx(r.v.tailwind)} cy={sy(r.v.directionGap)} r={on ? 6.5 : 5} fill="var(--color-teal)" stroke="var(--panel-solid)" strokeWidth={2}>
+                <title>{`${r.c.ticker} · ${r.c.name}: tailwind ${pct(r.v.tailwind)}, recent deals ${pct(r.v.dealOutlook)}, gap ${pts(r.v.directionGap)} (${r.v.direction ? DIRECTION[r.v.direction].label.toLowerCase() : "no call"})`}</title>
+              </circle>
+            </g>
+          );
+        })}
+        {groups.map((g) => (
+          <text key={g.tickers.join()} x={g.x + 9} y={g.y - 8} fontSize="11" fontWeight={600} fill="var(--color-ink)">{g.tickers.join(" · ")}</text>
+        ))}
+      </svg>
+      {missing.length > 0 && (
+        <p className="mt-2 text-[12px] text-faint">
+          Not plotted: {missing.map((r) => `${r.c.ticker} (${r.v.tailwind == null ? "no tailwind" : "too few recent deals with an outlook to call a direction"})`).join("; ")}.
+        </p>
+      )}
+    </div>
   );
 }
 

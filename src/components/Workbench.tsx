@@ -91,7 +91,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
     window.location.assign(`/analyze?${toSearch({ ...query, more: more || undefined })}#companies`);
   };
   const company = hash.startsWith("c/") ? (dataset.companies.find((c) => c.ticker === decodeURIComponent(hash.slice(2))) ?? null) : null;
-  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" || hash === "outlook" ? hash : "companies";
+  const tab: Tab = start ? "ranking" : company ? "companies" : hash === "map" || hash === "recommendation" ? hash : hash === "outlook" || hash.startsWith("outlook/") ? "outlook" : "companies";
 
   return (
     <div className="min-h-screen w-full">
@@ -140,7 +140,7 @@ export default function Workbench({ dataset, snapshot, query }: Props) {
         ) : tab === "recommendation" ? (
           <div><Recommendation dataset={dataset} snapshot={snapshot} onOpen={(t) => go(`c/${t}`)} /></div>
         ) : tab === "outlook" ? (
-          <OutlookEngine />
+          <OutlookEngine initial={hash.startsWith("outlook/") ? decodeURIComponent(hash.slice(8)) : undefined} />
         ) : tab === "map" ? (
           <div>
             <Card title={dataset.mapTitle ?? "Map"}>
