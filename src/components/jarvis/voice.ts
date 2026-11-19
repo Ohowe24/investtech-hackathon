@@ -91,6 +91,42 @@ interface Item {
   onStart: () => void;
 }
 
+/**
+ * At most this many sentences are being voiced at once. ElevenLabs refuses requests beyond the plan's
+ * concurrency limit (6 on ours, shared with transcription), so a long answer queues its sentences here,
+ * first come first served. Each later sentence is still fetched while an earlier one plays.
+ */
+const MAX_IN_FLIGHT = 3;
+let inFlight = 0;
+const waiting: (() => void)[] = [];
+
+/** Waits for a free slot; call the returned function to give it back. */
+async function slot(signal: AbortSignal): Promise<() => void> {
+  if (inFlight >= MAX_IN_FLIGHT) {
+    await new Promise<void>((resolve, reject) => {
+      const go = () => { signal.removeEventListener("abort", stop); resolve(); };
+      const stop = () => {
+        const i = waiting.indexOf(go);
+        if (i >= 0) waiting.splice(i, 1);
+        reject(new DOMException("Aborted", "AbortError"));
+      };
+      if (signal.aborted) return stop();
+      waiting.push(go);
+      signal.addEventListener("abort", stop, { once: true });
+    });
+  }
+  inFlight++;
+  let given = false;
+  return () => {
+    if (given) return;
+    given = true;
+    inFlight--;
+    waiting.shift()?.();
+  };
+}
+
+const pause = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 /** Leading and trailing silence of an mp3, measured from its decoded samples. Zero when it can't be decoded. */
 async function silences(blob: Blob): Promise<{ lead: number; tail: number }> {
   const ctx = audioContext();
@@ -221,25 +257,37 @@ export class Speaker {
 
   private async fetchAudio(speech: string, opts: VoiceOpts): Promise<Clip | null> {
     if (this.mode === "browser") return null;
+    const signal = this.ctrl.signal;
+    let release: (() => void) | null = null;
     try {
-      const res = await fetch("/api/jarvis/speak", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: speech, speed: opts.speed }),
-        signal: this.ctrl.signal,
-      });
-      // Not set up (501) or over a limit (429): use the browser's own voice from here on, without asking again.
-      if (res.status === 501 || res.status === 429) {
-        this.mode = "browser";
-        if (res.status === 429) this.onLimited?.();
-        return null;
+      release = await slot(signal);
+      // Another sentence may have switched to the browser's voice while this one waited.
+      if ((this.mode as string) === "browser") return null;
+      for (let attempt = 0; ; attempt++) {
+        const res = await fetch("/api/jarvis/speak", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: speech, speed: opts.speed }),
+          signal,
+        });
+        // Busy for a moment (503): try again shortly, keeping the ElevenLabs voice.
+        if (res.status === 503 && attempt < 2) { await pause(700 * (attempt + 1)); continue; }
+        // Not set up (501) or out of credits / over our budget (429): use the browser's own voice from here on.
+        if (res.status === 501 || res.status === 429) {
+          this.mode = "browser";
+          if (res.status === 429) this.onLimited?.();
+          return null;
+        }
+        if (!res.ok) return null;
+        const blob = await res.blob();
+        release();
+        const cut = opts.tight ? await silences(blob) : { lead: 0, tail: 0 };
+        return { url: URL.createObjectURL(blob), ...cut };
       }
-      if (!res.ok) return null;
-      const blob = await res.blob();
-      const cut = opts.tight ? await silences(blob) : { lead: 0, tail: 0 };
-      return { url: URL.createObjectURL(blob), ...cut };
     } catch {
       return null;
+    } finally {
+      release?.();
     }
   }
 
