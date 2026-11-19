@@ -1,0 +1,924 @@
+{
+  "generatedAt": "2026-11-19T15:26:58.370Z",
+  "status": "planned",
+  "thesis": "An acquirer is only as good as the industries it buys into. For each serial acquirer: which industries it owns and buys, where those industries are heading according to published forecasts and data, and whether its new deals point toward stronger or weaker industries than the business it already has.",
+  "layers": [
+    {
+      "id": "mix",
+      "title": "1 · Industry map",
+      "question": "Which industries does each company own and buy?",
+      "steps": [
+        {
+          "id": "deals",
+          "label": "Disclosed deals",
+          "status": "done",
+          "detail": "Acquisitions with SEDAR quotes, copied from engine/input/deals.json."
+        },
+        {
+          "id": "deal-labels",
+          "label": "Deal industry labels",
+          "status": "planned",
+          "detail": "A NAICS code per deal, with the quote that justifies it, approved by a person (engine/input/outlook-labels.csv)."
+        },
+        {
+          "id": "segments",
+          "label": "Revenue by segment",
+          "status": "planned",
+          "detail": "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each segment mapped to NAICS."
+        }
+      ]
+    },
+    {
+      "id": "signals",
+      "title": "2 · Industry signals",
+      "question": "Where is each industry heading, according to published sources?",
+      "steps": [
+        {
+          "id": "momentum",
+          "label": "Recent momentum",
+          "status": "planned",
+          "detail": "Statistics Canada GDP by industry (table 36-10-0434), 3-year yearly rate."
+        },
+        {
+          "id": "projection",
+          "label": "Official projection",
+          "status": "planned",
+          "detail": "US BLS Employment Projections and Canada COPS outlook by industry."
+        },
+        {
+          "id": "street",
+          "label": "Street forecast",
+          "status": "planned",
+          "detail": "Median analyst revenue growth estimate of the public companies in that industry (Onesheet estimates)."
+        },
+        {
+          "id": "narrative",
+          "label": "Narrative",
+          "status": "planned",
+          "detail": "News and earnings-call quotes summarized by Claude. Shown as text, never scored."
+        }
+      ]
+    },
+    {
+      "id": "tailwind",
+      "title": "3 · Company tailwind",
+      "question": "How strong are the industries this company earns its money in?",
+      "steps": [
+        {
+          "id": "blend",
+          "label": "Industry outlook",
+          "status": "planned",
+          "detail": "One declared blend of the signals (start: median of the available ones), in engine/metrics.ts with tests."
+        },
+        {
+          "id": "weighting",
+          "label": "Revenue-weighted tailwind",
+          "status": "planned",
+          "detail": "Share of revenue × industry outlook, with the share of revenue covered shown."
+        }
+      ]
+    },
+    {
+      "id": "direction",
+      "title": "4 · Direction",
+      "question": "Are the new deals heading toward stronger or weaker industries than the existing business?",
+      "steps": [
+        {
+          "id": "compare",
+          "label": "Deals vs base",
+          "status": "planned",
+          "detail": "Outlook of the last 3 years' deals vs the existing revenue mix: toward ↗, steady →, or away ↘."
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "deals",
+      "label": "Onesheet data pack deals with SEDAR quotes (engine/input/deals.json)",
+      "status": "fetched"
+    },
+    {
+      "id": "onesheet-segments",
+      "label": "Onesheet segments and KPIs",
+      "url": "https://api.onesheet.pro/v1/kpis/segments-and-kpis",
+      "status": "planned"
+    },
+    {
+      "id": "statcan-36-10-0434",
+      "label": "Statistics Canada, GDP at basic prices by industry (36-10-0434)",
+      "url": "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=3610043401",
+      "status": "planned"
+    },
+    {
+      "id": "bls-ep",
+      "label": "US BLS Employment Projections, output and employment by industry",
+      "url": "https://www.bls.gov/emp/",
+      "status": "planned"
+    },
+    {
+      "id": "esdc-cops",
+      "label": "Canadian Occupational Projection System (ESDC)",
+      "url": "https://occupations.esdc.gc.ca/sppc-cops/",
+      "status": "planned"
+    },
+    {
+      "id": "onesheet-estimates",
+      "label": "Onesheet analyst estimates",
+      "url": "https://api.onesheet.pro/v1/stocks/fundamentals",
+      "status": "planned"
+    }
+  ],
+  "companies": [
+    {
+      "ticker": "CSU",
+      "name": "Constellation Software",
+      "mix": [],
+      "tailwind": null,
+      "coverage": null,
+      "direction": null,
+      "notes": [
+        "Industry mix not mapped yet"
+      ]
+    },
+    {
+      "ticker": "TOI",
+      "name": "Topicus.com",
+      "mix": [],
+      "tailwind": null,
+      "coverage": null,
+      "direction": null,
+      "notes": [
+        "Industry mix not mapped yet"
+      ]
+    },
+    {
+      "ticker": "WSP",
+      "name": "WSP Global",
+      "mix": [],
+      "tailwind": null,
+      "coverage": null,
+      "direction": null,
+      "notes": [
+        "Industry mix not mapped yet"
+      ]
+    },
+    {
+      "ticker": "TFII",
+      "name": "TFI International",
+      "mix": [],
+      "tailwind": null,
+      "coverage": null,
+      "direction": null,
+      "notes": [
+        "Industry mix not mapped yet"
+      ]
+    },
+    {
+      "ticker": "ARE",
+      "name": "Aecon Group",
+      "mix": [],
+      "tailwind": null,
+      "coverage": null,
+      "direction": null,
+      "notes": [
+        "Industry mix not mapped yet"
+      ]
+    }
+  ],
+  "deals": [
+    {
+      "ticker": "ARE",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon Utilities Group Inc. (AUGI) completed the acquisition of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quote": "On December 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired all of the property and assets of Ainsworth Power Construction, an electrical services and power systems business unit of Ainsworth Inc., headquartered in Toronto, Ontario, from GDI Integrated Facility Services.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "2026-03-09",
+      "fiscalYear": 2026,
+      "counterparty": "Ryker Holdings Inc.",
+      "summary": "Aecon, through Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries, and a 49% interest in KNX Utility Services, LLC from Ryker Holdings Inc. on March 9, 2026.",
+      "quote": "On March 9, 2026, the Company, through its subsidiary Aecon Utilities Group Inc., completed the acquisition of 100% of Duna Services, LLC and its subsidiaries Arc American, LLC and C.A. Advanced, LLC (collectively, 'Duna'), as well as a 49% ownership interest in KNX Utility Services, LLC ('KNX'), from Ryker Holdings Inc.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "Q3 2025",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell and Trinity",
+      "summary": "Aecon completed the Bodell and Trinity acquisitions in the third quarter of 2025.",
+      "quote": "higher revenue in the U.S. following the Bodell and Trinity acquisitions in the third quarter of 2025",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "2025-09-18",
+      "fiscalYear": 2025,
+      "counterparty": "Trinity Industrial Services",
+      "summary": "Aecon Group Inc. acquired all of the property and assets of Trinity Industrial Services, headquartered in Beaumont, Texas, on September 18, 2025.",
+      "quote": "On September 18, 2025, the Company acquired the business of Trinity Industrial Services ('Trinity'), headquartered in Beaumont, Texas provides multidisciplinary services supporting maintenance, capital projects, turnarounds and fabrication for core industrial clients",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "2025-08-07",
+      "fiscalYear": 2025,
+      "counterparty": "Bodell Construction Company",
+      "summary": "Aecon acquired Bodell Construction Company, an industrial construction company headquartered in Salt Lake City, Utah, on August 7, 2025.",
+      "quote": "On August 7, 2025, the Company acquired Bodell Construction Company ('Bodell'), an industrial construction company headquartered in Salt Lake City, Utah.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "2024-12-17",
+      "fiscalYear": 2024,
+      "counterparty": "CriticalPoint Capital, LLC",
+      "summary": "Aecon Group Inc. acquired United Engineers & Constructors Inc. from affiliates of CriticalPoint Capital, LLC on December 17, 2024.",
+      "quote": "On December 17, 2024, the Company acquired United Engineers & Constructors Inc. ('United'), a nuclear and conventional power engineer and contractor headquartered in Mount Laurel, New Jersey, from affiliates of CriticalPoint Capital, LLC.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "2024-07-02",
+      "fiscalYear": 2024,
+      "counterparty": "Xtreme Powerline Construction Inc",
+      "summary": "Aecon, through its subsidiary Aecon Utilities, acquired Xtreme Powerline Construction Inc., an electrical distribution utility contractor based in Port Huron, Michigan, on July 2, 2024.",
+      "quote": "On July 2, 2024, the Company through its subsidiary, Aecon Utilities, acquired a 94.34% interest in Xtreme Powerline Construction Inc. ('Xtreme'), an electrical distribution utility contractor headquartered in Port Huron, Michigan.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Bodell",
+      "summary": "Aecon acquired Bodell, a U.S. industrial construction company, in 2025 to expand industrial capabilities.",
+      "quote": "In the U.S., Aecon acquired Bodell and Trinity. Bodell is an industrial construction company that specializes in capital expenditure projects across the oil and gas, mining, water and wastewater, and power generation sectors in the Western and Southern U.S.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "ARE",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Trinity",
+      "summary": "Aecon acquired Trinity, a U.S. industrial services company, in 2025 to expand industrial capabilities.",
+      "quote": "Trinity is an industrial services company that specializes in fabrication and O&M projects for industrial clients primarily in Texas and across the Gulf Coast Region",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "Q3 2026",
+      "fiscalYear": 2026,
+      "counterparty": "multiple businesses",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $1,241 plus cash holdbacks of $313 and contingent consideration with an estimated fair value of $51, totaling $1,605 for the nine months ended September 30, 2026.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $707 million on closing plus total estimated deferred payments of $96 million for total consideration of $802 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various",
+      "summary": "Constellation Software completed a number of additional acquisitions for aggregate cash consideration of $757 plus holdbacks and contingent consideration, totaling $999, in the six months ended June 30, 2026.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $384 on closing plus total estimated deferred payments of $71 for total consideration of $454.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2026-06-01",
+      "fiscalYear": 2026,
+      "counterparty": "DerbySoft Holdings Limited",
+      "summary": "Constellation Software acquired 91.8% of DerbySoft Holdings Limited on June 1, 2026 for total consideration of $391.",
+      "quote": "On June 1, 2026, the Company effectively acquired 91.8% of the outstanding shares of DerbySoft Holdings Limited ('DerbySoft'), thereby obtaining control, for cash consideration of $363 plus cash holdbacks of $14 and contingent consideration with an estimated acquisition date fair value of $15. The total consideration was $392.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2026-02-13",
+      "fiscalYear": 2026,
+      "counterparty": "Synchronoss Technologies, Inc.",
+      "summary": "Constellation Software completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. for cash proceeds of $309 million on February 13, 2026.",
+      "quote": "On February 13, 2026, the Company completed the acquisition of 100% of the shares of Synchronoss Technologies, Inc. ('Synchronoss') for cash proceeds of $309.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "Topicus completed the acquisition of 12,318,863 treasury shares of Asseco (14.84% of share capital) on October 1, 2025 for total purchase price of $289 million (EUR 246 million).",
+      "quote": "The acquisition of the treasury shares closed on October 1, 2025. On October 1, 2025, the restriction was released on the cash consideration and the total purchase price for the treasury shares was $289 (EUR 246).",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Constellation Software Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quote": "On June 2, 2025, the Company completed the acquisition of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of $228 plus issued an estimated cash holdback payable of $23 and contingent consideration with an estimated acquisition date fair value of $7. The total consideration resulting from acquisition of CS is $258.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software entered into a binding agreement on February 4, 2025 to acquire 12,318,863 treasury shares of Asseco Poland S.A. representing 14.84% of issued share capital at 85 PLN per share.",
+      "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital and will be purchased at a price of PLN 85 per share.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-02-04",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco",
+      "summary": "On February 4, 2025, Constellation Software entered into a binding agreement to acquire 14.84% of Asseco's share capital (12,318,863 treasury shares) at PLN 85 per share, subject to regulatory approvals.",
+      "quote": "On February 4, 2025, the Company entered into a binding agreement in respect of the acquisition of 12,318,863 treasury shares of Asseco. These shares represent 14.84% of Asseco's share capital",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Asseco Poland S.A.",
+      "summary": "Constellation Software purchased 8,300,029 shares (approximately 9.99%) in Asseco Poland S.A. at 85 PLN per share for total consideration of $174 million on January 31, 2025.",
+      "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The shares were acquired at a price of 85 PLN per share for total consideration of $174.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2024-04-30",
+      "fiscalYear": 2024,
+      "counterparty": "Conduent Incorporated",
+      "summary": "Constellation Software completed the acquisition of the Public Safety Businesses from Conduent Incorporated for total consideration of $280 million on April 30, 2024.",
+      "quote": "On April 30, 2024, the Company completed the acquisition of the Public Safety Businesses from Conduent Incorporated ('Conduent'). The Company paid cash of $174 plus issued an estimated cash holdback payable of $106. The total consideration resulting from acquisition of the Public Safety Business from Conduent is $280.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2023-02-22",
+      "fiscalYear": 2023,
+      "counterparty": "WideOrbit Inc.",
+      "summary": "Lumine issued 10,204,294 Lumine Special Shares to WideOrbit sellers for approximately $222 million as part of the WideOrbit acquisition completed February 22, 2023.",
+      "quote": "On February 22, 2023, the Company completed the acquisition of 100% of the shares of WideOrbit Inc. ('WideOrbit'). In conjunction with the acquisition of WideOrbit, Lumine issued 10,204,294 Lumine Special Shares to the sellers of WideOrbit for an initial subscription price of approximately $222",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "2022-05-02",
+      "fiscalYear": 2022,
+      "counterparty": "Allscripts Healthcare Solutions",
+      "summary": "Constellation, through N. Harris Computer Corporation, completed the purchase of Allscripts' Hospitals and Large Physician Practices business segment from Allscripts Healthcare Solutions on May 2, 2022; the segment now operates as Altera.",
+      "quote": "On May 2, 2022, Constellation, through its wholly-owned subsidiary, N. Harris Computer Corporation, completed the purchase from Allscripts Healthcare Solutions ('Allscripts') of Allscripts' Hospitals and Large Physician Practices business segment.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "DerbySoft",
+      "summary": "Constellation Software acquired DerbySoft, a software company operating in the travel vertical, with results included from the acquisition date in the nine months ended September 30, 2026.",
+      "quote": "DerbySoft is a software company that operates in the travel vertical. The acquisition has been accounted for using the acquisition method with the results of operations included in the condensed consolidated interim financial statements for six months ended June 30, 2026 from the date of the acquisition.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Optimal Blue",
+      "summary": "Constellation Software acquired Optimal Blue and entered into a promissory note agreement as part of the acquisition financing.",
+      "quote": "In conjunction with the acquisition of Optimal Blue, the Company had entered into a promissory note agreement ('Promissory Note').",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Synchronoss",
+      "summary": "Constellation Software acquired Synchronoss, which contributed revenue of $107 and a net loss of $2 for the nine months ended September 30, 2026.",
+      "quote": "The impact of acquisition accounting applied on a provisional basis in connection with the acquisition of Synchronoss is as follows:",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Conduent",
+      "summary": "Constellation Software acquired the Public Safety Business from Conduent, contributing $105 million in revenue and $9 million in net income for the year ended December 31, 2024.",
+      "quote": "The acquisition of Public Safety Businesses contributed revenue of $105 and net income of $9 for the year ended December 31, 2024.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "",
+      "summary": "Subsequent to June 30, 2025, Constellation Software completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $210 million plus estimated deferred payments of $109 million, totalling $320 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $289 million on closing plus cash holdbacks of $44 million and contingent consideration with an estimated fair value of $23 million for total consideration of $357 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "multiple",
+      "summary": "Subsequent to June 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $818 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $669 on closing plus total estimated deferred payments of $149 for total consideration of $818.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "CSU",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "multiple software businesses",
+      "summary": "Subsequent to September 30, 2026, Constellation Software completed or has open commitments to acquire multiple businesses for total consideration of $673 million.",
+      "quote": "the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of $526 million on closing plus total estimated deferred payments of $148 million for total consideration of $673 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "Triangle Warehouse",
+      "summary": "TFI International acquired Triangle Warehouse, which now operates as part of the Truckload segment.",
+      "quote": "During the first quarter, the Company acquired Triangle Warehouse which now operates as part of the Truckload segment.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "2026-02-08",
+      "fiscalYear": 2026,
+      "counterparty": "",
+      "summary": "TFI International acquired a non-material business for a total purchase price of $48.9 million on February 8, 2026.",
+      "quote": "On February 8, 2026, the Group acquired a non-material business for a total purchase price of $48.9 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "Q4 2025",
+      "fiscalYear": 2025,
+      "counterparty": "four businesses",
+      "summary": "TFI International acquired four businesses during the year ended December 31, 2025 for a total of $201.3 million net of cash acquired.",
+      "quote": "cash used in business acquisitions, net of cash acquired, totaled $201.3 million to acquire four businesses",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "9M 2025",
+      "fiscalYear": 2025,
+      "counterparty": "",
+      "summary": "TFI International acquired three businesses during the nine months ended September 30, 2025 for $36.4 million net of cash acquired.",
+      "quote": "the Group acquired one business during 2026, which was not considered to be material. This transaction was concluded in order to add density in the Group's current network and further expand value-added services.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "2025-12-15",
+      "fiscalYear": 2025,
+      "counterparty": "Hearn Industrial Services",
+      "summary": "TFI International completed the acquisition of Hearn Industrial Services on December 15, 2025, for a total purchase price of $304.3 million, reported in the Logistics segment.",
+      "quote": "On December 15, 2025, the Group completed the acquisition of Hearn. Hearn is reported in the Logistics segment. The purchase price for the business acquisition totaled $304.3 million, which includes $95.5 million of contingent consideration measured at fair value at acquisition date.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TFII",
+      "date": "2024-04-01",
+      "fiscalYear": 2024,
+      "counterparty": "Daseke Inc.",
+      "summary": "TFI International completed the acquisition of Daseke, Inc. on April 1, 2024, for a total purchase price of $817.0 million, reported in the Truckload segment.",
+      "quote": "On April 1, 2024, the Group completed the acquisition of Daseke, Inc. Daseke is reported in the Truckload segment. The purchase price for the business acquisition totaled $817.0 million, which was funded by a $500.0 million term loan obtained and the remaining balance was drawn from cash on hand",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "Q1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "",
+      "summary": "Topicus.com Inc. completed multiple acquisitions during Q1 2026 for total consideration of EUR 22,508 thousand.",
+      "quote": "acquisitions for an aggregate of €336.6 million (including payments for holdbacks relating to prior acquisitions) offset by €62.7 million of acquired cash",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "H1 2026",
+      "fiscalYear": 2026,
+      "counterparty": "various software companies",
+      "summary": "Topicus.com Inc. completed multiple acquisitions of software companies across various verticals during the six-month period ended June 30, 2026.",
+      "quote": "None of the additional acquisitions completed during the year ended December 31, 2025 were deemed to be individually significant. All of the businesses acquired during the period were acquisitions of shares.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "2025-06-02",
+      "fiscalYear": 2025,
+      "counterparty": "Cipal Schaubroeck NV",
+      "summary": "Topicus.com Inc. completed the acquisition of 100% of the shares of Cipal Schaubroeck NV, a Belgium-based vertical market software provider, on June 2, 2025.",
+      "quote": "On June 2, 2025, the Company completed the acquisition of 100% of the shares of Cipal Schaubroeck NV ('CS'). The Company paid cash of EUR 197,607 plus issued an estimated cash holdback payable of EUR 20,000 and contingent consideration with an estimated acquisition date fair value of EUR 6,022. The total consideration resulting from acquisition of CS is EUR 223,629.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "2025-01-31",
+      "fiscalYear": 2025,
+      "counterparty": "Cyfrowy Polsat S.A.",
+      "summary": "On January 31, 2025, Topicus purchased 8,300,029 shares in Asseco Poland from Cyfrowy Polsat S.A., representing approximately 9.99% of Asseco's issued shares, for total consideration of €168.0 million.",
+      "quote": "On January 31, 2025, the Company purchased 8,300,029 shares in Asseco Poland S.A. ('Asseco') representing approximately 9.99% of the issued shares in Asseco. The Asseco shares were acquired at a price of 85 PLN per share for total consideration of EUR 167,977.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "Cipal",
+      "summary": "Topicus.com acquired a 50% interest in Remmicom JV NV as part of the acquisition of Cipal, applying the equity method of accounting.",
+      "quote": "As a result of the acquisition of Cipal (note 4), the Company acquired a 50% interest in Remmicom JV NV.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "multiple software companies",
+      "summary": "Subsequent to December 31, 2025, Topicus.com Inc. entered into agreements to acquire a number of businesses in automotive, planning, government, chemicals, healthcare, and legal verticals for total consideration of EUR 20,284 thousand.",
+      "quote": "Subsequent to December 31, 2025 the Company completed or have entered into agreements to acquire a number of additional businesses for aggregate cash consideration of EUR 13,299 on closing plus cash holdbacks of EUR 3,878 and contingent consideration with an estimated fair value of EUR 3,107 for total consideration of EUR 20,284.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "undisclosed fleet, healthcare and education software companies",
+      "summary": "Subsequent to June 30, 2026, Topicus.com Inc. completed or has open commitments to acquire a number of businesses in the fleet, healthcare, and education verticals for total consideration of €56.1 million.",
+      "quote": "Subsequent to June 30, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 43,384 on closing plus total estimated deferred payments of EUR 12,739 for total consideration of EUR 56,123.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "undisclosed software companies",
+      "summary": "Subsequent to March 31, 2026, Topicus.com completed or has open commitments to acquire a number of businesses in local government, financial services, printing, and healthcare verticals for total consideration of EUR 37,678 thousand.",
+      "quote": "Subsequent to March 31, 2026 the Company completed or has open commitments to acquire a number of businesses for aggregate cash consideration of EUR 29,285 on closing plus total estimated deferred payments of EUR 8,393 for total consideration of EUR 37,678.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "undisclosed healthcare and real estate software companies",
+      "summary": "Subsequent to September 30, 2026, Topicus.com Inc. completed or has open commitments to acquire additional businesses in healthcare and real estate verticals for total consideration of €16.5 million.",
+      "quote": "Subsequent to September 30, 2026 the Company completed or has open commitments to acquire businesses for aggregate cash consideration of EUR 11,011 on closing plus total estimated deferred payments of EUR 5,503 for total consideration of EUR 16,514.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "TOI",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "multiple businesses",
+      "summary": "Topicus.com completed or has open commitments to acquire several businesses in local government, financial services, printing, and healthcare verticals for total consideration of €37.7 million subsequent to March 31, 2026.",
+      "quote": "Subsequent to December 31, 2025 the Company completed or has open commitments to acquire a number of additional businesses for aggregate cash consideration of €13.3 million on closing plus total estimated deferred payments of €7.0 million for total consideration of €20.3 million.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-09-01",
+      "fiscalYear": 2026,
+      "counterparty": "Hulley & Kirkwood",
+      "summary": "WSP acquired Hulley & Kirkwood, a UK-based building services consultancy, in September 2026.",
+      "quote": "In September 2026, WSP acquired Hulley & Kirkwood, a UK-based building services consultancy.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-07-24",
+      "fiscalYear": 2026,
+      "counterparty": "Arcadis N.V.",
+      "summary": "WSP submitted a revised non-binding indicative proposal to acquire all shares of Arcadis N.V. at €51.50 per share on July 24, 2026, which was unanimously rejected by Arcadis on July 30, 2026.",
+      "quote": "WSP announced that it had submitted a non-binding indicative proposal to acquire all issued and outstanding shares of Arcadis N.V. (\"Arcadis\") for €51.50 per share",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC Companies",
+      "summary": "WSP acquired TRC Companies on February 24, 2026 for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion).",
+      "quote": "on February 24, 2026, WSP acquired TRC Companies (\"TRC\") for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-24",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC on February 24, 2026 for a total cash purchase price of US$3.3 billion ($4.5 billion).",
+      "quote": "on February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.3 billion ($4.5 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-01",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP acquired TRC in February 2026, adding approximately 7,800 employees to the Americas segment.",
+      "quote": "On February 24, 2026, WSP acquired TRC for a total cash purchase price of US$3.4 billion ($4.6 billion), including repayment of long-term debt of US$1.0 billion ($1.4 billion)",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2026-02-01",
+      "fiscalYear": 2026,
+      "counterparty": "TRC",
+      "summary": "WSP completed the acquisition of TRC in February 2026, adding approximately 7,800 employees net of the underground storage business divestiture.",
+      "quote": "Acquisition growth was mainly due to the acquisition of TRC in February 2026",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-12-01",
+      "fiscalYear": 2025,
+      "counterparty": "Harmonic Analytics",
+      "summary": "WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand, in December 2025.",
+      "quote": "In December 2025, WSP acquired Harmonic Analytics, a data science and analytics consultancy operating in New Zealand.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-10-01",
+      "fiscalYear": 2025,
+      "counterparty": "Ricardo",
+      "summary": "WSP Global completed the acquisition of Ricardo in October 2025.",
+      "quote": "WSP purchased a 19.9% interest in Ricardo plc ('Ricardo') and reached an agreement to acquire the entire issued and to be issued share capital of Ricardo for 430 pence per share (the 'Ricardo Acquisition')",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2025-06-01",
+      "fiscalYear": 2025,
+      "counterparty": "Lexica Health and Life Sciences Consultancy Ltd.",
+      "summary": "WSP completed the acquisition of Lexica Health and Life Sciences Consultancy Ltd. in June 2025, contributing to EMEIA acquisition growth in the nine-month period ended September 25, 2026.",
+      "quote": "In June 2025, WSP acquired Lexica Health and Life Sciences Consultancy Ltd. (\"Lexica\"), a UK-based consulting firm specializing in healthcare and life sciences with 90 UK-based employees.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-10-01",
+      "fiscalYear": 2024,
+      "counterparty": "POWER Engineers, Incorporated",
+      "summary": "WSP acquired POWER Engineers, Incorporated on October 1, 2024 for US$1.75 billion ($2.36 billion).",
+      "quote": "on October 1, 2024, WSP acquired POWER Engineers, Incorporated ('POWER'), pursuant to an agreement and plan of merger announced on August 12, 2024 (the 'POWER Acquisition'), for a purchase price of US$1.78 billion (approximately $2.44 billion), subject to final adjustments.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "1A Ingenieros, S.L.",
+      "summary": "WSP acquired 1A Ingenieros, S.L. in May 2024, a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector.",
+      "quote": "Also in May 2024, WSP acquired 1A Ingenieros, S.L. ('1A Ingenieros'), a 250-employee Spanish consulting firm operating mainly in the Power & Energy sector.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-05-01",
+      "fiscalYear": 2024,
+      "counterparty": "AKF Group LLC",
+      "summary": "WSP acquired AKF Group LLC in May 2024, a specialized mechanical, electrical, and plumbing firm with 365 professionals operating in the eastern United States and Mexico.",
+      "quote": "In May 2024, WSP acquired AKF Group LLC ('AKF'), a specialized mechanical, electrical, and plumbing firm that designs complex healthcare, science and technology, and mission-critical facilities.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Proxion Oy",
+      "summary": "WSP acquired Proxion Plan Oy and Proxion Pro Oy (together Proxion) in March 2024, two Finnish rail consultancy firms with a combined workforce of 150 employees.",
+      "quote": "In March 2024, WSP acquired Proxion Plan Oy and Proxion Pro Oy, both Finnish companies and subsidiaries of Proxion Oy.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024-03-01",
+      "fiscalYear": 2024,
+      "counterparty": "Communica Public Affairs Inc.",
+      "summary": "WSP completed the acquisition of Communica Public Affairs Inc. in March 2024.",
+      "quote": "Also in March 2024, WSP acquired Communica Public Affairs Inc., a 50-employee Canadian firm specializing in Indigenous and stakeholder engagement and information management consulting.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "2024",
+      "fiscalYear": 2024,
+      "counterparty": "Calibre Professional Services One Pty Ltd",
+      "summary": "WSP's APAC segment acquired Calibre Professional Services One Pty Ltd during 2024.",
+      "quote": "Acquisition growth in the year stemmed from the acquisition of Calibre Professional Services One Pty Ltd",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "Q4 2026",
+      "fiscalYear": null,
+      "counterparty": "GCM Corpo Inc.",
+      "summary": "WSP entered into an agreement in October 2026 to acquire GCM Corpo Inc., a Canadian engineering consulting firm, with closing expected in Q4 2026.",
+      "quote": "In October 2026, WSP entered into an agreement to acquire GCM Corpo Inc. (\"GCM Corpo\"), a Canadian provider of engineering consulting and specialist services for the energy and industrial sectors, with approximately 600 professionals.",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    },
+    {
+      "ticker": "WSP",
+      "date": "",
+      "fiscalYear": null,
+      "counterparty": "TRC",
+      "summary": "WSP Global Inc. acquired TRC, financing it with long-term debt issuance, which increased the leverage ratio to 2.2x.",
+      "quote": "the issuance of long-term debt used to finance the acquisition of TRC",
+      "naics": null,
+      "naicsTitle": null,
+      "naicsQuote": null,
+      "labelStatus": "unlabelled"
+    }
+  ],
+  "industries": []
+}
