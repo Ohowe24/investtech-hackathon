@@ -39,9 +39,17 @@ export interface OutlookDeal {
   /** NAICS 2022 code; null until labelled */
   naics: string | null;
   naicsTitle: string | null;
-  /** the deal text that justifies the label */
+  /** the deal text that justifies the label, verbatim */
   naicsQuote: string | null;
+  /** where naicsQuote comes from: "SEDAR quote", "Onesheet deal summary" or "Onesheet company profile" */
+  naicsQuoteSource: string | null;
+  /** customer markets the deal text names (e.g. "travel" for a travel software business); text, never scored */
+  serves: string | null;
   labelStatus: "unlabelled" | "proposed" | "approved";
+  /** why this row is left out of the deal mix (duplicate, minority stake, not completed…); null = counts */
+  exclude: string | null;
+  /** reviewer note on the label */
+  labelNote: string | null;
 }
 
 /** A company's revenue in one industry (Layer 1, from segments). */

@@ -15,7 +15,7 @@ export const LAYERS: OutlookLayer[] = [
     question: "Which industries does each company own and buy?",
     steps: [
       { id: "deals", label: "Disclosed deals", status: "done", detail: "Acquisitions with SEDAR quotes, copied from engine/input/deals.json." },
-      { id: "deal-labels", label: "Deal industry labels", status: "planned", detail: "A NAICS code per deal, with the quote that justifies it, approved by a person (engine/input/outlook-labels.csv)." },
+      { id: "deal-labels", label: "Deal industry labels", status: "in-progress", detail: "A NAICS code per deal, with the quote that justifies it, approved by a person (engine/input/outlook-labels.csv). Proposed; awaiting approval." },
       { id: "segments", label: "Revenue by segment", status: "planned", detail: "Onesheet segments for CSU, TOI, WSP, TFII, ARE, each segment mapped to NAICS." },
     ],
   },

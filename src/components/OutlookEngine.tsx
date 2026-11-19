@@ -4,7 +4,7 @@
 // Shows where the build stands. Shows no outlook numbers until the engine has computed them from published sources.
 
 import { useState } from "react";
-import type { OutlookData, StepStatus } from "@contract/outlook";
+import type { OutlookData, OutlookDeal, StepStatus } from "@contract/outlook";
 import outlookJson from "@data/outlook.json";
 import { Card } from "./ui";
 
@@ -15,6 +15,47 @@ const STATUS: Record<StepStatus, { label: string; cls: string }> = {
   "in-progress": { label: "In progress", cls: "bg-amber-500/15 text-amber-600" },
   planned: { label: "Planned", cls: "bg-line text-muted" },
 };
+
+const LABEL_TAG: Record<OutlookDeal["labelStatus"], { label: string; cls: string }> = {
+  approved: { label: "Approved", cls: STATUS.done.cls },
+  proposed: { label: "Proposed", cls: STATUS["in-progress"].cls },
+  unlabelled: { label: "Not labelled", cls: STATUS.planned.cls },
+};
+
+function labelCounts(deals: OutlookDeal[]) {
+  const n = (f: (d: OutlookDeal) => boolean) => deals.filter(f).length;
+  const coded = n((d) => !d.exclude && !!d.naics);
+  const open = n((d) => !d.exclude && !d.naics);
+  const out = n((d) => !!d.exclude);
+  const approved = n((d) => d.labelStatus === "approved");
+  return `${coded} with an industry code · ${open} the filings don't describe · ${out} left out (duplicates, minority stakes, deals not done) · ${approved} of ${deals.length} approved`;
+}
+
+function DealLabel({ d }: { d: OutlookDeal }) {
+  const tag = LABEL_TAG[d.labelStatus];
+  return (
+    <div className="space-y-1">
+      <div className="flex flex-wrap items-center gap-2">
+        {d.naics ? (
+          <span className="font-medium text-ink">
+            {d.naics} · {d.naicsTitle}
+          </span>
+        ) : (
+          <span className="text-faint">No industry code</span>
+        )}
+        <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase ${tag.cls}`}>{tag.label}</span>
+      </div>
+      {d.serves && <div className="text-[12px] text-muted">Serves: {d.serves}</div>}
+      {d.naicsQuote && (
+        <div className="text-[12px] italic leading-snug text-muted">
+          “{d.naicsQuote}” <span className="not-italic text-faint">· {d.naicsQuoteSource}</span>
+        </div>
+      )}
+      {d.exclude && <div className="text-[12px] font-medium text-muted">Left out: {d.exclude}</div>}
+      {d.labelNote && <div className="text-[12px] leading-snug text-faint">{d.labelNote}</div>}
+    </div>
+  );
+}
 
 export default function OutlookEngine() {
   const tickers = outlook.companies.map((c) => c.ticker);
@@ -69,8 +110,11 @@ export default function OutlookEngine() {
         }
       >
         <p className="mb-3 text-[12px] text-faint">
-          From SEDAR filings. Each deal gets an industry code (NAICS) with the quote that justifies it, approved by a person.
+          From SEDAR filings. Each deal gets an industry code (NAICS 2022) with the quote that justifies it, approved by a person.
           Constellation and Topicus disclose only material deals, so this shows where the large money goes, not every deal.
+        </p>
+        <p className="mb-3 text-[12px] text-muted">
+          {labelCounts(deals)}
         </p>
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] text-left text-[13px]">
@@ -83,14 +127,14 @@ export default function OutlookEngine() {
             </thead>
             <tbody>
               {deals.map((d, i) => (
-                <tr key={`${d.date}-${i}`} className="border-t border-line align-top">
-                  <td className="whitespace-nowrap py-2 pr-3 text-muted">{d.date}</td>
+                <tr key={`${d.date}-${i}`} className={`border-t border-line align-top ${d.exclude ? "opacity-60" : ""}`}>
+                  <td className="whitespace-nowrap py-2 pr-3 text-muted">{d.date || "—"}</td>
                   <td className="py-2 pr-3">
                     <div className="font-medium text-ink">{d.counterparty || "Not named"}</div>
                     <div className="text-[12px] text-muted">{d.summary}</div>
                   </td>
-                  <td className="whitespace-nowrap py-2 pr-3">
-                    {d.naics ? <span className="text-ink">{d.naics} · {d.naicsTitle}</span> : <span className="text-faint">Not labelled yet</span>}
+                  <td className="w-[44%] py-2 pr-3">
+                    <DealLabel d={d} />
                   </td>
                 </tr>
               ))}

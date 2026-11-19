@@ -1,6 +1,6 @@
 # Outlook engine (serial acquirers)
 
-**Status:** planned. The tab, data shapes, empty data file and the deal list (Layer 1 input) exist. No outlook numbers exist yet.
+**Status:** Layer 1 in progress. The tab, data shapes, deal list and **proposed** deal labels exist (awaiting Oscar's approval). No outlook numbers exist yet.
 **Owner:** Oscar. **Target:** the final on Nov 24.
 
 ## The idea in one line
@@ -32,6 +32,12 @@ Steps:
    quote the deal text that justifies it (`naicsQuote`), and a person approves it (`labelStatus: "approved"`).
    Labels live in `engine/input/outlook-labels.csv` (ticker, deal date, counterparty, naics, naics_title, quote, status)
    so they survive a rebuild, like `companies.csv`.
+   Columns: `ticker, date, counterparty` (the match key, as in `deals.json`), `naics, naics_title`, `serves` (customer
+   markets the text names, e.g. "travel"; text only), `quote` (verbatim), `quote_source` ("SEDAR quote", "Onesheet deal
+   summary" or "Onesheet company profile"), `status` (`proposed` → `approved`), `exclude` (why a row stays out of the deal
+   mix: duplicate, minority stake, not completed, contained in a longer period; empty = counts), `note`.
+   When a deal's own text is silent, the label may rest on the company's profile (e.g. CSU "acquires, manages and builds
+   vertical market software businesses"); the note says "Company-level label". A deal with no supporting text gets no code.
 2. Fetch segment revenue for the 5 candidates and map each segment to NAICS the same way.
 3. Known gap: Constellation and Topicus disclose only material deals, so the deal side shows where the big money goes,
    not every deal. Say so on the page.
