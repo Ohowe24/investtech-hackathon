@@ -63,18 +63,21 @@ export default function OutlookEngine() {
   const deals = outlook.deals.filter((d) => d.ticker === ticker);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <div className="flex flex-wrap items-center gap-2">
-          <h1 className="text-xl font-semibold tracking-tight text-ink">Outlook engine</h1>
+    <div className="enter space-y-5">
+      <section className="scan-once panel px-6 py-7 md:px-8">
+        <div className="kicker flex items-center gap-2">
+          <span className="live-dot" /> Outlook engine · serial acquirers
+        </div>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <h1 className="text-[32px] font-bold leading-[1.08] tracking-[-0.03em] text-ink md:text-[38px]">Outlook engine</h1>
           <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-amber-600">In development</span>
         </div>
-        <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-muted">{outlook.thesis}</p>
+        <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted">{outlook.thesis}</p>
         <p className="mt-2 max-w-3xl text-[12px] text-faint">
           Context, not a scored check: it does not change any recommendation. Every figure will come from a published source;
-          none is our own forecast. Not investment advice.
+          none is our own forecast. No backtest yet. Not investment advice.
         </p>
-      </div>
+      </section>
 
       <div className="grid gap-4 md:grid-cols-2">
         {outlook.layers.map((layer) => (
