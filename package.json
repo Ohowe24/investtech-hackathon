@@ -16,7 +16,9 @@
     "inputs": "tsx engine/make-inputs.ts",
     "fetch-statements": "node engine/fetch-statements.mjs",
     "discover": "node engine/discover.mjs",
-    "postinstall": "node scripts/copy-vad-assets.mjs"
+    "postinstall": "node scripts/copy-vad-assets.mjs",
+    "fetch-analyst": "node engine/fetch-analyst.mjs",
+    "prices": "tsx engine/fetch-prices.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^1.10.0",
@@ -35,6 +37,7 @@
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^5",
-    "vitest": "^5.1.0"
+    "vitest": "^5.1.0",
+    "yahoo-finance2": "4.0.5"
   }
 }

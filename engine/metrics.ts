@@ -358,3 +358,35 @@ export function marketWeights(markets: string[]): { market: string | null; weigh
   if (named.length === 0) return [{ market: null, weight: 1 }];
   return named.map((m) => ({ market: m === "?" ? null : m, weight: 1 / named.length }));
 }
+
+export interface RatingCounts {
+  strongBuy: number;
+  buy: number;
+  hold: number;
+  sell: number;
+  strongSell: number;
+}
+
+/** Fewer analysts than this and the counts are shown but no sentiment is called. */
+export const MIN_ANALYSTS = 3;
+
+/**
+ * Analyst consensus from rating counts. Scores strong buy 1, buy 2, hold 3, sell 4, strong sell 5 and averages them.
+ * Bullish at an average of 2.5 or better (buy or strong buy on balance), bearish at 3.5 or worse, neutral between.
+ * Sentiment is null with fewer than MIN_ANALYSTS ratings; everything is null with none.
+ */
+export function analystConsensus(c: RatingCounts): {
+  total: number;
+  meanScore: number | null;
+  buyShare: number | null;
+  sentiment: "bullish" | "neutral" | "bearish" | null;
+} {
+  const counts = [c.strongBuy, c.buy, c.hold, c.sell, c.strongSell];
+  if (counts.some((n) => !Number.isFinite(n) || n < 0)) return { total: 0, meanScore: null, buyShare: null, sentiment: null };
+  const total = counts.reduce((s, n) => s + n, 0);
+  if (total === 0) return { total: 0, meanScore: null, buyShare: null, sentiment: null };
+  const meanScore = counts.reduce((s, n, i) => s + n * (i + 1), 0) / total;
+  const buyShare = (c.strongBuy + c.buy) / total;
+  const sentiment = total < MIN_ANALYSTS ? null : meanScore <= 2.5 ? "bullish" : meanScore >= 3.5 ? "bearish" : "neutral";
+  return { total, meanScore, buyShare, sentiment };
+}

@@ -87,6 +87,30 @@ export interface Company {
   dataNote?: string;
   /** company-reported figures over time (industries judged on KPIs, e.g. REITs), one series per figure */
   reported?: ReportedSeries[];
+  /** sell-side analysts' current buy / hold / sell ratings. null means no ratings were found (see note). Not used in the verdict. */
+  analyst?: AnalystRatings | null;
+}
+
+export type AnalystSentiment = "bullish" | "neutral" | "bearish";
+
+/** How many analysts rate the stock at each level this month, and what that adds up to. */
+export interface AnalystRatings {
+  /** date the counts were fetched, "YYYY-MM-DD" */
+  asOf: string;
+  strongBuy: number;
+  buy: number;
+  hold: number;
+  sell: number;
+  strongSell: number;
+  total: number;
+  /** average rating, 1 = strong buy … 5 = strong sell */
+  meanScore: number;
+  /** share rating it buy or strong buy, as a decimal */
+  buyShare: number;
+  /** null when fewer analysts than the minimum rate it (see note) */
+  sentiment: AnalystSentiment | null;
+  sourceIds: string[];
+  note?: string;
 }
 
 /** One company-reported figure over time, as filed. Every point carries its own source. */

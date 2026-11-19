@@ -2,7 +2,7 @@
   "isFake": false,
   "industryId": "acquirers",
   "industryName": "Serial acquirers",
-  "generatedAt": "2026-11-19T18:43:17.893Z",
+  "generatedAt": "2026-11-19T19:04:10.183Z",
   "indexName": "Serial acquirers & consolidators",
   "holdingsSource": "organizers",
   "currency": "USD",
@@ -939,7 +939,22 @@
           ]
         }
       ],
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 7,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 12,
+        "meanScore": 1.9166666666666667,
+        "buyShare": 0.8333333333333334,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-CSU"
+        ]
+      }
     },
     {
       "ticker": "TOI",
@@ -1505,7 +1520,22 @@
           ]
         }
       ],
-      "reportingCurrency": "EUR"
+      "reportingCurrency": "EUR",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 2,
+        "buy": 1,
+        "hold": 0,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 3,
+        "meanScore": 1.3333333333333333,
+        "buyShare": 1,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-TOI"
+        ]
+      }
     },
     {
       "ticker": "WSP",
@@ -2363,7 +2393,22 @@
           ]
         }
       ],
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 8,
+        "hold": 0,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 14,
+        "meanScore": 1.5714285714285714,
+        "buyShare": 1,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-WSP"
+        ]
+      }
     },
     {
       "ticker": "STN",
@@ -2740,7 +2785,22 @@
         "revenueAdded": 4508100000,
         "goodwillAdded": 1037500000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 4,
+        "hold": 1,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 11,
+        "meanScore": 1.5454545454545454,
+        "buyShare": 0.9090909090909091,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-STN"
+        ]
+      }
     },
     {
       "ticker": "TFII",
@@ -3237,7 +3297,22 @@
           ]
         }
       ],
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 9,
+        "hold": 3,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 19,
+        "meanScore": 2,
+        "buyShare": 0.7894736842105263,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-TFII"
+        ]
+      }
     },
     {
       "ticker": "GFL",
@@ -3614,7 +3689,22 @@
         "revenueAdded": 1479300000,
         "goodwillAdded": -606200000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 10,
+        "hold": 3,
+        "sell": 0,
+        "strongSell": 2,
+        "total": 21,
+        "meanScore": 2.142857142857143,
+        "buyShare": 0.7619047619047619,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-GFL"
+        ]
+      }
     },
     {
       "ticker": "FSV",
@@ -3991,7 +4081,22 @@
         "revenueAdded": 2344664670,
         "goodwillAdded": 658088000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 5,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 10,
+        "meanScore": 1.9,
+        "buyShare": 0.8,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-FSV"
+        ]
+      }
     },
     {
       "ticker": "CIGI",
@@ -4367,7 +4472,22 @@
         "revenueAdded": 1566636843,
         "goodwillAdded": 1538180000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 4,
+        "buy": 5,
+        "hold": 4,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 13,
+        "meanScore": 2,
+        "buyShare": 0.6923076923076923,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-CIGI"
+        ]
+      }
     },
     {
       "ticker": "BYD",
@@ -4744,7 +4864,22 @@
         "revenueAdded": 1340730686,
         "goodwillAdded": 104202339
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 7,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 15,
+        "meanScore": 1.7333333333333334,
+        "buyShare": 0.8666666666666667,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-BYD"
+        ]
+      }
     },
     {
       "ticker": "CCL.B",
@@ -5120,7 +5255,22 @@
         "revenueAdded": 1931000000,
         "goodwillAdded": 616300000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 4,
+        "buy": 4,
+        "hold": 1,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 9,
+        "meanScore": 1.6666666666666667,
+        "buyShare": 0.8888888888888888,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-CCL.B"
+        ]
+      }
     },
     {
       "ticker": "RCH",
@@ -5497,7 +5647,23 @@
         "revenueAdded": 523611000,
         "goodwillAdded": 44912000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 0,
+        "buy": 0,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 2,
+        "meanScore": 3,
+        "buyShare": 0,
+        "sentiment": null,
+        "sourceIds": [
+          "yahoo-analyst-RCH"
+        ],
+        "note": "Only 2 analysts: fewer than 3, so no sentiment is called."
+      }
     },
     {
       "ticker": "ATD",
@@ -5874,7 +6040,22 @@
         "revenueAdded": 13696700000,
         "goodwillAdded": 4879517852
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 9,
+        "hold": 5,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 20,
+        "meanScore": 1.95,
+        "buyShare": 0.75,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-ATD"
+        ]
+      }
     },
     {
       "ticker": "DSG",
@@ -6251,7 +6432,22 @@
         "revenueAdded": 304302000,
         "goodwillAdded": 408314201
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 7,
+        "hold": 1,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 14,
+        "meanScore": 1.6428571428571428,
+        "buyShare": 0.9285714285714286,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-DSG"
+        ]
+      }
     },
     {
       "ticker": "ENGH",
@@ -6628,7 +6824,22 @@
         "revenueAdded": 31701000,
         "goodwillAdded": 118572000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 0,
+        "buy": 0,
+        "hold": 4,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 4,
+        "meanScore": 3,
+        "buyShare": 0,
+        "sentiment": "neutral",
+        "sourceIds": [
+          "yahoo-analyst-ENGH"
+        ]
+      }
     },
     {
       "ticker": "GIB.A",
@@ -7005,7 +7216,22 @@
         "revenueAdded": 3706408000,
         "goodwillAdded": 3450370000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 5,
+        "buy": 3,
+        "hold": 6,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 15,
+        "meanScore": 2.2666666666666666,
+        "buyShare": 0.5333333333333333,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-GIB.A"
+        ]
+      }
     },
     {
       "ticker": "PBH",
@@ -7382,7 +7608,22 @@
         "revenueAdded": 2545500000,
         "goodwillAdded": 111500000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 5,
+        "hold": 1,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 12,
+        "meanScore": 1.5833333333333333,
+        "buyShare": 0.9166666666666666,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-PBH"
+        ]
+      }
     },
     {
       "ticker": "EIF",
@@ -7759,7 +8000,22 @@
         "revenueAdded": 1864349000,
         "goodwillAdded": 338569000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 5,
+        "buy": 6,
+        "hold": 0,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 11,
+        "meanScore": 1.5454545454545454,
+        "buyShare": 1,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-EIF"
+        ]
+      }
     },
     {
       "ticker": "MTY",
@@ -8135,7 +8391,22 @@
         "revenueAdded": 638266000,
         "goodwillAdded": 264362000
       },
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 2,
+        "buy": 1,
+        "hold": 3,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 6,
+        "meanScore": 2.1666666666666665,
+        "buyShare": 0.5,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-MTY"
+        ]
+      }
     },
     {
       "ticker": "ARE",
@@ -8805,7 +9076,22 @@
           ]
         }
       ],
-      "reportingCurrency": "CAD"
+      "reportingCurrency": "CAD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 4,
+        "buy": 3,
+        "hold": 4,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 11,
+        "meanScore": 2,
+        "buyShare": 0.6363636363636364,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-ARE"
+        ]
+      }
     },
     {
       "ticker": "BSP",
@@ -9117,7 +9403,22 @@
         "revenueAdded": 919337000,
         "goodwillAdded": 2259707000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 1,
+        "buy": 7,
+        "hold": 3,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 12,
+        "meanScore": 2.4166666666666665,
+        "buyShare": 0.6666666666666666,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-BSP"
+        ]
+      }
     },
     {
       "ticker": "AME",
@@ -9491,7 +9792,22 @@
         "revenueAdded": 1854602000,
         "goodwillAdded": 1932044000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 2,
+        "buy": 12,
+        "hold": 6,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 20,
+        "meanScore": 2.2,
+        "buyShare": 0.7,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-AME"
+        ]
+      }
     },
     {
       "ticker": "WCN",
@@ -9866,7 +10182,22 @@
         "revenueAdded": 3352034730,
         "goodwillAdded": 2189333365
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 6,
+        "buy": 19,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 28,
+        "meanScore": 1.9642857142857142,
+        "buyShare": 0.8928571428571429,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-WCN"
+        ]
+      }
     },
     {
       "ticker": "BRO",
@@ -10240,7 +10571,22 @@
         "revenueAdded": 2715500000,
         "goodwillAdded": 10350200000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 4,
+        "hold": 13,
+        "sell": 1,
+        "strongSell": 0,
+        "total": 21,
+        "meanScore": 2.5714285714285716,
+        "buyShare": 0.3333333333333333,
+        "sentiment": "neutral",
+        "sourceIds": [
+          "yahoo-analyst-BRO"
+        ]
+      }
     },
     {
       "ticker": "IEX",
@@ -10614,7 +10960,22 @@
         "revenueAdded": 692700000,
         "goodwillAdded": 1246800000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 1,
+        "buy": 9,
+        "hold": 5,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 15,
+        "meanScore": 2.2666666666666666,
+        "buyShare": 0.6666666666666666,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-IEX"
+        ]
+      }
     },
     {
       "ticker": "ETN",
@@ -10988,7 +11349,22 @@
         "revenueAdded": 7820000000,
         "goodwillAdded": 1018000000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 5,
+        "buy": 17,
+        "hold": 6,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 28,
+        "meanScore": 2.0357142857142856,
+        "buyShare": 0.7857142857142857,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-ETN"
+        ]
+      }
     },
     {
       "ticker": "ROP",
@@ -11362,7 +11738,22 @@
         "revenueAdded": 3068700000,
         "goodwillAdded": 7246700000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 0,
+        "buy": 7,
+        "hold": 11,
+        "sell": 1,
+        "strongSell": 0,
+        "total": 19,
+        "meanScore": 2.6842105263157894,
+        "buyShare": 0.3684210526315789,
+        "sentiment": "neutral",
+        "sourceIds": [
+          "yahoo-analyst-ROP"
+        ]
+      }
     },
     {
       "ticker": "TDY",
@@ -11736,7 +12127,22 @@
         "revenueAdded": 1501100000,
         "goodwillAdded": 700900000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 6,
+        "hold": 3,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 12,
+        "meanScore": 2,
+        "buyShare": 0.75,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-TDY"
+        ]
+      }
     },
     {
       "ticker": "TDG",
@@ -12110,7 +12516,22 @@
         "revenueAdded": 5128000000,
         "goodwillAdded": 4305000000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 9,
+        "hold": 11,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 23,
+        "meanScore": 2.347826086956522,
+        "buyShare": 0.5217391304347826,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-TDG"
+        ]
+      }
     },
     {
       "ticker": "ACM",
@@ -12484,7 +12905,22 @@
         "revenueAdded": 2798770000,
         "goodwillAdded": 198120000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 8,
+        "hold": 2,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 13,
+        "meanScore": 1.9230769230769231,
+        "buyShare": 0.8461538461538461,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-ACM"
+        ]
+      }
     },
     {
       "ticker": "HEI",
@@ -12858,7 +13294,22 @@
         "revenueAdded": 2619362000,
         "goodwillAdded": 2211229000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 11,
+        "hold": 9,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 24,
+        "meanScore": 2.375,
+        "buyShare": 0.5833333333333334,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-HEI"
+        ]
+      }
     },
     {
       "ticker": "J",
@@ -13232,7 +13683,22 @@
         "revenueAdded": -2062849000,
         "goodwillAdded": -2416182000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 7,
+        "hold": 6,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 16,
+        "meanScore": 2.1875,
+        "buyShare": 0.625,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-J"
+        ]
+      }
     },
     {
       "ticker": "POOL",
@@ -13606,7 +14072,22 @@
         "revenueAdded": -6188000,
         "goodwillAdded": 18981000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 0,
+        "buy": 4,
+        "hold": 10,
+        "sell": 0,
+        "strongSell": 1,
+        "total": 15,
+        "meanScore": 2.8666666666666667,
+        "buyShare": 0.26666666666666666,
+        "sentiment": "neutral",
+        "sourceIds": [
+          "yahoo-analyst-POOL"
+        ]
+      }
     },
     {
       "ticker": "WSO",
@@ -13980,7 +14461,22 @@
         "revenueAdded": 959098000,
         "goodwillAdded": 28490000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 0,
+        "buy": 3,
+        "hold": 10,
+        "sell": 1,
+        "strongSell": 0,
+        "total": 14,
+        "meanScore": 2.857142857142857,
+        "buyShare": 0.21428571428571427,
+        "sentiment": "neutral",
+        "sourceIds": [
+          "yahoo-analyst-WSO"
+        ]
+      }
     },
     {
       "ticker": "DHR",
@@ -14354,7 +14850,22 @@
         "revenueAdded": -4885000000,
         "goodwillAdded": 1967000000
       },
-      "reportingCurrency": "USD"
+      "reportingCurrency": "USD",
+      "analyst": {
+        "asOf": "2026-11-19",
+        "strongBuy": 3,
+        "buy": 17,
+        "hold": 4,
+        "sell": 0,
+        "strongSell": 0,
+        "total": 24,
+        "meanScore": 2.0416666666666665,
+        "buyShare": 0.8333333333333334,
+        "sentiment": "bullish",
+        "sourceIds": [
+          "yahoo-analyst-DHR"
+        ]
+      }
     }
   ],
   "unmeasured": [
@@ -15096,6 +15607,176 @@
       "id": "outlook-boc-inflation-target",
       "label": "Outlook engine · Bank of Canada inflation-control target (2%), used only to put analyst revenue estimates after inflation",
       "url": "https://www.bankofcanada.ca/rates/indicators/key-variables/inflation-control-target/"
+    },
+    {
+      "id": "yahoo-analyst-CSU",
+      "label": "Yahoo Finance · CSU.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/CSU.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-TOI",
+      "label": "Yahoo Finance · TOI.V analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/TOI.V/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-WSP",
+      "label": "Yahoo Finance · WSP.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/WSP.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-TFII",
+      "label": "Yahoo Finance · TFII.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/TFII.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ARE",
+      "label": "Yahoo Finance · ARE.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ARE.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-BSP",
+      "label": "Yahoo Finance · BSP analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/BSP/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-AME",
+      "label": "Yahoo Finance · AME analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/AME/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-WCN",
+      "label": "Yahoo Finance · WCN analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/WCN/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-BRO",
+      "label": "Yahoo Finance · BRO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/BRO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-IEX",
+      "label": "Yahoo Finance · IEX analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/IEX/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ETN",
+      "label": "Yahoo Finance · ETN analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ETN/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ROP",
+      "label": "Yahoo Finance · ROP analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ROP/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-TDY",
+      "label": "Yahoo Finance · TDY analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/TDY/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-TDG",
+      "label": "Yahoo Finance · TDG analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/TDG/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ACM",
+      "label": "Yahoo Finance · ACM analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ACM/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-HEI",
+      "label": "Yahoo Finance · HEI analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/HEI/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-J",
+      "label": "Yahoo Finance · J analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/J/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-POOL",
+      "label": "Yahoo Finance · POOL analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/POOL/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-WSO",
+      "label": "Yahoo Finance · WSO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/WSO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-DHR",
+      "label": "Yahoo Finance · DHR analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/DHR/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ATD",
+      "label": "Yahoo Finance · ATD.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ATD.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-BYD",
+      "label": "Yahoo Finance · BYD.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/BYD.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-CCL.B",
+      "label": "Yahoo Finance · CCL-B.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/CCL-B.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-CIGI",
+      "label": "Yahoo Finance · CIGI.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/CIGI.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-DSG",
+      "label": "Yahoo Finance · DSG.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/DSG.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-EIF",
+      "label": "Yahoo Finance · EIF.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/EIF.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-ENGH",
+      "label": "Yahoo Finance · ENGH.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/ENGH.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-FSV",
+      "label": "Yahoo Finance · FSV.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/FSV.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-GFL",
+      "label": "Yahoo Finance · GFL.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/GFL.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-GIB.A",
+      "label": "Yahoo Finance · GIB-A.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/GIB-A.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-MTY",
+      "label": "Yahoo Finance · MTY.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/MTY.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-PBH",
+      "label": "Yahoo Finance · PBH.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/PBH.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-RCH",
+      "label": "Yahoo Finance · RCH.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/RCH.TO/analysis/"
+    },
+    {
+      "id": "yahoo-analyst-STN",
+      "label": "Yahoo Finance · STN.TO analyst recommendations (current month), fetched 2026-11-19",
+      "url": "https://finance.yahoo.com/quote/STN.TO/analysis/"
     }
   ]
 }
